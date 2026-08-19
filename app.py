@@ -312,7 +312,12 @@ with st.sidebar:
     st.subheader(t["sidebar_header"])
 
     user_name = st.text_input(t["name_label"], value="माय प्रोफाइल")
-    user_dob = st.date_input(t["dob_label"], value=datetime.date.today())
+    user_dob = st.date_input(
+        t["dob_label"],
+        value=datetime.date(1995, 1, 1),
+        min_value=datetime.date(1925, 1, 1),
+        max_value=datetime.date.today()
+    )
     
     # 24-Hour HH:MM Clock Selection Widget
     now_time = datetime.datetime.now().time()
