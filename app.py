@@ -538,21 +538,21 @@ with st.container(border=True):
     place_query = st.text_input(
         f"📍 {t['place_label']}:", 
         value=active_p["place"],
+        key="input_place_text",
         help="Type 3 or more characters of any city, district, or 6-digit pincode."
     ).strip()
 
     # Geocoding Lookup for City / Pincode
     matched_places = []
     if len(place_query) >= 3:
-        with st.spinner("🌐 Searching matching locations from internet..."):
-            matched_places = search_places_online(place_query)
+        matched_places = search_places_online(place_query)
 
     if matched_places:
         selected_matched_place = st.selectbox(
             "🌐 Select verified birthplace location from internet search results:",
             options=matched_places,
             index=0,
-            key="sb_matched_location_selector"
+            key=f"sb_matched_location_{hash(place_query)}"
         )
         user_place = selected_matched_place
     else:
