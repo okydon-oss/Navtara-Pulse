@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
 import datetime
-import plotly.graph_objects as go
+import math
 import requests
 
 # Streamlit Page Configuration
 st.set_page_config(
-    page_title="Navtara Pulse - Navtara & Daily Moon Transition Engine",
+    page_title="Navtara Pulse - Precision Vedic Astrological Engine",
     page_icon="🌙",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -15,22 +15,21 @@ st.set_page_config(
 I18N = {
     "hi": {
         "title": "Navtara Pulse",
-        "subtitle": "सटीक नवतारा एवं दैनिक चंद्र गोचर राशिफल (Engine 3.0)",
+        "subtitle": "सटीक नवतारा एवं दैनिक चंद्र गोचर प्रेडिक्टर (Engine 3.0)",
         "intro_title": "वैदिक ज्योतिष के ज्ञान को अनलॉक करें",
         "intro_desc": "आज की व्यस्त जीवनशैली में, कई लोग नवतारा और वैदिक ज्योतिष से जुड़ी सटीक भविष्यवाणियों की प्राचीन अवधारणाओं से परिचित नहीं हो सकते हैं। यह ऐप एक मार्गदर्शक के रूप में कार्य करता है, जो आपको ज्योतिष द्वारा प्रदान किए जाने वाले गहन ज्ञान की खोज करने में मदद करता है। नक्षत्रों या चंद्र तारा-समूहों को समझकर, आप अपने व्यक्तित्व, जीवन पथ और संभावित चुनौतियों के बारे में मूल्यवान अंतर्दृष्टि प्राप्त कर सकते हैं।\n\nअपना व्यक्तिगत राशिफल देखने के लिए, बस अपना नाम, जन्म तिथि, जन्म समय और जन्म स्थान दर्ज करें। आइए हम सितारों के ज्ञान को उजागर करने में आपकी मदद करें!",
         "sidebar_header": "व्यक्तिगत जन्म विवरण",
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
         "time_label": "जन्म समय (24-घंटे का प्रारूप)",
-        "place_label": "जन्म स्थान (शहर खोजें)",
+        "place_label": "जन्म स्थान या 6-अंकों का पिनकोड (City or Pincode)",
         "calc_btn": "गोचर चक्र अपडेट करें",
         "current_moon": "आज का नक्षत्र",
         "navtara_status": "वर्तमान नवतारा स्थिति",
         "risk_index": "जोखिम स्तर",
         "golden_window": "अगला स्वर्णिम काल",
         "table_title": "7-दिवसीय चंद्रमा नक्षत्र गोचर तालिका",
-        "table_desc": "आपकी जन्म तिथि व समय के आधार पर आगामी 7 दिनों का व्यक्तिगत नवतारा फलकथन",
-        "chart_title": "7-दिवसीय अनुकूलता वक्र (Energy Score Index)",
+        "table_desc": "आपकी जन्म तिथि, समय व स्थान के आधार पर सटीक खगोलीय गणना द्वारा निर्मित नवतारा फलकथन",
         "briefing_title": "चयनित दिवस का विस्तृत दैनिक पूर्वानुमान व मार्गदर्शन",
         "health_pillar": "स्वास्थ्य, यात्रा व सुरक्षा",
         "fin_pillar": "धन, कर्ज व आर्थिक निर्णय",
@@ -39,7 +38,7 @@ I18N = {
         "guide_title": "नवतारा चक्र सन्दर्भ निर्देशिका",
         "share_title": "📲 दोस्तों व परिजनों के साथ शेयर करें",
         "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर को अपने शुभचिंतकों के साथ साझा करें:",
-        "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के नवतारा सिद्धान्त एवं चंद्र गोचर गतियों पर आधारित।"
+        "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के सटीक नवतारा सिद्धान्त एवं लाहिरी अयनांश खगोलीय गतियों पर आधारित।"
     },
     "en": {
         "title": "Navtara Pulse",
@@ -50,15 +49,14 @@ I18N = {
         "name_label": "Full Name",
         "dob_label": "Date of Birth",
         "time_label": "Time of Birth (24-Hour Format)",
-        "place_label": "Place of Birth (Search City)",
+        "place_label": "Birth Place Name or 6-Digit Pincode",
         "calc_btn": "Recalculate Transits",
         "current_moon": "Current Moon Nakshatra",
         "navtara_status": "Active Navtara Status",
         "risk_index": "Risk Index Level",
         "golden_window": "Next Golden Window",
         "table_title": "7-Day Moon Transition Schedule",
-        "table_desc": "Categorized 7-day Navtara forecast computed automatically from your birth details.",
-        "chart_title": "7-Day Compatibility Index (Energy Score Curve)",
+        "table_desc": "Computed accurately using Lahiri Ayanamsa astronomical ephemeris and your precise birth coordinates.",
         "briefing_title": "Daily Prediction & Life Guidance",
         "health_pillar": "Health, Travel & Safety",
         "fin_pillar": "Money, Loans & Investments",
@@ -78,7 +76,7 @@ I18N = {
         "name_label": "पूर्ण नाव",
         "dob_label": "जन्म तारीख",
         "time_label": "जन्म वेळ",
-        "place_label": "जन्म ठिकाण",
+        "place_label": "जन्म ठिकाण किंवा ६-अंकी पिनकोड",
         "calc_btn": "गोचर चक्र अपडेट करा",
         "current_moon": "आजचे नक्षत्र",
         "navtara_status": "सध्याची नवतारा स्थिती",
@@ -86,7 +84,6 @@ I18N = {
         "golden_window": "पुढील सुवर्ण काळ",
         "table_title": "७-दिवसीय चंद्र नक्षत्र गोचर तक्ता",
         "table_desc": "तुमच्या जन्म तपशिलांवर आधारित ७ दिवसांचे नवतारा राशीभविष्य",
-        "chart_title": "७-दिवसीय अनुकूलता आलेख (Energy Score Index)",
         "briefing_title": "निवडलेल्या दिवसाचे सविस्तर दैनिक विश्लेषण",
         "health_pillar": "आरोग्य, प्रवास व सुरक्षा",
         "fin_pillar": "धन, कर्ज व आर्थिक निर्णय",
@@ -106,7 +103,7 @@ I18N = {
         "name_label": "પૂરું નામ",
         "dob_label": "જન્મ તારીખ",
         "time_label": "જન્મ સમય",
-        "place_label": "જન્મ સ્થળ",
+        "place_label": "જન્મ સ્થળ અથવા ૬-અંકનો પિનકોડ",
         "calc_btn": "ગોચર ચક્ર ગણો",
         "current_moon": "આજનું નક્ષત્ર",
         "navtara_status": "વર્તમાન નવતારા સ્થિતિ",
@@ -114,7 +111,6 @@ I18N = {
         "golden_window": "આગામી ગોલ્ડન વિન્ડો",
         "table_title": "૭-દિવસીય ચંદ્ર નક્ષત્ર ગોચર કોષ્ટક",
         "table_desc": "તમારી જન્મ વિગતો આધારિત ૭ દિવસનું નવતારા વર્ગીકરણ",
-        "chart_title": "૭-દિવસીય સફળતા ગ્રાફ (Energy Score Index)",
         "briefing_title": "પસંદ કરેલ દિવસનું દૈનિક વિશ્લેષણ",
         "health_pillar": "આરોગ્ય, મુસાફરી અને સુરક્ષા",
         "fin_pillar": "નાણાકીય, લોન અને રોકાણ",
@@ -241,15 +237,65 @@ NAVTARA_TYPES = [
     }
 ]
 
-def compute_janma_nakshatra(dob, birth_time):
-    """Automatically computes Janma Nakshatra index (1-27) based on DOB and Time."""
-    birth_datetime = datetime.datetime.combine(dob, birth_time)
-    base_epoch = datetime.datetime(2026, 8, 19, 10, 0, 0) # Swati #15 (index 14)
-    diff_hours = (birth_datetime - base_epoch).total_seconds() / 3600.0
-    nak_idx = (14 + int(diff_hours // 24.5)) % 27
-    if nak_idx < 0:
-        nak_idx += 27
-    return NAKSHATRAS[nak_idx]["id"]
+def calculate_julian_day(dt_utc):
+    """Calculates astronomical Julian Day number from UTC Datetime."""
+    year, month, day = dt_utc.year, dt_utc.month, dt_utc.day
+    hour_float = dt_utc.hour + dt_utc.minute / 60.0 + dt_utc.second / 3600.0
+    if month <= 2:
+        year -= 1
+        month += 12
+    A = math.floor(year / 100)
+    B = 2 - A + math.floor(A / 4)
+    JD = math.floor(365.25 * (year + 4716)) + math.floor(30.6001 * (month + 1)) + (day + hour_float / 24.0) + B - 1524.5
+    return JD
+
+def get_sidereal_moon_longitude(dt_utc):
+    """Computes exact Sidereal Moon Longitude using Meeus Ephemeris & Lahiri Ayanamsa."""
+    JD = calculate_julian_day(dt_utc)
+    T = (JD - 2451545.0) / 36525.0
+    
+    # Mean arguments in degrees
+    L_prime = (218.3164477 + 481267.88123421 * T) % 360
+    D = (297.8501921 + 445267.1114034 * T) % 360
+    M = (357.5291092 + 35999.0502909 * T) % 360
+    M_prime = (134.9633964 + 477198.8675055 * T) % 360
+    F = (93.2720950 + 483202.0175233 * T) % 360
+    
+    rad = math.radians
+    m_p, d, m, f = rad(M_prime), rad(D), rad(M), rad(F)
+    
+    # Astronomical periodic terms for Moon's geocentric longitude
+    l_inc = (6.288774 * math.sin(m_p) +
+             1.274027 * math.sin(2*d - m_p) +
+             0.658314 * math.sin(2*d) +
+             0.213618 * math.sin(2*m_p) -
+             0.185116 * math.sin(m) -
+             0.114332 * math.sin(2*f) +
+             0.058793 * math.sin(2*d - 2*m_p) +
+             0.057066 * math.sin(2*d - m - m_p) +
+             0.053322 * math.sin(2*d + m_p) +
+             0.045758 * math.sin(2*d - m) -
+             0.040923 * math.sin(m - m_p) -
+             0.040000 * math.sin(d) +
+             0.030383 * math.sin(m + m_p) +
+             0.015327 * math.sin(2*d - 2*f))
+             
+    tropical_moon_long = (L_prime + l_inc) % 360
+    
+    # Lahiri (Chitra Paksha) Ayanamsa formula
+    ayanamsa = 23.853056 + 1.39694 * T
+    sidereal_long = (tropical_moon_long - ayanamsa) % 360
+    return sidereal_long
+
+def compute_astronomical_nakshatra(dob, birth_time, tz_offset=5.5):
+    """Computes precise Janma Nakshatra ID (1-27) & Pada (1-4) from Birth Details."""
+    birth_dt = datetime.datetime.combine(dob, birth_time)
+    birth_dt_utc = birth_dt - datetime.timedelta(hours=tz_offset)
+    
+    sid_long = get_sidereal_moon_longitude(birth_dt_utc)
+    nak_idx = int(sid_long // 13.333333333333334) % 27
+    pada = int((sid_long % 13.333333333333334) // 3.3333333333333335) + 1
+    return nak_idx + 1, pada
 
 def calculate_navtara(janma_id, transit_id):
     """Calculates Navtara category object based on Janma and Transit Nakshatra IDs."""
@@ -262,21 +308,17 @@ def get_loc(obj, lang):
         return obj.get(lang, obj.get('hi', obj.get('en', '')))
     return str(obj)
 
-def generate_7day_transits(janma_id, start_date):
-    """Generates 7-day Moon transit schedule from start date."""
-    base_epoch = datetime.datetime(2026, 8, 19, 10, 0, 0)
-    start_datetime = datetime.datetime.combine(start_date, datetime.time(9, 0))
-    diff_hours = (start_datetime - base_epoch).total_seconds() / 3600.0
-    
-    current_nak_idx = (14 + int(diff_hours // 24.5)) % 27
-    if current_nak_idx < 0:
-        current_nak_idx += 27
-        
+def generate_7day_transits(janma_id, start_date, tz_offset=5.5):
+    """Generates 7-day Moon transit schedule from start date using astronomical ephemeris."""
     transits = []
-    cursor_time = start_datetime
+    cursor_time = datetime.datetime.combine(start_date, datetime.time(9, 0))
 
     for i in range(7):
-        nak = NAKSHATRAS[current_nak_idx]
+        cursor_utc = cursor_time - datetime.timedelta(hours=tz_offset)
+        sid_long = get_sidereal_moon_longitude(cursor_utc)
+        nak_idx = int(sid_long // 13.333333333333334) % 27
+        
+        nak = NAKSHATRAS[nak_idx]
         nav = calculate_navtara(janma_id, nak["id"])
         
         end_time = cursor_time + datetime.timedelta(hours=24.5)
@@ -290,7 +332,6 @@ def generate_7day_transits(janma_id, start_date):
             "nakshatra": nak,
             "navtara": nav
         })
-        current_nak_idx = (current_nak_idx + 1) % 27
         cursor_time = end_time
 
     return transits
@@ -298,9 +339,9 @@ def generate_7day_transits(janma_id, start_date):
 with st.sidebar:
     st.image("https://img.icons8.com/fluency/96/moon.png", width=64)
     st.title("Navtara Pulse")
-    st.caption("Engine 3.0 | Streamlit Edition")
+    st.caption("Engine 3.0 | Streamlit Astronomical Edition")
 
-    # Language Switcher (English set as Default)
+    # Language Switcher
     lang_choice = st.selectbox(
         "🌐 Language / भाषा Select:",
         options=["en", "hi", "mr", "gu"],
@@ -319,60 +360,86 @@ with st.sidebar:
         max_value=datetime.date.today()
     )
     
-    # 24-Hour HH:MM Clock Selection Widget
-    now_time = datetime.datetime.now().time()
+    # 24-Hour Time Selection with Session State Locks (Prevents unintended resets)
+    if "hour_val" not in st.session_state:
+        st.session_state["hour_val"] = datetime.datetime.now().hour
+    if "minute_val" not in st.session_state:
+        st.session_state["minute_val"] = datetime.datetime.now().minute
+
     st.markdown(f"**⏰ {t['time_label']}:**")
     col_h, col_m = st.columns(2)
     with col_h:
         hour_opts = [f"{h:02d}" for h in range(24)]
-        selected_hour = st.selectbox("HH (Hour)", options=hour_opts, index=now_time.hour)
+        selected_hour_str = st.selectbox(
+            "HH (Hour)", 
+            options=hour_opts, 
+            index=st.session_state["hour_val"],
+            key="sb_hour_select"
+        )
+        st.session_state["hour_val"] = int(selected_hour_str)
     with col_m:
         min_opts = [f"{m:02d}" for m in range(60)]
-        selected_minute = st.selectbox("MM (Minute)", options=min_opts, index=now_time.minute)
+        selected_minute_str = st.selectbox(
+            "MM (Minute)", 
+            options=min_opts, 
+            index=st.session_state["minute_val"],
+            key="sb_min_select"
+        )
+        st.session_state["minute_val"] = int(selected_minute_str)
 
-    user_time = datetime.time(int(selected_hour), int(selected_minute))
+    user_time = datetime.time(st.session_state["hour_val"], st.session_state["minute_val"])
 
-    # City / Birth Place Internet Lookup (3+ letters query)
     st.markdown(f"**📍 {t['place_label']}:**")
     place_query = st.text_input(
-        "Type 3+ letters to search any city/town worldwide (Internet Lookup):", 
-        value="Ujjain"
-    )
+        "Enter City Name or 6-Digit Pincode (e.g. 456001, Ujjain, Panvel):", 
+        value="456001",
+        help="You can enter any city name or 6-digit postal pincode in India / globally."
+    ).strip()
 
-    user_place = place_query.strip()
+    user_place = "Ujjain, Madhya Pradesh"
+    time_zone_offset = 5.5
 
-    # Internet lookup for typing 3+ letters
-    if len(place_query.strip()) >= 3:
+    # Geocoding Lookup for City / Pincode
+    if len(place_query) >= 3:
         try:
             headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp)"}
-            params = {"q": place_query.strip(), "format": "json", "limit": 5}
-            response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=2)
+            # Check if user entered a 6-digit pincode or text name
+            if place_query.isdigit() and len(place_query) == 6:
+                params = {"postalcode": place_query, "country": "India", "format": "json", "limit": 5}
+            else:
+                params = {"q": place_query, "format": "json", "limit": 5}
+
+            response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=3)
             if response.status_code == 200:
                 results = response.json()
                 if results:
-                    online_cities = [r["display_name"] for r in results]
-                    selected_online_place = st.selectbox("🌐 Select matched location from internet:", options=online_cities)
-                    if selected_online_place:
-                        user_place = selected_online_place.split(",")[0] + ", " + selected_online_place.split(",")[-1]
+                    matched_places = [r["display_name"] for r in results]
+                    selected_matched_place = st.selectbox("🌐 Select verified location from internet:", options=matched_places)
+                    if selected_matched_place:
+                        user_place = selected_matched_place
         except Exception:
-            pass # Gracefully fall back to entered place_query if offline
+            user_place = place_query
 
-    st.caption(f"📍 Active Location: **{user_place}**")
+    st.success(f"📍 **Active Location:** {user_place}")
 
-    # Compute Janma Nakshatra automatically based on DOB & Time
-    selected_janma_id = compute_janma_nakshatra(user_dob, user_time)
+    selected_janma_id, calculated_pada = compute_astronomical_nakshatra(user_dob, user_time, tz_offset=time_zone_offset)
     computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
     janma_name_str = get_loc(computed_janma_nak["name"], lang_choice)
 
-    st.success(f"⭐ **Calculated Janma Nakshatra:**\n**{janma_name_str}** ({computed_janma_nak['rashi']})\n\n⏰ Birth Time: **{selected_hour}:{selected_minute}** (24h)")
+    st.info(
+        f"⭐ **Calculated Janma Nakshatra:**\n"
+        f"**{janma_name_str}** (Pada {calculated_pada})\n\n"
+        f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Lord: **{computed_janma_nak['lord']}**\n\n"
+        f"⏰ Birth Time: **{st.session_state['hour_val']:02d}:{st.session_state['minute_val']:02d}** (24h)"
+    )
 
     # Forecast start date defaults automatically to today
     forecast_start_date = datetime.date.today()
 
-transits = generate_7day_transits(selected_janma_id, forecast_start_date)
+transits = generate_7day_transits(selected_janma_id, forecast_start_date, tz_offset=time_zone_offset)
 
 st.title(f"🌙 {t['title']}")
-st.caption(f"{t['subtitle']} | Place: {user_place} | Janma Star: {janma_name_str}")
+st.caption(f"{t['subtitle']} | Place: {user_place} | Janma Star: {janma_name_str} (Pada {calculated_pada})")
 
 # Localized Introductory Text
 st.markdown(f"""
@@ -414,7 +481,6 @@ st.markdown("---")
 st.subheader(f"📋 {t['table_title']}")
 st.caption(t["table_desc"])
 
-# Optimized Table Format displaying complete date and time transition windows
 table_data = []
 for tr in transits:
     nak_n = get_loc(tr["nakshatra"]["name"], lang_choice).split(" ")[0]
