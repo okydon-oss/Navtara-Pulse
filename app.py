@@ -429,55 +429,24 @@ st.dataframe(df_transits, use_container_width=True, hide_index=True)
 
 st.markdown("---")
 
-col_chart, col_brief = st.columns([1, 1])
+st.subheader(f"💼 {t['briefing_title']}")
 
-with col_chart:
-    st.subheader(f"📈 {t['chart_title']}")
-    
-    chart_days = [f"D{tr['day']}: {get_loc(tr['nakshatra']['name'], lang_choice).split(' ')[0]}" for tr in transits]
-    chart_scores = [tr["navtara"]["score"] for tr in transits]
-    chart_colors = ['#f43f5e' if tr["navtara"]["status_type"] == 'danger' else ('#f59e0b' if tr["navtara"]["status_type"] == 'golden' else '#10b981') for tr in transits]
+selected_day_idx = st.selectbox(
+    "Select Day to Inspect Details:",
+    options=range(7),
+    format_func=lambda x: f"Day {x+1}: {transits[x]['date_short']} - {get_loc(transits[x]['nakshatra']['name'], lang_choice)}"
+)
 
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(
-        x=chart_days,
-        y=chart_scores,
-        mode='lines+markers',
-        line=dict(color='#6366f1', width=3),
-        marker=dict(size=12, color=chart_colors),
-        text=[get_loc(tr["navtara"]["name"], lang_choice) for tr in transits],
-        hovertemplate='<b>%{x}</b><br>Score: %{y}/100<br>Status: %{text}<extra></extra>'
-    ))
+sel_t = transits[selected_day_idx]
+sel_nav = sel_t["navtara"]
+sel_nav_name = get_loc(sel_nav["name"], lang_choice)
 
-    fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        margin=dict(l=20, r=20, t=20, b=20),
-        yaxis=dict(range=[0, 110], gridcolor='rgba(255,255,255,0.1)'),
-        xaxis=dict(gridcolor='rgba(255,255,255,0.1)'),
-        font=dict(color='#ffffff')
-    )
-    st.plotly_chart(fig, use_container_width=True)
+st.info(f"**Selected Navtara:** {sel_nav['symbol']} **{sel_nav_name}** | Moon Star: **{get_loc(sel_t['nakshatra']['name'], lang_choice)}** ({sel_t['nakshatra']['lord']})")
 
-with col_brief:
-    st.subheader(f"💼 {t['briefing_title']}")
-    
-    selected_day_idx = st.selectbox(
-        "Select Day to Inspect Details:",
-        options=range(7),
-        format_func=lambda x: f"Day {x+1}: {transits[x]['date_short']} - {get_loc(transits[x]['nakshatra']['name'], lang_choice)}"
-    )
-    
-    sel_t = transits[selected_day_idx]
-    sel_nav = sel_t["navtara"]
-    sel_nav_name = get_loc(sel_nav["name"], lang_choice)
-    
-    st.info(f"**Selected Navtara:** {sel_nav['symbol']} **{sel_nav_name}** | Moon Star: **{get_loc(sel_t['nakshatra']['name'], lang_choice)}** ({sel_t['nakshatra']['lord']})")
-    
-    st.markdown(f"**🩺 {t['health_pillar']}:** {get_loc(sel_nav['health'], lang_choice)}")
-    st.markdown(f"**💼 {t['career_pillar']}:** {get_loc(sel_nav['career'], lang_choice)}")
-    st.markdown(f"**💰 {t['fin_pillar']}:** {get_loc(sel_nav['fin'], lang_choice)}")
-    st.markdown(f"**🛡️ {t['mind_pillar']}:** {get_loc(sel_nav['mind'], lang_choice)}")
+st.markdown(f"**🩺 {t['health_pillar']}:** {get_loc(sel_nav['health'], lang_choice)}")
+st.markdown(f"**💼 {t['career_pillar']}:** {get_loc(sel_nav['career'], lang_choice)}")
+st.markdown(f"**💰 {t['fin_pillar']}:** {get_loc(sel_nav['fin'], lang_choice)}")
+st.markdown(f"**🛡️ {t['mind_pillar']}:** {get_loc(sel_nav['mind'], lang_choice)}")
 
 st.markdown("---")
 
