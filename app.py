@@ -16,6 +16,8 @@ I18N = {
     "hi": {
         "title": "Navtara Pulse",
         "subtitle": "सटीक नवतारा एवं दैनिक चंद्र गोचर राशिफल (Engine 3.0)",
+        "intro_title": "वैदिक ज्योतिष के ज्ञान को अनलॉक करें",
+        "intro_desc": "आज की व्यस्त जीवनशैली में, कई लोग नवतारा और वैदिक ज्योतिष से जुड़ी सटीक भविष्यवाणियों की प्राचीन अवधारणाओं से परिचित नहीं हो सकते हैं। यह ऐप एक मार्गदर्शक के रूप में कार्य करता है, जो आपको ज्योतिष द्वारा प्रदान किए जाने वाले गहन ज्ञान की खोज करने में मदद करता है। नक्षत्रों या चंद्र तारा-समूहों को समझकर, आप अपने व्यक्तित्व, जीवन पथ और संभावित चुनौतियों के बारे में मूल्यवान अंतर्दृष्टि प्राप्त कर सकते हैं।\n\nअपना व्यक्तिगत राशिफल देखने के लिए, बस अपना नाम, जन्म तिथि, जन्म समय और जन्म स्थान दर्ज करें। आइए हम सितारों के ज्ञान को उजागर करने में आपकी मदद करें!",
         "sidebar_header": "व्यक्तिगत जन्म विवरण",
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
@@ -42,6 +44,8 @@ I18N = {
     "en": {
         "title": "Navtara Pulse",
         "subtitle": "Precision Navtara & Daily Moon Transition Engine 3.0",
+        "intro_title": "Unlocking the Wisdom of Vedic Astrology",
+        "intro_desc": "In our fast-paced world, many people may not be familiar with ancient concepts like Navtara and accurate predictions rooted in Vedic astrology. This app serves as a guide, helping you explore the profound insights that astrology can offer. By understanding the Nakshatras, or lunar mansions, you can gain valuable knowledge about your personality, life path, and potential challenges.\n\nTo access your personalized horoscope, simply enter your name, date of birth, time of birth, and place of birth. Let us help you uncover the wisdom of the stars!",
         "sidebar_header": "Birth Details & Profile",
         "name_label": "Full Name",
         "dob_label": "Date of Birth",
@@ -68,6 +72,8 @@ I18N = {
     "mr": {
         "title": "Navtara Pulse",
         "subtitle": "अचूक नवतारा आणि दैनिक चंद्र गोचर राशीभविष्य 3.0",
+        "intro_title": "वैदिक ज्योतिषाचे ज्ञान अनलॉक करा",
+        "intro_desc": "आजच्या धावपळीच्या जगात, अनेक लोकांना नवतारा आणि वैदिक ज्योतिषावर आधारित अचूक भविष्यासारख्या प्राचीन संकल्पनांची माहिती नसते. हे ॲप तुम्हाला ज्योतिषातील सखोल ज्ञानाचा शोध घेण्यासाठी मार्गदर्शन करते. नक्षत्रांना समजून घेऊन, तुम्ही तुमचे व्यक्तित्व, जीवन प्रवास आणि संभाव्य आव्हानांबद्दल मौल्यवान माहिती मिळवू शकता.\n\nतुमचे वैयक्तिक राशीभविष्य पाहण्यासाठी, फक्त तुमचे नाव, जन्म तारीख, जन्म वेळ आणि जन्म ठिकाण प्रविष्ट करा. चला, ताऱ्यांचे ज्ञान उलगडण्यात आम्ही तुम्हाला मदत करतो!",
         "sidebar_header": "वैयक्तिक जन्म माहिती",
         "name_label": "पूर्ण नाव",
         "dob_label": "जन्म तारीख",
@@ -94,6 +100,8 @@ I18N = {
     "gu": {
         "title": "Navtara Pulse",
         "subtitle": "ચોક્કસ નવતારા અને દૈનિક ચંદ્ર ગોચર રાશિફળ 3.0",
+        "intro_title": "વૈદિક જ્યોતિષના જ્ઞાનને અનાવૃત કરો",
+        "intro_desc": "આજના ઝડપી યુગમાં, ઘણા લોકો નવતારા અને વૈદિક જ્યોતિષ પર આધારિત ચોક્કસ આગાહીઓ જેવી પ્રાચીન વિભાવનાઓથી અજાણ હોય છે. આ એપ તમને જ્યોતિષ દ્વારા મળતા ગહન જ્ઞાનનો સંગાથ આપવા માર્ગદર્શક તરીકે કામ કરે છે. નક્ષત્રોને સમજીને, તમે તમારા વ્યક્તિત્વ, જીવન માર્ગ અને સંભવિત પડકારો વિશે મૂલ્યવાન માહિતી મેળવી શકો છો.\n\nતમારું વ્યક્તિગત રાશિફળ જોવા માટે, બસ તમારું નામ, જન્મ તારીખ, જન્મ સમય અને જન્મ સ્થળ દાખલ કરો. ચાલો તારાઓના જ્ઞાનને સમજવામાં અમે તમારી મદદ કરીએ!",
         "sidebar_header": "વ્યક્તિગત જન્મ વિગતો",
         "name_label": "પૂરું નામ",
         "dob_label": "જન્મ તારીખ",
@@ -292,11 +300,11 @@ with st.sidebar:
     st.title("Navtara Pulse")
     st.caption("Engine 3.0 | Streamlit Edition")
 
-    # Language Switcher
+    # Language Switcher (English set as Default)
     lang_choice = st.selectbox(
         "🌐 Language / भाषा Select:",
-        options=["hi", "en", "mr", "gu"],
-        format_func=lambda x: {"hi": "हिन्दी (Hindi)", "en": "English", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}[x]
+        options=["en", "hi", "mr", "gu"],
+        format_func=lambda x: {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}[x]
     )
     t = I18N[lang_choice]
 
@@ -361,12 +369,11 @@ transits = generate_7day_transits(selected_janma_id, forecast_start_date)
 st.title(f"🌙 {t['title']}")
 st.caption(f"{t['subtitle']} | Place: {user_place} | Janma Star: {janma_name_str}")
 
-st.markdown("""
-### **Unlocking the Wisdom of Vedic Astrology**
+# Localized Introductory Text
+st.markdown(f"""
+### **{t['intro_title']}**
 
-In our fast-paced world, many people may not be familiar with ancient concepts like Navtara and accurate predictions rooted in Vedic astrology. This app serves as a guide, helping you explore the profound insights that astrology can offer. By understanding the Nakshatras, or lunar mansions, you can gain valuable knowledge about your personality, life path, and potential challenges. 
-
-To access your personalized horoscope, simply enter your name, date of birth, time of birth, and place of birth. Let us help you uncover the wisdom of the stars!
+{t['intro_desc']}
 """)
 
 st.markdown("---")
