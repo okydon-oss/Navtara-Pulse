@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import math
 import requests
+import urllib.parse
 
 # Streamlit Page Configuration
 st.set_page_config(
@@ -354,23 +355,70 @@ def get_loc(obj, lang):
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def search_places_online(query):
-    """Searches Nominatim / OpenStreetMap API for matching place names or pincodes from the internet."""
-    if not query or len(query) < 3:
+    """Searches multiple internet geocoding APIs (Open-Meteo, Photon, Nominatim) for location names or pincodes."""
+    if not query or len(query.strip()) < 3:
         return []
-    try:
-        headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp/1.0)"}
-        if query.isdigit() and len(query) == 6:
-            params = {"postalcode": query, "country": "India", "format": "json", "limit": 10}
-        else:
-            params = {"q": query, "format": "json", "limit": 10}
+    
+    clean_query = query.strip()
+    encoded_query = urllib.parse.quote(clean_query)
+    results = []
+    headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp/1.0)"}
 
-        response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=4)
+    # Provider 1: Open-Meteo Geocoding API (Fast & free, does not block server IPs)
+    try:
+        url = f"https://geocoding-api.open-meteo.com/v1/search?name={encoded_query}&count=10&language=en&format=json"
+        response = requests.get(url, headers=headers, timeout=3)
         if response.status_code == 200:
-            results = response.json()
-            return [r["display_name"] for r in results if "display_name" in r]
+            data = response.json()
+            if "results" in data and isinstance(data["results"], list):
+                for r in data["results"]:
+                    name = r.get("name", "")
+                    admin1 = r.get("admin1", "")
+                    country = r.get("country", "")
+                    parts = [p for p in [name, admin1, country] if p]
+                    loc_str = ", ".join(parts)
+                    if loc_str and loc_str not in results:
+                        results.append(loc_str)
     except Exception:
         pass
-    return []
+
+    # Provider 2: Photon Komoot API (OSM Typeahead Search)
+    if not results:
+        try:
+            url = f"https://photon.komoot.io/api/?q={encoded_query}&limit=10"
+            response = requests.get(url, headers=headers, timeout=3)
+            if response.status_code == 200:
+                data = response.json()
+                for feat in data.get("features", []):
+                    props = feat.get("properties", {})
+                    name = props.get("name", "")
+                    city = props.get("city", "") or props.get("state", "")
+                    country = props.get("country", "")
+                    parts = [p for p in [name, city, country] if p]
+                    loc_str = ", ".join(parts)
+                    if loc_str and loc_str not in results:
+                        results.append(loc_str)
+        except Exception:
+            pass
+
+    # Provider 3: Nominatim OpenStreetMap (Pincode or City Fallback)
+    if not results:
+        try:
+            if clean_query.isdigit() and len(clean_query) == 6:
+                params = {"postalcode": clean_query, "country": "India", "format": "json", "limit": 10}
+            else:
+                params = {"q": clean_query, "format": "json", "limit": 10}
+            response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=3)
+            if response.status_code == 200:
+                data = response.json()
+                for r in data:
+                    display_name = r.get("display_name", "")
+                    if display_name and display_name not in results:
+                        results.append(display_name)
+        except Exception:
+            pass
+
+    return results
 
 def generate_7day_transits(janma_id, start_date, tz_offset=5.5):
     """Generates 7-day Moon transit schedule from start date using astronomical ephemeris."""
@@ -490,8 +538,27 @@ with st.container(border=True):
     place_query = st.text_input(
         f"📍 {t['place_label']}:", 
         value=active_p["place"],
-        help="You can enter any city name or 6-digit postal pincode in India / globally."
+        help="Type 3 or more characters of any city, district, or 6-digit pincode."
     ).strip()
+
+    # Geocoding Lookup for City / Pincode
+    matched_places = []
+    if len(place_query) >= 3:
+        with st.spinner("🌐 Searching matching locations from internet..."):
+            matched_places = search_places_online(place_query)
+
+    if matched_places:
+        selected_matched_place = st.selectbox(
+            "🌐 Select verified birthplace location from internet search results:",
+            options=matched_places,
+            index=0,
+            key="sb_matched_location_selector"
+        )
+        user_place = selected_matched_place
+    else:
+        user_place = place_query if place_query else "Ujjain, Madhya Pradesh"
+        if len(place_query) >= 3:
+            st.info("ℹ️ Using entered location text directly as birthplace.")
 
     # Save button & Sync to URL Query Params
     if st.button(t.get("save_profile_btn", "💾 Save Profile Changes"), use_container_width=True):
@@ -500,7 +567,7 @@ with st.container(border=True):
             "dob": user_dob,
             "hour": int(selected_hour_str),
             "minute": int(selected_minute_str),
-            "place": place_query
+            "place": user_place
         }
         # Sync to URL query parameters for persistent loading on refresh/bookmark
         st.query_params.update({
@@ -508,28 +575,11 @@ with st.container(border=True):
             "dob": user_dob.strftime("%Y-%m-%d"),
             "hour": selected_hour_str,
             "minute": selected_minute_str,
-            "place": place_query
+            "place": user_place
         })
-        st.success("✅ Profile saved! Details are remembered for future visits.")
+        st.success(f"✅ Profile saved! Verified birthplace: **{user_place}**")
 
-    user_place = place_query if place_query else "Ujjain, Madhya Pradesh"
     time_zone_offset = 5.5
-
-    # Geocoding Lookup for City / Pincode
-    if len(place_query) >= 3:
-        with st.spinner("🌐 Searching matching locations from internet..."):
-            matched_places = search_places_online(place_query)
-            
-        if matched_places:
-            selected_matched_place = st.selectbox(
-                "🌐 Select verified birthplace location from internet results:",
-                options=matched_places,
-                index=0
-            )
-            if selected_matched_place:
-                user_place = selected_matched_place
-        else:
-            st.info("ℹ️ No exact internet match found for this query. Using entered text as birthplace.")
 
     st.success(f"📍 **Verified Birth Place:** {user_place}")
 
