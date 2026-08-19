@@ -21,6 +21,7 @@ I18N = {
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
         "time_label": "जन्म समय",
+        "place_label": "जन्म स्थान",
         "nakshatra_label": "जन्म नक्षत्र (Janma Nakshatra)",
         "start_date_label": "पूर्वानुमान प्रारंभ तिथि",
         "calc_btn": "गोचर चक्र जनरेट करें",
@@ -46,6 +47,7 @@ I18N = {
         "name_label": "Full Name",
         "dob_label": "Date of Birth",
         "time_label": "Time of Birth",
+        "place_label": "Place of Birth",
         "nakshatra_label": "Janma Nakshatra",
         "start_date_label": "Forecast Start Date",
         "calc_btn": "Calculate Transits",
@@ -71,6 +73,7 @@ I18N = {
         "name_label": "पूर्ण नाव",
         "dob_label": "जन्म तारीख",
         "time_label": "जन्म वेळ",
+        "place_label": "जन्म ठिकाण",
         "nakshatra_label": "जन्म नक्षत्र",
         "start_date_label": "पूर्वानुमान प्रारंभ",
         "calc_btn": "गोचर चक्र जनरेट करा",
@@ -96,6 +99,7 @@ I18N = {
         "name_label": "પૂરું નામ",
         "dob_label": "જન્મ તારીખ",
         "time_label": "જન્મ સમય",
+        "place_label": "જન્મ સ્થળ",
         "nakshatra_label": "જન્મ નક્ષત્ર",
         "start_date_label": "આગાહી પ્રારંભ",
         "calc_btn": "ગોચર ચક્ર ગણો",
@@ -288,8 +292,16 @@ with st.sidebar:
         preset_selected = 3
 
     user_name = st.text_input(t["name_label"], value="माय प्रोफाइल")
-    user_dob = st.date_input(t["dob_label"], value=datetime.date(1984, 1, 13))
-    user_time = st.time_input(t["time_label"], value=datetime.time(14, 0))
+    
+    # Set default Birth Date to Today
+    user_dob = st.date_input(t["dob_label"], value=datetime.date.today())
+    
+    # Set default Birth Time to Current Time
+    now_time = datetime.datetime.now().time()
+    user_time = st.time_input(t["time_label"], value=datetime.time(now_time.hour, now_time.minute))
+
+    # Set default Birth Place to Ujjain
+    user_place = st.text_input(t["place_label"], value="उज्जैन (Ujjain)")
 
     # Nakshatra Selector
     nak_options = [f"{n['id']}. {get_loc(n['name'], lang_choice)} [{n['lord']}]" for n in NAKSHATRAS]
@@ -302,7 +314,7 @@ with st.sidebar:
 transits = generate_7day_transits(selected_janma_id, forecast_start_date)
 
 st.title(f"🌙 {t['title']}")
-st.caption(t["subtitle"])
+st.caption(f"{t['subtitle']} | Place: {user_place}")
 
 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
 
