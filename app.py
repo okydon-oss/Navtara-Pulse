@@ -18,8 +18,8 @@ I18N = {
         "sidebar_header": "व्यक्तिगत जन्म विवरण",
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
-        "time_label": "जन्म समय",
-        "place_label": "जन्म स्थान",
+        "time_label": "जन्म समय (24-घंटे का प्रारूप)",
+        "place_label": "जन्म स्थान (शहर खोजें)",
         "calc_btn": "गोचर चक्र अपडेट करें",
         "current_moon": "आज का नक्षत्र",
         "navtara_status": "वर्तमान नवतारा स्थिति",
@@ -44,8 +44,8 @@ I18N = {
         "sidebar_header": "Birth Details & Profile",
         "name_label": "Full Name",
         "dob_label": "Date of Birth",
-        "time_label": "Time of Birth",
-        "place_label": "Place of Birth",
+        "time_label": "Time of Birth (24-Hour Format)",
+        "place_label": "Place of Birth (Search City)",
         "calc_btn": "Recalculate Transits",
         "current_moon": "Current Moon Nakshatra",
         "navtara_status": "Active Navtara Status",
@@ -304,16 +304,51 @@ with st.sidebar:
 
     user_name = st.text_input(t["name_label"], value="माय प्रोफाइल")
     user_dob = st.date_input(t["dob_label"], value=datetime.date.today())
+    
+    # 24-Hour HH:MM Clock Selection Widget
     now_time = datetime.datetime.now().time()
-    user_time = st.time_input(t["time_label"], value=datetime.time(now_time.hour, now_time.minute))
-    user_place = st.text_input(t["place_label"], value="उज्जैन (Ujjain)")
+    st.markdown(f"**⏰ {t['time_label']}:**")
+    col_h, col_m = st.columns(2)
+    with col_h:
+        hour_opts = [f"{h:02d}" for h in range(24)]
+        selected_hour = st.selectbox("HH (Hour)", options=hour_opts, index=now_time.hour)
+    with col_m:
+        min_opts = [f"{m:02d}" for m in range(60)]
+        selected_minute = st.selectbox("MM (Minute)", options=min_opts, index=now_time.minute)
+
+    user_time = datetime.time(int(selected_hour), int(selected_minute))
+
+    # City / Birth Place Type-ahead Search (Type 3+ letters)
+    CITIES = [
+        "उज्जैन (Ujjain)", "मुंबई (Mumbai)", "दिल्ली (Delhi)", "पुणे (Pune)", 
+        "वाराणसी (Varanasi)", "अहमदाबाद (Ahmedabad)", "बंगलुरु (Bangalore)", 
+        "कोलकाता (Kolkata)", "चेन्नई (Chennai)", "जयपुर (Jaipur)", "इंदौर (Indore)", 
+        "नागपुर (Nagpur)", "नाशिक (Nashik)", "सूरत (Surat)", "हैदराबाद (Hyderabad)", 
+        "अयोध्या (Ayodhya)", "हरिद्वार (Haridwar)", "ऋषिकेश (Rishikesh)", "भोपाल (Bhopal)", 
+        "लखनऊ (Lucknow)", "कानपुर (Kanpur)", "पटना (Patna)", "प्रयागराज (Prayagraj)",
+        "पनवेल (Panvel)", "औरंगाबाद (Aurangabad)", "ठाणे (Thane)", "गांधीनगर (Gandhinagar)",
+        "जोधपुर (Jodhpur)", "उदयपुर (Udaipur)", "ग्वालियर (Gwalior)", "जबलपुर (Jabalpur)",
+        "✏️ Other / Type Custom Place"
+    ]
+
+    st.markdown(f"**📍 {t['place_label']}:**")
+    selected_place_option = st.selectbox(
+        "Select or type 3+ letters to search city:",
+        options=CITIES,
+        index=0  # Default to Ujjain
+    )
+
+    if selected_place_option == "✏️ Other / Type Custom Place":
+        user_place = st.text_input("Enter Birth Place Name:", value="उज्जैन (Ujjain)")
+    else:
+        user_place = selected_place_option
 
     # Compute Janma Nakshatra automatically based on DOB & Time
     selected_janma_id = compute_janma_nakshatra(user_dob, user_time)
     computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
     janma_name_str = get_loc(computed_janma_nak["name"], lang_choice)
 
-    st.success(f"⭐ **Calculated Janma Nakshatra:**\n**{janma_name_str}** ({computed_janma_nak['rashi']})")
+    st.success(f"⭐ **Calculated Janma Nakshatra:**\n**{janma_name_str}** ({computed_janma_nak['rashi']})\n\n⏰ Birth Time: **{selected_hour}:{selected_minute}** (24h)")
 
     # Forecast start date defaults automatically to today
     forecast_start_date = datetime.date.today()
