@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import plotly.graph_objects as go
+import requests
 
 # Streamlit Page Configuration
 st.set_page_config(
@@ -318,30 +319,32 @@ with st.sidebar:
 
     user_time = datetime.time(int(selected_hour), int(selected_minute))
 
-    # City / Birth Place Type-ahead Search (Type 3+ letters)
-    CITIES = [
-        "उज्जैन (Ujjain)", "मुंबई (Mumbai)", "दिल्ली (Delhi)", "पुणे (Pune)", 
-        "वाराणसी (Varanasi)", "अहमदाबाद (Ahmedabad)", "बंगलुरु (Bangalore)", 
-        "कोलकाता (Kolkata)", "चेन्नई (Chennai)", "जयपुर (Jaipur)", "इंदौर (Indore)", 
-        "नागपुर (Nagpur)", "नाशिक (Nashik)", "सूरत (Surat)", "हैदराबाद (Hyderabad)", 
-        "अयोध्या (Ayodhya)", "हरिद्वार (Haridwar)", "ऋषिकेश (Rishikesh)", "भोपाल (Bhopal)", 
-        "लखनऊ (Lucknow)", "कानपुर (Kanpur)", "पटना (Patna)", "प्रयागराज (Prayagraj)",
-        "पनवेल (Panvel)", "औरंगाबाद (Aurangabad)", "ठाणे (Thane)", "गांधीनगर (Gandhinagar)",
-        "जोधपुर (Jodhpur)", "उदयपुर (Udaipur)", "ग्वालियर (Gwalior)", "जबलपुर (Jabalpur)",
-        "✏️ Other / Type Custom Place"
-    ]
-
+    # City / Birth Place Internet Lookup (3+ letters query)
     st.markdown(f"**📍 {t['place_label']}:**")
-    selected_place_option = st.selectbox(
-        "Select or type 3+ letters to search city:",
-        options=CITIES,
-        index=0  # Default to Ujjain
+    place_query = st.text_input(
+        "Type 3+ letters to search any city/town worldwide (Internet Lookup):", 
+        value="Ujjain"
     )
 
-    if selected_place_option == "✏️ Other / Type Custom Place":
-        user_place = st.text_input("Enter Birth Place Name:", value="उज्जैन (Ujjain)")
-    else:
-        user_place = selected_place_option
+    user_place = place_query.strip()
+
+    # Internet lookup for typing 3+ letters
+    if len(place_query.strip()) >= 3:
+        try:
+            headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp)"}
+            params = {"q": place_query.strip(), "format": "json", "limit": 5}
+            response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=2)
+            if response.status_code == 200:
+                results = response.json()
+                if results:
+                    online_cities = [r["display_name"] for r in results]
+                    selected_online_place = st.selectbox("🌐 Select matched location from internet:", options=online_cities)
+                    if selected_online_place:
+                        user_place = selected_online_place.split(",")[0] + ", " + selected_online_place.split(",")[-1]
+        except Exception:
+            pass # Gracefully fall back to entered place_query if offline
+
+    st.caption(f"📍 Active Location: **{user_place}**")
 
     # Compute Janma Nakshatra automatically based on DOB & Time
     selected_janma_id = compute_janma_nakshatra(user_dob, user_time)
@@ -483,15 +486,15 @@ col_s1, col_s2, col_s3 = st.columns(3)
 
 with col_s1:
     whatsapp_url = f"https://api.whatsapp.com/send?text={encoded_share_text}"
-    st.markdown(f"[💬 Share on WhatsApp]({whatsapp_url})", unsafe_allow_html=True)
+    st.link_button("💬 Share on WhatsApp", whatsapp_url, use_container_width=True)
 
 with col_s2:
     email_url = f"mailto:?subject=Navtara Pulse Forecast&body={encoded_share_text}"
-    st.markdown(f"[✉️ Share via Email]({email_url})", unsafe_allow_html=True)
+    st.link_button("✉️ Share via Email", email_url, use_container_width=True)
 
 with col_s3:
     telegram_url = f"https://t.me/share/url?url=https://navtara-pulse.streamlit.app&text={encoded_share_text}"
-    st.markdown(f"[✈️ Share on Telegram]({telegram_url})", unsafe_allow_html=True)
+    st.link_button("✈️ Share on Telegram", telegram_url, use_container_width=True)
 
 st.markdown("---")
 st.caption(t["footer"])
