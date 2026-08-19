@@ -37,8 +37,7 @@ I18N = {
         "mind_pillar": "मानसिक शांति व सुरक्षा कवच",
         "guide_title": "नवतारा चक्र सन्दर्भ निर्देशिका",
         "share_title": "📲 दोस्तों व परिजनों के साथ शेयर करें",
-        "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर की लिंक अपने शुभचिंतकों के साथ साझा करें:",
-        "copy_link_label": "📋 ऐप डायरेक्ट लिंक (कॉपी करें):",
+        "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर की डायरेक्ट लिंक अपने शुभचिंतकों के साथ साझा करें:",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के सटीक नवतारा सिद्धान्त एवं लाहिरी अयनांश खगोलीय गतियों पर आधारित।"
     },
     "en": {
@@ -65,8 +64,7 @@ I18N = {
         "mind_pillar": "Mindset & Protection Shield",
         "guide_title": "Navtara Master Reference Guide",
         "share_title": "📲 Share with Friends & Family",
-        "share_desc": "Send this personalized Moon Transit & Navtara forecast link to your loved ones:",
-        "copy_link_label": "📋 Direct App Web Link (Copy):",
+        "share_desc": "Send this direct app link to your loved ones:",
         "footer": "Navtara Pulse © 2026 | Based on Vedic Astronomical Navtara principles & lunar transit speeds."
     },
     "mr": {
@@ -94,7 +92,6 @@ I18N = {
         "guide_title": "नवतारा चक्र संदर्भ मार्गदर्शिका",
         "share_title": "📲 मित्र आणि नातेवाईकांसोबत शेअर करा",
         "share_desc": "हे नवतारा चंद्र गोचर प्रेडिक्टर तुमच्या जवळच्या लोकांशी शेअर करा:",
-        "copy_link_label": "📋 ॲप लिंक (कॉपी करा):",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष आणि चंद्र गोचर गतीवर आधारित."
     },
     "gu": {
@@ -122,7 +119,6 @@ I18N = {
         "guide_title": "નવતારા ચક્ર સંદર્ભ ડિરેક્ટરી",
         "share_title": "📲 મિત્રો અને સગા-સંબંધીઓ સાથે શેર કરો",
         "share_desc": "આ નવતારા પ્રિડિક્ટર તમારા સ્નેહીજનો સાથે શેર કરો:",
-        "copy_link_label": "📋 એપ લિંક (કોપી કરો):",
         "footer": "Navtara Pulse © 2026 | વૈદિક જ્યોતિષ અને ચંદ્ર ગોચરની ગતિ પર આધારિત."
     }
 }
@@ -540,7 +536,7 @@ st.subheader(t["share_title"])
 st.caption(t["share_desc"])
 
 app_link = "https://navtara-pulse.streamlit.app"
-share_text = f"🌙 Check out my 7-Day Moon Transit & Navtara Forecast on Navtara Pulse!\nCurrent Star: {today_nak_name} ({today_nav_name}).\n\nTry the app now: {app_link}"
+share_text = f"🌙 Check out Navtara Pulse - Precision Moon Transit & Navtara Forecast: {app_link}"
 encoded_share_text = share_text.replace(" ", "%20").replace("\n", "%0A")
 
 col_s1, col_s2, col_s3 = st.columns(3)
@@ -550,15 +546,12 @@ with col_s1:
     st.link_button("💬 Share via WhatsApp", whatsapp_url, use_container_width=True)
 
 with col_s2:
-    email_url = f"mailto:?subject=Navtara Pulse App Link & Forecast&body={encoded_share_text}"
+    email_url = f"mailto:?subject=Navtara Pulse App Link&body={encoded_share_text}"
     st.link_button("✉️ Share via Email", email_url, use_container_width=True)
 
 with col_s3:
     telegram_url = f"https://t.me/share/url?url={app_link}&text={encoded_share_text}"
     st.link_button("✈️ Share via Telegram", telegram_url, use_container_width=True)
-
-# Copyable Direct Web Link Field
-st.text_input(t["copy_link_label"], value=app_link)
 
 st.markdown("---")
 st.caption(t["footer"])
