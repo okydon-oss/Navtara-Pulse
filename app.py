@@ -157,7 +157,7 @@ NAVTARA_TYPES = [
         "health": {"hi": "स्वास्थ्य सामान्य रहेगा। ड्राइविंग व लंबी यात्रा में जल्दबाजी न करें।", "en": "Health is fair. Drive carefully and avoid rushed travel."},
         "career": {"hi": "रूटीन काम निपटाएं। नई नौकरी या बड़े बदलाव में जल्दबाजी न करें।", "en": "Stick to routine tasks. Postpone job switches or big risks."},
         "fin": {"hi": "पैसों के लेन-देन में सतर्क रहें। कर्ज लेने या बड़ा निवेश टालें।", "en": "Avoid taking new loans or making speculative investments."},
-        "mind": {"hi": "6-7-8-9 मुखी रुद्राक्ष या शांत ध्यान से मानसिक स्थिरता मिलेगी।", "en": "Touch Rudraksha beads or meditate to maintain emotional calm."}
+        "mind": {"hi": "ध्यान, प्राणायाम व शांत मनोभाव से मानसिक स्थिरता मिलेगी।", "en": "Meditate or practice mindfulness to maintain emotional calm."}
     },
     {
         "index": 1, "code": "sampat", "symbol": "🟢", "status_type": "good", "score": 85,
@@ -175,7 +175,7 @@ NAVTARA_TYPES = [
         "health": {"hi": "वाहन सावधानी से चलाएं, दुर्घटना की आशंका। स्वास्थ्य का ध्यान रखें।", "en": "Drive carefully. High risk of minor accidents or fatigue."},
         "career": {"hi": "कार्यस्थल या ऑफिस में अधिकारियों से बहस से बचें। शांति रखें।", "en": "Avoid arguments with bosses or clients. Stay defensive."},
         "fin": {"hi": "धन हानि की संभावना। शेयर मार्केट, लॉटरी या नए कर्ज से बचें।", "en": "Risk of monetary loss. Avoid lending money or high-risk trades."},
-        "mind": {"hi": "7 मुखी (शनि) दाने का स्पर्श करें व 'ॐ नमः शिवाय' का जाप करें।", "en": "Chant Om Namah Shivaya to overcome anxiety and fear."}
+        "mind": {"hi": "शांत चित्त रहें, सकारात्मक चिंतन करें व क्रोध से दूर रहें।", "en": "Practice peaceful reflection and keep anxious thoughts at bay."}
     },
     {
         "index": 3, "code": "kshema", "symbol": "🟢", "status_type": "good", "score": 80,
@@ -193,7 +193,7 @@ NAVTARA_TYPES = [
         "health": {"hi": "मानसिक तनाव या सिरदर्द। ड्राइविंग करते समय सतर्क रहें।", "en": "Watch out for stress-induced fatigue. Avoid harsh driving."},
         "career": {"hi": "ऑफिस पॉलिटिक्स से दूर रहें। कोई महत्वपूर्ण फैसला आज न लें।", "en": "Stay away from office gossip and delay key legal decisions."},
         "fin": {"hi": "अनावश्यक खर्चे बढ़ सकते हैं। क्रेडिट कार्ड या लोन लेने से बचें।", "en": "Risk of unexpected expenses. Refrain from taking debt."},
-        "mind": {"hi": "8 मुखी (राहु) दाने को छुएं व शांत रहकर समय व्यतीत करें।", "en": "Touch 8 Mukhi (Rahu) bead to soothe nervous system."}
+        "mind": {"hi": "संयम बरतें, प्रतिक्रिया देने में जल्दबाजी न करें व शांत रहें।", "en": "Maintain patience, refrain from quick reactions, and stay calm."}
     },
     {
         "index": 5, "code": "saadhaka", "symbol": "🟢", "status_type": "good", "score": 90,
@@ -211,7 +211,7 @@ NAVTARA_TYPES = [
         "health": {"hi": "स्वास्थ्य का विशेष ध्यान रखें। दुर्घटना से बचने हेतु यात्रा टालें।", "en": "Take extra health precautions. Postpone non-essential travel."},
         "career": {"hi": "नौकरी या व्यापार में 100% रक्षात्मक रहें। नया रिस्क न लें।", "en": "Be 100% cautious at work. Do not make risky career moves."},
         "fin": {"hi": "धन का बड़ा नुकसान संभव। ट्रेडिंग या जुआ/सट्टा से दूर रहें।", "en": "High risk of heavy losses. Strict NO to speculative bets."},
-        "mind": {"hi": "महामृत्युंजय मंत्र का ध्यान करें या शांत रहकर समय बिताएं।", "en": "Chant Mahamrityunjaya Mantra or keep quiet meditation."}
+        "mind": {"hi": "मौन व आत्म-चिंतन का सहारा लें, तनावपूर्ण विचारों से दूर रहें।", "en": "Seek quiet meditation and maintain defensive composure."}
     },
     {
         "index": 7, "code": "mitra", "symbol": "🟢", "status_type": "good", "score": 85,
@@ -224,7 +224,7 @@ NAVTARA_TYPES = [
     },
     {
         "index": 8, "code": "ati_mitra", "symbol": "🟢🟢", "status_type": "golden", "score": 100,
-        "name": {"hi": "अति-मित्र (Ati-Mitra)", "en": "Ati-Mitra", "mr": "अति-मित्र", "gu": "અતિ-મિત્ર"},
+        "name": {"hi": "अति-मित्र (Ati-Mitra)", "en": "Ati-Mitra", "mr": "अति-मित्र", "gu": "અતિ-मित्र"},
         "desc": {"hi": "सर्वोच्च स्वर्णिम काल (Golden Window)! हर कार्य में सफलता।", "en": "Supreme Golden Power Window for major breakthroughs!"},
         "health": {"hi": "उत्कृष्ट आरोग्य व आरोग्य लाभ। दूरगामी यात्राएं अति-शुभ।", "en": "Peak vitality and excellent health. Highly favorable travel."},
         "career": {"hi": "भाग्य का पूर्ण साथ। नई नौकरी, प्रमोशन व बड़ी व्यावसायिक जीत।", "en": "Maximum luck! Promotions, contract sign-offs, and victories."},
