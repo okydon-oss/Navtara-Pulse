@@ -112,6 +112,7 @@ I18N = {
         "guide_title": "नवतारा चक्र संदर्भ मार्गदर्शिका",
         "share_title": "📲 मित्र आणि नातेवाईकांसोबत शेअर करा",
         "share_desc": "हे नवतारा चंद्र गोचर प्रेडिक्टर तुमच्या जवळच्या लोकांशी शेअर करा:",
+        "remedy_pillar": "🛡️ निवारण व सुरक्षा उपाय (Remedy & Protection)",
         "save_profile_btn": "💾 प्रोफाईल सेव्ह करा",
         "select_profile_label": "👤 सेव्ह केलेली प्रोफाईल निवडा किंवा एडिट करा:",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष आणि चंद्र गोचर गतीवर आधारित."
@@ -141,6 +142,7 @@ I18N = {
         "guide_title": "નવતારા ચક્ર સંદર્ભ ડિરેક્ટરી",
         "share_title": "📲 મિત્રો અને સગા-સંબંધીઓ સાથે શેર કરો",
         "share_desc": "આ નવતારા પ્રિડિક્ટર તમારા સ્નેહીજનો સાથે શેર કરો:",
+        "remedy_pillar": "🛡️ નિવારણ અને સુરક્ષા ઉપાયો (Remedy & Protection)",
         "save_profile_btn": "💾 પ્રોફાઇલ સાચવો",
         "select_profile_label": "👤 સાચવેલી પ્રોફાઇલ પસંદ કરો અથવા સુધારો:",
         "footer": "Navtara Pulse © 2026 | વૈદિક જ્યોતિષ અને ચંદ્ર ગોચરની ગતિ પર આધારિત."
@@ -516,7 +518,7 @@ janma_name_str = get_loc(computed_janma_nak["name"], lang_choice)
 st.info(
     f"⭐ **Calculated Janma Nakshatra:** **{janma_name_str}** (Pada {calculated_pada}) | "
     f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Nakshatra Lord: **{computed_janma_nak['lord']}** | "
-    f"⏰ Time: **{st.session_state['hour_val']:02d}:{st.session_state['minute_val']:02d}**"
+    f"⏰ Time: **{user_time.strftime('%H:%M')}**"
 )
 
 # Forecast start date defaults automatically to today
@@ -600,7 +602,7 @@ st.markdown(f"**🛡️ {t['mind_pillar']}:** {get_loc(sel_nav['mind'], lang_cho
 
 # Show Remedies for High-Risk Transit Days (Vipat, Pratyari, Vadha)
 if "remedy" in sel_nav:
-    st.warning(f"**{t['remedy_pillar']}:** {get_loc(sel_nav['remedy'], lang_choice)}")
+    st.warning(f"**{t.get('remedy_pillar', '🛡️ Remedy & Protection')}:** {get_loc(sel_nav['remedy'], lang_choice)}")
 
 st.markdown("---")
 
