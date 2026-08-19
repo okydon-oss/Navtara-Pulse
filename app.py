@@ -548,17 +548,18 @@ with st.container(border=True):
         matched_places = search_places_online(place_query)
 
     if matched_places:
-        selected_matched_place = st.selectbox(
-            "🌐 Select verified birthplace location from internet search results:",
+        default_idx = matched_places.index(active_p["place"]) if active_p["place"] in matched_places else 0
+        user_place = st.selectbox(
+            "🌐 Select verified birthplace location from search results:",
             options=matched_places,
-            index=0,
+            index=default_idx,
             key=f"sb_matched_location_{hash(place_query)}"
         )
-        user_place = selected_matched_place
     else:
         user_place = place_query if place_query else "Ujjain, Madhya Pradesh"
-        if len(place_query) >= 3:
-            st.info("ℹ️ Using entered location text directly as birthplace.")
+
+    # Verified birthplace display positioned directly inside profile above Save button
+    st.success(f"📍 **Verified Birth Place:** **{user_place}**")
 
     # Save button & Sync to URL Query Params
     if st.button(t.get("save_profile_btn", "💾 Save Profile Changes"), use_container_width=True):
@@ -577,11 +578,9 @@ with st.container(border=True):
             "minute": selected_minute_str,
             "place": user_place
         })
-        st.success(f"✅ Profile saved! Verified birthplace: **{user_place}**")
+        st.toast(f"✅ Profile saved with birthplace: {user_place}")
 
     time_zone_offset = 5.5
-
-    st.success(f"📍 **Verified Birth Place:** {user_place}")
 
 selected_janma_id, calculated_pada = compute_astronomical_nakshatra(user_dob, user_time, tz_offset=time_zone_offset)
 computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
