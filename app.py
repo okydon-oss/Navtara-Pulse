@@ -2,9 +2,8 @@ import streamlit as st
 import pandas as pd
 import datetime
 import plotly.graph_objects as go
-import plotly.express as px
 
-# Streamlit Page Setup
+# Streamlit Page Configuration
 st.set_page_config(
     page_title="Navtara Pulse - Navtara & Daily Moon Transition Engine",
     page_icon="🌙",
@@ -27,7 +26,7 @@ I18N = {
         "risk_index": "जोखिम स्तर",
         "golden_window": "अगला स्वर्णिम काल",
         "table_title": "7-दिवसीय चंद्रमा नक्षत्र गोचर तालिका",
-        "table_desc": "आपकी जन्म कुंडली के नक्षत्र आधार पर 7 दिनों का व्यक्तिगत राशिफल व वर्गीकरण",
+        "table_desc": "आपकी जन्म तिथि व समय के आधार पर आगामी 7 दिनों का व्यक्तिगत नवतारा फलकथन",
         "chart_title": "7-दिवसीय अनुकूलता वक्र (Energy Score Index)",
         "briefing_title": "चयनित दिवस का विस्तृत दैनिक पूर्वानुमान व मार्गदर्शन",
         "health_pillar": "स्वास्थ्य, यात्रा व सुरक्षा",
@@ -53,7 +52,7 @@ I18N = {
         "risk_index": "Risk Index Level",
         "golden_window": "Next Golden Window",
         "table_title": "7-Day Moon Transition Schedule",
-        "table_desc": "Categorized 7-day Navtara forecast based on your calculated birth constellation.",
+        "table_desc": "Categorized 7-day Navtara forecast computed automatically from your birth details.",
         "chart_title": "7-Day Compatibility Index (Energy Score Curve)",
         "briefing_title": "Daily Prediction & Life Guidance",
         "health_pillar": "Health, Travel & Safety",
@@ -79,7 +78,7 @@ I18N = {
         "risk_index": "जोखीम पातळी",
         "golden_window": "पुढील सुवर्ण काळ",
         "table_title": "७-दिवसीय चंद्र नक्षत्र गोचर तक्ता",
-        "table_desc": "तुमच्या जन्म नक्षत्रावर आधारित ७ दिवसांचे नवतारा राशीभविष्य",
+        "table_desc": "तुमच्या जन्म तपशिलांवर आधारित ७ दिवसांचे नवतारा राशीभविष्य",
         "chart_title": "७-दिवसीय अनुकूलता आलेख (Energy Score Index)",
         "briefing_title": "निवडलेल्या दिवसाचे सविस्तर दैनिक विश्लेषण",
         "health_pillar": "आरोग्य, प्रवास व सुरक्षा",
@@ -105,7 +104,7 @@ I18N = {
         "risk_index": "જોખમ સ્તર",
         "golden_window": "આગામી ગોલ્ડન વિન્ડો",
         "table_title": "૭-દિવસીય ચંદ્ર નક્ષત્ર ગોચર કોષ્ટક",
-        "table_desc": "તમારા જન્મ નક્ષત્ર આધારિત ૭ દિવસનું નવતારા વર્ગીકરણ",
+        "table_desc": "તમારી જન્મ વિગતો આધારિત ૭ દિવસનું નવતારા વર્ગીકરણ",
         "chart_title": "૭-દિવસીય સફળતા ગ્રાફ (Energy Score Index)",
         "briefing_title": "પસંદ કરેલ દિવસનું દૈનિક વિશ્લેષણ",
         "health_pillar": "આરોગ્ય, મુસાફરી અને સુરક્ષા",
@@ -149,235 +148,6 @@ NAKSHATRAS = [
     {"id": 27, "name": {"hi": "रेवती (Revati)", "en": "Revati", "mr": "रेवती", "gu": "રેવતી"}, "lord": "बुध (Mercury)", "rashi": "मीन (Pisces)"}
 ]
 
-NAVTARA_TYPES = [
-    {
-        "index": 0, "code": "janma", "symbol": "⚪", "status_type": "neutral", "score": 40,
-        "name": {"hi": "जन्म (Janma)", "en": "Janma", "mr": "जन्म", "gu": "જન્મ"},
-        "desc": {"hi": "शरीर व मन का प्रभाव क्षेत्र। स्वाभविक पैसिविटी या सुस्ती आ सकती है।", "en": "Focus on body & mind. Passivity or fatigue may occur."},
-        "ops": {"hi": "रूटीन कार्य निपटाएं। नए आक्रामक बदलावों को टालें।", "en": "Complete routine tasks. Postpone aggressive structural shifts."},
-        "fin": {"hi": "इंडेक्स और पोर्टफोलियो को केवल ऑब्जर्व करें, नया ट्रेड न लें।", "en": "Observe portfolio trends. Avoid heavy speculative trades."},
-        "mind": {"hi": "6-7-8-9 मुखी ब्रेसलेट का स्पर्श कर शांत रहें।", "en": "Touch 6-7-8-9 Mukhi Rudraksha bracelet to stay calm."}
-    },
-    {
-        "index": 1, "code": "sampat", "symbol": "🟢", "status_type": "good", "score": 85,
-        "name": {"hi": "सम्पत् (Sampat)", "en": "Sampat", "mr": "संपत्", "gu": "સંપત્"},
-        "desc": {"hi": "धन, संपत्ति और व्यावसायिक लाभ की अनुकूल विंडो।", "en": "Window of wealth, prosperity, and asset allocation."},
-        "ops": {"hi": "3-Bucket strategy के अनुकूल आवंटन निष्पादित करें।", "en": "Allocate resources strategically according to plan."},
-        "fin": {"hi": "MFI & RSI चार्ट्स देखकर री-बैलेंसिंग का समय।", "en": "Analyze MFI & RSI charts; rebalance leveraged ETFs."},
-        "mind": {"hi": "आर्थिक स्पष्टता व पूर्ण आत्मविश्वास।", "en": "Enhanced mental clarity and financial confidence."}
-    },
-    {
-        "index": 2, "code": "vipat", "symbol": "🔴", "status_type": "danger", "score": 20,
-        "name": {"hi": "विपत (Vipat)", "en": "Vipat", "mr": "विपत्", "gu": "વિપત્"},
-        "desc": {"hi": "अचानक विघ्न, विवाद व तकनीकी डेटा विचलन का जोखिम।", "en": "High risk of sudden impediments and technical errors."},
-        "ops": {"hi": "6 प्लांट्स में सर्वर, लैब डेटा या वेंडर विवाद पर शांत रहें।", "en": "Stay defensive during plant server delays or lab deviations."},
-        "fin": {"hi": "नो-ट्रेड जोन। पैनिक में कोई शेयर न बेचें।", "en": "Strict No-Trade Zone. Avoid panic selling or leverage exposure."},
-        "mind": {"hi": "7 मुखी (शनि) दाने का स्पर्श कर ॐ नमः शिवाय का जाप करें।", "en": "Touch 7 Mukhi (Saturn) bead and chant Om Namah Shivaya."}
-    },
-    {
-        "index": 3, "code": "kshema", "symbol": "🟢", "status_type": "good", "score": 80,
-        "name": {"hi": "क्षेम (Kshema)", "en": "Kshema", "mr": "क्षेम", "gu": "ક્ષેમ"},
-        "desc": {"hi": "सुरक्षा, कल्याण व सुचारू ऑपरेशन्स ज़ोन।", "en": "Zone of safety, protection, and operational harmony."},
-        "ops": {"hi": "पेंडिंग ऑडिट फाइलों व CAPA क्लीयरेंस को स्वीकृत करें।", "en": "Approve pending audit files and CAPA clearances safely."},
-        "fin": {"hi": "सुरक्षित एसेट्स लॉक करने के लिए उत्तम समय।", "en": "Ideal window to lock capital into safe-haven assets."},
-        "mind": {"hi": "तनाव से मुक्ति व पूर्ण एकाग्रता।", "en": "Relief from anxiety and excellent concentration."}
-    },
-    {
-        "index": 4, "code": "pratyari", "symbol": "🔴", "status_type": "danger", "score": 25,
-        "name": {"hi": "प्रत्यरि (Pratyari)", "en": "Pratyari", "mr": "प्रत्यरि", "gu": "પ્રત્યરિ"},
-        "desc": {"hi": "बाधाएं, वैचारिक मतभेद व संवाद में भ्रम का जोखिम।", "en": "Risk of friction, miscommunication, and opposition."},
-        "ops": {"hi": "सहकर्मियों व बाहरी ऑडिटर्स से तीखी बहस से बचें।", "en": "Avoid heated debates with external auditors or partners."},
-        "fin": {"hi": "ऑप्शन ट्रेडिंग व हाई-रिस्क ट्रेड्स से दूर रहें।", "en": "Refrain from option trading or high-leverage positions."},
-        "mind": {"hi": "8 मुखी (राहु) दाने के स्पर्श से नर्वस सिस्टम रिलैक्स रखें।", "en": "Touch 8 Mukhi (Rahu) bead to soothe nervous excitation."}
-    },
-    {
-        "index": 5, "code": "saadhaka", "symbol": "🟢", "status_type": "good", "score": 90,
-        "name": {"hi": "साधक (Saadhaka)", "en": "Saadhaka", "mr": "साधक", "gu": "સાધક"},
-        "desc": {"hi": "साधना, कठिन लक्ष्यों में विजय व उच्च सिद्धि।", "en": "Achievement of complex goals, victory, and high focus."},
-        "ops": {"hi": "जटिल तकनीकी समस्याओं का समाधान तेजी से निकालें।", "en": "Solve intricate technical issues and complex workflows."},
-        "fin": {"hi": "वित्तीय योजनाओं व पोर्टफोलियो री-बैलेंसिंग को एग्जीक्यूट करें।", "en": "Execute long-term financial shifts and portfolio rebalancing."},
-        "mind": {"hi": "उच्च मानसिक ऊर्जा और नेतृत्व गुण।", "en": "High mental stamina and authoritative leadership."}
-    },
-    {
-        "index": 6, "code": "vadha", "symbol": "🔴", "status_type": "danger", "score": 15,
-        "name": {"hi": "वध (Vadha)", "en": "Vadha", "mr": "वध", "gu": "વધ"},
-        "desc": {"hi": "अत्यधिक संवेदनशील। भारी तनाव व बाधा का जोखिम।", "en": "Extremely vulnerable window. Risk of heavy stress."},
-        "ops": {"hi": "100% डिफेंसिव मोड। कोई भी बड़ा रणनीतिक ऐलान न करें।", "en": "100% Defensive Mode. Do not announce strategic decisions."},
-        "fin": {"hi": "टर्मिनल बंद रखें। केवल पैसिव होल्डिंग जारी रखें।", "en": "Close trading terminal. Maintain passive holdings only."},
-        "mind": {"hi": "पीपल सेवा या महामृत्युंजय मंत्र का ध्यान करें।", "en": "Chant Mahamrityunjaya mantra or keep quiet meditation."}
-    },
-    {
-        "index": 7, "code": "mitra", "symbol": "🟢", "status_type": "good", "score": 85,
-        "name": {"hi": "मित्र (Mitra)", "en": "Mitra", "mr": "मित्र", "gu": "મિત્ર"},
-        "desc": {"hi": "अनुकूलता, सामंजस्य व सकारात्मक परिणाम।", "en": "Harmonious relationship building, trust, and smooth flow."},
-        "ops": {"hi": "टीम मीटिंग्स व वेंडर टॉक के लिए आदर्श दिन।", "en": "Ideal day for high-level team alignment & vendor reviews."},
-        "fin": {"hi": "वित्तीय सलाहकारों से परामर्श व सुरक्षित निवेश।", "en": "Consult advisors and enter steady, calculated positions."},
-        "mind": {"hi": "प्रसन्नचित्त मन व भावनात्मक संतुलन।", "en": "Joyful mood, balanced emotional state."}
-    },
-    {
-        "index": 8, "code": "ati_mitra", "symbol": "🟢🟢", "status_type": "golden", "score": 100,
-        "name": {"hi": "अति-मित्र (Ati-Mitra)", "en": "Ati-Mitra", "mr": "अति-मित्र", "gu": "અતિ-મિત્ર"},
-        "desc": {"hi": "सर्वोच्च स्वर्णिम पावर विंडो (Golden Window)।", "en": "Supreme Golden Power Window for major breakthroughs."},
-        "ops": {"hi": "मास्टर एग्जीक्यूशन, बड़े प्रोजेक्ट्स का शुभारंभ व साइन-ऑफ।", "en": "Master execution, major project launches, and sign-offs."},
-        "fin": {"hi": "TQQQ/FNGU व एसेट एलोकेशन को लॉक करने का गोल्डन टाइम।", "en": "Golden opportunity to lock major asset allocations."},
-        "mind": {"hi": "सर्वोच्च तार्किक व आध्यात्मिक स्पष्टता।", "en": "Supreme intellectual clarity and spiritual alignment."}
-    }
-]
-
-def calculate_navtara(janma_id, transit_id):
-    diff = (transit_id - janma_id + 27) % 9
-    return NAVTARA_TYPES[diff]
-
-def get_loc(obj, lang):
-    if isinstance(obj, dict):
-        return obj.get(lang, obj.get('hi', obj.get('en', '')))
-    return str(obj)
-
-def generate_7day_transits(janma_id, start_date):
-    base_epoch = datetime.datetime(2026, 8, 19, 10, 0, 0)
-    start_datetime = datetime.datetime.combine(start_date, datetime.time(9, 0))
-    diff_hours = (start_datetime - base_epoch).total_seconds() / 3600.0
-    
-    current_nak_idx = (14 + int(diff_hours // 24.5)) % 27
-    if current_nak_idx < 0:
-        current_nak_idx += 27
-        
-    transits = []
-    cursor_time = start_datetime
-
-    for i in range(7):
-        nak = NAKSHATRAS[current_nak_idx]
-        nav = calculate_navtara(janma_id, nak["id"])
-        
-        end_time = cursor_time + datetime.timedelta(hours=24.5)
-        
-        transits.append({
-            "day": i + 1,
-            "start_time": cursor_time,
-            "end_time": end_time,
-            "time_range": f"{cursor_time.strftime('%a, %d %b %I:%M %p')} to {end_time.strftime('%a, %d %b %I:%M %p')}",
-            "nakshatra": nak,
-            "navtara": nav
-        })
-        current_nak_idx = (current_nak_idx + 1) % 27
-        cursor_time = end_time
-
-    return transits
-
-with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/moon.png", width=64)
-    st.title("Navtara Pulse")
-    st.caption("Engine 3.0 | Streamlit Edition")
-
-    # Language Switcher
-    lang_choice = st.selectbox(
-        "🌐 Language / भाषा Select:",
-        options=["hi", "en", "mr", "gu"],
-        format_func=lambda x: {"hi": "हिन्दी (Hindi)", "en": "English", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}[x]
-    )
-    t = I18N[lang_choice]
-
-    st.markdown("---")
-    st.subheader(t["sidebar_header"])
-
-    # Quick Presets Buttons
-    st.write(t["quick_presets"])
-    col_p1, col_p2, col_p3 = st.columns(3)
-    preset_selected = None
-    if col_p1.button("भरणी"):
-        preset_selected = 2
-    if col_p2.button("अश्विनी"):
-        preset_selected = 1
-    if col_p3.button("कृत्तिका"):
-        preset_selected = 3
-
-    user_name = st.text_input(t["name_label"], value="माय प्रोफाइल")
-    
-    # Set default Birth Date to Today
-    user_dob = st.date_input(t["dob_label"], value=datetime.date.today())
-    
-    # Set default Birth Time to Current Time
-    now_time = datetime.datetime.now().time()
-    user_time = st.time_input(t["time_label"], value=datetime.time(now_time.hour, now_time.minute))
-
-    # Set default Birth Place to Ujjain
-    user_place = st.text_input(t["place_label"], value="उज्जैन (Ujjain)")
-
-    # Nakshatra Selector
-    nak_options = [f"{n['id']}. {get_loc(n['name'], lang_choice)} [{n['lord']}]" for n in NAKSHATRAS]
-    default_nak_index = (preset_selected - 1) if preset_selected else 1
-    selected_nak_str = st.selectbox(t["nakshatra_label"], nak_options, index=default_nak_index)
-    selected_janma_id = int(selected_nak_str.split(".")[0])
-
-    forecast_start_date = st.date_input(t["start_date_label"], value=datetime.date.today())
-
-transits = generate_7day_transits(selected_janma_id, forecast_start_date)
-
-st.title(f"🌙 {t['title']}")
-st.caption(f"{t['subtitle']} | Place: {user_place}")
-
-col_m1, col_m2, col_m3, col_m4 = st.columns(4)
-
-today_t = transits[0]
-today_nak_name = get_loc(today_t["nakshatra"]["name"], lang_choice)
-today_nav_name = get_loc(today_t["navtara"]["name"], lang_choice)
-
-with col_m1:
-    st.metric(label=t["current_moon"], value=today_nak_name, delta=today_t["nakshatra"]["rashi"])
-
-with col_m2:
-    status_label = f"{today_t['navtara']['symbol']} {today_nav_name}"
-    st.metric(label=t["navtara_status"], value=status_label)
-
-with col_m3:
-    risk_text = "HIGH RISK 🔴" if today_t["navtara"]["status_type"] == "danger" else ("GOLDEN 🟢🟢" if today_t["navtara"]["status_type"] == "golden" else "Favorable 🟢")
-    st.metric(label=t["risk_index"], value=risk_text, delta_color="off")
-
-with col_m4:
-    golden_day = next((tr for tr in transits if tr["navtara"]["code"] in ["ati_mitra", "saadhaka"]), None)
-    if golden_day:
-        g_name = get_loc(golden_day["navtara"]["name"], lang_choice)
-        g_nak = get_loc(golden_day["nakshatra"]["name"], lang_choice)
-        st.metric(label=t["golden_window"], value=f"{g_name}", delta=f"Day {golden_day['day']} ({g_nak})")
-    else:
-        st.metric(label=t["golden_window"], value="Sampat / Mitra")
-
-st.markdown("---")
-
-st.subheader(f"📋 {t['table_title']}")
-st.caption(t["table_desc"])
-
-table_data = []
-for tr in transits:
-    nak_n = get_loc(tr["nakshatra"]["name"], lang_choice)
-    nav_n = get_loc(tr["navtara"]["name"], lang_choice)
-    desc_n = get_loc(tr["navtara"]["desc"], lang_choice)
-    
-    table_data.append({
-        "Day": f"Day {tr['day']}",
-        "Status": tr["navtara"]["symbol"],
-        "Time Range": tr["time_range"],
-        "Nakshatra": f"{nak_n} ({tr['nakshatra']['rashi']})",
-        "Navtara Series": nav_n,
-        "Lord": tr["nakshatra"]["lord"],
-        "Summary": desc_n
-    })
-
-df_transits = pd.DataFrame(table_data)
-st.dataframe(df_transits, use_container_width=True, hide_index=True)
-
-st.markdown("---")
-
-col_chart, col_brief = st.columns([1, 1])
-
-with col_chart:
-    st.subheader(f"📈 {t['chart_title']}")
-    
-    chart_days = [f"D{tr['day']}: {get_loc(tr['nakshatra']['name'], lang_choice).split(' ')[0]}" for tr in transits]
-    chart_scores = [tr["navtara"]["score"] for tr in transits]
-    chart_colors = ['#f43f5e' if tr["navtara"]["status_type"] == 'danger' else ('#f59e0b' if tr["navtara"]["status_type"] == 'golden' else '#10b981') for tr in transits]
-
-# Updated General Predictions (Universal for all individuals)
 NAVTARA_TYPES = [
     {
         "index": 0, "code": "janma", "symbol": "⚪", "status_type": "neutral", "score": 40,
@@ -462,8 +232,8 @@ NAVTARA_TYPES = [
     }
 ]
 
-# Helper to automatically compute Janma Nakshatra from DOB & Time
 def compute_janma_nakshatra(dob, birth_time):
+    """Automatically computes Janma Nakshatra index (1-27) based on DOB and Time."""
     birth_datetime = datetime.datetime.combine(dob, birth_time)
     base_epoch = datetime.datetime(2026, 8, 19, 10, 0, 0) # Swati #15 (index 14)
     diff_hours = (birth_datetime - base_epoch).total_seconds() / 3600.0
@@ -473,15 +243,18 @@ def compute_janma_nakshatra(dob, birth_time):
     return NAKSHATRAS[nak_idx]["id"]
 
 def calculate_navtara(janma_id, transit_id):
+    """Calculates Navtara category object based on Janma and Transit Nakshatra IDs."""
     diff = (transit_id - janma_id + 27) % 9
     return NAVTARA_TYPES[diff]
 
 def get_loc(obj, lang):
+    """Returns localized string from dictionary with fallbacks."""
     if isinstance(obj, dict):
         return obj.get(lang, obj.get('hi', obj.get('en', '')))
     return str(obj)
 
 def generate_7day_transits(janma_id, start_date):
+    """Generates 7-day Moon transit schedule from start date."""
     base_epoch = datetime.datetime(2026, 8, 19, 10, 0, 0)
     start_datetime = datetime.datetime.combine(start_date, datetime.time(9, 0))
     diff_hours = (start_datetime - base_epoch).total_seconds() / 3600.0
