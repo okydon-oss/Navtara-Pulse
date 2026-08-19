@@ -352,6 +352,26 @@ def get_loc(obj, lang):
         return obj.get(lang, obj.get('en', obj.get('hi', '')))
     return str(obj)
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def search_places_online(query):
+    """Searches Nominatim / OpenStreetMap API for matching place names or pincodes from the internet."""
+    if not query or len(query) < 3:
+        return []
+    try:
+        headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp/1.0)"}
+        if query.isdigit() and len(query) == 6:
+            params = {"postalcode": query, "country": "India", "format": "json", "limit": 10}
+        else:
+            params = {"q": query, "format": "json", "limit": 10}
+
+        response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=4)
+        if response.status_code == 200:
+            results = response.json()
+            return [r["display_name"] for r in results if "display_name" in r]
+    except Exception:
+        pass
+    return []
+
 def generate_7day_transits(janma_id, start_date, tz_offset=5.5):
     """Generates 7-day Moon transit schedule from start date using astronomical ephemeris."""
     transits = []
@@ -492,28 +512,24 @@ with st.container(border=True):
         })
         st.success("✅ Profile saved! Details are remembered for future visits.")
 
-    user_place = "Ujjain, Madhya Pradesh"
+    user_place = place_query if place_query else "Ujjain, Madhya Pradesh"
     time_zone_offset = 5.5
 
     # Geocoding Lookup for City / Pincode
     if len(place_query) >= 3:
-        try:
-            headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp)"}
-            if place_query.isdigit() and len(place_query) == 6:
-                params = {"postalcode": place_query, "country": "India", "format": "json", "limit": 5}
-            else:
-                params = {"q": place_query, "format": "json", "limit": 5}
-
-            response = requests.get("https://nominatim.openstreetmap.org/search", params=params, headers=headers, timeout=3)
-            if response.status_code == 200:
-                results = response.json()
-                if results:
-                    matched_places = [r["display_name"] for r in results]
-                    selected_matched_place = st.selectbox("🌐 Select verified birthplace location:", options=matched_places)
-                    if selected_matched_place:
-                        user_place = selected_matched_place
-        except Exception:
-            user_place = place_query
+        with st.spinner("🌐 Searching matching locations from internet..."):
+            matched_places = search_places_online(place_query)
+            
+        if matched_places:
+            selected_matched_place = st.selectbox(
+                "🌐 Select verified birthplace location from internet results:",
+                options=matched_places,
+                index=0
+            )
+            if selected_matched_place:
+                user_place = selected_matched_place
+        else:
+            st.info("ℹ️ No exact internet match found for this query. Using entered text as birthplace.")
 
     st.success(f"📍 **Verified Birth Place:** {user_place}")
 
