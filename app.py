@@ -38,6 +38,7 @@ I18N = {
         "guide_title": "नवतारा चक्र सन्दर्भ निर्देशिका",
         "share_title": "📲 दोस्तों व परिजनों के साथ शेयर करें",
         "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर की डायरेक्ट लिंक अपने शुभचिंतकों के साथ साझा करें:",
+        "remedy_pillar": "🛡️ निवारण व सुरक्षा उपाय (Remedy & Protection)",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के सटीक नवतारा सिद्धान्त एवं लाहिरी अयनांश खगोलीय गतियों पर आधारित।"
     },
     "en": {
@@ -45,7 +46,7 @@ I18N = {
         "subtitle": "Precision Navtara & Daily Moon Transition Engine 3.0",
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
         "intro_desc": "In our fast-paced world, many people may not be familiar with ancient concepts like Navtara and accurate predictions rooted in Vedic astrology. This app serves as a guide, helping you explore the profound insights that astrology can offer. By understanding the Nakshatras, or lunar mansions, you can gain valuable knowledge about your personality, life path, and potential challenges.\n\nTo access your personalized horoscope, simply enter your name, date of birth, time of birth, and place of birth. Let us help you uncover the wisdom of the stars!",
-        "sidebar_header": "Birth Details & Profile",
+        "sidebar_header": "Birth Details & Profile Inputs",
         "name_label": "Full Name",
         "dob_label": "Date of Birth",
         "time_label": "Time of Birth (24-Hour Format)",
@@ -65,6 +66,7 @@ I18N = {
         "guide_title": "Navtara Master Reference Guide",
         "share_title": "📲 Share with Friends & Family",
         "share_desc": "Send this direct app link to your loved ones:",
+        "remedy_pillar": "🛡️ Vedic Remedy & Protection Shield",
         "footer": "Navtara Pulse © 2026 | Based on Vedic Astronomical Navtara principles & lunar transit speeds."
     },
     "mr": {
@@ -179,7 +181,11 @@ NAVTARA_TYPES = [
         "health": {"hi": "वाहन सावधानी से चलाएं, दुर्घटना की आशंका। स्वास्थ्य का ध्यान रखें।", "en": "Drive carefully. High risk of minor accidents or fatigue."},
         "career": {"hi": "कार्यस्थल या ऑफिस में अधिकारियों से बहस से बचें। शांति रखें।", "en": "Avoid arguments with bosses or clients. Stay defensive."},
         "fin": {"hi": "धन हानि की संभावना। शेयर मार्केट, लॉटरी या नए कर्ज से बचें।", "en": "Risk of monetary loss. Avoid lending money or high-risk trades."},
-        "mind": {"hi": "शांत चित्त रहें, सकारात्मक चिंतन करें व क्रोध से दूर रहें।", "en": "Practice peaceful reflection and keep anxious thoughts at bay."}
+        "mind": {"hi": "शांत चित्त रहें, सकारात्मक चिंतन करें व क्रोध से दूर रहें।", "en": "Practice peaceful reflection and keep anxious thoughts at bay."},
+        "remedy": {
+            "hi": "हनुमान चालीसा का पाठ करें, लाल या गुड़ की वस्तुओं का दान करें, बहते जल में तांबा/चावल अर्पित करें एवं जल्दबाजी में यात्रा न करें।",
+            "en": "Recite Hanuman Chalisa, offer water or flowers to plants, avoid risky travel, and perform acts of charity."
+        }
     },
     {
         "index": 3, "code": "kshema", "symbol": "🟢", "status_type": "good", "score": 80,
@@ -197,7 +203,11 @@ NAVTARA_TYPES = [
         "health": {"hi": "मानसिक तनाव या सिरदर्द। ड्राइविंग करते समय सतर्क रहें।", "en": "Watch out for stress-induced fatigue. Avoid harsh driving."},
         "career": {"hi": "ऑफिस पॉलिटिक्स से दूर रहें। कोई महत्वपूर्ण फैसला आज न लें।", "en": "Stay away from office gossip and delay key legal decisions."},
         "fin": {"hi": "अनावश्यक खर्चे बढ़ सकते हैं। क्रेडिट कार्ड या लोन लेने से बचें।", "en": "Risk of unexpected expenses. Refrain from taking debt."},
-        "mind": {"hi": "संयम बरतें, प्रतिक्रिया देने में जल्दबाजी न करें व शांत रहें।", "en": "Maintain patience, refrain from quick reactions, and stay calm."}
+        "mind": {"hi": "संयम बरतें, प्रतिक्रिया देने में जल्दबाजी न करें व शांत रहें।", "en": "Maintain patience, refrain from quick reactions, and stay calm."},
+        "remedy": {
+            "hi": "मौन व्रत रखें या संयम बरतें, 'ॐ शं शनैश्चराय नमः' का 108 बार जाप करें, गरीबों को काले तिल या सरसों तेल का दान दें।",
+            "en": "Maintain silence during arguments, chant 'Om Sham Shanaishcharaya Namah', and offer food or charity to the needy."
+        }
     },
     {
         "index": 5, "code": "saadhaka", "symbol": "🟢", "status_type": "good", "score": 90,
@@ -215,7 +225,11 @@ NAVTARA_TYPES = [
         "health": {"hi": "स्वास्थ्य का विशेष ध्यान रखें। दुर्घटना से बचने हेतु यात्रा टालें।", "en": "Take extra health precautions. Postpone non-essential travel."},
         "career": {"hi": "नौकरी या व्यापार में 100% रक्षात्मक रहें। नया रिस्क न लें।", "en": "Be 100% cautious at work. Do not make risky career moves."},
         "fin": {"hi": "धन का बड़ा नुकसान संभव। ट्रेडिंग या जुआ/सट्टा से दूर रहें।", "en": "High risk of heavy losses. Strict NO to speculative bets."},
-        "mind": {"hi": "मौन व आत्म-चिंतन का सहारा लें, तनावपूर्ण विचारों से दूर रहें।", "en": "Seek quiet meditation and maintain defensive composure."}
+        "mind": {"hi": "मौन व आत्म-चिंतन का सहारा लें, तनावपूर्ण विचारों से दूर रहें।", "en": "Seek quiet meditation and maintain defensive composure."},
+        "remedy": {
+            "hi": "महामृत्युंजय मन्त्र अथवा 'ॐ नमः शिवाय' का ध्यान करें, शिव मंदिर में जल या दूध अर्पित करें, नारियल जल में प्रवाहित करें एवं रक्षात्मक रहें।",
+            "en": "Chant the Mahamrityunjaya Mantra or 'Om Namah Shivaya', offer water to Lord Shiva, avoid major risks, and keep a peaceful mind."
+        }
     },
     {
         "index": 7, "code": "mitra", "symbol": "🟢", "status_type": "good", "score": 85,
@@ -336,62 +350,75 @@ def generate_7day_transits(janma_id, start_date, tz_offset=5.5):
 
     return transits
 
-with st.sidebar:
-    st.image("https://img.icons8.com/fluency/96/moon.png", width=64)
-    st.title("Navtara Pulse")
-    st.caption("Engine 3.0 | Streamlit Astronomical Edition")
+# ----------------- MAIN APP SINGLE-PAGE SCROLLING LAYOUT -----------------
 
-    # Language Switcher
-    lang_choice = st.selectbox(
-        "🌐 Language / भाषा Select:",
-        options=["en", "hi", "mr", "gu"],
-        format_func=lambda x: {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}[x]
-    )
-    t = I18N[lang_choice]
+st.title("🌙 Navtara Pulse")
+st.caption("Engine 3.0 | Streamlit Astronomical Edition")
 
-    st.markdown("---")
-    st.subheader(t["sidebar_header"])
+# Top Header Bar: Language Switcher
+lang_choice = st.selectbox(
+    "🌐 Select Language / भाषा चुनें:",
+    options=["en", "hi", "mr", "gu"],
+    format_func=lambda x: {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}[x],
+    key="top_lang_selector"
+)
+t = I18N[lang_choice]
 
-    user_name = st.text_input(t["name_label"], value="My Profile")
-    user_dob = st.date_input(
-        t["dob_label"],
-        value=datetime.date(1995, 1, 1),
-        min_value=datetime.date(1925, 1, 1),
-        max_value=datetime.date.today()
-    )
+# Localized Introductory Text
+st.markdown(f"""
+### **{t['intro_title']}**
+
+{t['intro_desc']}
+""")
+
+st.markdown("---")
+
+# Full Page Form Container for Birth Details & Profile Inputs
+with st.container(border=True):
+    st.subheader(f"👤 {t['sidebar_header']}")
     
-    # 24-Hour Time Selection with Session State Locks
-    if "hour_val" not in st.session_state:
-        st.session_state["hour_val"] = datetime.datetime.now().hour
-    if "minute_val" not in st.session_state:
-        st.session_state["minute_val"] = 0
-
-    st.markdown(f"**⏰ {t['time_label']}:**")
-    col_h, col_m = st.columns(2)
-    with col_h:
-        hour_opts = [f"{h:02d}" for h in range(24)]
-        selected_hour_str = st.selectbox(
-            "HH (Hour)", 
-            options=hour_opts, 
-            index=st.session_state["hour_val"],
-            key="sb_hour_select"
+    col_f1, col_f2 = st.columns([1, 1])
+    with col_f1:
+        user_name = st.text_input(t["name_label"], value="My Profile")
+        user_dob = st.date_input(
+            t["dob_label"],
+            value=datetime.date(1995, 1, 1),
+            min_value=datetime.date(1925, 1, 1),
+            max_value=datetime.date.today()
         )
-        st.session_state["hour_val"] = int(selected_hour_str)
-    with col_m:
-        min_opts = [f"{m:02d}" for m in range(60)]
-        selected_minute_str = st.selectbox(
-            "MM (Minute)", 
-            options=min_opts, 
-            index=st.session_state["minute_val"],
-            key="sb_min_select"
-        )
-        st.session_state["minute_val"] = int(selected_minute_str)
+    
+    with col_f2:
+        # 24-Hour Time Selection
+        if "hour_val" not in st.session_state:
+            st.session_state["hour_val"] = datetime.datetime.now().hour
+        if "minute_val" not in st.session_state:
+            st.session_state["minute_val"] = 0
 
-    user_time = datetime.time(st.session_state["hour_val"], st.session_state["minute_val"])
+        st.markdown(f"**⏰ {t['time_label']}:**")
+        col_h, col_m = st.columns(2)
+        with col_h:
+            hour_opts = [f"{h:02d}" for h in range(24)]
+            selected_hour_str = st.selectbox(
+                "HH (Hour)", 
+                options=hour_opts, 
+                index=st.session_state["hour_val"],
+                key="sb_hour_select"
+            )
+            st.session_state["hour_val"] = int(selected_hour_str)
+        with col_m:
+            min_opts = [f"{m:02d}" for m in range(60)]
+            selected_minute_str = st.selectbox(
+                "MM (Minute)", 
+                options=min_opts, 
+                index=st.session_state["minute_val"],
+                key="sb_min_select"
+            )
+            st.session_state["minute_val"] = int(selected_minute_str)
 
-    st.markdown(f"**📍 {t['place_label']}:**")
+        user_time = datetime.time(st.session_state["hour_val"], st.session_state["minute_val"])
+
     place_query = st.text_input(
-        "Enter City Name or 6-Digit Pincode (e.g. 456001, Ujjain, Panvel):", 
+        f"📍 {t['place_label']}:", 
         value="456001",
         help="You can enter any city name or 6-digit postal pincode in India / globally."
     ).strip()
@@ -413,42 +440,31 @@ with st.sidebar:
                 results = response.json()
                 if results:
                     matched_places = [r["display_name"] for r in results]
-                    selected_matched_place = st.selectbox("🌐 Select verified location from internet:", options=matched_places)
+                    selected_matched_place = st.selectbox("🌐 Select verified birthplace location:", options=matched_places)
                     if selected_matched_place:
                         user_place = selected_matched_place
         except Exception:
             user_place = place_query
 
-    st.success(f"📍 **Birth Place:** {user_place}")
+    st.success(f"📍 **Verified Birth Place:** {user_place}")
 
-    selected_janma_id, calculated_pada = compute_astronomical_nakshatra(user_dob, user_time, tz_offset=time_zone_offset)
-    computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
-    janma_name_str = get_loc(computed_janma_nak["name"], lang_choice)
+selected_janma_id, calculated_pada = compute_astronomical_nakshatra(user_dob, user_time, tz_offset=time_zone_offset)
+computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
+janma_name_str = get_loc(computed_janma_nak["name"], lang_choice)
 
-    st.info(
-        f"⭐ **Calculated Janma Nakshatra:**\n"
-        f"**{janma_name_str}** (Pada {calculated_pada})\n\n"
-        f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Nakshatra Lord: **{computed_janma_nak['lord']}**\n\n"
-        f"⏰ Birth Time: **{st.session_state['hour_val']:02d}:{st.session_state['minute_val']:02d}** (24h)"
-    )
+st.info(
+    f"⭐ **Calculated Janma Nakshatra:** **{janma_name_str}** (Pada {calculated_pada}) | "
+    f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Nakshatra Lord: **{computed_janma_nak['lord']}** | "
+    f"⏰ Time: **{st.session_state['hour_val']:02d}:{st.session_state['minute_val']:02d}**"
+)
 
-    # Forecast start date defaults automatically to today
-    forecast_start_date = datetime.date.today()
-
+# Forecast start date defaults automatically to today
+forecast_start_date = datetime.date.today()
 transits = generate_7day_transits(selected_janma_id, forecast_start_date, tz_offset=time_zone_offset)
-
-st.title(f"🌙 {t['title']}")
-st.caption(f"{t['subtitle']} | Birth Place: {user_place} | Janma Star: {janma_name_str} (Pada {calculated_pada})")
-
-# Localized Introductory Text
-st.markdown(f"""
-### **{t['intro_title']}**
-
-{t['intro_desc']}
-""")
 
 st.markdown("---")
 
+# Today Metrics Summary
 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
 
 today_t = transits[0]
@@ -477,32 +493,35 @@ with col_m4:
 
 st.markdown("---")
 
+# Responsive Mobile-Friendly 7-Day Schedule View (No Horizontal Scrolling)
 st.subheader(f"📋 {t['table_title']}")
 st.caption(t["table_desc"])
 
-table_data = []
 for tr in transits:
-    nak_n = get_loc(tr["nakshatra"]["name"], lang_choice).split(" ")[0]
+    nak_n = get_loc(tr["nakshatra"]["name"], lang_choice)
     nav_n = get_loc(tr["navtara"]["name"], lang_choice)
     desc_n = get_loc(tr["navtara"]["desc"], lang_choice)
+    badge_symbol = tr["navtara"]["symbol"]
     
-    table_data.append({
-        "Day": f"Day {tr['day']}",
-        "Date & Time Window (From ➔ To)": tr["time_range"],
-        "Moon Nakshatra": f"{nak_n}",
-        "Navtara Category": f"{tr['navtara']['symbol']} {nav_n}",
-        "General Forecast Summary": desc_n
-    })
-
-df_transits = pd.DataFrame(table_data)
-st.dataframe(df_transits, use_container_width=True, hide_index=True)
+    status_style = "🔴 HIGH RISK" if tr["navtara"]["status_type"] == "danger" else ("🟢🟢 GOLDEN" if tr["navtara"]["status_type"] == "golden" else "🟢 FAVORABLE")
+    
+    with st.container(border=True):
+        col_card1, col_card2 = st.columns([2, 1])
+        with col_card1:
+            st.markdown(f"**Day {tr['day']} ({tr['date_short']})** | {badge_symbol} **{nav_n}**")
+            st.caption(f"🕒 **Time:** {tr['time_range']}")
+            st.write(f"🌙 **Moon Nakshatra:** {nak_n} ({tr['nakshatra']['rashi']}) | Nakshatra Lord: **{tr['nakshatra']['lord']}**")
+        with col_card2:
+            st.markdown(f"**Status:** `{status_style}`")
+            st.caption(desc_n)
 
 st.markdown("---")
 
+# Detailed Briefing Section with Remedies
 st.subheader(f"💼 {t['briefing_title']}")
 
 selected_day_idx = st.selectbox(
-    "Select Day to Inspect Details:",
+    "Select Day to Inspect Detailed Forecast & Remedies:",
     options=range(7),
     format_func=lambda x: f"Day {x+1}: {transits[x]['date_short']} - {get_loc(transits[x]['nakshatra']['name'], lang_choice)}"
 )
@@ -518,6 +537,10 @@ st.markdown(f"**💼 {t['career_pillar']}:** {get_loc(sel_nav['career'], lang_ch
 st.markdown(f"**💰 {t['fin_pillar']}:** {get_loc(sel_nav['fin'], lang_choice)}")
 st.markdown(f"**🛡️ {t['mind_pillar']}:** {get_loc(sel_nav['mind'], lang_choice)}")
 
+# Show Remedies for High-Risk Transit Days (Vipat, Pratyari, Vadha)
+if "remedy" in sel_nav:
+    st.warning(f"**{t['remedy_pillar']}:** {get_loc(sel_nav['remedy'], lang_choice)}")
+
 st.markdown("---")
 
 with st.expander(f"📚 {t['guide_title']} (Click to Expand)", expanded=False):
@@ -532,6 +555,8 @@ with st.expander(f"📚 {t['guide_title']} (Click to Expand)", expanded=False):
             st.caption(desc_n)
 
 st.markdown("---")
+
+# Share Section with Embedded App URL in Payload
 st.subheader(t["share_title"])
 st.caption(t["share_desc"])
 
