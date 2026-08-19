@@ -208,7 +208,9 @@ NAVTARA_TYPES = [
         "mind": {"hi": "शांत चित्त रहें, सकारात्मक चिंतन करें व क्रोध से दूर रहें।", "en": "Practice peaceful reflection and keep anxious thoughts at bay."},
         "remedy": {
             "hi": "हनुमान चालीसा का पाठ करें, लाल या गुड़ की वस्तुओं का दान करें, बहते जल में तांबा/चावल अर्पित करें एवं जल्दबाजी में यात्रा न करें।",
-            "en": "Recite Hanuman Chalisa, offer water or flowers to plants, avoid risky travel, and perform acts of charity."
+            "en": "Recite Hanuman Chalisa, offer water or flowers to plants, avoid risky travel, and perform acts of charity.",
+            "mr": "हनुमान चालीसा पठण करा, लाल वस्तूंचे दान करा, प्रवास करताना काळजी घ्या आणि शांतता पाळा.",
+            "gu": "હનુમાન ચાલીસાના પાઠ કરો, લાલ વસ્તુઓનું દાન કરો, જોખમી મુસાફરી ટાળો અને દાન-પુણ્ય કરો."
         }
     },
     {
@@ -230,7 +232,9 @@ NAVTARA_TYPES = [
         "mind": {"hi": "संयम बरतें, प्रतिक्रिया देने में जल्दबाजी न करें व शांत रहें।", "en": "Maintain patience, refrain from quick reactions, and stay calm."},
         "remedy": {
             "hi": "मौन व्रत रखें या संयम बरतें, 'ॐ शं शनैश्चराय नमः' का 108 बार जाप करें, गरीबों को काले तिल या सरसों तेल का दान दें।",
-            "en": "Maintain silence during arguments, chant 'Om Sham Shanaishcharaya Namah', and offer food or charity to the needy."
+            "en": "Maintain silence during arguments, chant 'Om Sham Shanaishcharaya Namah', and offer food or charity to the needy.",
+            "mr": "वादादरम्यान शांतता राखा, 'ॐ शं शनैश्चराय नमः' चा १०८ वेळा जप करा आणि गरजूंना दान द्या.",
+            "gu": "વાદવિવાદમાં શાંતિ જાળવો, 'ઓમ શં શનૈશ્ચરાય નમઃ' નો ۱۰૮ વાર જાપ કરો અને જરૂરિયાતમંદોને દાન આપો."
         }
     },
     {
@@ -252,7 +256,9 @@ NAVTARA_TYPES = [
         "mind": {"hi": "मौन व आत्म-चिंतन का सहारा लें, तनावपूर्ण विचारों से दूर रहें।", "en": "Seek quiet meditation and maintain defensive composure."},
         "remedy": {
             "hi": "महामृत्युंजय मन्त्र अथवा 'ॐ नमः शिवाय' का ध्यान करें, शिव मंदिर में जल या दूध अर्पित करें, नारियल जल में प्रवाहित करें एवं रक्षात्मक रहें।",
-            "en": "Chant the Mahamrityunjaya Mantra or 'Om Namah Shivaya', offer water to Lord Shiva, avoid major risks, and keep a peaceful mind."
+            "en": "Chant the Mahamrityunjaya Mantra or 'Om Namah Shivaya', offer water to Lord Shiva, avoid major risks, and keep a peaceful mind.",
+            "mr": "महामृत्युंजय मंत्र किंवा 'ॐ नमः शिवाय' चा जप करा, शिवमंदिरात जल/दूध अर्पण करा आणि कोणतेही मोठे धोके पत्करू नका.",
+            "gu": "મહામૃત્યુંજય મંત્ર અથવા 'ઓમ નમઃ શિવાય' નો જાપ કરો, શિવ મંદિરમાં જળ કે દૂધ અર્પિત કરો અને મોટો જોખમ ન લો."
         }
     },
     {
@@ -624,7 +630,7 @@ st.subheader(t["share_title"])
 st.caption(t["share_desc"])
 
 app_link = "https://navtara-pulse.streamlit.app"
-share_text = f"🌙 Check out Navtara Pulse - Precision Moon Transit & Navtara Forecast: {app_link}"
+share_text = f"Check out Navtara Pulse - Precision Moon Transit: {app_link}"
 encoded_share_text = share_text.replace(" ", "%20").replace("\n", "%0A")
 
 col_s1, col_s2, col_s3 = st.columns(3)
