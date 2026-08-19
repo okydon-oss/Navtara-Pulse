@@ -409,7 +409,7 @@ st.markdown("---")
 st.subheader(f"📋 {t['table_title']}")
 st.caption(t["table_desc"])
 
-# Optimized Table Format to avoid horizontal scroll on mobile/desktop
+# Optimized Table Format displaying complete date and time transition windows
 table_data = []
 for tr in transits:
     nak_n = get_loc(tr["nakshatra"]["name"], lang_choice).split(" ")[0]
@@ -417,7 +417,8 @@ for tr in transits:
     desc_n = get_loc(tr["navtara"]["desc"], lang_choice)
     
     table_data.append({
-        "Day & Date": f"D{tr['day']} ({tr['date_short']})",
+        "Day": f"Day {tr['day']}",
+        "Date & Time Window (From ➔ To)": tr["time_range"],
         "Moon Nakshatra": f"{nak_n}",
         "Navtara Category": f"{tr['navtara']['symbol']} {nav_n}",
         "General Forecast Summary": desc_n
