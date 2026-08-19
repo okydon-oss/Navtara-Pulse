@@ -37,7 +37,8 @@ I18N = {
         "mind_pillar": "मानसिक शांति व सुरक्षा कवच",
         "guide_title": "नवतारा चक्र सन्दर्भ निर्देशिका",
         "share_title": "📲 दोस्तों व परिजनों के साथ शेयर करें",
-        "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर को अपने शुभचिंतकों के साथ साझा करें:",
+        "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर की लिंक अपने शुभचिंतकों के साथ साझा करें:",
+        "copy_link_label": "📋 ऐप डायरेक्ट लिंक (कॉपी करें):",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के सटीक नवतारा सिद्धान्त एवं लाहिरी अयनांश खगोलीय गतियों पर आधारित।"
     },
     "en": {
@@ -64,7 +65,8 @@ I18N = {
         "mind_pillar": "Mindset & Protection Shield",
         "guide_title": "Navtara Master Reference Guide",
         "share_title": "📲 Share with Friends & Family",
-        "share_desc": "Send this personalized Moon Transit & Navtara forecast to your loved ones:",
+        "share_desc": "Send this personalized Moon Transit & Navtara forecast link to your loved ones:",
+        "copy_link_label": "📋 Direct App Web Link (Copy):",
         "footer": "Navtara Pulse © 2026 | Based on Vedic Astronomical Navtara principles & lunar transit speeds."
     },
     "mr": {
@@ -92,6 +94,7 @@ I18N = {
         "guide_title": "नवतारा चक्र संदर्भ मार्गदर्शिका",
         "share_title": "📲 मित्र आणि नातेवाईकांसोबत शेअर करा",
         "share_desc": "हे नवतारा चंद्र गोचर प्रेडिक्टर तुमच्या जवळच्या लोकांशी शेअर करा:",
+        "copy_link_label": "📋 ॲप लिंक (कॉपी करा):",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष आणि चंद्र गोचर गतीवर आधारित."
     },
     "gu": {
@@ -119,6 +122,7 @@ I18N = {
         "guide_title": "નવતારા ચક્ર સંદર્ભ ડિરેક્ટરી",
         "share_title": "📲 મિત્રો અને સગા-સંબંધીઓ સાથે શેર કરો",
         "share_desc": "આ નવતારા પ્રિડિક્ટર તમારા સ્નેહીજનો સાથે શેર કરો:",
+        "copy_link_label": "📋 એપ લિંક (કોપી કરો):",
         "footer": "Navtara Pulse © 2026 | વૈદિક જ્યોતિષ અને ચંદ્ર ગોચરની ગતિ પર આધારિત."
     }
 }
@@ -305,7 +309,7 @@ def calculate_navtara(janma_id, transit_id):
 def get_loc(obj, lang):
     """Returns localized string from dictionary with fallbacks."""
     if isinstance(obj, dict):
-        return obj.get(lang, obj.get('hi', obj.get('en', '')))
+        return obj.get(lang, obj.get('en', obj.get('hi', '')))
     return str(obj)
 
 def generate_7day_transits(janma_id, start_date, tz_offset=5.5):
@@ -352,7 +356,7 @@ with st.sidebar:
     st.markdown("---")
     st.subheader(t["sidebar_header"])
 
-    user_name = st.text_input(t["name_label"], value="माय प्रोफाइल")
+    user_name = st.text_input(t["name_label"], value="My Profile")
     user_dob = st.date_input(
         t["dob_label"],
         value=datetime.date(1995, 1, 1),
@@ -360,7 +364,7 @@ with st.sidebar:
         max_value=datetime.date.today()
     )
     
-    # 24-Hour Time Selection with Session State Locks (Prevents unintended resets)
+    # 24-Hour Time Selection with Session State Locks
     if "hour_val" not in st.session_state:
         st.session_state["hour_val"] = datetime.datetime.now().hour
     if "minute_val" not in st.session_state:
@@ -403,7 +407,6 @@ with st.sidebar:
     if len(place_query) >= 3:
         try:
             headers = {"User-Agent": "NavtaraPulse/3.0 (AstroApp)"}
-            # Check if user entered a 6-digit pincode or text name
             if place_query.isdigit() and len(place_query) == 6:
                 params = {"postalcode": place_query, "country": "India", "format": "json", "limit": 5}
             else:
@@ -532,27 +535,30 @@ with st.expander(f"📚 {t['guide_title']} (Click to Expand)", expanded=False):
             st.markdown(f"**{nav_item['index']+1}. {nav_n} ({nav_item['symbol']})**")
             st.caption(desc_n)
 
-# Social Sharing Section
 st.markdown("---")
 st.subheader(t["share_title"])
 st.caption(t["share_desc"])
 
-share_text = f"🌙 Check out my 7-Day Moon Transit & Navtara Forecast on Navtara Pulse! Current Star: {today_nak_name} ({today_nav_name}). Try Navtara Pulse app now!"
-encoded_share_text = share_text.replace(" ", "%20")
+app_link = "https://navtara-pulse.streamlit.app"
+share_text = f"🌙 Check out my 7-Day Moon Transit & Navtara Forecast on Navtara Pulse!\nCurrent Star: {today_nak_name} ({today_nav_name}).\n\nTry the app now: {app_link}"
+encoded_share_text = share_text.replace(" ", "%20").replace("\n", "%0A")
 
 col_s1, col_s2, col_s3 = st.columns(3)
 
 with col_s1:
     whatsapp_url = f"https://api.whatsapp.com/send?text={encoded_share_text}"
-    st.link_button("💬 Share on WhatsApp", whatsapp_url, use_container_width=True)
+    st.link_button("💬 Share via WhatsApp", whatsapp_url, use_container_width=True)
 
 with col_s2:
-    email_url = f"mailto:?subject=Navtara Pulse Forecast&body={encoded_share_text}"
+    email_url = f"mailto:?subject=Navtara Pulse App Link & Forecast&body={encoded_share_text}"
     st.link_button("✉️ Share via Email", email_url, use_container_width=True)
 
 with col_s3:
-    telegram_url = f"https://t.me/share/url?url=https://navtara-pulse.streamlit.app&text={encoded_share_text}"
-    st.link_button("✈️ Share on Telegram", telegram_url, use_container_width=True)
+    telegram_url = f"https://t.me/share/url?url={app_link}&text={encoded_share_text}"
+    st.link_button("✈️ Share via Telegram", telegram_url, use_container_width=True)
+
+# Copyable Direct Web Link Field
+st.text_input(t["copy_link_label"], value=app_link)
 
 st.markdown("---")
 st.caption(t["footer"])
