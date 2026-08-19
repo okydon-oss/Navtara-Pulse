@@ -364,7 +364,7 @@ with st.sidebar:
     if "hour_val" not in st.session_state:
         st.session_state["hour_val"] = datetime.datetime.now().hour
     if "minute_val" not in st.session_state:
-        st.session_state["minute_val"] = datetime.datetime.now().minute
+        st.session_state["minute_val"] = 0
 
     st.markdown(f"**⏰ {t['time_label']}:**")
     col_h, col_m = st.columns(2)
@@ -420,7 +420,7 @@ with st.sidebar:
         except Exception:
             user_place = place_query
 
-    st.success(f"📍 **Active Location:** {user_place}")
+    st.success(f"📍 **Birth Place:** {user_place}")
 
     selected_janma_id, calculated_pada = compute_astronomical_nakshatra(user_dob, user_time, tz_offset=time_zone_offset)
     computed_janma_nak = NAKSHATRAS[selected_janma_id - 1]
@@ -429,7 +429,7 @@ with st.sidebar:
     st.info(
         f"⭐ **Calculated Janma Nakshatra:**\n"
         f"**{janma_name_str}** (Pada {calculated_pada})\n\n"
-        f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Lord: **{computed_janma_nak['lord']}**\n\n"
+        f"🌙 Rashi: **{computed_janma_nak['rashi']}** | Nakshatra Lord: **{computed_janma_nak['lord']}**\n\n"
         f"⏰ Birth Time: **{st.session_state['hour_val']:02d}:{st.session_state['minute_val']:02d}** (24h)"
     )
 
@@ -439,7 +439,7 @@ with st.sidebar:
 transits = generate_7day_transits(selected_janma_id, forecast_start_date, tz_offset=time_zone_offset)
 
 st.title(f"🌙 {t['title']}")
-st.caption(f"{t['subtitle']} | Place: {user_place} | Janma Star: {janma_name_str} (Pada {calculated_pada})")
+st.caption(f"{t['subtitle']} | Birth Place: {user_place} | Janma Star: {janma_name_str} (Pada {calculated_pada})")
 
 # Localized Introductory Text
 st.markdown(f"""
@@ -512,7 +512,7 @@ sel_t = transits[selected_day_idx]
 sel_nav = sel_t["navtara"]
 sel_nav_name = get_loc(sel_nav["name"], lang_choice)
 
-st.info(f"**Selected Navtara:** {sel_nav['symbol']} **{sel_nav_name}** | Moon Star: **{get_loc(sel_t['nakshatra']['name'], lang_choice)}** ({sel_t['nakshatra']['lord']})")
+st.info(f"**Selected Navtara:** {sel_nav['symbol']} **{sel_nav_name}** | Moon Star: **{get_loc(sel_t['nakshatra']['name'], lang_choice)}** (Nakshatra Lord: **{sel_t['nakshatra']['lord']}**)")
 
 st.markdown(f"**🩺 {t['health_pillar']}:** {get_loc(sel_nav['health'], lang_choice)}")
 st.markdown(f"**💼 {t['career_pillar']}:** {get_loc(sel_nav['career'], lang_choice)}")
