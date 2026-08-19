@@ -361,6 +361,16 @@ transits = generate_7day_transits(selected_janma_id, forecast_start_date)
 st.title(f"🌙 {t['title']}")
 st.caption(f"{t['subtitle']} | Place: {user_place} | Janma Star: {janma_name_str}")
 
+st.markdown("""
+### **Unlocking the Wisdom of Vedic Astrology**
+
+In our fast-paced world, many people may not be familiar with ancient concepts like Navtara and accurate predictions rooted in Vedic astrology. This app serves as a guide, helping you explore the profound insights that astrology can offer. By understanding the Nakshatras, or lunar mansions, you can gain valuable knowledge about your personality, life path, and potential challenges. 
+
+To access your personalized horoscope, simply enter your name, date of birth, time of birth, and place of birth. Let us help you uncover the wisdom of the stars!
+""")
+
+st.markdown("---")
+
 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
 
 today_t = transits[0]
