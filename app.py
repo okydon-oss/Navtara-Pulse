@@ -12,6 +12,20 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+if "saved_profiles" not in st.session_state:
+    st.session_state["saved_profiles"] = {
+        "My Profile": {
+            "name": st.query_params.get("name", "My Profile"),
+            "dob": datetime.datetime.strptime(st.query_params.get("dob", "1995-01-01"), "%Y-%m-%d").date() if st.query_params.get("dob") else datetime.date(1995, 1, 1),
+            "hour": int(st.query_params.get("hour", 12)),
+            "minute": int(st.query_params.get("minute", 0)),
+            "place": st.query_params.get("place", "456001")
+        }
+    }
+
+if "current_profile_key" not in st.session_state:
+    st.session_state["current_profile_key"] = "My Profile"
+
 I18N = {
     "hi": {
         "title": "Navtara Pulse",
@@ -39,6 +53,8 @@ I18N = {
         "share_title": "📲 दोस्तों व परिजनों के साथ शेयर करें",
         "share_desc": "इस नवतारा चंद्र गोचर प्रेडिक्टर की डायरेक्ट लिंक अपने शुभचिंतकों के साथ साझा करें:",
         "remedy_pillar": "🛡️ निवारण व सुरक्षा उपाय (Remedy & Protection)",
+        "save_profile_btn": "💾 प्रोफाइल विवरण सुरक्षित करें",
+        "select_profile_label": "👤 सहेजी गई प्रोफाइल चुनें या सम्पादित करें:",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष के सटीक नवतारा सिद्धान्त एवं लाहिरी अयनांश खगोलीय गतियों पर आधारित।"
     },
     "en": {
@@ -67,6 +83,8 @@ I18N = {
         "share_title": "📲 Share with Friends & Family",
         "share_desc": "Send this direct app link to your loved ones:",
         "remedy_pillar": "🛡️ Vedic Remedy & Protection Shield",
+        "save_profile_btn": "💾 Save Profile Changes",
+        "select_profile_label": "👤 Select or Edit Saved Profile:",
         "footer": "Navtara Pulse © 2026 | Based on Vedic Astronomical Navtara principles & lunar transit speeds."
     },
     "mr": {
@@ -94,6 +112,8 @@ I18N = {
         "guide_title": "नवतारा चक्र संदर्भ मार्गदर्शिका",
         "share_title": "📲 मित्र आणि नातेवाईकांसोबत शेअर करा",
         "share_desc": "हे नवतारा चंद्र गोचर प्रेडिक्टर तुमच्या जवळच्या लोकांशी शेअर करा:",
+        "save_profile_btn": "💾 प्रोफाईल सेव्ह करा",
+        "select_profile_label": "👤 सेव्ह केलेली प्रोफाईल निवडा किंवा एडिट करा:",
         "footer": "Navtara Pulse © 2026 | वैदिक ज्योतिष आणि चंद्र गोचर गतीवर आधारित."
     },
     "gu": {
@@ -121,6 +141,8 @@ I18N = {
         "guide_title": "નવતારા ચક્ર સંદર્ભ ડિરેક્ટરી",
         "share_title": "📲 મિત્રો અને સગા-સંબંધીઓ સાથે શેર કરો",
         "share_desc": "આ નવતારા પ્રિડિક્ટર તમારા સ્નેહીજનો સાથે શેર કરો:",
+        "save_profile_btn": "💾 પ્રોફાઇલ સાચવો",
+        "select_profile_label": "👤 સાચવેલી પ્રોફાઇલ પસંદ કરો અથવા સુધારો:",
         "footer": "Navtara Pulse © 2026 | વૈદિક જ્યોતિષ અને ચંદ્ર ગોચરની ગતિ પર આધારિત."
     }
 }
@@ -377,23 +399,45 @@ st.markdown("---")
 with st.container(border=True):
     st.subheader(f"👤 {t['sidebar_header']}")
     
+    # Profile Selector & Manager
+    col_p_sel, col_p_act = st.columns([2, 1])
+    with col_p_sel:
+        profile_keys = list(st.session_state["saved_profiles"].keys()) + ["+ Add New Profile"]
+        selected_prof_key = st.selectbox(
+            t.get("select_profile_label", "👤 Select or Edit Saved Profile:"), 
+            options=profile_keys,
+            index=0 if st.session_state["current_profile_key"] not in profile_keys else profile_keys.index(st.session_state["current_profile_key"])
+        )
+        
+        if selected_prof_key == "+ Add New Profile":
+            new_prof_name = st.text_input("Enter New Profile Name:", value="New Profile")
+            if st.button("➕ Create New Profile"):
+                st.session_state["saved_profiles"][new_prof_name] = {
+                    "name": new_prof_name,
+                    "dob": datetime.date(1995, 1, 1),
+                    "hour": 12,
+                    "minute": 0,
+                    "place": "456001"
+                }
+                st.session_state["current_profile_key"] = new_prof_name
+                st.rerun()
+        else:
+            st.session_state["current_profile_key"] = selected_prof_key
+
+    active_p = st.session_state["saved_profiles"][st.session_state["current_profile_key"]]
+
     col_f1, col_f2 = st.columns([1, 1])
     with col_f1:
-        user_name = st.text_input(t["name_label"], value="My Profile")
+        user_name = st.text_input(t["name_label"], value=active_p["name"])
         user_dob = st.date_input(
             t["dob_label"],
-            value=datetime.date(1995, 1, 1),
+            value=active_p["dob"],
             min_value=datetime.date(1925, 1, 1),
             max_value=datetime.date.today()
         )
     
     with col_f2:
         # 24-Hour Time Selection
-        if "hour_val" not in st.session_state:
-            st.session_state["hour_val"] = datetime.datetime.now().hour
-        if "minute_val" not in st.session_state:
-            st.session_state["minute_val"] = 0
-
         st.markdown(f"**⏰ {t['time_label']}:**")
         col_h, col_m = st.columns(2)
         with col_h:
@@ -401,27 +445,44 @@ with st.container(border=True):
             selected_hour_str = st.selectbox(
                 "HH (Hour)", 
                 options=hour_opts, 
-                index=st.session_state["hour_val"],
+                index=active_p["hour"],
                 key="sb_hour_select"
             )
-            st.session_state["hour_val"] = int(selected_hour_str)
         with col_m:
             min_opts = [f"{m:02d}" for m in range(60)]
             selected_minute_str = st.selectbox(
                 "MM (Minute)", 
                 options=min_opts, 
-                index=st.session_state["minute_val"],
+                index=active_p["minute"],
                 key="sb_min_select"
             )
-            st.session_state["minute_val"] = int(selected_minute_str)
 
-        user_time = datetime.time(st.session_state["hour_val"], st.session_state["minute_val"])
+        user_time = datetime.time(int(selected_hour_str), int(selected_minute_str))
 
     place_query = st.text_input(
         f"📍 {t['place_label']}:", 
-        value="456001",
+        value=active_p["place"],
         help="You can enter any city name or 6-digit postal pincode in India / globally."
     ).strip()
+
+    # Save button & Sync to URL Query Params
+    if st.button(t.get("save_profile_btn", "💾 Save Profile Changes"), use_container_width=True):
+        st.session_state["saved_profiles"][st.session_state["current_profile_key"]] = {
+            "name": user_name,
+            "dob": user_dob,
+            "hour": int(selected_hour_str),
+            "minute": int(selected_minute_str),
+            "place": place_query
+        }
+        # Sync to URL query parameters for persistent loading on refresh/bookmark
+        st.query_params.update({
+            "name": user_name,
+            "dob": user_dob.strftime("%Y-%m-%d"),
+            "hour": selected_hour_str,
+            "minute": selected_minute_str,
+            "place": place_query
+        })
+        st.success("✅ Profile saved! Details are remembered for future visits.")
 
     user_place = "Ujjain, Madhya Pradesh"
     time_zone_offset = 5.5
