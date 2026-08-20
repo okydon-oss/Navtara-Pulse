@@ -3,9 +3,6 @@ import datetime
 import urllib.parse
 import math
 
-# ==========================================
-# DEPENDENCY CHECKER
-# ==========================================
 try:
     import requests
     import ephem
@@ -15,9 +12,6 @@ except ModuleNotFoundError as e:
     st.code("pip install requests ephem", language="bash")
     st.stop()
 
-# ==========================================
-# 1. PAGE CONFIGURATION & CSS
-# ==========================================
 st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
 
 st.markdown("""
@@ -137,9 +131,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. CONSTANTS & LOCALIZATION
-# ==========================================
 nakshatra_list = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -273,9 +264,6 @@ translations = {
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
-# ==========================================
-# 3. HELPER & ASTRONOMY FUNCTIONS
-# ==========================================
 @st.cache_data(show_spinner=False)
 def search_places_online(query):
     """Fetch geocoding data from OpenStreetMap Nominatim API."""
@@ -292,7 +280,7 @@ def search_places_online(query):
     return []
 
 def get_utc_offset_hours(place_obj, place_query):
-    """Automatically determine UTC offset in hours based on place data (no user input needed)."""
+    """Automatically determine UTC offset in hours based on place data."""
     if isinstance(place_obj, dict):
         addr = place_obj.get('address', {})
         country_code = addr.get('country_code', '').lower()
@@ -302,7 +290,6 @@ def get_utc_offset_hours(place_obj, place_query):
         if lon != 0:
             return round(lon / 15.0 * 2) / 2
     
-    # Default fallback for Indian pincodes or place names
     return 5.5
 
 def get_moon_nakshatra_index(dt_utc):
@@ -335,62 +322,54 @@ def find_exact_nakshatra_transition(utc_start, utc_end):
             
     return high
 
-def calculate_7_day_transits(start_local_dt, utc_offset_hours):
-    """Calculates exact Moon transit time windows (to 1-minute precision) for the next 7 days in local time."""
-    transits = []
-    current_local = start_local_dt
-    current_utc = current_local - datetime.timedelta(hours=utc_offset_hours)
-    current_nak = get_moon_nakshatra_index(current_utc)
+def calculate_7_day_transits(now_local, utc_offset_hours):
+    """
+    Calculates exact Moon transit time windows.
+    Scans from 36 hours in the past to 7 days ahead, then strictly excludes 
+    any transit block whose end date and time has passed relative to now_local.
+    """
+    current_utc = now_local - datetime.timedelta(hours=utc_offset_hours)
     
-    # Look back up to 30 hours in 15-minute steps to find rough start of current Nakshatra
-    rough_start_utc = current_utc
-    for i in range(1, 120):  # 120 * 15 min = 30 hours
-        check_utc = current_utc - datetime.timedelta(minutes=15 * i)
-        if get_moon_nakshatra_index(check_utc) != current_nak:
-            rough_start_utc = check_utc
-            break
-            
-    # Refine exact start time of current Nakshatra using binary search
-    exact_start_utc = find_exact_nakshatra_transition(rough_start_utc, rough_start_utc + datetime.timedelta(minutes=15))
-    window_start_local = exact_start_utc + datetime.timedelta(hours=utc_offset_hours)
-    
-    scan_utc = current_utc
+    scan_utc = current_utc - datetime.timedelta(hours=36)
     end_utc_limit = current_utc + datetime.timedelta(days=7)
     
-    while scan_utc < end_utc_limit:
-        next_step_utc = scan_utc + datetime.timedelta(minutes=15)
-        if next_step_utc > end_utc_limit:
-            next_step_utc = end_utc_limit
-            
-        test_nak = get_moon_nakshatra_index(next_step_utc)
-        if test_nak != current_nak or next_step_utc == end_utc_limit:
-            if test_nak != current_nak:
-                exact_trans_utc = find_exact_nakshatra_transition(scan_utc, next_step_utc)
-            else:
-                exact_trans_utc = end_utc_limit
-                
-            window_end_local = exact_trans_utc + datetime.timedelta(hours=utc_offset_hours)
-            
+    step_minutes = 10
+    prev_utc = scan_utc
+    prev_nak = get_moon_nakshatra_index(prev_utc)
+    
+    raw_transitions = []
+    curr_utc = scan_utc + datetime.timedelta(minutes=step_minutes)
+    
+    while curr_utc <= end_utc_limit:
+        curr_nak = get_moon_nakshatra_index(curr_utc)
+        if curr_nak != prev_nak:
+            exact_trans_utc = find_exact_nakshatra_transition(prev_utc, curr_utc)
+            raw_transitions.append((exact_trans_utc, curr_nak))
+            prev_nak = curr_nak
+            prev_utc = exact_trans_utc
+        
+        curr_utc += datetime.timedelta(minutes=step_minutes)
+        
+    transits = []
+    for i in range(len(raw_transitions) - 1):
+        start_utc, nak_idx = raw_transitions[i]
+        end_utc, _ = raw_transitions[i + 1]
+        
+        start_local = start_utc + datetime.timedelta(hours=utc_offset_hours)
+        end_local = end_utc + datetime.timedelta(hours=utc_offset_hours)
+        
+        # STRICT FILTER: Exclude any transit block whose end date/time is in the past!
+        if end_local > now_local:
             transits.append({
-                "start": window_start_local,
-                "end": window_end_local,
-                "nak_index": current_nak
+                "start": start_local,
+                "end": end_local,
+                "nak_index": nak_idx
             })
-            
-            current_nak = test_nak
-            window_start_local = window_end_local
-            scan_utc = exact_trans_utc + datetime.timedelta(minutes=1)
-        else:
-            scan_utc = next_step_utc
             
     return transits
 
-# ==========================================
-# 4. MAIN APP LAYOUT & URL PARAMETERS
-# ==========================================
 query_params = st.query_params
 
-# Initialize session state for multi-profile storage
 if 'saved_profiles' not in st.session_state:
     st.session_state['saved_profiles'] = {}
 
@@ -399,8 +378,7 @@ if 'profile_saved' not in st.session_state:
 
 st.title("🌙 Navtara Pulse")
 
-# Purple Highlighted Language Selector
-lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "गुજરાતી (Gujarati)"}
+lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
 t = translations[lang_code]
@@ -409,12 +387,8 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
-# ==========================================
-# 5. MULTI-PROFILE MANAGEMENT & USER INPUT
-# ==========================================
 st.header(t['profile_title'])
 
-# Profile Selector
 profile_names = ["➕ Create New Profile"] + list(st.session_state['saved_profiles'].keys())
 selected_profile_key = st.selectbox("📁 Select or Switch Saved Profile", profile_names, index=0)
 
@@ -447,7 +421,6 @@ with col2:
     with tc2: 
         birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
 
-# Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
 place_query = st.text_input(
     "Search Location", 
@@ -467,15 +440,12 @@ if len(place_query) >= 3:
         selected_place_display = display_names[selected_idx]
         place_obj_data = places_list[selected_idx]
 
-# Auto-calculate UTC offset in the background
 utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 
-# Auto-calculate default Janma Nakshatra based on Date/Time
 birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
 birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
 auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt) if default_nak_idx is None else default_nak_idx
 
-# Option to verify or adjust Janma Nakshatra directly from Kundli
 st.write("✨ **Janma Nakshatra (Birth Star)**")
 selected_janma_nakshatra = st.selectbox(
     "Verify/Select your exact Kundli Birth Star:",
@@ -484,17 +454,14 @@ selected_janma_nakshatra = st.selectbox(
     help="Auto-calculated based on your birth date and time. You can adjust this if your official Kundli mentions a specific star."
 )
 
-# Display Verified Birth Place Badge right above the action button
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Glittering Yellow Action Button Container
 st.markdown("<div class='glitter-btn'>", unsafe_allow_html=True)
 if st.button(t['generate_btn'], type="primary", use_container_width=True):
     if len(place_query) < 3:
         st.error("⚠️ Please enter a valid Birth Place or Pincode to generate your predictions.")
     else:
-        # Save profile to session state
         profile_key_name = user_name or selected_place_display or "Saved Profile"
         st.session_state['saved_profiles'][profile_key_name] = {
             'n': user_name,
@@ -514,19 +481,14 @@ if st.button(t['generate_btn'], type="primary", use_container_width=True):
         st.session_state['profile_saved'] = True
 st.markdown("</div>", unsafe_allow_html=True)
 
-# ==========================================
-# 6. RESULTS & HOROSCOPE SCHEDULE
-# ==========================================
 if st.session_state.get('profile_saved'):
     st.divider()
     
-    # Exact Janma Nakshatra & Nakshatra Lord
     janma_index = nakshatra_list.index(selected_janma_nakshatra)
     janma_lord = nakshatra_lords[janma_index]
     
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
     
-    # Save & Install Guidance Card for Mobile Access
     st.markdown("""
         <div class="install-banner">
             <h4>📱 Save & Install for 1-Click Mobile Access</h4>
@@ -540,16 +502,14 @@ if st.session_state.get('profile_saved'):
 
     st.header(t['horoscope_title'])
     
-    # Generate exact 7-Day Moon Transits
     now_local = datetime.datetime.now()
     transits = calculate_7_day_transits(now_local, utc_offset_val)
     
     for transit in transits:
-        # Skip any transit time block that has already passed
+        # Extra explicit check: Skip any transit block that has already expired relative to current time
         if transit["end"] <= now_local:
             continue
 
-        # Astronomical Navtara Calculation
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
         cycle_group = cycles[nak_difference // 9]
@@ -562,7 +522,6 @@ if st.session_state.get('profile_saved'):
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
         end_str = transit["end"].strftime('%a, %d %b %I:%M %p')
         
-        # Light Blue High Contrast Card
         st.markdown(f"""
         <div class="transit-card">
             <h5>🕒 {start_str} ➔ {end_str}</h5>
@@ -572,7 +531,6 @@ if st.session_state.get('profile_saved'):
         </div>
         """, unsafe_allow_html=True)
         
-        # Glittering Yellow Expander
         with st.expander("✨ Click here to see the Prediction & Life Guidance ✨"):
             st.write(f"**Health:** {tara_data['H']}")
             st.write(f"**Career:** {tara_data['C']}")
@@ -581,9 +539,6 @@ if st.session_state.get('profile_saved'):
             if tara_data['R']:
                 st.error(tara_data['R'])
 
-# ==========================================
-# 7. SHARE APP (Direct Link Payload)
-# ==========================================
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
 app_url = "https://navtara-pulse.streamlit.app"
