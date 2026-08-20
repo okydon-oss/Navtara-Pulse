@@ -50,7 +50,7 @@ st.markdown("""
     }
     .transit-card p {
         color: #1e293b !important;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         font-size: 0.95rem;
     }
     .verified-badge { 
@@ -166,29 +166,28 @@ lucky_numbers_map = {
     9: "1, 2, 3, 9"
 }
 
-# Detailed Personal Day Vibration Meanings (Main Card Text)
 personal_day_meanings_en = {
-    1: "New beginnings, leadership, and bold initiative. Drive new goals with focused confidence.",
-    2: "Cooperation, emotional balance, and patience. Focus on active listening and harmonious teamwork.",
-    3: "Creative self-expression, communication, and optimism. Share ideas and embrace social connections.",
-    4: "Hard work, discipline, and practical foundation building. Organize tasks and avoid shortcut risks.",
-    5: "Dynamic change, adaptability, and fast networking. Embrace quick decisions and versatile momentum.",
-    6: "Responsibility, family harmony, and domestic wellness. Prioritize relationships and mutual care.",
-    7: "Introspection, analytical study, and spiritual calm. Observe quietly before executing major shifts.",
-    8: "Executive decision-making, financial strategy, and material ambition. Exercise authoritative focus.",
-    9: "Completion of pending matters, clearing clutter, and letting go. Practice detachment and compassion."
+    1: "Good day to launch new goals, lead projects, and pitch ideas. Avoid hesitating or relying on others.",
+    2: "Good day for teamwork, smooth negotiations, and active listening. Avoid emotional impulse buying or arguments.",
+    3: "Good day for meetings, creative tasks, and social networking. Avoid overpromising or heavy overindulgence.",
+    4: "Good day to organize, complete routine audits, and clean your workspace. Avoid taking shortcuts or making speculative bets.",
+    5: "Good day for fast networking, sales pitches, and quick decisions. Avoid being rigid or losing focus.",
+    6: "Good day for family discussions, relationship bonding, and self-care. Avoid unnecessary arguments or neglecting home ties.",
+    7: "Good day for quiet study, deep research, and mental rest. Avoid launching major public changes or making hasty big decisions.",
+    8: "Good day for financial planning, debt management, and structured work. Avoid being overly stern or rushing big tasks.",
+    9: "Good day to finish pending backlogs, clear clutter, and forgive old grievances. Avoid launching brand-new long-term commitments."
 }
 
 personal_day_meanings_hi = {
-    1: "नई शुरुआत, नेतृत्व और साहसिक पहल। केंद्रित आत्मविश्वास के साथ नए लक्ष्यों को आगे बढ़ाएं।",
-    2: "सहयोग, भावनात्मक संतुलन और धैर्य। सक्रिय सुनने और सौहार्दपूर्ण टीम वर्क पर ध्यान केंद्रित करें।",
-    3: "रचनात्मक अभिव्यक्ति, संवाद और नई आशा। विचारों को साझा करें और सामाजिक संवाद बढ़ाएं।",
-    4: "कड़ी मेहनत, अनुशासन और व्यावहारिक आधार। कार्यों को व्यवस्थित करें और जल्दबाजी से बचें।",
-    5: "गतिशील बदलाव, अनुकूलनशीलता और नेटवर्किंग। त्वरित निर्णयों और नई ऊर्जा का स्वागत करें।",
-    6: "जिम्मेदारी, पारिवारिक सद्भाव और कल्याण। संबंधों और आपसी देखभाल को प्राथमिकता दें।",
-    7: "आत्मनिरीक्षण, गहन विश्लेषण और आध्यात्मिक शांति। बदलाव से पहले शांत अवलोकन करें।",
-    8: "कारोबारी निर्णय, वित्तीय योजना और महत्वाकांक्षा। रणनीतिक अनुशासन के साथ काम करें।",
-    9: "अधूरे कार्यों का समापन, मानसिक स्पष्टता और क्षमाशीलता। नए चक्र के लिए जगह बनाएं।"
+    1: "नए लक्ष्य शुरू करने और नेतृत्व के लिए अच्छा दिन। टालमटोल या दूसरों पर निर्भर रहने से बचें।",
+    2: "टीम वर्क, बातचीत और ध्यान से सुनने के लिए अच्छा दिन। भावुक होकर खरीदारी या बहस करने से बचें।",
+    3: "बैठकों, रचनात्मक कार्यों और नेटवर्किंग के लिए अच्छा दिन। झूठे वादे करने से बचें।",
+    4: "कार्यों को व्यवस्थित करने और नियमित ऑडिट के लिए अच्छा दिन। जल्दबाजी या सट्टेबाजी से बचें।",
+    5: "त्वरित निर्णयों, बिक्री और संपर्कों के लिए अच्छा दिन। जिद्दी रुख अपनाने से बचें।",
+    6: "पारिवारिक चर्चा, संबंधों को मजबूत करने व विश्राम के लिए अच्छा दिन। घर के मामलों की अनदेखी न करें।",
+    7: "शांत अध्ययन, शोध और मानसिक शांति के लिए अच्छा दिन। जल्दबाजी में बड़े सार्वजनिक बदलाव करने से बचें।",
+    8: "वित्तीय योजना, बजट और अनुशासित कार्य के लिए अच्छा दिन। अत्यधिक कठोर या जल्दबाज़ होने से बचें।",
+    9: "अधूरे कार्यों को निपटाने, सफाई करने व क्षमाशीलता के लिए अच्छा दिन। आज नई दीर्घकालिक शुरुआत से बचें।"
 }
 
 # Personal Day Numerology Nuances for Predictions
@@ -204,7 +203,6 @@ personal_day_aspects_en = {
     9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
 }
 
-# Base Navtara Details (including Relationships)
 tara_details_en = {
     0: {
         "status": "Janma (1st Tara - Self) ⚪",
@@ -555,12 +553,10 @@ if st.session_state.get('profile_saved'):
         p_desc = (personal_day_meanings_hi if lang_code in ["hi", "mr", "gu"] else personal_day_meanings_en).get(p_day, "")
         num_aspects = personal_day_aspects_en.get(p_day, {})
         
-        # Upper Portion: Moon Transit Metadata & Shifted Main-Card Numerology Section
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
-            <p><b>Status:</b> <span class='status-badge'>{tara_badge_name}</span></p>
-            <p><b>Moon Nakshatra:</b> {transit_nak_name} (<b>Nakshatra Lord:</b> {transit_nak_lord})</p>
+            <p><b>🌙 Navtara Transit:</b> Status: <span class='status-badge'>{tara_badge_name}</span> | <b>Moon Nakshatra:</b> {transit_nak_name} (<b>Lord:</b> {transit_nak_lord})</p>
             <p style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #bae6fd;">
                 🔢 <b>Numerology Vibration:</b> Personal Day <b>{p_day} ({p_lord})</b> — {p_desc}
             </p>
