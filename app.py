@@ -535,13 +535,16 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
 # 4. MAIN APP LAYOUT & URL PARAMETERS
 # ==========================================
 query_params = st.query_params
-if 'profile_saved' not in st.session_state:
-    st.session_state['profile_saved'] = 'saved' in query_params
+
+# Initialize session state for generated state
+if 'profile_generated' not in st.session_state:
+    # Auto-reveal if explicit 'saved=true' exists in URL
+    st.session_state['profile_generated'] = (query_params.get('saved') == 'true')
 
 st.title("🌙 Navtara Pulse")
 
 # Purple Highlighted Language Selector
-lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાती (Gujarati)"}
+lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
 t = translations[lang_code]
@@ -551,12 +554,20 @@ st.write(t['intro_desc'])
 st.divider()
 
 # ==========================================
-# 5. UNIFIED USER PROFILE WINDOW
+# 5. UNIFIED USER PROFILE INPUT WINDOW
 # ==========================================
 st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
-default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
+default_date_str = query_params.get('d', '')
+if default_date_str:
+    try:
+        default_date = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
+    except:
+        default_date = datetime.date(1995, 1, 1)
+else:
+    default_date = datetime.date(1995, 1, 1)
+
 default_h = int(query_params.get('h', '0'))
 default_m = int(query_params.get('m', '0'))
 default_place = query_params.get('p', '')
@@ -616,7 +627,7 @@ with btn_col2:
 
 if save_clicked or generate_clicked:
     if len(place_query) < 3:
-        st.error("⚠️ Please enter a valid Birth Place or Pincode to save your profile.")
+        st.error("⚠️ Please enter a valid Birth Place or Pincode before saving or generating predictions.")
     else:
         st.query_params['n'] = user_name
         st.query_params['d'] = str(birth_date)
@@ -624,13 +635,13 @@ if save_clicked or generate_clicked:
         st.query_params['m'] = str(int(birth_minute))
         st.query_params['p'] = selected_place_display
         st.query_params['saved'] = 'true'
-        st.session_state['profile_saved'] = True
-        st.toast("✅ Profile saved successfully!", icon="🎉")
+        st.session_state['profile_generated'] = True
+        st.toast("✅ Profile saved & horoscope generated!", icon="🎉")
 
 # ==========================================
 # 6. CONSOLIDATED PROFILE & HOROSCOPE
 # ==========================================
-if st.session_state.get('profile_saved'):
+if st.session_state.get('profile_generated'):
     st.divider()
     
     # 1. Fixed Astrological Kundli Parameters
@@ -649,13 +660,15 @@ if st.session_state.get('profile_saved'):
     bhagyank_trait = moolank_traits_map.get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
-    profile_display_name = user_name.strip() if user_name.strip() else "User"
+    # Format display name cleanly
+    clean_name = user_name.strip()
+    profile_display_name = f"{clean_name}'s Profile" if clean_name else "User's Profile"
     
     # Single Consolidated Light Green Profile Box
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
         <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
-            🌿 {profile_display_name}'s Profile
+            🌿 {profile_display_name}
         </h4>
         <div style="font-size: 0.94rem; color: #14532d; line-height: 1.6;">
             <p style="margin-bottom: 6px;">
