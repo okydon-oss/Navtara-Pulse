@@ -36,7 +36,6 @@ st.markdown("""
 # ==========================================
 # 2. COMPLETE PREDICTION & LANGUAGE DICTIONARY
 # ==========================================
-# Full dictionaries providing actual details for the 9 Navtara categories.
 tara_details_en = {
     0: {"name": "Janma", "status": "Janma (Self)", "H": "Focus on self-care. Your body and digestion may feel sensitive today.", "C": "Maintain your daily routine. Avoid launching major new projects.", "F": "Keep finances stable. Avoid impulsive buying.", "M": "Self-reflective, quiet, and calm.", "R": ""},
     1: {"name": "Sampat", "status": "Sampat (Wealth) 🟢", "H": "Energy levels are high. Great day for recovery and healing.", "C": "Excellent for professional growth, meetings, and new opportunities.", "F": "Highly favorable day for investments and financial gains.", "M": "Positive, confident, and outgoing.", "R": ""},
@@ -56,7 +55,7 @@ translations = {
         "profile_title": "👤 Your Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
-        "save_btn": "💾 Save Profile Changes",
+        "generate_btn": "Generate Horoscope & Predictions",
         "tara": tara_details_en
     },
     "hi": {
@@ -65,11 +64,10 @@ translations = {
         "profile_title": "👤 आपकी जन्म कुंडली प्रोफ़ाइल",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
-        "save_btn": "💾 प्रोफ़ाइल सहेजें",
-        "tara": tara_details_en # (For brevity, UI is translated, predictions use English base. You can translate tara_details_en to Hindi here)
+        "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
+        "tara": tara_details_en 
     }
 }
-# Map MR and GU to UI translations
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
@@ -114,7 +112,7 @@ def calculate_7_day_transits(start_dt):
     current_nak = get_moon_nakshatra_index(current_dt)
     window_start = current_dt
     
-    for i in range(1, 7 * 48): # 30 min intervals for 7 days
+    for i in range(1, 7 * 48): 
         test_dt = start_dt + datetime.timedelta(minutes=30 * i)
         test_nak = get_moon_nakshatra_index(test_dt)
         if test_nak != current_nak:
@@ -128,14 +126,12 @@ def calculate_7_day_transits(start_dt):
 # ==========================================
 # 4. MAIN APP LAYOUT & URL STATE
 # ==========================================
-# URL Persistence: Read parameters from URL if they exist
 query_params = st.query_params
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
 
 st.title("🌙 Navtara Pulse")
 
-# Purple Highlighted Language Selector
 lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
@@ -150,7 +146,6 @@ st.divider()
 # ==========================================
 st.header(t['profile_title'])
 
-# Load defaults from URL Query Params if available
 default_name = query_params.get('n', '')
 default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
 default_h = int(query_params.get('h', '0'))
@@ -169,23 +164,21 @@ with col2:
     with tc2: birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
 
 st.write(t['search_prompt'])
-place_query = st.text_input("Type 3 letters or a pincode to search...", value=default_place)
-selected_place = default_place
+
+# Foolproof Location Entry
+place_query = st.text_input("Search Location:", value=default_place, placeholder="e.g., Panvel, Aurangabad, or 400001")
+selected_place = place_query # Default to whatever the user typed
 
 if len(place_query) >= 3 and place_query != default_place:
-    with st.spinner("Searching online..."):
-        places = search_places_online(place_query)
-        if places:
-            selected_place = st.selectbox("Select matching location:", places)
+    places = search_places_online(place_query)
+    if places:
+        selected_place = st.selectbox("Select verified location from list:", places)
 
-if selected_place:
-    st.markdown(f"<div class='verified-badge'>📍 Verified Birth Place: {selected_place}</div>", unsafe_allow_html=True)
-
-if st.button(t['save_btn'], use_container_width=True):
-    if not selected_place:
-        st.error("Please search and select a verified birthplace.")
+# Highly Visible Action Button
+if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True):
+    if len(place_query) < 3:
+        st.error("⚠️ Please enter your Birth Place to generate your horoscope.")
     else:
-        # Save to session and URL parameters for persistent bookmarking!
         st.query_params['n'] = user_name
         st.query_params['d'] = str(birth_date)
         st.query_params['h'] = str(int(birth_hour))
@@ -193,7 +186,6 @@ if st.button(t['save_btn'], use_container_width=True):
         st.query_params['p'] = selected_place
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
-        st.success("Profile Saved! You can now bookmark this URL to save your details permanently.")
 
 # ==========================================
 # 6. RESULTS & COMBINED TABLE
@@ -201,7 +193,6 @@ if st.button(t['save_btn'], use_container_width=True):
 if st.session_state.get('profile_saved'):
     st.divider()
     
-    # Accurate Astronomical Calculation
     birth_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
     janma_index = get_moon_nakshatra_index(birth_dt)
     janma_nakshatra = nakshatra_list[janma_index]
@@ -213,7 +204,6 @@ if st.session_state.get('profile_saved'):
     transits = calculate_7_day_transits(now)
     
     for transit in transits:
-        # Calculate Navtara Series and Cycle logic
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
         cycle_group = cycles[nak_difference // 9] 
@@ -224,7 +214,6 @@ if st.session_state.get('profile_saved'):
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
         end_str = transit["end"].strftime('%a, %d %b %I:%M %p')
         
-        # Responsive UI Card rendering all details
         st.markdown(f"""
         <div class="transit-card">
             <h5 style='margin-top:0; color: #ffffff;'>🕒 {start_str} ➔ {end_str}</h5>
@@ -236,7 +225,6 @@ if st.session_state.get('profile_saved'):
         </div>
         """, unsafe_allow_html=True)
         
-        # Unified Dropdown for Predictions & Guidance
         with st.expander("🔮 Daily Prediction & Life Guidance"):
             st.write(f"**Health:** {tara_data['H']}")
             st.write(f"**Career:** {tara_data['C']}")
