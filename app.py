@@ -3,6 +3,9 @@ import datetime
 import urllib.parse
 import math
 
+# ==========================================
+# DEPENDENCY CHECKER
+# ==========================================
 try:
     import requests
     import ephem
@@ -12,6 +15,9 @@ except ModuleNotFoundError as e:
     st.code("pip install requests ephem", language="bash")
     st.stop()
 
+# ==========================================
+# 1. PAGE CONFIGURATION & CSS
+# ==========================================
 st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
 
 st.markdown("""
@@ -82,7 +88,7 @@ st.markdown("""
         display: inline-block;
     }
 
-    /* Yellow Glittering Generate Button */
+    /* Yellow Glittering Buttons */
     div[data-testid="stButton"] > button[kind="primary"] {
         background: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%) !important;
         color: #1e1b4b !important;
@@ -99,44 +105,53 @@ st.markdown("""
         box-shadow: 0 0 25px rgba(245, 158, 11, 0.9);
         background: linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #f59e0b 100%) !important;
     }
+
     @keyframes glitter {
         0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.5), 0 0 20px rgba(251, 191, 36, 0.4); }
         50% { box-shadow: 0 0 22px rgba(245, 158, 11, 0.9), 0 0 35px rgba(251, 191, 36, 0.8); }
     }
 
-    /* Seamless Expander Attachment to the Transit Card */
+    /* Eye-Catching Yellow Glittering Expander Summary Bar */
     div[data-testid="stExpander"] {
         border-top: none !important;
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
         border-bottom-left-radius: 12px !important;
         border-bottom-right-radius: 12px !important;
-        border-left: 6px solid #0284c7 !important;
-        border-right: 1px solid #bae6fd !important;
-        border-bottom: 1px solid #bae6fd !important;
-        background-color: #f0f9ff !important;
+        border-left: 6px solid #d97706 !important;
+        border-right: 1px solid #fef08a !important;
+        border-bottom: 1px solid #fef08a !important;
+        background-color: #fffbeb !important;
         margin-bottom: 18px !important;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
     div[data-testid="stExpander"] summary {
-        background-color: #dbeafe !important;
-        color: #0369a1 !important;
-        font-weight: 700 !important;
+        background: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%) !important;
+        color: #1e1b4b !important;
+        font-weight: 800 !important;
+        font-size: 0.98rem !important;
         border-radius: 0 !important;
-        padding: 10px 14px !important;
+        padding: 12px 16px !important;
+        box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        animation: glitter 2s infinite ease-in-out;
+        transition: all 0.3s ease;
     }
     div[data-testid="stExpander"] summary:hover {
-        background-color: #bfdbfe !important;
-        color: #0c4a6e !important;
+        background: linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #f59e0b 100%) !important;
+        color: #0f172a !important;
     }
     div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
-        background-color: #f8fafc !important;
-        padding: 14px !important;
+        background-color: #ffffff !important;
+        padding: 16px !important;
         border-radius: 0 0 10px 10px !important;
+        border-top: 1px solid #fef08a !important;
     }
     </style>
 """, unsafe_allow_html=True)
 
+# ==========================================
+# 2. CONSTANTS & LOCALIZATION
+# ==========================================
 nakshatra_list = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -152,6 +167,18 @@ nakshatra_lords = [
     "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
     "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
     "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
+]
+
+rashi_list = [
+    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
+    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
+    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
+]
+
+lagna_list = [
+    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
+    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
+    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
 ]
 
 navtara_names = [
@@ -172,7 +199,6 @@ cycles = {
     2: "3rd Cycle (Trijanma Group)"
 }
 
-# Detailed Nakshatra Core Personality Traits
 nakshatra_traits_map = {
     "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
     "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
@@ -203,7 +229,6 @@ nakshatra_traits_map = {
     "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
 }
 
-# Numerology Driver & Conductor Traits Map
 num_lords = {
     1: "Sun (Surya)",
     2: "Moon (Chandra)",
@@ -368,6 +393,7 @@ translations = {
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
         "generate_btn": "Generate Horoscope & Predictions",
+        "save_btn": "Save Profile & Generate Horoscope",
         "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
         "tara": tara_details_en
     },
@@ -378,6 +404,7 @@ translations = {
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
         "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
+        "save_btn": "प्रोफाइल सहेजें और राशिफल जनरेट करें",
         "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
         "tara": tara_details_en 
     }
@@ -385,6 +412,9 @@ translations = {
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
+# ==========================================
+# 3. HELPER & ASTRONOMY FUNCTIONS
+# ==========================================
 def reduce_to_single_digit(n: int) -> int:
     """Reduce any number to a single digit 1-9."""
     while n > 9:
@@ -476,6 +506,9 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
                 
     return transits
 
+# ==========================================
+# 4. MAIN APP LAYOUT & URL PARAMETERS
+# ==========================================
 query_params = st.query_params
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
@@ -492,7 +525,9 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
-# Birth Profile Form
+# ==========================================
+# 5. UNIFIED USER PROFILE WINDOW
+# ==========================================
 st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
@@ -500,6 +535,8 @@ default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '
 default_h = int(query_params.get('h', '0'))
 default_m = int(query_params.get('m', '0'))
 default_place = query_params.get('p', '')
+default_rashi = int(query_params.get('r', '0'))
+default_lagna = int(query_params.get('l', '0'))
 
 col1, col2 = st.columns(2)
 with col1:
@@ -542,29 +579,61 @@ birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_h
 birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
 auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt)
 
-st.write("✨ **Janma Nakshatra (Birth Star)**")
-selected_janma_nakshatra = st.selectbox(
-    "Verify/Select your exact Kundli Birth Star:",
-    nakshatra_list,
-    index=auto_janma_idx,
-    help="Auto-calculated based on birth date/time. You can adjust this if your Kundli mentions a specific star."
-)
+# Birth Kundli Details Grid: Nakshatra, Rashi, Lagna
+st.write("✨ **Kundli Astrological Parameters**")
+ck1, ck2, ck3 = st.columns(3)
 
+with ck1:
+    selected_janma_nakshatra = st.selectbox(
+        "Janma Nakshatra (Birth Star)",
+        nakshatra_list,
+        index=auto_janma_idx
+    )
+
+with ck2:
+    selected_rashi = st.selectbox(
+        "Janma Rashi (Moon Sign)",
+        rashi_list,
+        index=default_rashi if default_rashi < len(rashi_list) else 0
+    )
+
+with ck3:
+    selected_lagna = st.selectbox(
+        "Lagna (Ascendant)",
+        lagna_list,
+        index=default_lagna if default_lagna < len(lagna_list) else 0
+    )
+
+# Plain Birth Place Badge
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True):
+# Dedicated Save Profile & Generate Horoscope Button (Glittering Yellow)
+btn_col1, btn_col2 = st.columns([1, 1])
+with btn_col1:
+    save_clicked = st.button("💾 Save Profile", use_container_width=True)
+
+with btn_col2:
+    generate_clicked = st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True)
+
+if save_clicked or generate_clicked:
     if len(place_query) < 3:
-        st.error("⚠️ Please enter a valid Birth Place or Pincode to generate your predictions.")
+        st.error("⚠️ Please enter a valid Birth Place or Pincode to save your profile.")
     else:
         st.query_params['n'] = user_name
         st.query_params['d'] = str(birth_date)
         st.query_params['h'] = str(int(birth_hour))
         st.query_params['m'] = str(int(birth_minute))
         st.query_params['p'] = selected_place_display
+        st.query_params['r'] = str(rashi_list.index(selected_rashi))
+        st.query_params['l'] = str(lagna_list.index(selected_lagna))
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
+        st.toast("✅ Profile saved successfully!", icon="🎉")
 
+# ==========================================
+# 6. CONSOLIDATED PROFILE & HOROSCOPE
+# ==========================================
 if st.session_state.get('profile_saved'):
     st.divider()
     
@@ -582,14 +651,21 @@ if st.session_state.get('profile_saved'):
     bhagyank_trait = moolank_traits_map.get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
-    # Single Consolidated Light Green Profile Box
+    profile_display_name = user_name.strip() if user_name.strip() else "User"
+    
+    # Single Consolidated Light Green Profile Box with Rashi & Lagna Included
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
         <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
-            🌿 {user_name or 'User'}'s Profile
+            🌿 {profile_display_name}'s Profile
         </h4>
         <div style="font-size: 0.94rem; color: #14532d; line-height: 1.6;">
-            <p style="margin-bottom: 6px;">⭐ <b>Janma Nakshatra:</b> {selected_janma_nakshatra} &nbsp;|&nbsp; <b>Nakshatra Lord:</b> {janma_lord}</p>
+            <p style="margin-bottom: 6px;">
+                ⭐ <b>Janma Nakshatra:</b> {selected_janma_nakshatra} &nbsp;|&nbsp; 
+                <b>Nakshatra Lord:</b> {janma_lord} &nbsp;|&nbsp; 
+                <b>Rashi:</b> {selected_rashi} &nbsp;|&nbsp; 
+                <b>Lagna:</b> {selected_lagna}
+            </p>
             <p style="margin-bottom: 12px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
                 ✨ <b>Nakshatra Traits:</b> {janma_traits}
             </p>
@@ -644,6 +720,7 @@ if st.session_state.get('profile_saved'):
         p_desc = (personal_day_meanings_hi if lang_code in ["hi", "mr", "gu"] else personal_day_meanings_en).get(p_day, "")
         num_aspects = personal_day_aspects_en.get(p_day, {})
         
+        # Upper Portion: Day Card with Navtara Transit & Numerology Vibration
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
@@ -654,7 +731,7 @@ if st.session_state.get('profile_saved'):
         </div>
         """, unsafe_allow_html=True)
         
-        # Attached Lower Portion: Expanded Guidance with Health, Career, Finance, Mindset & Relationships
+        # Attached Lower Portion: Eye-Catching Yellow Glittering Expander Bar
         with st.expander(t["expander_title"]):
             st.write(f"🩺 **Health:** {tara_data['H']} *(Numerology Focus: {num_aspects.get('H', '')})*")
             st.write(f"💼 **Career:** {tara_data['C']} *(Numerology Focus: {num_aspects.get('C', '')})*")
@@ -668,6 +745,9 @@ if st.session_state.get('profile_saved'):
             if num_aspects.get("Remedy", ""):
                 st.info(num_aspects["Remedy"])
 
+# ==========================================
+# 7. SHARE APP (Direct Link Payload)
+# ==========================================
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
 app_url = "https://navtara-pulse.streamlit.app"
