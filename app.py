@@ -1,4 +1,3 @@
-# STREAMING_CHUNK:Importing required libraries...
 import streamlit as st
 import datetime
 import urllib.parse
@@ -16,7 +15,6 @@ except ModuleNotFoundError as e:
     st.code("pip install requests ephem", language="bash")
     st.stop()
 
-# STREAMING_CHUNK:Configuring Streamlit page and CSS styling...
 # ==========================================
 # 1. PAGE CONFIGURATION & CSS
 # ==========================================
@@ -34,20 +32,13 @@ st.markdown("""
     #MainMenu {visibility: hidden;} 
     footer {visibility: hidden;}
     
-    /* Red Border & Glowing Highlight for Missing Input Fields */
-    .missing-field div[data-baseweb="input"], 
-    .missing-field div[data-baseweb="select"] > div,
-    .missing-field input {
-        border: 2px solid #ef4444 !important;
-        border-radius: 8px !important;
-        background-color: #fef2f2 !important;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.35) !important;
-    }
-    .missing-field-warning {
+    /* Missing Field Warning Styling */
+    .missing-warning {
         color: #dc2626 !important;
-        font-size: 0.82rem !important;
+        font-size: 0.83rem !important;
         font-weight: 700 !important;
-        margin-top: 4px;
+        margin-top: -8px;
+        margin-bottom: 8px;
         display: block;
     }
 
@@ -178,7 +169,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# STREAMING_CHUNK:Defining astrological & numerological constants...
 # ==========================================
 # 2. CONSTANTS & LOCALIZATION
 # ==========================================
@@ -440,7 +430,6 @@ translations = {
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
-# STREAMING_CHUNK:Defining astronomical math and helper functions...
 # ==========================================
 # 3. HELPER & ASTRONOMY FUNCTIONS
 # ==========================================
@@ -496,7 +485,7 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
     ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
     
     sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
-    nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
+    nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27 if 'sidereal_lon' in locals() else int(sidereal_moon_lon / 13.333333333333334) % 27
     rashi_index = int(sidereal_moon_lon / 30.0) % 12
     
     try:
@@ -560,7 +549,6 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
                 
     return transits
 
-# STREAMING_CHUNK:Setting up layout and language options...
 # ==========================================
 # 4. MAIN APP LAYOUT & URL PARAMETERS
 # ==========================================
@@ -581,7 +569,6 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
-# STREAMING_CHUNK:Building birth profile input form with validation...
 # ==========================================
 # 5. UNIFIED USER PROFILE INPUT WINDOW
 # ==========================================
@@ -601,22 +588,9 @@ default_h = int(query_params.get('h', '0'))
 default_m = int(query_params.get('m', '0'))
 default_place = query_params.get('p', '')
 
-# Evaluate form validity checks
-is_name_valid = bool(default_name.strip()) if 'user_name_input' not in st.session_state else bool(st.session_state.get('user_name_input', '').strip())
-is_place_valid = len(default_place.strip()) >= 3 if 'place_input' not in st.session_state else len(st.session_state.get('place_input', '').strip()) >= 3
-
 col1, col2 = st.columns(2)
 with col1:
-    # Wrap in red border if missing
-    if not is_name_valid:
-        st.markdown('<div class="missing-field">', unsafe_allow_html=True)
-    user_name = st.text_input("Name", value=default_name, placeholder="e.g. Rahul Sharma", key="user_name_input")
-    is_name_valid = bool(user_name.strip())
-    if not is_name_valid:
-        st.markdown('<span class="missing-field-warning">⚠️ Name is required</span></div>', unsafe_allow_html=True)
-    else:
-        if not is_name_valid: st.markdown('</div>', unsafe_allow_html=True)
-
+    user_name = st.text_input("Name", value=default_name, placeholder="e.g. Rahul Sharma")
     birth_date = st.date_input("Date of Birth", min_value=datetime.date(1925, 1, 1), max_value=datetime.date.today(), value=default_date)
 
 with col2:
@@ -627,21 +601,24 @@ with col2:
     with tc2: 
         birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
 
-# Unified Single Birth Place Search Box with Red Highlighting when empty
+# Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
-
-if not is_place_valid:
-    st.markdown('<div class="missing-field">', unsafe_allow_html=True)
 place_query = st.text_input(
     "Search Location", 
     value=default_place, 
     placeholder="e.g. Ujjain, Mumbai, London, or 456001",
-    label_visibility="collapsed",
-    key="place_input"
+    label_visibility="collapsed"
 )
+
+# Display subtle warning caption below field if empty
+is_name_valid = bool(user_name.strip())
 is_place_valid = len(place_query.strip()) >= 3
+
+if not is_name_valid:
+    st.markdown('<span class="missing-warning">⚠️ Name is required</span>', unsafe_allow_html=True)
+
 if not is_place_valid:
-    st.markdown('<span class="missing-field-warning">⚠️ Valid Birth Place or 6-digit Pincode is required (e.g. Mumbai, Ujjain)</span></div>', unsafe_allow_html=True)
+    st.markdown('<span class="missing-warning">⚠️ Valid Birth Place or 6-digit Pincode is required</span>', unsafe_allow_html=True)
 
 selected_place_display = place_query
 place_obj_data = None
@@ -666,7 +643,7 @@ auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(bir
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Full Form Validation Check
+# Form Validation Check
 is_dob_valid = birth_date is not None
 is_tob_valid = birth_hour is not None and birth_minute is not None
 is_form_valid = is_name_valid and is_dob_valid and is_tob_valid and is_place_valid
@@ -679,7 +656,7 @@ submit_clicked = st.button(
 )
 
 if not is_form_valid:
-    st.caption("⚠️ Please fill in all required birth details (**Name** and a valid **Birth Place**) highlighted above to enable predictions.")
+    st.caption("⚠️ Please enter all required birth details (**Name** and a valid **Birth Place**) above to enable predictions.")
 
 if submit_clicked:
     st.query_params['n'] = user_name
@@ -691,7 +668,6 @@ if submit_clicked:
     st.session_state['profile_generated'] = True
     st.toast("✅ Profile saved & horoscope generated!", icon="🎉")
 
-# STREAMING_CHUNK:Rendering consolidated profile and predictions...
 # ==========================================
 # 6. CONSOLIDATED PROFILE & HOROSCOPE
 # ==========================================
@@ -810,7 +786,6 @@ if st.session_state.get('profile_generated') and is_form_valid:
             if num_aspects.get("Remedy", ""):
                 st.info(num_aspects["Remedy"])
 
-# STREAMING_CHUNK:Rendering social sharing buttons...
 # ==========================================
 # 7. SHARE APP (Direct Link Payload)
 # ==========================================
@@ -826,9 +801,3 @@ with sc2:
     st.link_button("✉️ Email", f"mailto:?subject=Navtara Pulse&body={share_text}", use_container_width=True)
 with sc3: 
     st.link_button("✈️ Telegram", f"https://t.me/share/url?url={app_url}&text=Check out Navtara Pulse", use_container_width=True)
-```eof
-
-### What Has Been Added:
-- **Red Border Highlighting (`.missing-field`):** Unfilled or missing required fields (`Name` or `Birth Place`) immediately glow with a red border (`border: 2px solid #ef4444`) and soft red background highlight (`#fef2f2`).
-- **Attention Badges (`.missing-field-warning`):** Displays a red warning message directly beneath the input field to make it obvious to the user.
-- **Real-Time Responsiveness:** The red highlighting disappears instantly as soon as the user enters valid inputs into the fields.
