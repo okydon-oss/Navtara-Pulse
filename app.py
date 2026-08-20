@@ -88,7 +88,7 @@ st.markdown("""
         display: inline-block;
     }
 
-    /* Yellow Glittering Buttons (Both Save & Generate) */
+    /* Yellow Glittering Consolidated Primary Button */
     div[data-testid="stButton"] > button[kind="primary"] {
         background: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%) !important;
         color: #1e1b4b !important;
@@ -104,6 +104,16 @@ st.markdown("""
         transform: translateY(-2px);
         box-shadow: 0 0 25px rgba(245, 158, 11, 0.9);
         background: linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #f59e0b 100%) !important;
+    }
+    /* Disabled state for primary button */
+    div[data-testid="stButton"] > button[kind="primary"]:disabled {
+        background: #e2e8f0 !important;
+        color: #94a3b8 !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        animation: none !important;
+        cursor: not-allowed !important;
+        transform: none !important;
     }
 
     @keyframes glitter {
@@ -392,8 +402,7 @@ translations = {
         "profile_title": "👤 Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
-        "generate_btn": "Generate Horoscope & Predictions",
-        "save_btn": "Save Profile",
+        "generate_btn": "Save Profile & Generate Predictions",
         "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
         "tara": tara_details_en
     },
@@ -403,8 +412,7 @@ translations = {
         "profile_title": "👤 जन्म विवरण",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
-        "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
-        "save_btn": "प्रोफाइल सहेजें",
+        "generate_btn": "प्रोफाइल सहेजें और भविष्यवाणियां उत्पन्न करें",
         "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
         "tara": tara_details_en 
     }
@@ -536,9 +544,7 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
 # ==========================================
 query_params = st.query_params
 
-# Initialize session state for generated state
 if 'profile_generated' not in st.session_state:
-    # Auto-reveal if explicit 'saved=true' exists in URL
     st.session_state['profile_generated'] = (query_params.get('saved') == 'true')
 
 st.title("🌙 Navtara Pulse")
@@ -617,31 +623,38 @@ auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(bir
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Both Save Profile & Generate Horoscope Buttons styled with primary glittering yellow
-btn_col1, btn_col2 = st.columns([1, 1])
-with btn_col1:
-    save_clicked = st.button("💾 Save Profile", type="primary", use_container_width=True)
+# Form Validation Check (Ensuring all required birth details are provided)
+is_name_valid = bool(user_name.strip())
+is_dob_valid = birth_date is not None
+is_tob_valid = birth_hour is not None and birth_minute is not None
+is_place_valid = len(place_query.strip()) >= 3
 
-with btn_col2:
-    generate_clicked = st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True)
+is_form_valid = is_name_valid and is_dob_valid and is_tob_valid and is_place_valid
 
-if save_clicked or generate_clicked:
-    if len(place_query) < 3:
-        st.error("⚠️ Please enter a valid Birth Place or Pincode before saving or generating predictions.")
-    else:
-        st.query_params['n'] = user_name
-        st.query_params['d'] = str(birth_date)
-        st.query_params['h'] = str(int(birth_hour))
-        st.query_params['m'] = str(int(birth_minute))
-        st.query_params['p'] = selected_place_display
-        st.query_params['saved'] = 'true'
-        st.session_state['profile_generated'] = True
-        st.toast("✅ Profile saved & horoscope generated!", icon="🎉")
+submit_clicked = st.button(
+    f"💾 {t['generate_btn']}", 
+    type="primary", 
+    use_container_width=True,
+    disabled=not is_form_valid
+)
+
+if not is_form_valid:
+    st.caption("⚠️ Please enter all required birth details (**Name**, **Date of Birth**, **Time of Birth**, and a valid **Birth Place**) above to enable predictions.")
+
+if submit_clicked:
+    st.query_params['n'] = user_name
+    st.query_params['d'] = str(birth_date)
+    st.query_params['h'] = str(int(birth_hour))
+    st.query_params['m'] = str(int(birth_minute))
+    st.query_params['p'] = selected_place_display
+    st.query_params['saved'] = 'true'
+    st.session_state['profile_generated'] = True
+    st.toast("✅ Profile saved & horoscope generated!", icon="🎉")
 
 # ==========================================
 # 6. CONSOLIDATED PROFILE & HOROSCOPE
 # ==========================================
-if st.session_state.get('profile_generated'):
+if st.session_state.get('profile_generated') and is_form_valid:
     st.divider()
     
     # 1. Fixed Astrological Kundli Parameters
