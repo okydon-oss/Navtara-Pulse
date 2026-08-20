@@ -81,7 +81,7 @@ st.markdown("""
         background-color: #0284c7;
         color: white;
         font-size: 0.75rem;
-        padding: 3px 10px;
+        padding: 4px 12px;
         border-radius: 12px;
         font-weight: 700;
         text-transform: uppercase;
@@ -271,47 +271,49 @@ def get_moon_nakshatra_index(dt_utc):
     nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27
     return nakshatra_index
 
-def calculate_7_day_transits(now_local, utc_offset_hours, days=7):
+def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     """
-    Finds exact start of active Nakshatra and computes future transits.
-    Filters out any past window whose end time is already behind current time.
+    Computes current and future transits anchored strictly to UTC time.
+    Discards any past transit whose end time is before current local time.
     """
-    now_utc = now_local - datetime.timedelta(hours=utc_offset_hours)
+    now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
     current_nak = get_moon_nakshatra_index(now_utc)
     
     # 1. Step backward in 15-minute intervals to find start of current active Nakshatra
-    start_search = now_local
-    for i in range(1, 120): # up to 30 hours back
-        test_local = now_local - datetime.timedelta(minutes=15 * i)
-        test_utc = test_local - datetime.timedelta(hours=utc_offset_hours)
+    start_search_utc = now_utc
+    for i in range(1, 200): # up to 50 hours back
+        test_utc = now_utc - datetime.timedelta(minutes=15 * i)
         if get_moon_nakshatra_index(test_utc) != current_nak:
-            start_search = test_local
+            start_search_utc = test_utc + datetime.timedelta(minutes=15)
             break
             
+    window_start_local = start_search_utc + datetime.timedelta(hours=utc_offset_hours)
+    
     # 2. Step forward from active transit start to build current and future transits
     transits = []
-    window_start = start_search
-    scan_limit_end = now_local + datetime.timedelta(days=days)
+    curr_nak = current_nak
+    scan_limit_utc = now_utc + datetime.timedelta(days=days)
     
-    total_steps = int((days + 2) * 24 * 4) # 15-min intervals
+    total_steps = int((days + 3) * 24 * 4) # 15-min intervals
     for i in range(1, total_steps):
-        test_local = start_search + datetime.timedelta(minutes=15 * i)
-        test_utc = test_local - datetime.timedelta(hours=utc_offset_hours)
+        test_utc = start_search_utc + datetime.timedelta(minutes=15 * i)
         test_nak = get_moon_nakshatra_index(test_utc)
         
-        if test_nak != current_nak:
-            # Only include windows that have not expired yet
+        if test_nak != curr_nak:
+            test_local = test_utc + datetime.timedelta(hours=utc_offset_hours)
+            
+            # Only include windows whose end time is strictly in the future
             if test_local > now_local:
                 transits.append({
-                    "start": window_start,
+                    "start": window_start_local,
                     "end": test_local,
-                    "nak_index": current_nak,
-                    "is_current": (window_start <= now_local <= test_local)
+                    "nak_index": curr_nak,
+                    "is_current": (window_start_local <= now_local < test_local)
                 })
-            current_nak = test_nak
-            window_start = test_local
+            curr_nak = test_nak
+            window_start_local = test_local
             
-            if window_start >= scan_limit_end:
+            if test_utc >= scan_limit_utc:
                 break
                 
     return transits
@@ -422,8 +424,9 @@ if st.session_state.get('profile_saved'):
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
     st.header(t['horoscope_title'])
     
-    now_local = datetime.datetime.now()
-    transits = calculate_7_day_transits(now_local, utc_offset_val)
+    # Accurate UTC anchor regardless of server timezone
+    now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+    transits = calculate_7_day_transits(now_utc, utc_offset_val)
     
     for transit in transits:
         nak_difference = (transit["nak_index"] - janma_index) % 27
