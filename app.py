@@ -29,6 +29,30 @@ st.markdown("""
     /* Unified Transit Card Top Block */
     .transit-card { 
         background-color: #e0f2fe; 
+        color: #0f172a;
+        padding: 16px; 
+        border-radius: 12px 12px 0 0; 
+        margin-bottom: 0px; 
+        border-left: 6px solid #0284c7; 
+        border-top: 1px solid #bae6fd;
+        border-right: 1px solid #bae6fd;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
+    }
+    .transit-card h5 {
+        color: #0369a1 !important;
+        margin-top: 0;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .transit-card p {
+        color: #1e293b !important;
+        margin-bottom: 4px;
+        font-size: 0.95rem;
+    }
     /* Plain Birth Place Badge */
     .verified-badge { 
         background-color: #f1f5f9; 
@@ -82,6 +106,72 @@ st.markdown("""
 
     /* Seamless Expander Attachment to the Transit Card */
     div[data-testid="stExpander"] {
+        border-top: none !important;
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 12px !important;
+        border-bottom-right-radius: 12px !important;
+        border-left: 6px solid #0284c7 !important;
+        border-right: 1px solid #bae6fd !important;
+        border-bottom: 1px solid #bae6fd !important;
+        background-color: #f0f9ff !important;
+        margin-bottom: 18px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    div[data-testid="stExpander"] summary {
+        background-color: #dbeafe !important;
+        color: #0369a1 !important;
+        font-weight: 700 !important;
+        border-radius: 0 !important;
+        padding: 10px 14px !important;
+    }
+    div[data-testid="stExpander"] summary:hover {
+        background-color: #bfdbfe !important;
+        color: #0c4a6e !important;
+    }
+    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
+        background-color: #f8fafc !important;
+        padding: 14px !important;
+        border-radius: 0 0 10px 10px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+nakshatra_list = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Moola", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+]
+
+nakshatra_lords = [
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
+]
+
+navtara_names = [
+    "Janma (Self / Body) ⚪",
+    "Sampat (Wealth / Progress) 🟢",
+    "Vipat (Obstacles / Delays) 🔴",
+    "Kshema (Wellbeing / Comfort) 🟢",
+    "Pratyari (Opposition / Tension) 🔴",
+    "Sadhaka (Success / Achievement) 🟢",
+    "Vadha (Risk / Danger) 🔴",
+    "Mitra (Friend) 🟢",
+    "Ati-Mitra (Best Friend) 🟢🟢"
+]
+
+cycles = {
+    0: "1st Cycle (Janma Group)",
+    1: "2nd Cycle (Anujanma Group)",
+    2: "3rd Cycle (Trijanma Group)"
+}
+
 # Detailed Nakshatra Core Personality Traits
 nakshatra_traits_map = {
     "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
@@ -114,6 +204,18 @@ nakshatra_traits_map = {
 }
 
 # Numerology Driver & Conductor Traits Map
+num_lords = {
+    1: "Sun (Surya)",
+    2: "Moon (Chandra)",
+    3: "Jupiter (Guru)",
+    4: "Rahu",
+    5: "Mercury (Budh)",
+    6: "Venus (Shukra)",
+    7: "Ketu",
+    8: "Saturn (Shani)",
+    9: "Mars (Mangal)"
+}
+
 moolank_traits_map = {
     1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
     2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
@@ -126,7 +228,42 @@ moolank_traits_map = {
     9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
 }
 
-# Personal Day Aspect Nuances for Expander Guidance
+lucky_numbers_map = {
+    1: "1, 2, 3, 9",
+    2: "1, 2, 5",
+    3: "1, 2, 3, 9",
+    4: "1, 4, 5, 6, 7",
+    5: "1, 5, 6",
+    6: "1, 5, 6, 7",
+    7: "1, 4, 7",
+    8: "3, 5, 6, 8",
+    9: "1, 2, 3, 9"
+}
+
+personal_day_meanings_en = {
+    1: "Good day to launch new goals, lead projects, and pitch ideas. Avoid hesitating or relying on others.",
+    2: "Good day for teamwork, smooth negotiations, and active listening. Avoid emotional impulse buying or arguments.",
+    3: "Good day for meetings, creative tasks, and social networking. Avoid overpromising or heavy overindulgence.",
+    4: "Good day to organize, complete routine audits, and clean your workspace. Avoid taking shortcuts or making speculative bets.",
+    5: "Good day for fast networking, sales pitches, and quick decisions. Avoid being rigid or losing focus.",
+    6: "Good day for family discussions, relationship bonding, and self-care. Avoid unnecessary arguments or neglecting home ties.",
+    7: "Good day for quiet study, deep research, and mental rest. Avoid launching major public changes or making hasty big decisions.",
+    8: "Good day for financial planning, debt management, and structured work. Avoid being overly stern or rushing big tasks.",
+    9: "Good day to finish pending backlogs, clear clutter, and forgive old grievances. Avoid launching brand-new long-term commitments."
+}
+
+personal_day_meanings_hi = {
+    1: "लक्ष्य शुरू करने, नेतृत्व करने और विचार प्रस्तुत करने के लिए अच्छा दिन। संकोच से बचें।",
+    2: "टीम कार्य, कूटनीति और सक्रिय सुनने के लिए अच्छा दिन। भावनात्मक खरीदारी से बचें।",
+    3: "बैठकों, रचनात्मक कार्यों और नेटवर्किंग के लिए अच्छा दिन। वादों में अतिरंजना से बचें।",
+    4: "संगठित होने, ऑडिट पूरा करने और कार्यक्षेत्र व्यवस्थित करने के लिए अच्छा दिन। शॉर्टकट से बचें।",
+    5: "त्वरित नेटवर्किंग, बिक्री और निर्णयों के लिए अच्छा दिन। कठोरता से बचें।",
+    6: "पारिवारिक चर्चा, संबंधों और आत्म-देखभाल के लिए अच्छा दिन। अनावश्यक विवादों से बचें।",
+    7: "शांत अध्ययन, गहन शोध और मानसिक विश्राम के लिए अच्छा दिन। जल्दबाजी के निर्णयों से बचें।",
+    8: "वित्तीय योजना, ऋण प्रबंधन और संरचित कार्य के लिए अच्छा दिन। अति कठोरता से बचें।",
+    9: "अधूरे कार्यों को पूरा करने, अव्यवस्था दूर करने और माफ करने के लिए अच्छा दिन। नई शुरुआत से बचें।"
+}
+
 personal_day_aspects_en = {
     1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
     2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
@@ -345,6 +482,7 @@ if 'profile_saved' not in st.session_state:
 
 st.title("🌙 Navtara Pulse")
 
+# Purple Highlighted Language Selector
 lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
@@ -354,6 +492,7 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
+# Birth Profile Form
 st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
