@@ -3,9 +3,6 @@ import datetime
 import urllib.parse
 import math
 
-# ==========================================
-# DEPENDENCY CHECKER
-# ==========================================
 try:
     import requests
     import ephem
@@ -15,9 +12,6 @@ except ModuleNotFoundError as e:
     st.code("pip install requests ephem", language="bash")
     st.stop()
 
-# ==========================================
-# 1. PAGE CONFIGURATION & CSS
-# ==========================================
 st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
 
 st.markdown("""
@@ -124,9 +118,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. CONSTANTS & LOCALIZATION
-# ==========================================
 nakshatra_list = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -144,7 +135,6 @@ nakshatra_lords = [
     "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
 ]
 
-# Complete Status Badges with Green, White, and Red Indicator Dots
 navtara_names = [
     "Janma (Self / Body) ⚪",
     "Sampat (Wealth / Progress) 🟢",
@@ -161,6 +151,54 @@ cycles = {
     0: "1st Cycle (Janma Group)",
     1: "2nd Cycle (Anujanma Group)",
     2: "3rd Cycle (Trijanma Group)"
+}
+
+num_lords = {
+    1: "Sun (Surya)",
+    2: "Moon (Chandra)",
+    3: "Jupiter (Guru)",
+    4: "Rahu",
+    5: "Mercury (Budh)",
+    6: "Venus (Shukra)",
+    7: "Ketu",
+    8: "Saturn (Shani)",
+    9: "Mars (Mangal)"
+}
+
+lucky_numbers_map = {
+    1: "1, 2, 3, 9",
+    2: "1, 2, 5",
+    3: "1, 2, 3, 9",
+    4: "1, 4, 5, 6, 7",
+    5: "1, 5, 6",
+    6: "1, 5, 6, 7",
+    7: "1, 4, 7",
+    8: "3, 5, 6, 8",
+    9: "1, 2, 3, 9"
+}
+
+personal_day_meanings_en = {
+    1: "New beginnings, leadership initiative, independence, and taking decisive action.",
+    2: "Cooperation, patience, diplomacy, emotional sensitivity, and building partnerships.",
+    3: "Creativity, self-expression, social interactions, communication, and enthusiasm.",
+    4: "Hard work, discipline, organizing, setting solid practical foundations, and focus.",
+    5: "Adaptability, dynamic changes, quick decisions, travel, and networking.",
+    6: "Responsibility, family harmony, wellness, domestic care, and serving others.",
+    7: "Introspection, analytical thinking, research, quiet observation, and spiritual study.",
+    8: "Executive decisions, business authority, financial planning, and material ambition.",
+    9: "Completion of pending matters, clearing clutter, humanitarian outlook, and compassion."
+}
+
+personal_day_meanings_hi = {
+    1: "नई शुरुआत, नेतृत्व पहल, स्वतंत्रता और निर्णायक कदम उठाने के लिए अनुकूल।",
+    2: "सहयोग, धैर्य, कूटनीति, भावनात्मक संतुलन और साझेदारी के लिए उत्तम।",
+    3: "रचनात्मकता, आत्म-अभिव्यक्ति, सामाजिक संवाद और नई ऊर्जा।",
+    4: "कड़ी मेहनत, अनुशासन, व्यवस्था और व्यावहारिक कार्यों पर स्थिर ध्यान।",
+    5: "अनुकूलनशीलता, सकारात्मक बदलाव, त्वरित निर्णय, नेटवर्किंग और यात्रा।",
+    6: "जिम्मेदारी, पारिवारिक सद्भाव, स्वास्थ्य देखभाल और संबंधों में सामंजस्य।",
+    7: "आत्मनिरीक्षण, गहन विश्लेषण, शांत अवलोकन और आध्यात्मिक अध्ययन।",
+    8: "व्यावसायिक निर्णय, अधिकार, वित्तीय योजना और महत्वाकांक्षी लक्ष्य।",
+    9: "अधूरे कार्यों का समापन, क्षमा, दानशीलता और मानवीय दृष्टिकोण।"
 }
 
 tara_details_en = {
@@ -241,7 +279,7 @@ tara_details_en = {
 translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
-        "intro_desc": "In Vedic astrology, the Moon's transit through the 27 Nakshatras creates a unique daily energy pattern relative to your birth star (Janma Nakshatra). This app provides accurate, astronomical insights into your daily Navtara Pulse, health, career, and financial guidance.",
+        "intro_desc": "In Vedic astrology, the Moon's transit through the 27 Nakshatras creates a unique daily energy pattern relative to your birth star (Janma Nakshatra). This app provides accurate, astronomical insights into your daily Navtara Pulse, numerological vibrations, health, career, and financial guidance.",
         "profile_title": "👤 Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
@@ -250,8 +288,8 @@ translations = {
         "tara": tara_details_en
     },
     "hi": {
-        "intro_title": "वैदिक ज्योतिष के ज्ञान को अनलॉक करें",
-        "intro_desc": "वैदिक ज्योतिष में, 27 नक्षत्रों के माध्यम से चंद्रमा का गोचर आपके जन्म नक्षत्र के सापेक्ष एक अनूठा दैनिक ऊर्जा पैटर्न बनाता है। यह ऐप आपके दैनिक नवतारा पल्स, स्वास्थ्य, करियर और वित्तीय मार्गदर्शन में सटीक अंतर्दृष्टि प्रदान करता है।",
+        "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
+        "intro_desc": "वैदिक ज्योतिष और अंकशास्त्र में, 27 नक्षत्रों में चंद्रमा का गोचर आपके जन्म नक्षत्र और जन्म मूलांक के सापेक्ष एक अनूठा ऊर्जा पैटर्न बनाता है। यह ऐप दैनिक नवतारा पल्स, अंकशास्त्र कंपन, स्वास्थ्य, करियर और वित्तीय मार्गदर्शन प्रदान करता है।",
         "profile_title": "👤 जन्म विवरण",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
@@ -263,9 +301,12 @@ translations = {
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
-# ==========================================
-# 3. HELPER & ASTRONOMY FUNCTIONS
-# ==========================================
+def reduce_to_single_digit(n: int) -> int:
+    """Reduce any number to a single digit 1-9."""
+    while n > 9:
+        n = sum(int(d) for d in str(n))
+    return n
+
 @st.cache_data(show_spinner=False)
 def search_places_online(query):
     """Fetch geocoding data from OpenStreetMap Nominatim API."""
@@ -315,7 +356,6 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
     current_nak = get_moon_nakshatra_index(now_utc)
     
-    # Step backward in 15-minute intervals to find start of current active Nakshatra
     start_search_utc = now_utc
     for i in range(1, 200):
         test_utc = now_utc - datetime.timedelta(minutes=15 * i)
@@ -325,7 +365,6 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
             
     window_start_local = start_search_utc + datetime.timedelta(hours=utc_offset_hours)
     
-    # Step forward from active transit start to build current and future transits
     transits = []
     curr_nak = current_nak
     scan_limit_utc = now_utc + datetime.timedelta(days=days)
@@ -353,9 +392,6 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
                 
     return transits
 
-# ==========================================
-# 4. MAIN APP LAYOUT & URL PARAMETERS
-# ==========================================
 query_params = st.query_params
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
@@ -372,9 +408,6 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
-# ==========================================
-# 5. UNIFIED USER PROFILE WINDOW
-# ==========================================
 st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
@@ -447,16 +480,28 @@ if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=Tr
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
 
-# ==========================================
-# 6. RESULTS & HOROSCOPE SCHEDULE
-# ==========================================
 if st.session_state.get('profile_saved'):
     st.divider()
     
+    # 1. Vedic Nakshatra Details
     janma_index = nakshatra_list.index(selected_janma_nakshatra)
     janma_lord = nakshatra_lords[janma_index]
     
+    # 2. Vedic Numerology Profile Calculation
+    moolank = reduce_to_single_digit(birth_date.day)
+    bhagyank = reduce_to_single_digit(birth_date.day + birth_date.month + birth_date.year)
+    moolank_lord = num_lords.get(moolank, "")
+    bhagyank_lord = num_lords.get(bhagyank, "")
+    lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
+    
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
+    
+    # Numerology Summary Pill
+    st.markdown(f"""
+    <div style="background-color: #f1f5f9; color: #1e293b; padding: 12px 16px; border-radius: 10px; margin-top: -6px; margin-bottom: 16px; border: 1px solid #cbd5e1; font-size: 0.93rem;">
+        🔢 <b>Numerology Profile:</b> Moolank (Driver): <b>{moolank} ({moolank_lord})</b> &nbsp;|&nbsp; Bhagyank (Conductor): <b>{bhagyank} ({bhagyank_lord})</b> &nbsp;|&nbsp; Lucky Numbers: <b>{lucky_nums}</b>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Save & Install Mobile Instructions Banner
     st.markdown("""
@@ -474,7 +519,6 @@ if st.session_state.get('profile_saved'):
     
     st.header(t['horoscope_title'])
     
-    # Accurate UTC anchor regardless of server timezone
     now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
     transits = calculate_7_day_transits(now_utc, utc_offset_val)
     
@@ -493,6 +537,12 @@ if st.session_state.get('profile_saved'):
         
         current_pill = "<span class='current-badge'>⚡ Active Now</span>" if transit.get("is_current") else ""
         
+        # Calculate Daily Personal Day Number for the transit date
+        t_date = transit["start"].date()
+        p_day = reduce_to_single_digit(birth_date.day + birth_date.month + t_date.day + t_date.month + t_date.year)
+        p_lord = num_lords.get(p_day, "")
+        p_desc = (personal_day_meanings_hi if lang_code in ["hi", "mr", "gu"] else personal_day_meanings_en).get(p_day, "")
+        
         # Upper Portion: Moon Transit Metadata (Light Blue Card)
         st.markdown(f"""
         <div class="transit-card">
@@ -505,6 +555,7 @@ if st.session_state.get('profile_saved'):
         
         # Attached Lower Portion: Seamlessly Joined Expander for Predictions & Guidance
         with st.expander(t["expander_title"]):
+            st.write(f"🔢 **Numerology:** Personal Day {p_day} ({p_lord}) — {p_desc}")
             st.write(f"🩺 **Health:** {tara_data['H']}")
             st.write(f"💼 **Career:** {tara_data['C']}")
             st.write(f"💰 **Finance:** {tara_data['F']}")
@@ -512,9 +563,6 @@ if st.session_state.get('profile_saved'):
             if tara_data['R']:
                 st.error(tara_data['R'])
 
-# ==========================================
-# 7. SHARE APP (Direct Link Payload)
-# ==========================================
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
 app_url = "https://navtara-pulse.streamlit.app"
