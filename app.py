@@ -328,6 +328,100 @@ personal_day_aspects_en = {
     9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
 }
 
+# Detailed Shani Vahan (Saturn's Vehicle) Predictive Map
+vahan_map = {
+    1: {
+        "name": "Ghoda (Horse / घोड़ा) 🐴",
+        "symbolism": "Speed, High Stamina & Rapid Progress",
+        "H": "High physical stamina and vital energy; guard against overexertion.",
+        "C": "Swift career expansion, bold initiatives, and quick victory over competitors.",
+        "F": "Fast fluid liquidity and profitable momentum in ongoing deals.",
+        "M": "Energetic, brave, goal-focused, and proactive.",
+        "R": "Dynamic communication; avoid rushing partner decisions.",
+        "Remedy": "🏇 Shani Vahan Remedy (Horse): Feed soaked black chana (chickpeas) to horses or workers on Saturdays."
+    },
+    2: {
+        "name": "Gadha (Donkey / गधा) 🫏",
+        "symbolism": "Heavy Labor, Patience & Delayed Recognition",
+        "H": "Physical tiredness or joint/back strain; ensure adequate rest and good posture.",
+        "C": "Heavy workload requiring patience; rewards follow steady routine effort.",
+        "F": "Strict budgeting required; focus on routine earnings over speculative trades.",
+        "M": "Requires patient endurance and stamina; stay resilient against stress.",
+        "R": "Practice patience and gentle listening to avoid domestic friction.",
+        "Remedy": "🫏 Shani Vahan Remedy (Donkey): Serve aged workers/laborers or donate footwear to the underprivileged."
+    },
+    3: {
+        "name": "Siyar (Jackal / सियार) 🦊",
+        "symbolism": "Caution, Misdirection Risk & High Vigilance",
+        "H": "Nervous fatigue or digestive sensitivity; stay hydrated and composed.",
+        "C": "Beware of misleading advice or legal fine print; double-check all documents.",
+        "F": "High risk of financial scams or misdirection; avoid unverified schemes.",
+        "M": "Alert, observant, but prone to overthinking or skepticism.",
+        "R": "Be direct and transparent in speech to prevent trust deficits.",
+        "Remedy": "🦊 Shani Vahan Remedy (Jackal): Feed stray animals or birds with chapati/bread on Saturday evenings."
+    },
+    4: {
+        "name": "Hathi (Elephant / हाथी) 🐘",
+        "symbolism": "Royalty, Prestige & Financial Gains",
+        "H": "Robust health, dignified energy, and physical stability.",
+        "C": "Recognition from authority, executive promotions, and elevated prestige.",
+        "F": "Financial windfalls, luxury acquisitions, and major asset stability.",
+        "M": "Dignified, generous, confident, and emotionally peaceful.",
+        "R": "Generous and heartwarming presence in family and social ties.",
+        "Remedy": "🐘 Shani Vahan Remedy (Elephant): Respect mentors/teachers and offer mustard oil or sesame seeds in charity."
+    },
+    5: {
+        "name": "Bail (Bull / बैल) 🐂",
+        "symbolism": "Steady Persistence & Gradual Growth",
+        "H": "Solid physical stamina; maintain neck and joint flexibility.",
+        "C": "Methodical progress in core tasks; ideal for foundational groundwork.",
+        "F": "Steady, continuous accumulation through real estate or long-term assets.",
+        "M": "Grounded, persistent, patient, and unshakable focus.",
+        "R": "Dependable, committed, and stable bonding in family life.",
+        "Remedy": "🐂 Shani Vahan Remedy (Bull): Feed green fodder or jaggery to black bulls or cows on Saturdays."
+    },
+    6: {
+        "name": "Sher (Lion / शेर) 🦁",
+        "symbolism": "Power, Leadership Courage & Victory",
+        "H": "Strong confidence and vitality; keep cardiovascular stress low.",
+        "C": "Commanding leadership authority; triumph in legal or competitive challenges.",
+        "F": "Strong capital protection and commanding negotiation leverage.",
+        "M": "Bold, fearless, authoritative, and decisive mindset.",
+        "R": "Protect loved ones warmly; guard against dominating tone.",
+        "Remedy": "🦁 Shani Vahan Remedy (Lion): Recite Hanuman Chalisa or offer red flowers to Lord Hanuman or Lord Shiva."
+    },
+    7: {
+        "name": "Kowwa (Crow / कौवा) 🐦‍⬛",
+        "symbolism": "Restlessness, Travel & Scattered Focus",
+        "H": "Restless nerves or light sleep; practice calming breathwork.",
+        "C": "Frequent travel, scattered attention, or unexpected minor delays.",
+        "F": "Flustered small expenses; avoid impulsive online purchases.",
+        "M": "Anxious or scattered mindset; practice silence (*Mouna*) and meditation.",
+        "R": "Avoid impatient retorts or arguments with close family members.",
+        "Remedy": "🐦‍⬛ Shani Vahan Remedy (Crow): Feed crows or stray birds with grains, seeds, or bread every morning."
+    },
+    8: {
+        "name": "Mayur (Peacock / मयूर) 🦚",
+        "symbolism": "Joy, Creative Breakthroughs & Good News",
+        "H": "Vibrant physical vitality, aesthetic radiance, and emotional warmth.",
+        "C": "Creative breakthroughs, social applause, and team harmony.",
+        "F": "Heartwarming financial gains, creative rewards, and pleasant surprises.",
+        "M": "Joyous, optimistic, creative, and socially uplifted.",
+        "R": "Romantic warmth, heartwarming family news, and social joy.",
+        "Remedy": "🦚 Shani Vahan Remedy (Peacock): Keep a peacock feather at your desk or chant 'Om Sham Shanayscharaya Namah'."
+    },
+    9: {
+        "name": "Hans (Swan / हंस) 🦢",
+        "symbolism": "Supreme Wisdom, Inner Peace & Clarity",
+        "H": "Peaceful vitality, mental composure, and holistic health.",
+        "C": "Wise decision-making, excellent judgment, and peer respect.",
+        "F": "Strong financial security, debt clearance, and prudent investments.",
+        "M": "Deep spiritual clarity, tranquil, intuitive, and discerning.",
+        "R": "Pure, soul-nourishing harmony and deep mutual respect.",
+        "Remedy": "🦢 Shani Vahan Remedy (Swan): Practice quiet meditation; offer milk or fresh water to birds or Lord Shiva."
+    }
+}
+
 tara_details_en = {
     0: {
         "status": "Janma (1st Tara - Self) ⚪",
@@ -823,7 +917,16 @@ if st.session_state.get('profile_generated') and is_form_valid:
         p_desc = (personal_day_meanings_hi if lang_code in ["hi", "mr", "gu"] else personal_day_meanings_en).get(p_day, "")
         num_aspects = personal_day_aspects_en.get(p_day, {})
         
-        # Upper Portion: Day Card with Navtara Transit & Numerology Vibration
+        # Calculate Daily Shani Vahan (Saturn's Vehicle)
+        # Formula: ((Birth Nakshatra # * 4) + Transit Moon Nakshatra #) % 9
+        janma_nak_num = auto_janma_idx + 1
+        transit_nak_num = transit["nak_index"] + 1
+        vahan_rem = ((janma_nak_num * 4) + transit_nak_num) % 9
+        if vahan_rem == 0:
+            vahan_rem = 9
+        vahan_info = vahan_map.get(vahan_rem, vahan_map[9])
+        
+        # Upper Portion: Day Card with 3 Explicit Headings (Navtara, Numerology & Shani Vahan)
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
@@ -831,22 +934,27 @@ if st.session_state.get('profile_generated') and is_form_valid:
             <p style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #bae6fd;">
                 🔢 <b>Numerology Vibration:</b> Personal Day <b>{p_day} ({p_lord})</b> — {p_desc}
             </p>
+            <p style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #bae6fd;">
+                🪐 <b>Shani Vahan:</b> <b>{vahan_info['name']}</b> — <i>{vahan_info['symbolism']}</i>
+            </p>
         </div>
         """, unsafe_allow_html=True)
         
         # Attached Lower Portion: Eye-Catching Yellow Glittering Expander Bar
         with st.expander(t["expander_title"]):
-            st.write(f"🩺 **Health:** {tara_data['H']} *(Numerology Focus: {num_aspects.get('H', '')})*")
-            st.write(f"💼 **Career:** {tara_data['C']} *(Numerology Focus: {num_aspects.get('C', '')})*")
-            st.write(f"💰 **Finance:** {tara_data['F']} *(Numerology Focus: {num_aspects.get('F', '')})*")
-            st.write(f"🧘 **Mindset:** {tara_data['M']} *(Numerology Focus: {num_aspects.get('M', '')})*")
-            st.write(f"❤️ **Relationships:** {tara_data.get('Rel', '')} *(Numerology Focus: {num_aspects.get('R', '')})*")
+            st.write(f"🩺 **Health:** {tara_data['H']} *(Numerology: {num_aspects.get('H', '')})* *(Shani Vahan: {vahan_info['H']})*")
+            st.write(f"💼 **Career:** {tara_data['C']} *(Numerology: {num_aspects.get('C', '')})* *(Shani Vahan: {vahan_info['C']})*")
+            st.write(f"💰 **Finance:** {tara_data['F']} *(Numerology: {num_aspects.get('F', '')})* *(Shani Vahan: {vahan_info['F']})*")
+            st.write(f"🧘 **Mindset:** {tara_data['M']} *(Numerology: {num_aspects.get('M', '')})* *(Shani Vahan: {vahan_info['M']})*")
+            st.write(f"❤️ **Relationships:** {tara_data.get('Rel', '')} *(Numerology: {num_aspects.get('R', '')})* *(Shani Vahan: {vahan_info['R']})*")
             
-            # Show Navtara and/or Numerology Remedies if applicable
+            # Show Navtara, Numerology, and Shani Vahan Remedies
             if tara_data['R']:
                 st.error(tara_data['R'])
             if num_aspects.get("Remedy", ""):
                 st.info(num_aspects["Remedy"])
+            if vahan_info.get("Remedy", ""):
+                st.warning(vahan_info["Remedy"])
 
 # ==========================================
 # 7. SHARE APP (Direct Link Payload)
