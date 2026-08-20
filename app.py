@@ -148,36 +148,39 @@ def search_places_online(query):
     except: pass
     return []
 
-def get_moon_nakshatra_index(dt_obj):
+def get_moon_nakshatra_index(dt_obj, tz_offset_hours=5.5):
     """
     Computes true geocentric sidereal Moon Nakshatra using PyEphem 
-    and Lahiri Ayanamsa correction.
+    with UTC timezone correction and precise Lahiri Ayanamsa.
     """
+    # Convert local birth time to UTC for PyEphem
+    utc_dt = dt_obj - datetime.timedelta(hours=tz_offset_hours)
+    
     observer = ephem.Observer()
-    observer.date = ephem.date(dt_obj)
+    observer.date = ephem.date(utc_dt)
     moon = ephem.Moon(observer)
     
-    # Calculate geocentric ecliptic longitude of Moon
+    # Geocentric ecliptic longitude of Moon
     ecl = ephem.Ecliptic(moon)
     lon_deg = math.degrees(ecl.lon)
     
-    # Lahiri Ayanamsa formula (~24.18° for 2026)
-    year = dt_obj.year
-    ayanamsa = 23.85 + (year - 2000) * 0.01397
+    # Accurate Lahiri Ayanamsa formula (~24.21° for 2026)
+    year_fraction = utc_dt.year + (utc_dt.timetuple().tm_yday - 1) / 365.25
+    ayanamsa = 23.8533 + (year_fraction - 2000.0) * 0.01397
     sidereal_lon = (lon_deg - ayanamsa) % 360
     
     # 27 Nakshatras each spanning 13.3333° (13°20')
     return int(sidereal_lon / (360.0 / 27.0)) % 27
 
-def calculate_7_day_transits(start_dt):
+def calculate_7_day_transits(start_dt, tz_offset_hours=5.5):
     transits = []
     current_dt = start_dt
-    current_nak = get_moon_nakshatra_index(current_dt)
+    current_nak = get_moon_nakshatra_index(current_dt, tz_offset_hours)
     window_start = current_dt
     
     for i in range(1, 7 * 48): 
         test_dt = start_dt + datetime.timedelta(minutes=30 * i)
-        test_nak = get_moon_nakshatra_index(test_dt)
+        test_nak = get_moon_nakshatra_index(test_dt, tz_offset_hours)
         if test_nak != current_nak:
             transits.append({"start": window_start, "end": test_dt, "nak_index": current_nak})
             current_nak = test_nak
@@ -209,6 +212,10 @@ default_h = int(query_params.get('h', '0'))
 default_m = int(query_params.get('m', '0'))
 default_place = query_params.get('p', '')
 
+# Calculate default auto-detected Nakshatra index for default selection
+calc_default_dt = datetime.datetime.combine(default_date, datetime.time(default_h, default_m))
+default_nak_idx = get_moon_nakshatra_index(calc_default_dt)
+
 col1, col2 = st.columns(2)
 with col1:
     user_name = st.text_input("Name", value=default_name)
@@ -219,6 +226,29 @@ with col2:
     tc1, tc2 = st.columns(2)
     with tc1: birth_hour = st.selectbox("HH", [f"{i:02d}" for i in range(24)], index=default_h)
     with tc2: birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m) # Defaults to 00
+
+# Time Zone Offset Selector
+tz_option = st.selectbox("🌐 Birth Time Zone Offset:", ["IST (UTC+05:30) - India", "UTC+00:00 - GMT/UTC", "EST (UTC-05:00) - USA East", "PST (UTC-08:00) - USA West", "CET (UTC+01:00) - Europe"], index=0)
+tz_offset_map = {
+    "IST (UTC+05:30) - India": 5.5,
+    "UTC+00:00 - GMT/UTC": 0.0,
+    "EST (UTC-05:00) - USA East": -5.0,
+    "PST (UTC-08:00) - USA West": -8.0,
+    "CET (UTC+01:00) - Europe": 1.0
+}
+tz_offset = tz_offset_map[tz_option]
+
+# Janma Nakshatra Selector (Auto-Calculated + Direct Override Option)
+st.write("🌟 **Janma Nakshatra (Birth Star):**")
+current_calc_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
+auto_nak_index = get_moon_nakshatra_index(current_calc_dt, tz_offset)
+
+selected_nakshatra = st.selectbox(
+    "Verify or select your exact Janma Nakshatra (from Kundli):",
+    nakshatra_list,
+    index=auto_nak_index,
+    help="Auto-calculated from Date/Time/Location. You can also manually choose your exact birth star from your Kundli."
+)
 
 st.write(t['search_prompt'])
 
@@ -248,15 +278,15 @@ if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=Tr
 if st.session_state.get('profile_saved'):
     st.divider()
     
-    birth_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
-    janma_index = get_moon_nakshatra_index(birth_dt)
+    # Use selected Janma Nakshatra index for 100% precision
+    janma_index = nakshatra_list.index(selected_nakshatra)
     janma_nakshatra, janma_lord = nakshatra_lords[janma_index]
     
     st.success(f"🌟 **{user_name}'s Janma Nakshatra:** {janma_nakshatra} | **Nakshatra Lord:** {janma_lord} | **Birth Place:** {selected_place}")
     st.header(t['horoscope_title'])
     
     now = datetime.datetime.now()
-    transits = calculate_7_day_transits(now)
+    transits = calculate_7_day_transits(now, tz_offset)
     
     for transit in transits:
         nak_difference = (transit["nak_index"] - janma_index) % 27
