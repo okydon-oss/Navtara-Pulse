@@ -320,43 +320,69 @@ def get_moon_nakshatra_index(dt_utc):
     nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27
     return nakshatra_index
 
+def find_exact_nakshatra_transition(utc_start, utc_end):
+    """Finds exact minute when Nakshatra changes between utc_start and utc_end using binary search."""
+    start_nak = get_moon_nakshatra_index(utc_start)
+    low = utc_start
+    high = utc_end
+    
+    while (high - low).total_seconds() > 60:
+        mid = low + datetime.timedelta(seconds=(high - low).total_seconds() / 2)
+        if get_moon_nakshatra_index(mid) == start_nak:
+            low = mid
+        else:
+            high = mid
+            
+    return high
+
 def calculate_7_day_transits(start_local_dt, utc_offset_hours):
-    """Calculates exact Moon transit time windows for the next 7 days in local time."""
+    """Calculates exact Moon transit time windows (to 1-minute precision) for the next 7 days in local time."""
     transits = []
     current_local = start_local_dt
-    
     current_utc = current_local - datetime.timedelta(hours=utc_offset_hours)
     current_nak = get_moon_nakshatra_index(current_utc)
     
-    # Look back up to 30 hours to find the true start time of the current active Nakshatra
-    window_start = current_local
+    # Look back up to 30 hours in 15-minute steps to find rough start of current Nakshatra
+    rough_start_utc = current_utc
     for i in range(1, 120):  # 120 * 15 min = 30 hours
-        check_local = start_local_dt - datetime.timedelta(minutes=15 * i)
-        check_utc = check_local - datetime.timedelta(hours=utc_offset_hours)
+        check_utc = current_utc - datetime.timedelta(minutes=15 * i)
         if get_moon_nakshatra_index(check_utc) != current_nak:
-            window_start = check_local + datetime.timedelta(minutes=15)
+            rough_start_utc = check_utc
             break
+            
+    # Refine exact start time of current Nakshatra using binary search
+    exact_start_utc = find_exact_nakshatra_transition(rough_start_utc, rough_start_utc + datetime.timedelta(minutes=15))
+    window_start_local = exact_start_utc + datetime.timedelta(hours=utc_offset_hours)
     
-    # Check at 15-minute intervals over 7 days
-    for i in range(1, 7 * 96):
-        test_local = start_local_dt + datetime.timedelta(minutes=15 * i)
-        test_utc = test_local - datetime.timedelta(hours=utc_offset_hours)
-        test_nak = get_moon_nakshatra_index(test_utc)
-        
-        if test_nak != current_nak:
+    scan_utc = current_utc
+    end_utc_limit = current_utc + datetime.timedelta(days=7)
+    
+    while scan_utc < end_utc_limit:
+        next_step_utc = scan_utc + datetime.timedelta(minutes=15)
+        if next_step_utc > end_utc_limit:
+            next_step_utc = end_utc_limit
+            
+        test_nak = get_moon_nakshatra_index(next_step_utc)
+        if test_nak != current_nak or next_step_utc == end_utc_limit:
+            if test_nak != current_nak:
+                exact_trans_utc = find_exact_nakshatra_transition(scan_utc, next_step_utc)
+            else:
+                exact_trans_utc = end_utc_limit
+                
+            window_end_local = exact_trans_utc + datetime.timedelta(hours=utc_offset_hours)
+            
             transits.append({
-                "start": window_start,
-                "end": test_local,
+                "start": window_start_local,
+                "end": window_end_local,
                 "nak_index": current_nak
             })
-            current_nak = test_nak
-            window_start = test_local
             
-    transits.append({
-        "start": window_start,
-        "end": start_local_dt + datetime.timedelta(days=7),
-        "nak_index": current_nak
-    })
+            current_nak = test_nak
+            window_start_local = window_end_local
+            scan_utc = exact_trans_utc + datetime.timedelta(minutes=1)
+        else:
+            scan_utc = next_step_utc
+            
     return transits
 
 # ==========================================
