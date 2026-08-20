@@ -68,11 +68,6 @@ st.markdown("""
         font-weight: bold; 
         color: #0f172a; 
     }
-    .cycle-badge { 
-        font-size: 0.88em; 
-        color: #475569; 
-        font-weight: 600;
-    }
     .current-badge {
         background-color: #0284c7;
         color: white;
@@ -147,12 +142,6 @@ navtara_names = [
     "Ati-Mitra (Best Friend) 🟢🟢"
 ]
 
-cycles = {
-    0: "1st Cycle (Janma Group)",
-    1: "2nd Cycle (Anujanma Group)",
-    2: "3rd Cycle (Trijanma Group)"
-}
-
 num_lords = {
     1: "Sun (Surya)",
     2: "Moon (Chandra)",
@@ -177,30 +166,45 @@ lucky_numbers_map = {
     9: "1, 2, 3, 9"
 }
 
+# Detailed Personal Day Vibration Meanings (Main Card Text)
 personal_day_meanings_en = {
-    1: "New beginnings, leadership initiative, independence, and taking decisive action.",
-    2: "Cooperation, patience, diplomacy, emotional sensitivity, and building partnerships.",
-    3: "Creativity, self-expression, social interactions, communication, and enthusiasm.",
-    4: "Hard work, discipline, organizing, setting solid practical foundations, and focus.",
-    5: "Adaptability, dynamic changes, quick decisions, travel, and networking.",
-    6: "Responsibility, family harmony, wellness, domestic care, and serving others.",
-    7: "Introspection, analytical thinking, research, quiet observation, and spiritual study.",
-    8: "Executive decisions, business authority, financial planning, and material ambition.",
-    9: "Completion of pending matters, clearing clutter, humanitarian outlook, and compassion."
+    1: "New beginnings, leadership, and bold initiative. Drive new goals with focused confidence.",
+    2: "Cooperation, emotional balance, and patience. Focus on active listening and harmonious teamwork.",
+    3: "Creative self-expression, communication, and optimism. Share ideas and embrace social connections.",
+    4: "Hard work, discipline, and practical foundation building. Organize tasks and avoid shortcut risks.",
+    5: "Dynamic change, adaptability, and fast networking. Embrace quick decisions and versatile momentum.",
+    6: "Responsibility, family harmony, and domestic wellness. Prioritize relationships and mutual care.",
+    7: "Introspection, analytical study, and spiritual calm. Observe quietly before executing major shifts.",
+    8: "Executive decision-making, financial strategy, and material ambition. Exercise authoritative focus.",
+    9: "Completion of pending matters, clearing clutter, and letting go. Practice detachment and compassion."
 }
 
 personal_day_meanings_hi = {
-    1: "नई शुरुआत, नेतृत्व पहल, स्वतंत्रता और निर्णायक कदम उठाने के लिए अनुकूल।",
-    2: "सहयोग, धैर्य, कूटनीति, भावनात्मक संतुलन और साझेदारी के लिए उत्तम।",
-    3: "रचनात्मकता, आत्म-अभिव्यक्ति, सामाजिक संवाद और नई ऊर्जा।",
-    4: "कड़ी मेहनत, अनुशासन, व्यवस्था और व्यावहारिक कार्यों पर स्थिर ध्यान।",
-    5: "अनुकूलनशीलता, सकारात्मक बदलाव, त्वरित निर्णय, नेटवर्किंग और यात्रा।",
-    6: "जिम्मेदारी, पारिवारिक सद्भाव, स्वास्थ्य देखभाल और संबंधों में सामंजस्य।",
-    7: "आत्मनिरीक्षण, गहन विश्लेषण, शांत अवलोकन और आध्यात्मिक अध्ययन।",
-    8: "व्यावसायिक निर्णय, अधिकार, वित्तीय योजना और महत्वाकांक्षी लक्ष्य।",
-    9: "अधूरे कार्यों का समापन, क्षमा, दानशीलता और मानवीय दृष्टिकोण।"
+    1: "नई शुरुआत, नेतृत्व और साहसिक पहल। केंद्रित आत्मविश्वास के साथ नए लक्ष्यों को आगे बढ़ाएं।",
+    2: "सहयोग, भावनात्मक संतुलन और धैर्य। सक्रिय सुनने और सौहार्दपूर्ण टीम वर्क पर ध्यान केंद्रित करें।",
+    3: "रचनात्मक अभिव्यक्ति, संवाद और नई आशा। विचारों को साझा करें और सामाजिक संवाद बढ़ाएं।",
+    4: "कड़ी मेहनत, अनुशासन और व्यावहारिक आधार। कार्यों को व्यवस्थित करें और जल्दबाजी से बचें।",
+    5: "गतिशील बदलाव, अनुकूलनशीलता और नेटवर्किंग। त्वरित निर्णयों और नई ऊर्जा का स्वागत करें।",
+    6: "जिम्मेदारी, पारिवारिक सद्भाव और कल्याण। संबंधों और आपसी देखभाल को प्राथमिकता दें।",
+    7: "आत्मनिरीक्षण, गहन विश्लेषण और आध्यात्मिक शांति। बदलाव से पहले शांत अवलोकन करें।",
+    8: "कारोबारी निर्णय, वित्तीय योजना और महत्वाकांक्षा। रणनीतिक अनुशासन के साथ काम करें।",
+    9: "अधूरे कार्यों का समापन, मानसिक स्पष्टता और क्षमाशीलता। नए चक्र के लिए जगह बनाएं।"
 }
 
+# Personal Day Numerology Nuances for Predictions
+personal_day_aspects_en = {
+    1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
+    2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
+    3: {"H": "Expansive energy; avoid overindulgent heavy meals.", "C": "Excellent for presentations, pitching, and teaching.", "F": "Good day for long-term growth investments.", "M": "Optimistic, joyful, and expressive.", "R": "Warm social gatherings and joyful family exchanges.", "Remedy": ""},
+    4: {"H": "Rahu frequency; guard against sudden nervous fatigue.", "C": "Focus on routine audits; strictly avoid shortcut risks.", "F": "Maintain strict budgeting; avoid speculative trading.", "M": "Analytical, grounded, but prone to restlessness.", "R": "Be direct yet polite to prevent sudden miscommunications.", "Remedy": "✨ Numerology Remedy (Day 4): Keep your workspace tidy and chant 'Om Raam Rahave Namah' to calm mental flutter."},
+    5: {"H": "Mercurial pace; take short walking breaks to release tension.", "C": "Fast progress in sales, digital work, and networking.", "F": "Opportunities for quick fluid transactions.", "M": "Quick-witted, versatile, and curious.", "R": "Fun, lively outings and spontaneous communication.", "Remedy": ""},
+    6: {"H": "Venusian alignment; focus on skin, hydration, and relaxation.", "C": "Ideal for design, client relations, and aesthetic projects.", "F": "Favorable for family assets and aesthetic comforts.", "M": "Harmonious, peaceful, and balanced.", "R": "Heartwarming romantic closeness and family peace.", "Remedy": ""},
+    7: {"H": "Ketu vibration; prioritize quiet rest and digestive ease.", "C": "Best for research, auditing, and deep technical study.", "F": "Review finances silently; do not execute hasty transfers.", "M": "Contemplative, highly intuitive, and quiet.", "R": "Seek intimate, meaningful talks over noisy crowds.", "Remedy": "✨ Numerology Remedy (Day 7): Spend 10 minutes in quiet meditation or chant 'Om Kem Ketave Namah'."},
+    8: {"H": "Saturnian discipline; care for joint health and posture.", "C": "Command authoritative tasks and structured workloads.", "F": "Focus on debt management and solid long-term assets.", "M": "Pragmatic, cautious, and resilient.", "R": "Honor commitments faithfully; avoid being overly stern.", "Remedy": "✨ Numerology Remedy (Day 8): Light a sesame oil lamp or chant 'Om Sham Shanayscharaya Namah' for smooth progress."},
+    9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
+}
+
+# Base Navtara Details (including Relationships)
 tara_details_en = {
     0: {
         "status": "Janma (1st Tara - Self) ⚪",
@@ -208,6 +212,7 @@ tara_details_en = {
         "C": "Maintain daily routine tasks. Avoid launching major new impulsive projects.",
         "F": "Keep finances stable. Avoid hasty or emotional buying.",
         "M": "Self-reflective, quiet, and calm mindset.",
+        "Rel": "Maintain emotional balance in personal relationships; avoid demanding too much from loved ones.",
         "R": ""
     },
     1: {
@@ -216,6 +221,7 @@ tara_details_en = {
         "C": "Excellent day for professional growth, key business meetings, and new opportunities.",
         "F": "Highly favorable day for wealth accumulation, investments, and financial gains.",
         "M": "Positive, confident, and optimistic mindset.",
+        "Rel": "Wonderful day for bonding, expressing appreciation, and deepening mutual trust in relationships.",
         "R": ""
     },
     2: {
@@ -224,6 +230,7 @@ tara_details_en = {
         "C": "Sudden hurdles or unexpected delays in projects may arise. Exercise patience.",
         "F": "Strictly avoid speculative investments, trading, or lending money today.",
         "M": "Prone to sudden anxiety, restlessness, or stress.",
+        "Rel": "Potential for minor friction or misunderstandings; practice patience and gentle listening.",
         "R": "🛡️ Vedic Remedy (Vipat): Recite or listen to Hanuman Chalisa. Offer fresh water to green plants or birds. Postpone major risky commitments."
     },
     3: {
@@ -232,6 +239,7 @@ tara_details_en = {
         "C": "Smooth operations, effective teamwork, and steady ongoing progress.",
         "F": "Financial security and safe transactions are favored.",
         "M": "Peaceful, content, and emotionally balanced.",
+        "Rel": "Warm, comforting interactions; excellent time for quality family moments and social harmony.",
         "R": ""
     },
     4: {
@@ -240,6 +248,7 @@ tara_details_en = {
         "C": "Friction or misunderstandings with colleagues or authority figures are possible.",
         "F": "Unexpected expenses or delayed payments can disrupt your budget.",
         "M": "Easily irritated or defensive. Practice mindfulness.",
+        "Rel": "High chance of defensive reactions; practice silence (*Mouna*) during heated moments and give space.",
         "R": "🛡️ Vedic Remedy (Pratyari): Practice silence (Mouna) during arguments. Chant 'Om Sham Shanayscharaya Namah' or donate black sesame/oil."
     },
     5: {
@@ -248,6 +257,7 @@ tara_details_en = {
         "C": "Great achievements, breakthroughs, and successful completion of difficult goals.",
         "F": "Profitable ventures and realization of long-term financial plans.",
         "M": "Determined, highly focused, and intellectually sharp.",
+        "Rel": "Achieve strong mutual understanding, resolve past issues, and build meaningful connections.",
         "R": ""
     },
     6: {
@@ -256,6 +266,7 @@ tara_details_en = {
         "C": "Major blockages or opposition. Do not schedule crucial confrontations today.",
         "F": "Protect your assets. Avoid high-stakes financial commitments.",
         "M": "Overwhelmed, fearful, or defensive.",
+        "Rel": "Sensitive day for personal ties; avoid major confrontations or bringing up past grievances.",
         "R": "🛡️ Vedic Remedy (Vadha): Chant Mahamrityunjaya Mantra or 'Om Namah Shivaya'. Offer water or milk to Lord Shiva."
     },
     7: {
@@ -264,6 +275,7 @@ tara_details_en = {
         "C": "Expect cooperation from peers and joint success in group tasks.",
         "F": "Collaborative financial gains and steady wealth.",
         "M": "Happy, sociable, and emotionally supported.",
+        "Rel": "Very supportive and friendly vibration; great day for social gatherings and romantic warmth.",
         "R": ""
     },
     8: {
@@ -272,6 +284,7 @@ tara_details_en = {
         "C": "High growth, ultimate success, and public recognition for your efforts.",
         "F": "Windfalls, bonuses, or highly favorable financial news.",
         "M": "Joyous, spiritually uplifted, and deeply fulfilled.",
+        "Rel": "Deep emotional joy, heartwarming harmony, and full support from family and partners.",
         "R": ""
     }
 }
@@ -279,7 +292,7 @@ tara_details_en = {
 translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
-        "intro_desc": "In Vedic astrology, the Moon's transit through the 27 Nakshatras creates a unique daily energy pattern relative to your birth star (Janma Nakshatra). This app provides accurate, astronomical insights into your daily Navtara Pulse, numerological vibrations, health, career, and financial guidance.",
+        "intro_desc": "In Vedic astrology and numerology, the Moon's transit through the 27 Nakshatras and daily numerical vibrations create a unique energy pattern relative to your birth profile. This app provides accurate, astronomical, and numerological insights into your health, career, finance, mindset, and relationships.",
         "profile_title": "👤 Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
@@ -289,7 +302,7 @@ translations = {
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
-        "intro_desc": "वैदिक ज्योतिष और अंकशास्त्र में, 27 नक्षत्रों में चंद्रमा का गोचर आपके जन्म नक्षत्र और जन्म मूलांक के सापेक्ष एक अनूठा ऊर्जा पैटर्न बनाता है। यह ऐप दैनिक नवतारा पल्स, अंकशास्त्र कंपन, स्वास्थ्य, करियर और वित्तीय मार्गदर्शन प्रदान करता है।",
+        "intro_desc": "वैदिक ज्योतिष और अंकशास्त्र में, 27 नक्षत्रों में चंद्रमा का गोचर और दैनिक अंक कंपन आपके जन्म विवरण के सापेक्ष एक अनूठा ऊर्जा पैटर्न बनाते हैं। यह ऐप स्वास्थ्य, करियर, वित्त, मानसिकता और संबंधों में सटीक अंतर्दृष्टि प्रदान करता है।",
         "profile_title": "👤 जन्म विवरण",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
@@ -398,7 +411,6 @@ if 'profile_saved' not in st.session_state:
 
 st.title("🌙 Navtara Pulse")
 
-# Purple Highlighted Language Selector
 lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
@@ -525,7 +537,6 @@ if st.session_state.get('profile_saved'):
     for transit in transits:
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
-        cycle_group = cycles[nak_difference // 9]
         
         tara_data = t["tara"][tara_index]
         tara_badge_name = navtara_names[tara_index]
@@ -542,26 +553,33 @@ if st.session_state.get('profile_saved'):
         p_day = reduce_to_single_digit(birth_date.day + birth_date.month + t_date.day + t_date.month + t_date.year)
         p_lord = num_lords.get(p_day, "")
         p_desc = (personal_day_meanings_hi if lang_code in ["hi", "mr", "gu"] else personal_day_meanings_en).get(p_day, "")
+        num_aspects = personal_day_aspects_en.get(p_day, {})
         
-        # Upper Portion: Moon Transit Metadata (Light Blue Card)
+        # Upper Portion: Moon Transit Metadata & Shifted Main-Card Numerology Section
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
             <p><b>Status:</b> <span class='status-badge'>{tara_badge_name}</span></p>
             <p><b>Moon Nakshatra:</b> {transit_nak_name} (<b>Nakshatra Lord:</b> {transit_nak_lord})</p>
-            <p class='cycle-badge'><b>Navtara Series:</b> {cycle_group}</p>
+            <p style="margin-top: 6px; padding-top: 6px; border-top: 1px dashed #bae6fd;">
+                🔢 <b>Numerology Vibration:</b> Personal Day <b>{p_day} ({p_lord})</b> — {p_desc}
+            </p>
         </div>
         """, unsafe_allow_html=True)
         
-        # Attached Lower Portion: Seamlessly Joined Expander for Predictions & Guidance
+        # Attached Lower Portion: Expanded Guidance with Health, Career, Finance, Mindset & Relationships
         with st.expander(t["expander_title"]):
-            st.write(f"🔢 **Numerology:** Personal Day {p_day} ({p_lord}) — {p_desc}")
-            st.write(f"🩺 **Health:** {tara_data['H']}")
-            st.write(f"💼 **Career:** {tara_data['C']}")
-            st.write(f"💰 **Finance:** {tara_data['F']}")
-            st.write(f"🧘 **Mindset:** {tara_data['M']}")
+            st.write(f"🩺 **Health:** {tara_data['H']} *(Numerology Focus: {num_aspects.get('H', '')})*")
+            st.write(f"💼 **Career:** {tara_data['C']} *(Numerology Focus: {num_aspects.get('C', '')})*")
+            st.write(f"💰 **Finance:** {tara_data['F']} *(Numerology Focus: {num_aspects.get('F', '')})*")
+            st.write(f"🧘 **Mindset:** {tara_data['M']} *(Numerology Focus: {num_aspects.get('M', '')})*")
+            st.write(f"❤️ **Relationships:** {tara_data.get('Rel', '')} *(Numerology Focus: {num_aspects.get('R', '')})*")
+            
+            # Show Navtara and/or Numerology Remedies if applicable
             if tara_data['R']:
                 st.error(tara_data['R'])
+            if num_aspects.get("Remedy", ""):
+                st.info(num_aspects["Remedy"])
 
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
