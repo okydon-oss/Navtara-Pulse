@@ -1,9 +1,19 @@
 import streamlit as st
 import datetime
-import requests
 import urllib.parse
-import ephem
 import math
+
+# ==========================================
+# DEPENDENCY CHECKER
+# ==========================================
+try:
+    import requests
+    import ephem
+except ModuleNotFoundError as e:
+    st.error(f"🚨 **Missing Library Error:** `{e.name}`")
+    st.info("To fix this, please open your terminal/command prompt and run:")
+    st.code("pip install requests ephem", language="bash")
+    st.stop()
 
 # ==========================================
 # 1. PAGE CONFIGURATION & CSS
@@ -122,7 +132,6 @@ def get_status_badge(tara_name):
 def calculate_nakshatra(date_obj, hour, minute):
     """
     Approximation of Nakshatra using Ephem. 
-    In a full production app, pyswisseph with Lahiri Ayanamsa is recommended.
     """
     observer = ephem.Observer()
     observer.date = f"{date_obj.year}-{date_obj.month}-{date_obj.day} {hour}:{minute}:00"
@@ -170,7 +179,7 @@ with col2:
     with time_c1:
         birth_hour = st.selectbox("HH", [f"{i:02d}" for i in range(24)], index=0)
     with time_c2:
-        birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=0) # Defaults to 00
+        birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=0)
 
 # Unified Birthplace Search Window
 st.write("🌍 Birth Place Name or 6-Digit Pincode")
