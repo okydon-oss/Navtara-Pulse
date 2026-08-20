@@ -187,6 +187,13 @@ nakshatra_list = [
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
 
+nakshatra_list_map = {
+    "en": nakshatra_list,
+    "hi": ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "अश्लेषा", "मघा", "पूर्वाफाल्गुनी", "उत्तराफाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्वाभाद्रपद", "उत्तराभाद्रपद", "रेवती"],
+    "mr": ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशीर्ष", "आर्द्र", "पुनर्वसू", "पुष्य", "आश्लेषा", "मघा", "पूर्वा फाल्गुनी", "उत्तरा फाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूळ", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा", "शततारका", "पूर्वा भाद्रपदा", "उत्तरा भाद्रपदा", "रेवती"],
+    "gu": ["અશ્વિની", "ભરણી", "કૃતિકા", "રોહિણી", "મૃગશીર્ષ", "આર્દ્રા", "પુનર્વસુ", "પુષ્ય", "આશ્લેષા", "મઘા", "પૂર્વા ફાલ્ગુની", "ઉત્તરા ફાલ્ગુની", "હસ્ત", "ચિત્રા", "સ્વાતિ", "વિશાખા", "અનુરાધા", "જ્યેષ્ઠા", "મૂળ", "પૂર્વાષાઢા", "ઉત્તરાષાઢા", "શ્રવણ", "ધનિષ્ઠા", "શતભિષા", "પૂર્વા ભાદ્રપદ", "ઉત્તરા ભાદ્રપદ", "રેવતી"]
+}
+
 nakshatra_lords_map = {
     "en": ["Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu", "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"] * 3,
     "hi": ["केतु", "शुक्र", "सूर्य", "चंद्र", "मंगल", "राहु", "गुरु", "शनि", "बुध"] * 3,
@@ -218,46 +225,94 @@ num_lords_map = {
 }
 
 nakshatra_traits_map = {
-    "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
-    "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
-    "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
-    "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
-    "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
-    "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
-    "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
-    "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
-    "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
-    "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
-    "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
-    "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
-    "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
-    "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
-    "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
-    "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
-    "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
-    "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
-    "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
-    "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
-    "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
-    "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
-    "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
-    "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
-    "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
-    "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
-    "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
+    "en": {
+        "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
+        "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
+        "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
+        "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
+        "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
+        "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
+        "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
+        "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
+        "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
+        "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
+        "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
+        "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
+        "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
+        "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
+        "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
+        "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
+        "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
+        "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
+        "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
+        "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
+        "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
+        "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
+        "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
+        "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
+        "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
+        "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
+        "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
+    },
+    "hi": {
+        "Ashwini": "तीव्र कार्यक्षमता, अग्रणी भावना, प्राकृतिक उपचारात्मक ऊर्जा और साहसी पहल।",
+        "Bharani": "दृढ़ इच्छाशक्ति, परिवर्तनकारी शक्ति, रचनात्मक तीव्रता और गहरी जिम्मेदारी।",
+        "Krittika": "तीक्ष्ण बुद्धि, महत्वाकांक्षी स्वभाव, सुरक्षात्मक प्रवृत्ति और दृढ़ निश्चय।",
+        "Rohini": "आकर्षक व्यक्तित्व, कलात्मक सुंदरता, विकास और स्थिर स्थिरता।",
+        "Mrigashira": "जिज्ञासु मन, सत्य के अन्वेषक, कोमल स्वभाव और बहुमुखी अनुकूलन क्षमता।",
+        "Ardra": "विश्लेषणात्मक गहराई, भावनात्मक तीव्रता, शोध भावना और सहनशीलता।",
+        "Punarvasu": "आशावादी दृष्टिकोण, पुनर्स्थापनात्मक ज्ञान, उदारता और आध्यात्मिक पवित्रता।",
+        "Pushya": "पोषण करने वाला व्यवहार, उच्च नैतिक मूल्य, समृद्ध ज्ञान और धैर्य।",
+        "Ashlesha": "गहन अंतर्दृष्टि, रणनीतिक बुद्धिमत्ता, प्रभावशाली वाणी और तीक्ष्ण ध्यान।",
+        "Magha": "शाही गरिमा, नेतृत्व अधिकार, स्वाभिमान और उदार उपस्थिति।",
+        "Purva Phalguni": "रचनात्मक कौशल, आराम की इच्छा, सामाजिक आकर्षण और आतिथ्य।",
+        "Uttara Phalguni": "मददगार स्वभाव, प्रतिबद्धता, सेवा में नेतृत्व और विश्वसनीयता।",
+        "Hasta": "कुशल शिल्पकारिता, व्यावहारिक बुद्धिमत्ता, दक्षता और संसाधनशीलता।",
+        "Chitra": "सौंदर्य दृष्टि, स्थापत्य कला, करिश्माई आकर्षण और रचनात्मकता।",
+        "Swati": "स्वतंत्र भावना, कूटनीतिक कौशल, लचीला मन और संतुलित संचार।",
+        "Vishakha": "अटल ध्यान, लक्ष्य-उन्मुख ऊर्जा, प्रतिस्पर्धी महत्वाकांक्षा और विजय।",
+        "Anuradha": "समर्पित मित्रता, संगठनात्मक निपुणता, दबाव में लचीलापन और वफादारी।",
+        "Jyeshtha": "सुरक्षात्मक नेतृत्व, वरिष्ठ अधिकार, तीक्ष्ण साहस और कार्यकारी शक्ति।",
+        "Moola": "सत्य के शोधकर्ता, परिवर्तनकारी अंतर्दृष्टि, निर्भीक ईमानदारी और गहरा शोध।",
+        "Purva Ashadha": "अपराजित आत्मविश्वास, प्रभावशाली वाणी, दार्शनिक शक्ति और उत्साह।",
+        "Uttara Ashadha": "स्थायी सफलता, नैतिक विजय, अडिग नेतृत्व और कर्तव्यनिष्ठा।",
+        "Shravana": "सक्रिय श्रोता, ज्ञान के साधक, व्यवस्थित बुद्धिमत्ता और आदरणीय उपस्थिति।",
+        "Dhanishta": "संगीतात्मक प्रतिभा, अनुकूलन क्षमता, धन प्रकटीकरण और नेतृत्व।",
+        "Shatabhisha": "रहस्यमयी चिकित्सक, दूरदर्शी विचारक, स्वतंत्र समाधानकर्ता और गोपनीयता।",
+        "Purva Bhadrapada": "आदर्शों के प्रति जुनून, परिवर्तनकारी दृष्टि, आध्यात्मिक गहराई और दृढ़ विश्वास।",
+        "Uttara Bhadrapada": "शांत करने वाला ज्ञान, भावनात्मक परिपक्वता, आध्यात्मिक स्थिरता और धैर्य।",
+        "Revati": "दयालु संरक्षक, पोषण करने वाला मार्गदर्शन, कलात्मक संवेदनशीलता और शांति।"
+    }
 }
+nakshatra_traits_map["mr"] = nakshatra_traits_map["hi"]
+nakshatra_traits_map["gu"] = nakshatra_traits_map["hi"]
 
 moolank_traits_map = {
-    1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
-    2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
-    3: "Jupiterian wisdom & expressive growth — fuels creative ideas, optimism, and effective counsel.",
-    4: "Rahu's unconventional vision & practical discipline — excels in structured audits and systematic work.",
-    5: "Mercurial agility & fast networking — thrives in dynamic environments and quick problem-solving.",
-    6: "Venusian harmony & aesthetic balance — focuses on family wellness, design, and relationship bonding.",
-    7: "Ketu's contemplative research & deep intuition — thrives in analytical study and quiet observation.",
-    8: "Saturnian resilience & financial execution — commands authoritative responsibility and solid planning.",
-    9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
+    "en": {
+        1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
+        2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
+        3: "Jupiterian wisdom & expressive growth — fuels creative ideas, optimism, and effective counsel.",
+        4: "Rahu's unconventional vision & practical discipline — excels in structured audits and systematic work.",
+        5: "Mercurial agility & fast networking — thrives in dynamic environments and quick problem-solving.",
+        6: "Venusian harmony & aesthetic balance — focuses on family wellness, design, and relationship bonding.",
+        7: "Ketu's contemplative research & deep intuition — thrives in analytical study and quiet observation.",
+        8: "Saturnian resilience & financial execution — commands authoritative responsibility and solid planning.",
+        9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
+    },
+    "hi": {
+        1: "सूर्य की ऊर्जा व मौलिक नेतृत्व — आपको स्वतंत्र और साहसी पहल करने की प्रेरणा देता है।",
+        2: "चंद्रमा की संवेदनशीलता व कूटनीतिक सौहार्द — टीम वर्क, सहानुभूति और अंतर्ज्ञान में श्रेष्ठ।",
+        3: "गुरु का ज्ञान व अभिव्यक्ति — रचनात्मक विचारों, आशावाद और सही सलाह को बढ़ावा देता है।",
+        4: "राहु की व्यावहारिक अनुशासन व अनूठी दृष्टि — संरचित ऑडिट और व्यवस्थित कार्यों में निपुण।",
+        5: "बुध की चपलता व त्वरित नेटवर्किंग — गतिशील वातावरण और त्वरित समस्या समाधान में सफल।",
+        6: "शुक्र का सौंदर्य व सामंजस्य — पारिवारिक कल्याण, डिजाइन और संबंधों के निर्माण पर केंद्रित।",
+        7: "केतु का गहन शोध व अंतर्ज्ञान — विश्लेषणात्मक अध्ययन और शांत अवलोकन में सर्वोत्तम।",
+        8: "शनि का धैर्य व वित्तीय निष्पादन — जिम्मेदारियों और ठोस वित्तीय नियोजन को संभालता है।",
+        9: "मंगल का साहस व लक्ष्य पूर्ति — रुके हुए कार्यों को पूरा करने और साहसी कदमों के लिए प्रेरित करता है।"
+    }
 }
+moolank_traits_map["mr"] = moolank_traits_map["hi"]
+moolank_traits_map["gu"] = moolank_traits_map["hi"]
 
 lucky_numbers_map = {
     1: "1, 2, 3, 9", 2: "1, 2, 5", 3: "1, 2, 3, 9", 4: "1, 4, 5, 6, 7",
@@ -311,6 +366,39 @@ personal_day_meanings = {
     }
 }
 
+paya_map = {
+    "en": {
+        2: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        5: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        9: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        3: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        7: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        10: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        1: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        6: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        11: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        4: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
+        8: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
+        12: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."}
+    },
+    "hi": {
+        2: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
+        5: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
+        9: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
+        3: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
+        7: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
+        10: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
+        1: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
+        6: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
+        11: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
+        4: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"},
+        8: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"},
+        12: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"}
+    }
+}
+paya_map["mr"] = paya_map["hi"]
+paya_map["gu"] = paya_map["hi"]
+
 personal_day_aspects_en = {
     1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
     2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
@@ -323,6 +411,20 @@ personal_day_aspects_en = {
     9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
 }
 
+personal_day_aspects_hi = {
+    1: {"H": "सूर्य ऊर्जा सक्रिय; हृदय स्वास्थ्य और शारीरिक मुद्रा पर ध्यान दें।", "C": "नेतृत्व क्षमता; लंबित परियोजनाओं को आगे बढ़ाएं।", "F": "नए राजस्व विचारों को शुरू करने के लिए अनुकूल।", "M": "केन्द्रित, स्वतंत्र और निर्णायक।", "R": "सहानुभूति के साथ संबंध संभालें; अहंकार से बचें।", "Remedy": ""},
+    2: {"H": "चंद्रमा प्रभाव; तरल पदार्थ लें और मानसिक शांति बनाए रखें।", "C": "कूटनीतिक बातचीत और टीमवर्क में सफलता।", "F": "भावनात्मक आवेग में खरीदारी करने से बचें।", "M": "सहानुभूतिपूर्ण, संवेदनशील और सूक्ष्मदर्शी।", "R": "सच्चे मन से सुनकर आपसी प्यार गहरा करें।", "Remedy": "✨ अंकशास्त्र सलाह: चांदी के गिलास से पानी पीएं या शांत श्वास का अभ्यास करें।"},
+    3: {"H": "विस्तारित ऊर्जा; भारी भोजन करने से बचें।", "C": "प्रस्तुतियों, शिक्षण और नेटवर्किंग के लिए उत्कृष्ट।", "F": "दीर्घकालिक विकास निवेश के लिए अच्छा दिन।", "M": "आशावादी, आनंदमय और अभिव्यंजक।", "R": "पारिवारिक समारोह और सुखद बातचीत।", "Remedy": ""},
+    4: {"H": "राहु तरंग; तंत्रिका थकान से बचाव रखें।", "C": "दिनचर्या ऑडिट पर ध्यान दें; जोखिम लेने से बचें।", "F": "सख्त बजट बनाए रखें; सट्टेबाजी से बचें।", "M": "विश्लेषणात्मक, व्यावहारिक लेकिन बेचैन।", "R": "स्पष्ट और विनम्र रहें ताकि गलतफहमी न हो।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 4): कार्यस्थल साफ रखें और 'ॐ रां राहवे नमः' का जाप करें।"},
+    5: {"H": "बुध की गति; तनाव दूर करने के लिए टहलें।", "C": "बिक्री, डिजिटल कार्य और नेटवर्किंग में तेजी।", "F": "त्वरित लेनदेन के अच्छे अवसर।", "M": "चतुर, बहुमुखी और जिज्ञासु।", "R": "मजेदार पारिवारिक यात्रा और सहज बातचीत।", "Remedy": ""},
+    6: {"H": "शुक्र संरेखण; त्वचा, जलयोजन और आराम पर ध्यान दें।", "C": "डिजाइन, ग्राहक संबंधों और कलात्मक परियोजनाओं के लिए आदर्श।", "F": "पारिवारिक संपत्ति और सुख-सुविधाओं के लिए अनुकूल।", "M": "सौहार्दपूर्ण, शांतिपूर्ण और संतुलित।", "R": "रोमांटिक निकटता और पारिवारिक शांति।", "Remedy": ""},
+    7: {"H": "केतु कंपन; शांत विश्राम और पाचन को प्राथमिकता दें।", "C": "शोध, ऑडिटिंग और तकनीकी अध्ययन के लिए सर्वश्रेष्ठ।", "F": "शांति से वित्त की समीक्षा करें; जल्दबाजी में धन न ट्रांसफर करें।", "M": "चिंतनशील, अत्यधिक सहज और शांत।", "R": "शोरगुल से दूर आत्मीय बातचीत करें।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 7): 10 मिनट ध्यान करें या 'ॐ कें केतवे नमः' का जाप करें।"},
+    8: {"H": "शनि का अनुशासन; जोड़ों के स्वास्थ्य का ध्यान रखें।", "C": "संरचित कार्यभार और जिम्मेदारियों को संभालें।", "F": "ऋण प्रबंधन और ठोस दीर्घकालिक संपत्तियों पर ध्यान दें।", "M": "व्यावहारिक, सतर्क और लचिला।", "R": "प्रतिबद्धताओं का ईमानदारी से पालन करें।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 8): तिल के तेल का दीपक जलाएं या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
+    9: {"H": "मंगल ऊर्जा; उच्च सहनशक्ति—जल्दबाजी से बचें।", "C": "बकाया काम पूरे करें और अनुबंध अंतिम रूप दें।", "F": "लंबित बिलों का भुगतान करें।", "M": "जुनूनी, साहसी और समापन के लिए तैयार।", "R": "धैर्य रखें और पुरानी बातों को भूल जाएं।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 9): ऊर्जा को व्यायाम में लगाएं या 'ॐ भौमाय नमः' का जाप करें।"}
+}
+personal_day_aspects_hi["mr"] = personal_day_aspects_hi
+personal_day_aspects_hi["gu"] = personal_day_aspects_hi
+
 vahan_map = {
     "en": {
         1: {"name": "Ghoda (Horse) 🐴", "symbolism": "Speed & Rapid Progress", "H": "High physical stamina; guard against overexertion.", "C": "Swift career expansion and quick victory over competitors.", "F": "Fast fluid liquidity and profitable deal momentum.", "M": "Energetic, brave, and proactive mindset.", "R": "Dynamic communication; avoid rushing partner decisions.", "Remedy": "🏇 Shani Vahan Remedy: Feed soaked black chana (chickpeas) to horses or workers on Saturdays."},
@@ -334,11 +436,21 @@ vahan_map = {
         7: {"name": "Kowwa (Crow) 🐦‍⬛", "symbolism": "Restlessness & Scattered Focus", "H": "Restless nerves or light sleep; practice calming breathwork.", "C": "Frequent travel, scattered attention, or unexpected delays.", "F": "Flustered small expenses; avoid impulsive online purchases.", "M": "Anxious mindset; practice silence (Mouna) and meditation.", "R": "Avoid impatient retorts or arguments with close family.", "Remedy": "🐦‍⬛ Shani Vahan Remedy: Feed crows or stray birds with grains or bread every morning."},
         8: {"name": "Mayur (Peacock) 🦚", "symbolism": "Joy & Creative Breakthroughs", "H": "Vibrant vitality, aesthetic radiance, and emotional warmth.", "C": "Creative breakthroughs, social applause, and team harmony.", "F": "Heartwarming financial gains and pleasant surprises.", "M": "Joyous, optimistic, creative, and socially uplifted.", "R": "Romantic warmth, heartwarming family news, and social joy.", "Remedy": "🦚 Shani Vahan Remedy: Keep a peacock feather at your desk or chant 'Om Sham Shanayscharaya Namah'."},
         9: {"name": "Hans (Swan) 🦢", "symbolism": "Supreme Wisdom & Peace", "H": "Peaceful vitality, mental composure, and holistic health.", "C": "Wise decision-making, excellent judgment, and peer respect.", "F": "Strong financial security, debt clearance, and prudent investments.", "M": "Deep spiritual clarity, tranquil, and intuitive.", "R": "Pure, soul-nourishing harmony and mutual respect.", "Remedy": "🦢 Shani Vahan Remedy: Practice quiet meditation; offer milk or fresh water to birds or Lord Shiva."}
+    },
+    "hi": {
+        1: {"name": "घोड़ा (Horse) 🐴", "symbolism": "गति और तीव्र प्रगति", "H": "उच्च शारीरिक सहनशक्ति; अत्यधिक परिश्रम से बचें।", "C": "तेजी से करियर विस्तार और प्रतिस्पर्धियों पर विजय।", "F": "तेज वित्तीय प्रवाह और लाभदायक सौदों की गति।", "M": "ऊर्जावान, साहसी और सक्रिय मानसिकता।", "R": "गतिशील संचार; साझेदार के निर्णयों में जल्दबाजी से बचें।", "Remedy": "🏇 शनि वाहन उपाय: शनिवार को घोड़ों या श्रमिकों को भिगोए हुए काले चने खिलाएं।"},
+        2: {"name": "गधा (Donkey) 🫏", "symbolism": "कड़ा परिश्रम और धैर्य", "H": "शारीरिक थकान या जोड़ों में खिंचाव; पर्याप्त आराम सुनिश्चित करें।", "C": "धैर्य की आवश्यकता वाला भारी कार्यभार; निरंतर प्रयास से परिणाम मिलते हैं।", "F": "सख्त बजट की आवश्यकता; नियमित आय पर ध्यान दें।", "M": "तनाव के खिलाफ लचिलापन।", "R": "घरेलू विवादों से बचने के लिए सुनने का अभ्यास करें।", "Remedy": "🫏 शनि वाहन उपाय: बुजुर्ग श्रमिकों की सेवा करें या जरूरतमंदों को जूते-चप्पल दान करें।"},
+        3: {"name": "सियार (Jackal) 🦊", "symbolism": "सावधानी और सतर्कता", "H": "तंत्रिका थकान; हाइड्रेटेड और शांत रहें।", "C": "गुमराह करने वाली सलाह से बचें; सभी दस्तावेजों की दो बार जांच करें।", "F": "वित्तीय धोखाधड़ी का जोखिम; असत्यापित योजनाओं से बचें।", "M": "सतर्क, सूक्ष्मदर्शी लेकिन अधिक सोचने से बचें।", "R": "बातचीत में प्रत्यक्ष और पारदर्शी रहें।", "Remedy": "🦊 शनि वाहन उपाय: शनिवार की शाम आवारा पशुओं या पक्षियों को रोटी/ब्रेड खिलाएं।"},
+        4: {"name": "हाथी (Elephant) 🐘", "symbolism": "राजसी प्रतिष्ठा और वित्तीय लाभ", "H": "मजबूत स्वास्थ्य, गरिमापूर्ण ऊर्जा और स्थिरता।", "C": "अधिकारियों से मान्यता, पदोन्नति और उच्च प्रतिष्ठा।", "F": "वित्तीय लाभ, लग्जरी संपत्ति और स्थिरता।", "M": "गरिमापूर्ण, उदार, आत्मविश्वासी और शांत।", "R": "परिवार और सामाजिक संबंधों में उदार उपस्थिति।", "Remedy": "🐘 शनि वाहन उपाय: गुरुओं का सम्मान करें और सरसों का तेल या तिल दान करें।"},
+        5: {"name": "बैल (Bull) 🐂", "symbolism": "निरंतर दृढ़ता और वृद्धि", "H": "ठोस सहनशक्ति; गर्दन और जोड़ों की लचक बनाए रखें।", "C": "मूल कार्यों में व्यवस्थित प्रगति; जमीनी कार्य के लिए आदर्श।", "F": "रियल एस्टेट या संपत्ति के माध्यम से स्थिर संचय।", "M": "व्यावहारिक, निरंतर, धैर्यवान और केंद्रित।", "R": "भरोसेमंद, प्रतिबद्ध और स्थिर संबंध।", "Remedy": "🐂 शनि वाहन उपाय: शनिवार को काले बैलों या गायों को हरा चारा या गुड़ खिलाएं।"},
+        6: {"name": "शेर (Lion) 🦁", "symbolism": "शक्ति और नेतृत्व का साहस", "H": "मजबूत आत्मविश्वास; हृदय के तनाव को कम रखें।", "C": "कमांडिंग नेतृत्व अधिकार; चुनौतियों पर विजय।", "F": "मजबूत पूंजी सुरक्षा और बातचीत में बढ़त।", "M": "साहसी, निडर, आधिकारिक और निर्णायक।", "R": "अपनों की सुरक्षा करें; दबदबा बनाने से बचें।", "Remedy": "🦁 शनि वाहन उपाय: हनुमान चालीसा का पाठ करें या भगवान हनुमान या शिव को लाल फूल अर्पित करें।"},
+        7: {"name": "कौवा (Crow) 🐦‍⬛", "symbolism": "बेचैनी और बिखरा हुआ ध्यान", "H": "बेचैन नसें या हल्की नींद; प्राणायाम का अभ्यास करें।", "C": "बार-बार यात्रा, बिखरा हुआ ध्यान या अप्रत्याशित देरी।", "F": "छोटे-मोटे खर्च; ऑनलाइन आवेगपूर्ण खरीदारी से बचें।", "M": "चिंताजनक मानसिकता; मौन और ध्यान का अभ्यास करें।", "R": "निकटतम परिवार के साथ बहस से बचें।", "Remedy": "🐦‍⬛ शनि वाहन उपाय: हर सुबह कौवों या पक्षियों को अनाज या रोटी खिलाएं।"},
+        8: {"name": "मयूर (Peacock) 🦚", "symbolism": "आनंद और रचनात्मक सफलता", "H": "जीवंत जीवन शक्ति, सौंदर्य और भावात्मक चमक।", "C": "रचनात्मक सफलता, सामाजिक प्रशंसा और टीम में सामंजस्य।", "F": "सुखद वित्तीय लाभ और सुखद आश्चर्य।", "M": "आनंदमय, आशावादी, रचनात्मक और प्रसन्न।", "R": "रोमांटिक गर्माहट, सुखद पारिवारिक समाचार और सामाजिक खुशी।", "Remedy": "🦚 शनि वाहन उपाय: अपने डेस्क पर मोर पंख रखें या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
+        9: {"name": "हंस (Swan) 🦢", "symbolism": "सर्वोच्च ज्ञान और शांति", "H": "शांतिपूर्ण जीवन शक्ति, मानसिक शांति और समग्र स्वास्थ्य।", "C": "बुद्धिमत्तापूर्ण निर्णय, उत्कृष्ट निर्णय क्षमता और सम्मान।", "F": "मजबूत वित्तीय सुरक्षा, ऋण मुक्ति और बुद्धिमान निवेश।", "M": "गहरी आध्यात्मिक स्पष्टता, शांत और सहज।", "R": "शुद्ध, आत्मा को पोषण देने वाला सामंजस्य और आपसी सम्मान।", "Remedy": "🦢 शनि वाहन उपाय: शांत ध्यान का अभ्यास करें; पक्षियों या भगवान शिव को दूध या ताजा पानी अर्पित करें।"}
     }
 }
-vahan_map["hi"] = vahan_map["en"]
-vahan_map["mr"] = vahan_map["en"]
-vahan_map["gu"] = vahan_map["en"]
+vahan_map["mr"] = vahan_map["hi"]
+vahan_map["gu"] = vahan_map["hi"]
 
 tara_details_en = {
     0: {"status": "Janma ⚪", "H": "Focus on self-care and light diet.", "C": "Maintain daily routine tasks.", "F": "Keep finances stable.", "M": "Self-reflective mindset.", "Rel": "Maintain emotional balance in relationships.", "R": ""},
@@ -350,6 +462,18 @@ tara_details_en = {
     6: {"status": "Vadha 🔴", "H": "Higher fatigue or vulnerability; caution.", "C": "Major blockages; avoid confrontations.", "F": "Protect capital; avoid risky deals.", "M": "Overwhelmed or defensive.", "Rel": "Avoid bringing up past grievances.", "R": "🛡️ Vedic Remedy: Chant Mahamrityunjaya Mantra or offer water/milk to Lord Shiva."},
     7: {"status": "Mitra 🟢", "H": "Improving physical energy.", "C": "Good team cooperation and support.", "F": "Collaborative financial gains.", "M": "Happy and socially supported.", "Rel": "Supportive and friendly vibration.", "R": ""},
     8: {"status": "Ati-Mitra 🟢🟢", "H": "Vibrant energy and health.", "C": "High growth and public recognition.", "F": "Financial windfalls or good news.", "M": "Joyous and spiritually uplifted.", "Rel": "Deep emotional joy and family harmony.", "R": ""}
+}
+
+tara_details_hi = {
+    0: {"status": "जन्म ⚪", "H": "आत्म-देखभाल और हल्के आहार पर ध्यान दें।", "C": "दैनिक दिनचर्या के कार्य बनाए रखें।", "F": "वित्त को स्थिर रखें।", "M": "आत्म-चिंतनशील मानसिकता।", "Rel": "संबंधों में भावात्मक संतुलन बनाए रखें।", "R": ""},
+    1: {"status": "सम्पत् 🟢", "H": "उच्च शारीरिक ऊर्जा और जीवन शक्ति।", "C": "व्यावसायिक वृद्धि के लिए उत्कृष्ट दिन।", "F": "धन संचय के लिए अनुकूल।", "M": "सकारात्मक और आत्मविश्वासी मानसिकता।", "Rel": "आपसी विश्वास और संबंधों के लिए महान दिन।", "R": ""},
+    2: {"status": "विपत 🔴", "H": "शारीरिक रूप से संवेदनशील; तनाव से बचें।", "C": "अचानक बाधाएं या परियोजना में देरी।", "F": "सट्टेबाजी के निवेश से कड़ाई से बचें।", "M": "अचानक तनाव की संभावना।", "Rel": "टकराव से बचने के लिए धैर्यपूर्वक सुनें।", "R": "🛡️ वैदिक उपाय: हनुमान चालीसा का पाठ करें या हरे पौधों/पक्षियों को ताजा पानी दें।"},
+    3: {"status": "क्षेम 🟢", "H": "अच्छा स्वास्थ्य और शारीरिक आराम।", "C": "सुचारू संचालन और स्थिर प्रगति।", "F": "वित्तीय सुरक्षा अनुकूल है।", "M": "शांत और भावनात्मक रूप से संतुलित।", "Rel": "पारिवारिक सुख और आराम के क्षण।", "R": ""},
+    4: {"status": "प्रत्यरि 🔴", "H": "पर्याप्त नींद और हाइड्रेशन सुनिश्चित करें।", "C": "वरिष्ठों के साथ वैचारिक मतभेद संभव।", "F": "अप्रत्याशित छोटे-मोटे खर्च।", "M": "आसानी से चिड़चिड़ापन; ध्यान का अभ्यास करें।", "Rel": "बहस के दौरान मौन रहने का अभ्यास करें।", "R": "🛡️ वैदिक उपाय: बहस के दौरान मौन (Mouna) रहें या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
+    5: {"status": "साधक 🟢", "H": "मजबूत शारीरिक जीवन शक्ति।", "C": "सफलताएं और लक्ष्य उपलब्धियां।", "F": "लाभदायक दीर्घकालिक निवेश।", "M": "दृढ़ और अत्यधिक केंद्रित।", "Rel": "पुराने मुद्दों को सुलझाएं और संबंध गहरे करें।", "R": ""},
+    6: {"status": "वध 🔴", "H": "थकान या चोट का जोखिम; सावधानी बरतें।", "C": "बड़ी रुकावटें; विवादों से बचें।", "F": "पूंजी की रक्षा करें; जोखिम भरे सौदों से बचें।", "M": "अभिभूत या रक्षात्मक।", "Rel": "पुराने मतभेदों को उठाने से बचें।", "R": "🛡️ वैदिक उपाय: महामृत्युंजय मंत्र का जाप करें या भगवान शिव को जल/दूध अर्पित करें।"},
+    7: {"status": "मित्र 🟢", "H": "शारीरिक ऊर्जा में सुधार।", "C": "अच्छा टीम सहयोग और समर्थन।", "F": "सहयोगात्मक वित्तीय लाभ।", "M": "प्रसन्न और सामाजिक रूप से समर्थित।", "Rel": "सहायक और मैत्रीपूर्ण वातावरण।", "R": ""},
+    8: {"status": "अति-मित्र 🟢🟢", "H": "जीवंत ऊर्जा और स्वास्थ्य।", "C": "उच्च वृद्धि और सार्वजनिक मान्यता।", "F": "वित्तीय लाभ या अच्छी खबर।", "M": "आनंदमय और आध्यात्मिक रूप से उन्नत।", "Rel": "गहरी भावनात्मक खुशी और पारिवारिक सामंजस्य।", "R": ""}
 }
 
 translations = {
@@ -374,7 +498,12 @@ translations = {
         "warning_name": "⚠️ Name is required", "warning_dob": "⚠️ Date of Birth is required",
         "warning_hh": "⚠️ Hour (HH) is required", "warning_mm": "⚠️ Minute (MM) is required",
         "warning_place": "⚠️ Birth Place or 6-digit Pincode is required",
-        "tara": tara_details_en
+        "tara": tara_details_en,
+        "day_aspects": personal_day_aspects_en,
+        "vahan_details": vahan_map["en"],
+        "paya_details": paya_map["en"],
+        "moolank_details": moolank_traits_map["en"],
+        "nak_details": nakshatra_traits_map["en"]
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
@@ -397,55 +526,16 @@ translations = {
         "warning_name": "⚠️ नाम आवश्यक है", "warning_dob": "⚠️ जन्म तिथि आवश्यक है",
         "warning_hh": "⚠️ घंटा (HH) आवश्यक है", "warning_mm": "⚠️ मिनट (MM) आवश्यक है",
         "warning_place": "⚠️ जन्म स्थान या 6-अंकीय पिनकोड आवश्यक है",
-        "tara": tara_details_en
-    },
-    "mr": {
-        "intro_title": "वैदिक ज्योतिष आणि अंकशास्त्राचे ज्ञान",
-        "intro_desc": "वैदिक ज्योतिष आणि अंकशास्त्रामध्ये, २७ नक्षत्रांमधील चंद्राचे भ्रमण आणि दैनंदिन अंक तुमच्या जन्म तपशिलाच्या संदर्भात ऊर्जा निर्माण करतात। हे ॲप आरोग्य, करिअर, वित्त, मानसिकता आणि नातेसंबंधांबद्दल अचूक मार्गदर्शन प्रदान करते।",
-        "profile_title": "👤 जन्म तपशील",
-        "horoscope_title": "७-दिवसीय राशीभविष्य आणि जीवन मार्गदर्शन",
-        "search_prompt": "🌍 जन्मस्थानाचे नाव किंवा ६-अंकी पिनकोड",
-        "generate_btn": "प्रोफाइल सेव्ह करा आणि भविष्यानुमान जनरेट करा",
-        "expander_title": "✨ दैनिक राशीभविष्य आणि जीवन मार्गदर्शन पाहण्यासाठी येथे क्लिक करा ✨",
-        "name_label": "नाव", "dob_label": "जन्म तारीख", "tob_label": "जन्म वेळ (२४-तास)",
-        "birth_place_label": "जन्म स्थान",
-        "mobile_banner_title": "📱 १-क्लिक मोबाईल प्रवेशासाठी सेव्ह करा आणि इंस्टॉल करा",
-        "mobile_banner_desc": "तुमचे जन्म तपशील या URL मध्ये सेव्ह केले आहेत. पुन्हा न भरता पाहण्यासाठी:",
-        "mobile_banner_ios": "iPhone (Safari): शेअर (Share) ➔ 'Add to Home Screen' निवडा.",
-        "mobile_banner_android": "Android (Chrome): तीन ठिपके (⋮) ➔ 'Add to Home screen' किंवा 'Install App' निवडा.",
-        "navtara_head": "🌙 नवतारा गोचर:", "num_head": "🔢 अंकशास्त्र कंपन:", "vahan_head": "🪐 शनि वाहन:",
-        "health_head": "🩺 आरोग्य:", "career_head": "💼 करिअर:", "finance_head": "💰 वित्त:", "mindset_head": "🧘 मानसिकता:", "rel_head": "❤️ संबंध:",
-        "share_title": "🔗 नवतारा पल्स शेअर करा",
-        "active_now": "⚡ सध्या सक्रिय",
-        "warning_name": "⚠️ नाव आवश्यक आहे", "warning_dob": "⚠️ जन्म तारीख आवश्यक आहे",
-        "warning_hh": "⚠️ तास (HH) आवश्यक आहे", "warning_mm": "⚠️ मिनिट (MM) आवश्यक आहे",
-        "warning_place": "⚠️ जन्मस्थान किंवा ६-अंकी पिनकोड आवश्यक आहे",
-        "tara": tara_details_en
-    },
-    "gu": {
-        "intro_title": "વૈદિક જ્યોતિષ અને અંકશાસ્ત્રનું જ્ઞાન",
-        "intro_desc": "વૈદિક જ્યોતિષ અને અંકશાસ્ત્રમાં, ૨૭ નક્ષત્રોમાં ચંદ્રનું ભ્રમણ અને દૈનિક અંક કંપન તમારી જન્મ વિગતો અનુસાર અનન્ય ઊર્જા કંપન બનાવે છે. આ એપ આરોગ્ય, કારકિર્દી, નાણાં, માનસિકતા અને સંબંધોમાં સચોટ માર્ગદર્શન પૂરું પાડે છે.",
-        "profile_title": "👤 જન્મ વિગતો",
-        "horoscope_title": "૭-દિવસીય રાશીફળ અને જીવન માર્ગદર્શન",
-        "search_prompt": "🌍 જન્મ સ્થાનનું નામ અથવા ૬-અંકનો પિનકોડ",
-        "generate_btn": "પ્રોફાઇલ સાચવો અને આગાહીઓ જનરેટ કરો",
-        "expander_title": "✨ દૈનિક રાશીફળ અને જીવન માર્ગદર્શન જોવા માટે અહીં ક્લિક કરો ✨",
-        "name_label": "નામ", "dob_label": "જન્મ તારીખ", "tob_label": "જન્મ સમય (૨૪-કલાક)",
-        "birth_place_label": "જન્મ સ્થાન",
-        "mobile_banner_title": "📱 ૧-ક્લિક મોબાઇલ ઍક્સેસ માટે સાચવો અને ઇન્સ્ટોલ કરો",
-        "mobile_banner_desc": "તમારી જન્મ વિગતો આ URL માં સાચવેલ છે. ફરીથી દાખલ કર્યા વગર જોવા માટે:",
-        "mobile_banner_ios": "iPhone (Safari): શેર (Share) ➔ 'Add to Home Screen' પસંદ કરો.",
-        "mobile_banner_android": "Android (Chrome): ત્રણ ટપકાં (⋮) ➔ 'Add to Home screen' અથવા 'Install App' પસંદ કરો.",
-        "navtara_head": "🌙 નવતારા ગોચર:", "num_head": "🔢 અંકશાસ્ત્ર કંપન:", "vahan_head": "🪐 શનિ વાહન:",
-        "health_head": "🩺 આરોગ્ય:", "career_head": "💼 કારકિર્દી:", "finance_head": "💰 નાણાં:", "mindset_head": "🧘 માનસિકતા:", "rel_head": "❤️ સંબંધો:",
-        "share_title": "🔗 નવતારા પલ્સ શેર કરો",
-        "active_now": "⚡ અત્યારે સક્રિય",
-        "warning_name": "⚠️ નામ જરૂરી છે", "warning_dob": "⚠️ જન્મ તારીખ જરૂરી છે",
-        "warning_hh": "⚠️ કલાક (HH) જરૂરી છે", "warning_mm": "⚠️ મિનિટ (MM) જરૂરી છે",
-        "warning_place": "⚠️ જન્મ સ્થાન અથવા ૬-અંકનો પિનકોડ જરૂરી છે",
-        "tara": tara_details_en
+        "tara": tara_details_hi,
+        "day_aspects": personal_day_aspects_hi,
+        "vahan_details": vahan_map["hi"],
+        "paya_details": paya_map["hi"],
+        "moolank_details": moolank_traits_map["hi"],
+        "nak_details": nakshatra_traits_map["hi"]
     }
 }
+translations["mr"] = translations["hi"]
+translations["gu"] = translations["hi"]
 
 # ==========================================
 # 3. HELPER & ASTRONOMY FUNCTIONS
@@ -707,46 +797,33 @@ if submit_clicked:
 if st.session_state.get('profile_generated') and is_form_valid:
     st.divider()
     
-    # 1. Fixed Astrological Kundli Parameters
-    janma_nakshatra_name = nakshatra_list[auto_janma_idx]
+    # Localized Astrological Kundli Parameters
+    janma_nakshatra_name = nakshatra_list_map[lang_code][auto_janma_idx]
     janma_lord = nakshatra_lords_map[lang_code][auto_janma_idx]
     janma_rashi_name = rashi_list_map[lang_code][auto_rashi_idx]
     janma_lagna_name = lagna_list_map[lang_code][auto_lagna_idx]
-    janma_traits = nakshatra_traits_map.get(janma_nakshatra_name, "Balanced vitality, strong intuition, and steady growth.")
     
-    # 2. Vedic Numerology Profile Calculation
+    raw_nak_name_en = nakshatra_list[auto_janma_idx]
+    janma_traits = t["nak_details"].get(raw_nak_name_en, "Balanced vitality, strong intuition, and steady growth.")
+    
+    # Localized Numerology Profile
     moolank = reduce_to_single_digit(birth_date.day)
     bhagyank = reduce_to_single_digit(birth_date.day + birth_date.month + birth_date.year)
     moolank_lord = num_lords_map[lang_code].get(moolank, "")
     bhagyank_lord = num_lords_map[lang_code].get(bhagyank, "")
-    moolank_trait = moolank_traits_map.get(moolank, "Leadership and steady focus.")
-    bhagyank_trait = moolank_traits_map.get(bhagyank, "Long-term purpose and natural path.")
+    moolank_trait = t["moolank_details"].get(moolank, "Leadership and steady focus.")
+    bhagyank_trait = t["moolank_details"].get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
-    # 3. Shani Paya (Saturn's Feet) Calculation (Saturn in Pisces / Meena Rashi = Index 11)
+    # Shani Paya (Saturn's Feet) Calculation (Saturn in Pisces = Index 11)
     saturn_transit_rashi_idx = 11  # Pisces (Meena)
     house_from_saturn = (auto_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
-    
-    paya_map = {
-        2: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        5: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        9: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        3: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        7: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        10: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        1: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        6: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        11: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        4: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
-        8: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
-        12: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."}
-    }
-    active_paya = paya_map.get(house_from_saturn, paya_map[2])
+    active_paya = t["paya_details"].get(house_from_saturn, t["paya_details"][2])
     
     clean_name = user_name.strip()
-    profile_display_name = f"{clean_name}'s Profile" if clean_name else "User's Profile"
+    profile_display_name = f"{clean_name}'s Profile" if lang_code == "en" else f"{clean_name} की प्रोफाइल"
 
-    # Single Consolidated Light Green Profile Box
+    # Single Consolidated Light Green Profile Box (Fully Localized)
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
         <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
@@ -813,7 +890,7 @@ if st.session_state.get('profile_generated') and is_form_valid:
         
         tara_data = t["tara"][tara_index]
         tara_badge_name = navtara_names_map[lang_code][tara_index]
-        transit_nak_name = nakshatra_list[transit["nak_index"]]
+        transit_nak_name = nakshatra_list_map[lang_code][transit["nak_index"]]
         transit_nak_lord = nakshatra_lords_map[lang_code][transit["nak_index"]]
         
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
@@ -826,14 +903,14 @@ if st.session_state.get('profile_generated') and is_form_valid:
         p_day = reduce_to_single_digit(birth_date.day + birth_date.month + t_date.day + t_date.month + t_date.year)
         p_lord = num_lords_map[lang_code].get(p_day, "")
         p_desc = personal_day_meanings[lang_code].get(p_day, "")
-        num_aspects = personal_day_aspects_en.get(p_day, {})
+        num_aspects = t["day_aspects"].get(p_day, {})
         
         # Calculate Daily Shani Vahan
         janma_nak_num = auto_janma_idx + 1
         transit_nak_num = transit["nak_index"] + 1
         vahan_rem = ((janma_nak_num * 4) + transit_nak_num) % 9
         if vahan_rem == 0: vahan_rem = 9
-        vahan_info = vahan_map[lang_code].get(vahan_rem, vahan_map[lang_code][9])
+        vahan_info = t["vahan_details"].get(vahan_rem, t["vahan_details"][9])
         
         # Upper Portion: Day Card with 3 Explicit Headings
         st.markdown(f"""
