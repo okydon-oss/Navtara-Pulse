@@ -32,15 +32,17 @@ st.markdown("""
     #MainMenu {visibility: hidden;} 
     footer {visibility: hidden;}
     
-    /* High-contrast Light Blue Transit Cards */
+    /* Unified Transit Card Top Block */
     .transit-card { 
         background-color: #e0f2fe; 
         color: #0f172a;
         padding: 16px; 
-        border-radius: 12px; 
-        margin-bottom: 12px; 
+        border-radius: 12px 12px 0 0; 
+        margin-bottom: 0px; 
         border-left: 6px solid #0284c7; 
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+        border-top: 1px solid #bae6fd;
+        border-right: 1px solid #bae6fd;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
     }
     .transit-card h5 {
         color: #0369a1 !important;
@@ -87,6 +89,37 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 0.5px;
         display: inline-block;
+    }
+
+    /* Seamless Expander Attachment to the Transit Card */
+    div[data-testid="stExpander"] {
+        border-top: none !important;
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        border-bottom-left-radius: 12px !important;
+        border-bottom-right-radius: 12px !important;
+        border-left: 6px solid #0284c7 !important;
+        border-right: 1px solid #bae6fd !important;
+        border-bottom: 1px solid #bae6fd !important;
+        background-color: #f0f9ff !important;
+        margin-bottom: 18px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    div[data-testid="stExpander"] summary {
+        background-color: #dbeafe !important;
+        color: #0369a1 !important;
+        font-weight: 700 !important;
+        border-radius: 0 !important;
+        padding: 10px 14px !important;
+    }
+    div[data-testid="stExpander"] summary:hover {
+        background-color: #bfdbfe !important;
+        color: #0c4a6e !important;
+    }
+    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
+        background-color: #f8fafc !important;
+        padding: 14px !important;
+        border-radius: 0 0 10px 10px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -212,6 +245,7 @@ translations = {
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
         "generate_btn": "Generate Horoscope & Predictions",
+        "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
         "tara": tara_details_en
     },
     "hi": {
@@ -221,6 +255,7 @@ translations = {
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
         "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
+        "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
         "tara": tara_details_en 
     }
 }
@@ -458,6 +493,7 @@ if st.session_state.get('profile_saved'):
         
         current_pill = "<span class='current-badge'>⚡ Active Now</span>" if transit.get("is_current") else ""
         
+        # Upper Portion: Moon Transit Metadata (Light Blue Card)
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
@@ -467,11 +503,12 @@ if st.session_state.get('profile_saved'):
         </div>
         """, unsafe_allow_html=True)
         
-        with st.expander("🔮 Daily Prediction & Life Guidance"):
-            st.write(f"**Health:** {tara_data['H']}")
-            st.write(f"**Career:** {tara_data['C']}")
-            st.write(f"**Finance:** {tara_data['F']}")
-            st.write(f"**Mindset:** {tara_data['M']}")
+        # Attached Lower Portion: Seamlessly Joined Expander for Predictions & Guidance
+        with st.expander(t["expander_title"]):
+            st.write(f"🩺 **Health:** {tara_data['H']}")
+            st.write(f"💼 **Career:** {tara_data['C']}")
+            st.write(f"💰 **Finance:** {tara_data['F']}")
+            st.write(f"🧘 **Mindset:** {tara_data['M']}")
             if tara_data['R']:
                 st.error(tara_data['R'])
 
