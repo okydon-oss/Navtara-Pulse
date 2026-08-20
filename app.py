@@ -32,13 +32,20 @@ st.markdown("""
     #MainMenu {visibility: hidden;} 
     footer {visibility: hidden;}
     
-    /* Missing Field Warning Styling */
-    .missing-warning {
+    /* Red Border & Glowing Highlight for Missing Input Fields */
+    .missing-field div[data-baseweb="input"], 
+    .missing-field div[data-baseweb="select"] > div,
+    .missing-field input {
+        border: 2px solid #ef4444 !important;
+        border-radius: 8px !important;
+        background-color: #fef2f2 !important;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.35) !important;
+    }
+    .missing-field-warning {
         color: #dc2626 !important;
-        font-size: 0.83rem !important;
+        font-size: 0.82rem !important;
         font-weight: 700 !important;
-        margin-top: -8px;
-        margin-bottom: 8px;
+        margin-top: 4px;
         display: block;
     }
 
@@ -584,7 +591,6 @@ if default_date_str:
 else:
     default_date = None
 
-# Query param index resolution for HH & MM
 hh_param = query_params.get('h')
 hh_index = int(hh_param) + 1 if (hh_param is not None and hh_param.isdigit() and int(hh_param) < 24) else 0
 
@@ -598,12 +604,12 @@ with col1:
     user_name = st.text_input("Name", value=default_name, placeholder="e.g. Rahul Sharma")
     is_name_valid = bool(user_name.strip())
     if not is_name_valid:
-        st.markdown('<span class="missing-warning">⚠️ Name is required</span>', unsafe_allow_html=True)
+        st.markdown('<span class="missing-field-warning">⚠️ Name is required</span>', unsafe_allow_html=True)
 
     birth_date = st.date_input("Date of Birth", min_value=datetime.date(1925, 1, 1), max_value=datetime.date.today(), value=default_date)
     is_dob_valid = birth_date is not None
     if not is_dob_valid:
-        st.markdown('<span class="missing-warning">⚠️ Date of Birth is required</span>', unsafe_allow_html=True)
+        st.markdown('<span class="missing-field-warning">⚠️ Date of Birth is required</span>', unsafe_allow_html=True)
 
 with col2:
     st.write("Time of Birth (24-Hour)")
@@ -615,13 +621,13 @@ with col2:
         birth_hour = st.selectbox("HH", hh_options, index=hh_index)
         is_hh_valid = birth_hour != "--"
         if not is_hh_valid:
-            st.markdown('<span class="missing-warning">⚠️ Hour (HH) is required</span>', unsafe_allow_html=True)
+            st.markdown('<span class="missing-field-warning">⚠️ Hour (HH) is required</span>', unsafe_allow_html=True)
 
     with tc2: 
         birth_minute = st.selectbox("MM", mm_options, index=mm_index)
         is_mm_valid = birth_minute != "--"
         if not is_mm_valid:
-            st.markdown('<span class="missing-warning">⚠️ Minute (MM) is required</span>', unsafe_allow_html=True)
+            st.markdown('<span class="missing-field-warning">⚠️ Minute (MM) is required</span>', unsafe_allow_html=True)
 
 # Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
@@ -634,7 +640,7 @@ place_query = st.text_input(
 
 is_place_valid = len(place_query.strip()) >= 3
 if not is_place_valid:
-    st.markdown('<span class="missing-warning">⚠️ Birth Place or 6-digit Pincode is required</span>', unsafe_allow_html=True)
+    st.markdown('<span class="missing-field-warning">⚠️ Birth Place or 6-digit Pincode is required</span>', unsafe_allow_html=True)
 
 selected_place_display = place_query
 place_obj_data = None
@@ -707,10 +713,34 @@ if st.session_state.get('profile_generated') and is_form_valid:
     bhagyank_trait = moolank_traits_map.get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
+    # 3. Shani Paya (Saturn's Feet) Calculation (Saturn in Pisces / Meena Rashi = Index 11)
+    saturn_transit_rashi_idx = 11  # Pisces (Meena)
+    house_from_saturn = (auto_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
+    
+    paya_map = {
+        2: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        5: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        9: {"name": "Rajat Paya (Silver Feet / चाँदी का पाया) 🥈", "metal": "Silver", "grade": "Most Auspicious & Protective (अति शुभ)", "desc": "Acts as a divine protective shield. Cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
+        
+        3: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        7: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        10: {"name": "Tamra Paya (Copper Feet / तांबे का पाया) 🥉", "metal": "Copper", "grade": "Favorable & Productive (शुभ एवं फलदायी)", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
+        
+        1: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        6: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        11: {"name": "Swarna Paya (Gold Feet / सोने का पाया) 🥇", "metal": "Gold", "grade": "Testing / Mixed Results (मध्यम एवं सचेत)", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
+        
+        4: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
+        8: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
+        12: {"name": "Loha Paya (Iron Feet / लोहे का पाया) 🪙", "metal": "Iron", "grade": "Requires Discipline & Caution (कठिन एवं धैर्य)", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."}
+    }
+    
+    active_paya = paya_map.get(house_from_saturn, paya_map[2])
+    
     # Format display name cleanly
     clean_name = user_name.strip()
     profile_display_name = f"{clean_name}'s Profile" if clean_name else "User's Profile"
-    
+
     # Single Consolidated Light Green Profile Box
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
@@ -731,9 +761,24 @@ if st.session_state.get('profile_generated') and is_form_valid:
             <p style="margin-bottom: 6px; margin-top: 10px;">
                 🔢 <b>Numerology Profile:</b> Moolank (Driver): <b>{moolank} ({moolank_lord})</b> &nbsp;|&nbsp; Bhagyank (Conductor): <b>{bhagyank} ({bhagyank_lord})</b> &nbsp;|&nbsp; Lucky Numbers: <b>{lucky_nums}</b>
             </p>
-            <p style="margin-bottom: 4px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
+            <p style="margin-bottom: 12px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
                 💡 <b>Numerology Traits:</b> Moolank {moolank} brings {moolank_trait} Bhagyank {bhagyank} emphasizes {bhagyank_trait}
             </p>
+            <hr style="border: 0; border-top: 1px dashed #a7f3d0; margin: 10px 0;">
+            <p style="margin-bottom: 6px; margin-top: 10px;">
+                🪐 <b>Shani Paya (Saturn's Feet) Analysis:</b>
+            </p>
+            <div style="background-color: #ffffff; padding: 12px 14px; border-radius: 8px; border: 1px solid #bbf7d0; color: #14532d; font-size: 0.9rem; margin-top: 6px;">
+                <p style="margin-bottom: 4px;">
+                    📌 <b>Ongoing Transit:</b> Saturn in <b>Meena Rashi (Pisces)</b> &nbsp;|&nbsp; <b>Duration:</b> <span style="background-color: #dcfce7; padding: 2px 8px; border-radius: 6px; font-weight: 700; color: #15803d;">March 2025 – June 2027</span>
+                </p>
+                <p style="margin-bottom: 4px;">
+                    🦵 <b>Active Paya:</b> <b>{active_paya['name']}</b> &nbsp;|&nbsp; <b>House Position:</b> {house_from_saturn}rd/th House from Saturn
+                </p>
+                <p style="margin-bottom: 0px; color: #166534; padding-left: 8px; border-left: 3px solid #16a34a; margin-top: 6px;">
+                    🔮 <b>Predictions & Impact:</b> <b>[{active_paya['grade']}]</b> {active_paya['desc']}
+                </p>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
