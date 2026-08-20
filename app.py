@@ -213,8 +213,50 @@ navtara_names_map = {
 num_lords_map = {
     "en": {1: "Sun (Surya)", 2: "Moon (Chandra)", 3: "Jupiter (Guru)", 4: "Rahu", 5: "Mercury (Budh)", 6: "Venus (Shukra)", 7: "Ketu", 8: "Saturn (Shani)", 9: "Mars (Mangal)"},
     "hi": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगल"},
-    "mr": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगळ"},
+    "mr": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतू", 8: "शनि", 9: "मंगळ"},
     "gu": {1: "સૂર્ય", 2: "ચંદ્ર", 3: "ગુરુ", 4: "રાહુ", 5: "બુધ", 6: "શુક્ર", 7: "કેતુ", 8: "શનિ", 9: "મંગળ"}
+}
+
+nakshatra_traits_map = {
+    "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
+    "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
+    "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
+    "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
+    "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
+    "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
+    "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
+    "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
+    "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
+    "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
+    "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
+    "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
+    "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
+    "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
+    "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
+    "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
+    "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
+    "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
+    "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
+    "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
+    "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
+    "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
+    "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
+    "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
+    "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
+    "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
+    "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
+}
+
+moolank_traits_map = {
+    1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
+    2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
+    3: "Jupiterian wisdom & expressive growth — fuels creative ideas, optimism, and effective counsel.",
+    4: "Rahu's unconventional vision & practical discipline — excels in structured audits and systematic work.",
+    5: "Mercurial agility & fast networking — thrives in dynamic environments and quick problem-solving.",
+    6: "Venusian harmony & aesthetic balance — focuses on family wellness, design, and relationship bonding.",
+    7: "Ketu's contemplative research & deep intuition — thrives in analytical study and quiet observation.",
+    8: "Saturnian resilience & financial execution — commands authoritative responsibility and solid planning.",
+    9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
 }
 
 lucky_numbers_map = {
@@ -264,9 +306,21 @@ personal_day_meanings = {
         5: "ઝડપી નિર્ણયો, વેચાણ અને નેટવર્કિંગ માટે ઉત્તમ દિવસ. જિદ્દી બનવાનું ટાળો.",
         6: "પારિવારિક ચર્ચા, સંબંધો અને સ્વ-સંભાળ માટે સારો દિવસ. બિનજરૂરી વિવાદ ટાળો.",
         7: "શાંત અભ્યાસ, ઊંડા સંશોધન અને માનસિક આરામ માટે ઉત્તમ દિવસ. ઉતાવળા નિર્ણયો ટાળો.",
-        8: "નાણાકીય આયોજન, દેવા સંચાલન आणि શિસ્તબદ્ધ કામ માટે ઉત્તમ દિવસ.",
+        8: "નાણાકીય આયોજન, દેવા સંચાલન અને શિસ્તબદ્ધ કામ માટે ઉત્તમ દિવસ.",
         9: "અધૂરા કામો પૂર્ણ કરવા અને જૂના ભેદભાવ ભૂલી જવા માટે ઉત્તમ દિવસ."
     }
+}
+
+personal_day_aspects_en = {
+    1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
+    2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
+    3: {"H": "Expansive energy; avoid overindulgent heavy meals.", "C": "Excellent for presentations, pitching, and teaching.", "F": "Good day for long-term growth investments.", "M": "Optimistic, joyful, and expressive.", "R": "Warm social gatherings and joyful family exchanges.", "Remedy": ""},
+    4: {"H": "Rahu frequency; guard against sudden nervous fatigue.", "C": "Focus on routine audits; strictly avoid shortcut risks.", "F": "Maintain strict budgeting; avoid speculative trading.", "M": "Analytical, grounded, but prone to restlessness.", "R": "Be direct yet polite to prevent sudden miscommunications.", "Remedy": "✨ Numerology Remedy (Day 4): Keep your workspace tidy and chant 'Om Raam Rahave Namah' to calm mental flutter."},
+    5: {"H": "Mercurial pace; take short walking breaks to release tension.", "C": "Fast progress in sales, digital work, and networking.", "F": "Opportunities for quick fluid transactions.", "M": "Quick-witted, versatile, and curious.", "R": "Fun, lively outings and spontaneous communication.", "Remedy": ""},
+    6: {"H": "Venusian alignment; focus on skin, hydration, and relaxation.", "C": "Ideal for design, client relations, and aesthetic projects.", "F": "Favorable for family assets and aesthetic comforts.", "M": "Harmonious, peaceful, and balanced.", "R": "Heartwarming romantic closeness and family peace.", "Remedy": ""},
+    7: {"H": "Ketu vibration; prioritize quiet rest and digestive ease.", "C": "Best for research, auditing, and deep technical study.", "F": "Review finances silently; do not execute hasty transfers.", "M": "Contemplative, highly intuitive, and quiet.", "R": "Seek intimate, meaningful talks over noisy crowds.", "Remedy": "✨ Numerology Remedy (Day 7): Spend 10 minutes in quiet meditation or chant 'Om Kem Ketave Namah'."},
+    8: {"H": "Saturnian discipline; care for joint health and posture.", "C": "Command authoritative tasks and structured workloads.", "F": "Focus on debt management and solid long-term assets.", "M": "Pragmatic, cautious, and resilient.", "R": "Honor commitments faithfully; avoid being overly stern.", "Remedy": "✨ Numerology Remedy (Day 8): Light a sesame oil lamp or chant 'Om Sham Shanayscharaya Namah' for smooth progress."},
+    9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
 }
 
 vahan_map = {
@@ -286,6 +340,18 @@ vahan_map["hi"] = vahan_map["en"]
 vahan_map["mr"] = vahan_map["en"]
 vahan_map["gu"] = vahan_map["en"]
 
+tara_details_en = {
+    0: {"status": "Janma ⚪", "H": "Focus on self-care and light diet.", "C": "Maintain daily routine tasks.", "F": "Keep finances stable.", "M": "Self-reflective mindset.", "Rel": "Maintain emotional balance in relationships.", "R": ""},
+    1: {"status": "Sampat 🟢", "H": "High physical energy and vitality.", "C": "Excellent day for professional growth.", "F": "Favorable for wealth accumulation.", "M": "Positive and confident mindset.", "Rel": "Great day for bonding and mutual trust.", "R": ""},
+    2: {"status": "Vipat 🔴", "H": "Physically vulnerable; avoid strain.", "C": "Unexpected hurdles or project delays.", "F": "Strictly avoid speculative investments.", "M": "Prone to sudden stress.", "Rel": "Practice patient listening to prevent friction.", "R": "🛡️ Vedic Remedy: Recite Hanuman Chalisa or offer fresh water to green plants/birds."},
+    3: {"status": "Kshema 🟢", "H": "Good health and physical comfort.", "C": "Smooth operations and steady progress.", "F": "Financial security is favored.", "M": "Peaceful and emotionally balanced.", "Rel": "Warm family moments and comfort.", "R": ""},
+    4: {"status": "Pratyari 🔴", "H": "Ensure adequate sleep and hydration.", "C": "Possible friction with authority figures.", "F": "Unexpected small expenses.", "M": "Easily irritated; practice mindfulness.", "Rel": "Practice silence during arguments.", "R": "🛡️ Vedic Remedy: Practice Mouna (silence) during arguments or chant 'Om Sham Shanayscharaya Namah'."},
+    5: {"status": "Sadhaka 🟢", "H": "Strong physical vitality.", "C": "Breakthroughs and goal achievements.", "F": "Profitable long-term investments.", "M": "Determined and highly focused.", "Rel": "Resolve past issues and deepen bonds.", "R": ""},
+    6: {"status": "Vadha 🔴", "H": "Higher fatigue or vulnerability; caution.", "C": "Major blockages; avoid confrontations.", "F": "Protect capital; avoid risky deals.", "M": "Overwhelmed or defensive.", "Rel": "Avoid bringing up past grievances.", "R": "🛡️ Vedic Remedy: Chant Mahamrityunjaya Mantra or offer water/milk to Lord Shiva."},
+    7: {"status": "Mitra 🟢", "H": "Improving physical energy.", "C": "Good team cooperation and support.", "F": "Collaborative financial gains.", "M": "Happy and socially supported.", "Rel": "Supportive and friendly vibration.", "R": ""},
+    8: {"status": "Ati-Mitra 🟢🟢", "H": "Vibrant energy and health.", "C": "High growth and public recognition.", "F": "Financial windfalls or good news.", "M": "Joyous and spiritually uplifted.", "Rel": "Deep emotional joy and family harmony.", "R": ""}
+}
+
 translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
@@ -304,9 +370,11 @@ translations = {
         "navtara_head": "🌙 Navtara Transit:", "num_head": "🔢 Numerology Vibration:", "vahan_head": "🪐 Shani Vahan:",
         "health_head": "🩺 Health:", "career_head": "💼 Career:", "finance_head": "💰 Finance:", "mindset_head": "🧘 Mindset:", "rel_head": "❤️ Relationships:",
         "share_title": "🔗 Share Navtara Pulse",
+        "active_now": "⚡ Active Now",
         "warning_name": "⚠️ Name is required", "warning_dob": "⚠️ Date of Birth is required",
         "warning_hh": "⚠️ Hour (HH) is required", "warning_mm": "⚠️ Minute (MM) is required",
-        "warning_place": "⚠️ Birth Place or 6-digit Pincode is required"
+        "warning_place": "⚠️ Birth Place or 6-digit Pincode is required",
+        "tara": tara_details_en
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
@@ -325,13 +393,15 @@ translations = {
         "navtara_head": "🌙 नवतारा गोचर:", "num_head": "🔢 अंकशास्त्र कंपन:", "vahan_head": "🪐 शनि वाहन:",
         "health_head": "🩺 स्वास्थ्य:", "career_head": "💼 करियर:", "finance_head": "💰 वित्त:", "mindset_head": "🧘 मानसिकता:", "rel_head": "❤️ संबंध:",
         "share_title": "🔗 नवतारा पल्स शेयर करें",
+        "active_now": "⚡ अभी सक्रिय",
         "warning_name": "⚠️ नाम आवश्यक है", "warning_dob": "⚠️ जन्म तिथि आवश्यक है",
         "warning_hh": "⚠️ घंटा (HH) आवश्यक है", "warning_mm": "⚠️ मिनट (MM) आवश्यक है",
-        "warning_place": "⚠️ जन्म स्थान या 6-अंकीय पिनकोड आवश्यक है"
+        "warning_place": "⚠️ जन्म स्थान या 6-अंकीय पिनकोड आवश्यक है",
+        "tara": tara_details_en
     },
     "mr": {
         "intro_title": "वैदिक ज्योतिष आणि अंकशास्त्राचे ज्ञान",
-        "intro_desc": "वैदिक ज्योतिष आणि अंकशास्त्रामध्ये, २७ नक्षत्रांमधील चंद्राचे भ्रमण आणि दैनंदिन अंक तुमच्या जन्म तपशिलाच्या संदर्भात ऊर्जा निर्माण करतात. हे ॲप आरोग्य, करिअर, वित्त, मानसिकता आणि नातेसंबंधांबद्दल अचूक मार्गदर्शन प्रदान करते.",
+        "intro_desc": "वैदिक ज्योतिष आणि अंकशास्त्रामध्ये, २७ नक्षत्रांमधील चंद्राचे भ्रमण आणि दैनंदिन अंक तुमच्या जन्म तपशिलाच्या संदर्भात ऊर्जा निर्माण करतात। हे ॲप आरोग्य, करिअर, वित्त, मानसिकता आणि नातेसंबंधांबद्दल अचूक मार्गदर्शन प्रदान करते।",
         "profile_title": "👤 जन्म तपशील",
         "horoscope_title": "७-दिवसीय राशीभविष्य आणि जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्मस्थानाचे नाव किंवा ६-अंकी पिनकोड",
@@ -346,9 +416,11 @@ translations = {
         "navtara_head": "🌙 नवतारा गोचर:", "num_head": "🔢 अंकशास्त्र कंपन:", "vahan_head": "🪐 शनि वाहन:",
         "health_head": "🩺 आरोग्य:", "career_head": "💼 करिअर:", "finance_head": "💰 वित्त:", "mindset_head": "🧘 मानसिकता:", "rel_head": "❤️ संबंध:",
         "share_title": "🔗 नवतारा पल्स शेअर करा",
+        "active_now": "⚡ सध्या सक्रिय",
         "warning_name": "⚠️ नाव आवश्यक आहे", "warning_dob": "⚠️ जन्म तारीख आवश्यक आहे",
         "warning_hh": "⚠️ तास (HH) आवश्यक आहे", "warning_mm": "⚠️ मिनिट (MM) आवश्यक आहे",
-        "warning_place": "⚠️ जन्मस्थान किंवा ६-अंकी पिनकोड आवश्यक आहे"
+        "warning_place": "⚠️ जन्मस्थान किंवा ६-अंकी पिनकोड आवश्यक आहे",
+        "tara": tara_details_en
     },
     "gu": {
         "intro_title": "વૈદિક જ્યોતિષ અને અંકશાસ્ત્રનું જ્ઞાન",
@@ -367,9 +439,11 @@ translations = {
         "navtara_head": "🌙 નવતારા ગોચર:", "num_head": "🔢 અંકશાસ્ત્ર કંપન:", "vahan_head": "🪐 શનિ વાહન:",
         "health_head": "🩺 આરોગ્ય:", "career_head": "💼 કારકિર્દી:", "finance_head": "💰 નાણાં:", "mindset_head": "🧘 માનસિકતા:", "rel_head": "❤️ સંબંધો:",
         "share_title": "🔗 નવતારા પલ્સ શેર કરો",
+        "active_now": "⚡ અત્યારે સક્રિય",
         "warning_name": "⚠️ નામ જરૂરી છે", "warning_dob": "⚠️ જન્મ તારીખ જરૂરી છે",
         "warning_hh": "⚠️ કલાક (HH) જરૂરી છે", "warning_mm": "⚠️ મિનિટ (MM) જરૂરી છે",
-        "warning_place": "⚠️ જન્મ સ્થાન અથવા ૬-અંકનો પિનકોડ જરૂરી છે"
+        "warning_place": "⚠️ જન્મ સ્થાન અથવા ૬-અંકનો પિનકોડ જરૂરી છે",
+        "tara": tara_details_en
     }
 }
 
