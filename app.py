@@ -158,14 +158,14 @@ nakshatra_lords = [
 ]
 
 navtara_names = [
-    "Janma (Self / Body)",
+    "Janma (Self / Body) ⚪",
     "Sampat (Wealth / Progress) 🟢",
     "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort)",
+    "Kshema (Wellbeing / Comfort) 🟢",
     "Pratyari (Opposition / Tension) 🔴",
     "Sadhaka (Success / Achievement) 🟢",
     "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend)",
+    "Mitra (Friend) 🟢",
     "Ati-Mitra (Best Friend) 🟢🟢"
 ]
 
@@ -177,7 +177,7 @@ cycles = {
 
 tara_details_en = {
     0: {
-        "status": "Janma (1st Tara - Self)",
+        "status": "Janma (1st Tara - Self) ⚪",
         "H": "Focus on self-care and balanced light diet. Body and digestion may feel sensitive today.",
         "C": "Maintain daily routine tasks. Avoid launching major new impulsive projects.",
         "F": "Keep finances stable. Avoid hasty or emotional buying.",
@@ -201,7 +201,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vipat): Recite or listen to Hanuman Chalisa. Offer fresh water to green plants or birds. Postpone major risky commitments."
     },
     3: {
-        "status": "Kshema (4th Tara - Wellbeing)",
+        "status": "Kshema (4th Tara - Wellbeing) 🟢",
         "H": "Good day for general wellbeing, healing, and physical comfort.",
         "C": "Smooth operations, effective teamwork, and steady ongoing progress.",
         "F": "Financial security and safe transactions are favored.",
@@ -233,7 +233,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vadha): Chant Mahamrityunjaya Mantra or 'Om Namah Shivaya'. Offer water or milk to Lord Shiva."
     },
     7: {
-        "status": "Mitra (8th Tara - Friend)",
+        "status": "Mitra (8th Tara - Friend) 🟢",
         "H": "Improving health and supportive physical energy.",
         "C": "Expect cooperation from peers and joint success in group tasks.",
         "F": "Collaborative financial gains and steady wealth.",
