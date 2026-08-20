@@ -37,8 +37,8 @@ st.markdown("""
         background-color: #e0f2fe; 
         color: #0f172a;
         padding: 16px; 
-        border-radius: 12px 12px 0 0; 
-        margin-bottom: 0px; 
+        border-radius: 12px; 
+        margin-bottom: 12px; 
         border-left: 6px solid #0284c7; 
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
     }
@@ -88,22 +88,6 @@ st.markdown("""
         letter-spacing: 0.5px;
         display: inline-block;
     }
-    /* Seamless Attached Expander Dropdown */
-    div[data-testid="stExpander"] {
-        border: 2px solid #0284c7 !important;
-        border-top: none !important;
-        border-radius: 0 0 12px 12px !important;
-        background-color: #f0f9ff !important;
-        margin-bottom: 16px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
-    }
-    div[data-testid="stExpander"] summary {
-        font-weight: 700 !important;
-        color: #0369a1 !important;
-        background-color: #bae6fd !important;
-        border-radius: 0 0 10px 10px !important;
-        padding: 10px 14px !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -128,14 +112,14 @@ nakshatra_lords = [
 ]
 
 navtara_names = [
-    "Janma (Self / Body) ⚪",
+    "Janma (Self / Body)",
     "Sampat (Wealth / Progress) 🟢",
     "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort) 🟢",
+    "Kshema (Wellbeing / Comfort)",
     "Pratyari (Opposition / Tension) 🔴",
     "Sadhaka (Success / Achievement) 🟢",
     "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend) 🟢",
+    "Mitra (Friend)",
     "Ati-Mitra (Best Friend) 🟢🟢"
 ]
 
@@ -147,7 +131,7 @@ cycles = {
 
 tara_details_en = {
     0: {
-        "status": "Janma (1st Tara - Self) ⚪",
+        "status": "Janma (1st Tara - Self)",
         "H": "Focus on self-care and balanced light diet. Body and digestion may feel sensitive today.",
         "C": "Maintain daily routine tasks. Avoid launching major new impulsive projects.",
         "F": "Keep finances stable. Avoid hasty or emotional buying.",
@@ -171,7 +155,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vipat): Recite or listen to Hanuman Chalisa. Offer fresh water to green plants or birds. Postpone major risky commitments."
     },
     3: {
-        "status": "Kshema (4th Tara - Wellbeing) 🟢",
+        "status": "Kshema (4th Tara - Wellbeing)",
         "H": "Good day for general wellbeing, healing, and physical comfort.",
         "C": "Smooth operations, effective teamwork, and steady ongoing progress.",
         "F": "Financial security and safe transactions are favored.",
@@ -203,7 +187,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vadha): Chant Mahamrityunjaya Mantra or 'Om Namah Shivaya'. Offer water or milk to Lord Shiva."
     },
     7: {
-        "status": "Mitra (8th Tara - Friend) 🟢",
+        "status": "Mitra (8th Tara - Friend)",
         "H": "Improving health and supportive physical energy.",
         "C": "Expect cooperation from peers and joint success in group tasks.",
         "F": "Collaborative financial gains and steady wealth.",
@@ -438,6 +422,21 @@ if st.session_state.get('profile_saved'):
     janma_lord = nakshatra_lords[janma_index]
     
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
+    
+    # Save & Install Mobile Instructions Banner
+    st.markdown("""
+    <div style="background-color: #1e1b4b; color: #ffffff; padding: 16px; border-radius: 12px; margin-top: 10px; margin-bottom: 20px;">
+        <h5 style="color: #fbbf24; margin-top: 0; font-size: 1.05rem; font-weight: bold;">📱 Save & Install for 1-Click Mobile Access</h5>
+        <p style="font-size: 0.9rem; color: #e2e8f0; margin-bottom: 8px;">
+            Your birth profile details have been saved to this custom URL. To open this horoscope anytime without re-entering details:
+        </p>
+        <ul style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 0; padding-left: 20px;">
+            <li><b>iPhone (Safari):</b> Tap the <b>Share</b> icon at the bottom ➔ select <b>"Add to Home Screen"</b>.</li>
+            <li><b>Android (Chrome):</b> Tap the <b>three dots (⋮)</b> at top-right ➔ select <b>"Add to Home screen"</b> or <b>"Install App"</b>.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.header(t['horoscope_title'])
     
     # Accurate UTC anchor regardless of server timezone
@@ -459,23 +458,22 @@ if st.session_state.get('profile_saved'):
         
         current_pill = "<span class='current-badge'>⚡ Active Now</span>" if transit.get("is_current") else ""
         
-        with st.container():
-            st.markdown(f"""
-            <div class="transit-card">
-                <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
-                <p><b>Status:</b> <span class='status-badge'>{tara_badge_name}</span></p>
-                <p><b>Moon Nakshatra:</b> {transit_nak_name} (<b>Nakshatra Lord:</b> {transit_nak_lord})</p>
-                <p class='cycle-badge'><b>Navtara Series:</b> {cycle_group}</p>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            with st.expander("✨ Click Here to see the Prediction & Life Guidance ✨"):
-                st.write(f"**Health:** {tara_data['H']}")
-                st.write(f"**Career:** {tara_data['C']}")
-                st.write(f"**Finance:** {tara_data['F']}")
-                st.write(f"**Mindset:** {tara_data['M']}")
-                if tara_data['R']:
-                    st.error(tara_data['R'])
+        st.markdown(f"""
+        <div class="transit-card">
+            <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
+            <p><b>Status:</b> <span class='status-badge'>{tara_badge_name}</span></p>
+            <p><b>Moon Nakshatra:</b> {transit_nak_name} (<b>Nakshatra Lord:</b> {transit_nak_lord})</p>
+            <p class='cycle-badge'><b>Navtara Series:</b> {cycle_group}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        with st.expander("🔮 Daily Prediction & Life Guidance"):
+            st.write(f"**Health:** {tara_data['H']}")
+            st.write(f"**Career:** {tara_data['C']}")
+            st.write(f"**Finance:** {tara_data['F']}")
+            st.write(f"**Mindset:** {tara_data['M']}")
+            if tara_data['R']:
+                st.error(tara_data['R'])
 
 # ==========================================
 # 7. SHARE APP (Direct Link Payload)
