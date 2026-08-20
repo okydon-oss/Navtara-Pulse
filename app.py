@@ -582,24 +582,46 @@ if default_date_str:
     except:
         default_date = datetime.date(1995, 1, 1)
 else:
-    default_date = datetime.date(1995, 1, 1)
+    default_date = None
 
-default_h = int(query_params.get('h', '0'))
-default_m = int(query_params.get('m', '0'))
+# Query param index resolution for HH & MM
+hh_param = query_params.get('h')
+hh_index = int(hh_param) + 1 if (hh_param is not None and hh_param.isdigit() and int(hh_param) < 24) else 0
+
+mm_param = query_params.get('m')
+mm_index = int(mm_param) + 1 if (mm_param is not None and mm_param.isdigit() and int(mm_param) < 60) else 0
+
 default_place = query_params.get('p', '')
 
 col1, col2 = st.columns(2)
 with col1:
     user_name = st.text_input("Name", value=default_name, placeholder="e.g. Rahul Sharma")
+    is_name_valid = bool(user_name.strip())
+    if not is_name_valid:
+        st.markdown('<span class="missing-warning">⚠️ Name is required</span>', unsafe_allow_html=True)
+
     birth_date = st.date_input("Date of Birth", min_value=datetime.date(1925, 1, 1), max_value=datetime.date.today(), value=default_date)
+    is_dob_valid = birth_date is not None
+    if not is_dob_valid:
+        st.markdown('<span class="missing-warning">⚠️ Date of Birth is required</span>', unsafe_allow_html=True)
 
 with col2:
     st.write("Time of Birth (24-Hour)")
     tc1, tc2 = st.columns(2)
+    hh_options = ["--"] + [f"{i:02d}" for i in range(24)]
+    mm_options = ["--"] + [f"{i:02d}" for i in range(60)]
+
     with tc1: 
-        birth_hour = st.selectbox("HH", [f"{i:02d}" for i in range(24)], index=default_h)
+        birth_hour = st.selectbox("HH", hh_options, index=hh_index)
+        is_hh_valid = birth_hour != "--"
+        if not is_hh_valid:
+            st.markdown('<span class="missing-warning">⚠️ Hour (HH) is required</span>', unsafe_allow_html=True)
+
     with tc2: 
-        birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
+        birth_minute = st.selectbox("MM", mm_options, index=mm_index)
+        is_mm_valid = birth_minute != "--"
+        if not is_mm_valid:
+            st.markdown('<span class="missing-warning">⚠️ Minute (MM) is required</span>', unsafe_allow_html=True)
 
 # Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
@@ -610,15 +632,9 @@ place_query = st.text_input(
     label_visibility="collapsed"
 )
 
-# Display subtle warning caption below field if empty
-is_name_valid = bool(user_name.strip())
 is_place_valid = len(place_query.strip()) >= 3
-
-if not is_name_valid:
-    st.markdown('<span class="missing-warning">⚠️ Name is required</span>', unsafe_allow_html=True)
-
 if not is_place_valid:
-    st.markdown('<span class="missing-warning">⚠️ Valid Birth Place or 6-digit Pincode is required</span>', unsafe_allow_html=True)
+    st.markdown('<span class="missing-warning">⚠️ Birth Place or 6-digit Pincode is required</span>', unsafe_allow_html=True)
 
 selected_place_display = place_query
 place_obj_data = None
@@ -635,18 +651,19 @@ if len(place_query) >= 3:
 utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 
 # Auto-calculate fixed Kundali Parameters based on Date/Time/Location
-birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
-birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
-auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(birth_utc_dt, place_obj_data)
+if is_dob_valid and is_hh_valid and is_mm_valid:
+    birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
+    birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
+    auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(birth_utc_dt, place_obj_data)
+else:
+    auto_janma_idx, auto_rashi_idx, auto_lagna_idx = 0, 0, 0
 
 # Plain Birth Place Badge
-if selected_place_display:
+if selected_place_display and is_place_valid:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
 # Form Validation Check
-is_dob_valid = birth_date is not None
-is_tob_valid = birth_hour is not None and birth_minute is not None
-is_form_valid = is_name_valid and is_dob_valid and is_tob_valid and is_place_valid
+is_form_valid = is_name_valid and is_dob_valid and is_hh_valid and is_mm_valid and is_place_valid
 
 submit_clicked = st.button(
     f"💾 {t['generate_btn']}", 
@@ -656,7 +673,7 @@ submit_clicked = st.button(
 )
 
 if not is_form_valid:
-    st.caption("⚠️ Please enter all required birth details (**Name** and a valid **Birth Place**) above to enable predictions.")
+    st.caption("⚠️ Please enter all required birth details highlighted above to enable predictions.")
 
 if submit_clicked:
     st.query_params['n'] = user_name
