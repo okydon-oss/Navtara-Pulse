@@ -144,15 +144,16 @@ nakshatra_lords = [
     "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
 ]
 
+# Complete Status Badges with Green, White, and Red Indicator Dots
 navtara_names = [
-    "Janma (Self / Body)",
+    "Janma (Self / Body) ⚪",
     "Sampat (Wealth / Progress) 🟢",
     "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort)",
+    "Kshema (Wellbeing / Comfort) 🟢",
     "Pratyari (Opposition / Tension) 🔴",
     "Sadhaka (Success / Achievement) 🟢",
     "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend)",
+    "Mitra (Friend) 🟢",
     "Ati-Mitra (Best Friend) 🟢🟢"
 ]
 
@@ -164,7 +165,7 @@ cycles = {
 
 tara_details_en = {
     0: {
-        "status": "Janma (1st Tara - Self)",
+        "status": "Janma (1st Tara - Self) ⚪",
         "H": "Focus on self-care and balanced light diet. Body and digestion may feel sensitive today.",
         "C": "Maintain daily routine tasks. Avoid launching major new impulsive projects.",
         "F": "Keep finances stable. Avoid hasty or emotional buying.",
@@ -188,7 +189,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vipat): Recite or listen to Hanuman Chalisa. Offer fresh water to green plants or birds. Postpone major risky commitments."
     },
     3: {
-        "status": "Kshema (4th Tara - Wellbeing)",
+        "status": "Kshema (4th Tara - Wellbeing) 🟢",
         "H": "Good day for general wellbeing, healing, and physical comfort.",
         "C": "Smooth operations, effective teamwork, and steady ongoing progress.",
         "F": "Financial security and safe transactions are favored.",
@@ -220,7 +221,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vadha): Chant Mahamrityunjaya Mantra or 'Om Namah Shivaya'. Offer water or milk to Lord Shiva."
     },
     7: {
-        "status": "Mitra (8th Tara - Friend)",
+        "status": "Mitra (8th Tara - Friend) 🟢",
         "H": "Improving health and supportive physical energy.",
         "C": "Expect cooperation from peers and joint success in group tasks.",
         "F": "Collaborative financial gains and steady wealth.",
@@ -314,9 +315,9 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
     current_nak = get_moon_nakshatra_index(now_utc)
     
-    # 1. Step backward in 15-minute intervals to find start of current active Nakshatra
+    # Step backward in 15-minute intervals to find start of current active Nakshatra
     start_search_utc = now_utc
-    for i in range(1, 200): # up to 50 hours back
+    for i in range(1, 200):
         test_utc = now_utc - datetime.timedelta(minutes=15 * i)
         if get_moon_nakshatra_index(test_utc) != current_nak:
             start_search_utc = test_utc + datetime.timedelta(minutes=15)
@@ -324,12 +325,12 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
             
     window_start_local = start_search_utc + datetime.timedelta(hours=utc_offset_hours)
     
-    # 2. Step forward from active transit start to build current and future transits
+    # Step forward from active transit start to build current and future transits
     transits = []
     curr_nak = current_nak
     scan_limit_utc = now_utc + datetime.timedelta(days=days)
     
-    total_steps = int((days + 3) * 24 * 4) # 15-min intervals
+    total_steps = int((days + 3) * 24 * 4)
     for i in range(1, total_steps):
         test_utc = start_search_utc + datetime.timedelta(minutes=15 * i)
         test_nak = get_moon_nakshatra_index(test_utc)
@@ -337,7 +338,6 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
         if test_nak != curr_nak:
             test_local = test_utc + datetime.timedelta(hours=utc_offset_hours)
             
-            # Only include windows whose end time is strictly in the future
             if test_local > now_local:
                 transits.append({
                     "start": window_start_local,
