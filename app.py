@@ -485,7 +485,7 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
     ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
     
     sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
-    nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27 if 'sidereal_lon' in locals() else int(sidereal_moon_lon / 13.333333333333334) % 27
+    nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
     rashi_index = int(sidereal_moon_lon / 30.0) % 12
     
     try:
@@ -580,7 +580,7 @@ if default_date_str:
     try:
         default_date = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
     except:
-        default_date = datetime.date(1995, 1, 1)
+        default_date = None
 else:
     default_date = None
 
