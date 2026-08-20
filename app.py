@@ -72,6 +72,59 @@ st.markdown("""
         color: #475569; 
         font-weight: 600;
     }
+
+    /* Glittering Yellow Animation Keyframes */
+    @keyframes glitter {
+        0% { background-position: 0% 50%; box-shadow: 0 0 12px #f59e0b, 0 0 22px #fbbf24; }
+        50% { background-position: 100% 50%; box-shadow: 0 0 22px #f59e0b, 0 0 38px #fef08a, 0 0 12px #d97706; }
+        100% { background-position: 0% 50%; box-shadow: 0 0 12px #f59e0b, 0 0 22px #fbbf24; }
+    }
+
+    /* Glittering Yellow Main Action Button */
+    .glitter-btn div[data-testid="stButton"] > button {
+        background: linear-gradient(135deg, #f59e0b 0%, #fef08a 25%, #fbbf24 50%, #d97706 75%, #f59e0b 100%) !important;
+        background-size: 200% 200% !important;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        font-size: 1.05rem !important;
+        border: 2px solid #fef08a !important;
+        border-radius: 12px !important;
+        padding: 14px 20px !important;
+        animation: glitter 3s infinite ease-in-out !important;
+        text-shadow: 0 1px 1px rgba(255,255,255,0.7) !important;
+        width: 100% !important;
+    }
+
+    /* Glittering Yellow Expander Header */
+    div[data-testid="stExpander"] details summary {
+        background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #fef08a 100%) !important;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        border: 2px solid #d97706 !important;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
+        animation: glitter 4s infinite ease-in-out !important;
+    }
+    div[data-testid="stExpander"] details summary:hover {
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.9) !important;
+    }
+
+    /* Mobile Save / PWA Banner Card */
+    .install-banner {
+        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+        border: 2px solid #818cf8;
+        border-radius: 12px;
+        padding: 16px;
+        color: #f8fafc;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    }
+    .install-banner h4 {
+        color: #fbbf24 !important;
+        margin-top: 0;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -192,19 +245,19 @@ translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
         "intro_desc": "In Vedic astrology, the Moon's transit through the 27 Nakshatras creates a unique daily energy pattern relative to your birth star (Janma Nakshatra). This app provides accurate, astronomical insights into your daily Navtara Pulse, health, career, and financial guidance.",
-        "profile_title": "👤 Birth Profile",
+        "profile_title": "👤 Birth Profiles Management",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
-        "generate_btn": "Generate Horoscope & Predictions",
+        "generate_btn": "✨ Click here to know the Horoscope & Predictions ✨",
         "tara": tara_details_en
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष के ज्ञान को अनलॉक करें",
         "intro_desc": "वैदिक ज्योतिष में, 27 नक्षत्रों के माध्यम से चंद्रमा का गोचर आपके जन्म नक्षत्र के सापेक्ष एक अनूठा दैनिक ऊर्जा पैटर्न बनाता है। यह ऐप आपके दैनिक नवतारा पल्स, स्वास्थ्य, करियर और वित्तीय मार्गदर्शन में सटीक अंतर्दृष्टि प्रदान करता है।",
-        "profile_title": "👤 जन्म विवरण",
+        "profile_title": "👤 जन्म प्रोफाइल प्रबंधन",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
-        "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
+        "generate_btn": "✨ राशिफल और भविष्यवाणियां जानने के लिए यहां क्लिक करें ✨",
         "tara": tara_details_en 
     }
 }
@@ -293,13 +346,18 @@ def calculate_7_day_transits(start_local_dt, utc_offset_hours):
 # 4. MAIN APP LAYOUT & URL PARAMETERS
 # ==========================================
 query_params = st.query_params
+
+# Initialize session state for multi-profile storage
+if 'saved_profiles' not in st.session_state:
+    st.session_state['saved_profiles'] = {}
+
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
 
 st.title("🌙 Navtara Pulse")
 
 # Purple Highlighted Language Selector
-lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
+lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "गुજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
 t = translations[lang_code]
@@ -309,15 +367,29 @@ st.write(t['intro_desc'])
 st.divider()
 
 # ==========================================
-# 5. UNIFIED USER PROFILE WINDOW (NON-REPEATING)
+# 5. MULTI-PROFILE MANAGEMENT & USER INPUT
 # ==========================================
 st.header(t['profile_title'])
 
-default_name = query_params.get('n', '')
-default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
-default_h = int(query_params.get('h', '0'))
-default_m = int(query_params.get('m', '0')) # Default minutes = 00
-default_place = query_params.get('p', '')
+# Profile Selector
+profile_names = ["➕ Create New Profile"] + list(st.session_state['saved_profiles'].keys())
+selected_profile_key = st.selectbox("📁 Select or Switch Saved Profile", profile_names, index=0)
+
+if selected_profile_key != "➕ Create New Profile" and selected_profile_key in st.session_state['saved_profiles']:
+    p = st.session_state['saved_profiles'][selected_profile_key]
+    default_name = p.get('n', '')
+    default_date = p.get('d', datetime.date(1995, 1, 1))
+    default_h = p.get('h', 0)
+    default_m = p.get('m', 0)
+    default_place = p.get('p', '')
+    default_nak_idx = p.get('nak_idx', 0)
+else:
+    default_name = query_params.get('n', '')
+    default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
+    default_h = int(query_params.get('h', '0'))
+    default_m = int(query_params.get('m', '0'))
+    default_place = query_params.get('p', '')
+    default_nak_idx = None
 
 col1, col2 = st.columns(2)
 with col1:
@@ -358,7 +430,7 @@ utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 # Auto-calculate default Janma Nakshatra based on Date/Time
 birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
 birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
-auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt)
+auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt) if default_nak_idx is None else default_nak_idx
 
 # Option to verify or adjust Janma Nakshatra directly from Kundli
 st.write("✨ **Janma Nakshatra (Birth Star)**")
@@ -373,11 +445,23 @@ selected_janma_nakshatra = st.selectbox(
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Generate Action Button
-if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True):
+# Glittering Yellow Action Button Container
+st.markdown("<div class='glitter-btn'>", unsafe_allow_html=True)
+if st.button(t['generate_btn'], type="primary", use_container_width=True):
     if len(place_query) < 3:
         st.error("⚠️ Please enter a valid Birth Place or Pincode to generate your predictions.")
     else:
+        # Save profile to session state
+        profile_key_name = user_name or selected_place_display or "Saved Profile"
+        st.session_state['saved_profiles'][profile_key_name] = {
+            'n': user_name,
+            'd': birth_date,
+            'h': int(birth_hour),
+            'm': int(birth_minute),
+            'p': selected_place_display,
+            'nak_idx': nakshatra_list.index(selected_janma_nakshatra)
+        }
+        
         st.query_params['n'] = user_name
         st.query_params['d'] = str(birth_date)
         st.query_params['h'] = str(int(birth_hour))
@@ -385,6 +469,7 @@ if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=Tr
         st.query_params['p'] = selected_place_display
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
+st.markdown("</div>", unsafe_allow_html=True)
 
 # ==========================================
 # 6. RESULTS & HOROSCOPE SCHEDULE
@@ -397,6 +482,19 @@ if st.session_state.get('profile_saved'):
     janma_lord = nakshatra_lords[janma_index]
     
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
+    
+    # Save & Install Guidance Card for Mobile Access
+    st.markdown("""
+        <div class="install-banner">
+            <h4>📱 Save & Install for 1-Click Mobile Access</h4>
+            <p>Your birth profile details have been saved to this custom URL. To open this horoscope anytime without re-entering details:</p>
+            <ul>
+                <li><b>iPhone (Safari):</b> Tap the <i>Share</i> icon at the bottom ➔ select <b>"Add to Home Screen"</b>.</li>
+                <li><b>Android (Chrome):</b> Tap the three dots (⋮) at top-right ➔ select <b>"Add to Home screen"</b> or <b>"Install App"</b>.</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
+
     st.header(t['horoscope_title'])
     
     # Generate exact 7-Day Moon Transits
@@ -405,7 +503,6 @@ if st.session_state.get('profile_saved'):
     
     for transit in transits:
         # Astronomical Navtara Calculation
-        # Count from Janma Nakshatra to Transit Nakshatra inclusive
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
         cycle_group = cycles[nak_difference // 9]
@@ -428,8 +525,8 @@ if st.session_state.get('profile_saved'):
         </div>
         """, unsafe_allow_html=True)
         
-        # Expandable Predictions & Guidance
-        with st.expander("🔮 Daily Prediction & Life Guidance"):
+        # Glittering Yellow Expander
+        with st.expander("✨ Click here to see the Prediction & Life Guidance ✨"):
             st.write(f"**Health:** {tara_data['H']}")
             st.write(f"**Career:** {tara_data['C']}")
             st.write(f"**Finance:** {tara_data['F']}")
