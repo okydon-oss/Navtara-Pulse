@@ -29,36 +29,14 @@ st.markdown("""
     /* Unified Transit Card Top Block */
     .transit-card { 
         background-color: #e0f2fe; 
-        color: #0f172a;
-        padding: 16px; 
-        border-radius: 12px 12px 0 0; 
-        margin-bottom: 0px; 
-        border-left: 6px solid #0284c7; 
-        border-top: 1px solid #bae6fd;
-        border-right: 1px solid #bae6fd;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); 
-    }
-    .transit-card h5 {
-        color: #0369a1 !important;
-        margin-top: 0;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-    .transit-card p {
-        color: #1e293b !important;
-        margin-bottom: 6px;
-        font-size: 0.95rem;
-    }
+    /* Plain Birth Place Badge */
     .verified-badge { 
-        background-color: #16a34a; 
-        color: white; 
+        background-color: #f1f5f9; 
+        color: #1e293b; 
         padding: 8px 12px; 
-        border-radius: 6px; 
-        font-weight: bold; 
+        border-radius: 8px; 
+        font-weight: 600; 
+        border: 1px solid #cbd5e1;
         margin-top: 10px;
         margin-bottom: 15px; 
         display: block; 
@@ -80,117 +58,75 @@ st.markdown("""
         display: inline-block;
     }
 
+    /* Yellow Glittering Generate Button */
+    div[data-testid="stButton"] > button[kind="primary"] {
+        background: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%) !important;
+        color: #1e1b4b !important;
+        font-size: 1.05rem !important;
+        font-weight: 800 !important;
+        border: 2px solid #f59e0b !important;
+        border-radius: 10px !important;
+        box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+        animation: glitter 2s infinite ease-in-out;
+        transition: all 0.3s ease;
+    }
+    div[data-testid="stButton"] > button[kind="primary"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 25px rgba(245, 158, 11, 0.9);
+        background: linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #f59e0b 100%) !important;
+    }
+    @keyframes glitter {
+        0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.5), 0 0 20px rgba(251, 191, 36, 0.4); }
+        50% { box-shadow: 0 0 22px rgba(245, 158, 11, 0.9), 0 0 35px rgba(251, 191, 36, 0.8); }
+    }
+
     /* Seamless Expander Attachment to the Transit Card */
     div[data-testid="stExpander"] {
-        border-top: none !important;
-        border-top-left-radius: 0 !important;
-        border-top-right-radius: 0 !important;
-        border-bottom-left-radius: 12px !important;
-        border-bottom-right-radius: 12px !important;
-        border-left: 6px solid #0284c7 !important;
-        border-right: 1px solid #bae6fd !important;
-        border-bottom: 1px solid #bae6fd !important;
-        background-color: #f0f9ff !important;
-        margin-bottom: 18px !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
-    div[data-testid="stExpander"] summary {
-        background-color: #dbeafe !important;
-        color: #0369a1 !important;
-        font-weight: 700 !important;
-        border-radius: 0 !important;
-        padding: 10px 14px !important;
-    }
-    div[data-testid="stExpander"] summary:hover {
-        background-color: #bfdbfe !important;
-        color: #0c4a6e !important;
-    }
-    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
-        background-color: #f8fafc !important;
-        padding: 14px !important;
-        border-radius: 0 0 10px 10px !important;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-nakshatra_list = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
-    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
-    "Moola", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
-
-nakshatra_lords = [
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
-]
-
-navtara_names = [
-    "Janma (Self / Body) ⚪",
-    "Sampat (Wealth / Progress) 🟢",
-    "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort) 🟢",
-    "Pratyari (Opposition / Tension) 🔴",
-    "Sadhaka (Success / Achievement) 🟢",
-    "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend) 🟢",
-    "Ati-Mitra (Best Friend) 🟢🟢"
-]
-
-num_lords = {
-    1: "Sun (Surya)",
-    2: "Moon (Chandra)",
-    3: "Jupiter (Guru)",
-    4: "Rahu",
-    5: "Mercury (Budh)",
-    6: "Venus (Shukra)",
-    7: "Ketu",
-    8: "Saturn (Shani)",
-    9: "Mars (Mangal)"
+# Detailed Nakshatra Core Personality Traits
+nakshatra_traits_map = {
+    "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
+    "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
+    "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
+    "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
+    "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
+    "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
+    "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
+    "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
+    "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
+    "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
+    "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
+    "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
+    "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
+    "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
+    "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
+    "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
+    "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
+    "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
+    "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
+    "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
+    "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
+    "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
+    "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
+    "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
+    "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
+    "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
+    "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
 }
 
-lucky_numbers_map = {
-    1: "1, 2, 3, 9",
-    2: "1, 2, 5",
-    3: "1, 2, 3, 9",
-    4: "1, 4, 5, 6, 7",
-    5: "1, 5, 6",
-    6: "1, 5, 6, 7",
-    7: "1, 4, 7",
-    8: "3, 5, 6, 8",
-    9: "1, 2, 3, 9"
+# Numerology Driver & Conductor Traits Map
+moolank_traits_map = {
+    1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
+    2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
+    3: "Jupiterian wisdom & expressive growth — fuels creative ideas, optimism, and effective counsel.",
+    4: "Rahu's unconventional vision & practical discipline — excels in structured audits and systematic work.",
+    5: "Mercurial agility & fast networking — thrives in dynamic environments and quick problem-solving.",
+    6: "Venusian harmony & aesthetic balance — focuses on family wellness, design, and relationship bonding.",
+    7: "Ketu's contemplative research & deep intuition — thrives in analytical study and quiet observation.",
+    8: "Saturnian resilience & financial execution — commands authoritative responsibility and solid planning.",
+    9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
 }
 
-personal_day_meanings_en = {
-    1: "Good day to launch new goals, lead projects, and pitch ideas. Avoid hesitating or relying on others.",
-    2: "Good day for teamwork, smooth negotiations, and active listening. Avoid emotional impulse buying or arguments.",
-    3: "Good day for meetings, creative tasks, and social networking. Avoid overpromising or heavy overindulgence.",
-    4: "Good day to organize, complete routine audits, and clean your workspace. Avoid taking shortcuts or making speculative bets.",
-    5: "Good day for fast networking, sales pitches, and quick decisions. Avoid being rigid or losing focus.",
-    6: "Good day for family discussions, relationship bonding, and self-care. Avoid unnecessary arguments or neglecting home ties.",
-    7: "Good day for quiet study, deep research, and mental rest. Avoid launching major public changes or making hasty big decisions.",
-    8: "Good day for financial planning, debt management, and structured work. Avoid being overly stern or rushing big tasks.",
-    9: "Good day to finish pending backlogs, clear clutter, and forgive old grievances. Avoid launching brand-new long-term commitments."
-}
-
-personal_day_meanings_hi = {
-    1: "नए लक्ष्य शुरू करने और नेतृत्व के लिए अच्छा दिन। टालमटोल या दूसरों पर निर्भर रहने से बचें।",
-    2: "टीम वर्क, बातचीत और ध्यान से सुनने के लिए अच्छा दिन। भावुक होकर खरीदारी या बहस करने से बचें।",
-    3: "बैठकों, रचनात्मक कार्यों और नेटवर्किंग के लिए अच्छा दिन। झूठे वादे करने से बचें।",
-    4: "कार्यों को व्यवस्थित करने और नियमित ऑडिट के लिए अच्छा दिन। जल्दबाजी या सट्टेबाजी से बचें।",
-    5: "त्वरित निर्णयों, बिक्री और संपर्कों के लिए अच्छा दिन। जिद्दी रुख अपनाने से बचें।",
-    6: "पारिवारिक चर्चा, संबंधों को मजबूत करने व विश्राम के लिए अच्छा दिन। घर के मामलों की अनदेखी न करें।",
-    7: "शांत अध्ययन, शोध और मानसिक शांति के लिए अच्छा दिन। जल्दबाजी में बड़े सार्वजनिक बदलाव करने से बचें।",
-    8: "वित्तीय योजना, बजट और अनुशासित कार्य के लिए अच्छा दिन। अत्यधिक कठोर या जल्दबाज़ होने से बचें।",
-    9: "अधूरे कार्यों को निपटाने, सफाई करने व क्षमाशीलता के लिए अच्छा दिन। आज नई दीर्घकालिक शुरुआत से बचें।"
-}
-
-# Personal Day Numerology Nuances for Predictions
+# Personal Day Aspect Nuances for Expander Guidance
 personal_day_aspects_en = {
     1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
     2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
@@ -496,20 +432,36 @@ if st.session_state.get('profile_saved'):
     # 1. Vedic Nakshatra Details
     janma_index = nakshatra_list.index(selected_janma_nakshatra)
     janma_lord = nakshatra_lords[janma_index]
+    janma_traits = nakshatra_traits_map.get(selected_janma_nakshatra, "Balanced vitality, strong intuition, and steady growth.")
     
     # 2. Vedic Numerology Profile Calculation
     moolank = reduce_to_single_digit(birth_date.day)
     bhagyank = reduce_to_single_digit(birth_date.day + birth_date.month + birth_date.year)
     moolank_lord = num_lords.get(moolank, "")
     bhagyank_lord = num_lords.get(bhagyank, "")
+    moolank_trait = moolank_traits_map.get(moolank, "Leadership and steady focus.")
+    bhagyank_trait = moolank_traits_map.get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
-    st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
-    
-    # Numerology Summary Pill
+    # Single Consolidated Light Green Profile Box
     st.markdown(f"""
-    <div style="background-color: #f1f5f9; color: #1e293b; padding: 12px 16px; border-radius: 10px; margin-top: -6px; margin-bottom: 16px; border: 1px solid #cbd5e1; font-size: 0.93rem;">
-        🔢 <b>Numerology Profile:</b> Moolank (Driver): <b>{moolank} ({moolank_lord})</b> &nbsp;|&nbsp; Bhagyank (Conductor): <b>{bhagyank} ({bhagyank_lord})</b> &nbsp;|&nbsp; Lucky Numbers: <b>{lucky_nums}</b>
+    <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+        <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
+            🌿 {user_name or 'User'}'s Profile
+        </h4>
+        <div style="font-size: 0.94rem; color: #14532d; line-height: 1.6;">
+            <p style="margin-bottom: 6px;">⭐ <b>Janma Nakshatra:</b> {selected_janma_nakshatra} &nbsp;|&nbsp; <b>Nakshatra Lord:</b> {janma_lord}</p>
+            <p style="margin-bottom: 12px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
+                ✨ <b>Nakshatra Traits:</b> {janma_traits}
+            </p>
+            <hr style="border: 0; border-top: 1px dashed #a7f3d0; margin: 10px 0;">
+            <p style="margin-bottom: 6px; margin-top: 10px;">
+                🔢 <b>Numerology Profile:</b> Moolank (Driver): <b>{moolank} ({moolank_lord})</b> &nbsp;|&nbsp; Bhagyank (Conductor): <b>{bhagyank} ({bhagyank_lord})</b> &nbsp;|&nbsp; Lucky Numbers: <b>{lucky_nums}</b>
+            </p>
+            <p style="margin-bottom: 4px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
+                💡 <b>Numerology Traits:</b> Moolank {moolank} brings {moolank_trait} Bhagyank {bhagyank} emphasizes {bhagyank_trait}
+            </p>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
