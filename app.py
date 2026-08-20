@@ -3,9 +3,6 @@ import datetime
 import urllib.parse
 import math
 
-# ==========================================
-# DEPENDENCY CHECKER
-# ==========================================
 try:
     import requests
     import ephem
@@ -14,36 +11,85 @@ except ModuleNotFoundError as e:
     st.info("To fix this, open your terminal and run: `pip install requests ephem`")
     st.stop()
 
-# ==========================================
-# 1. PAGE CONFIGURATION & CSS
-# ==========================================
 st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
 
 st.markdown("""
     <style>
     /* Purple background for language selector */
-    div[data-baseweb="select"] > div { background-color: #6a0dad !important; color: white !important; border-radius: 8px; font-weight: bold; }
-    #MainMenu {visibility: hidden;} footer {visibility: hidden;}
+    div[data-baseweb="select"] > div { 
+        background-color: #6a0dad !important; 
+        color: white !important; 
+        border-radius: 8px; 
+        font-weight: bold; 
+    }
+    #MainMenu {visibility: hidden;} 
+    footer {visibility: hidden;}
     
-    /* Responsive Transit Cards */
-    .transit-card { background-color: #1e1e1e; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #6a0dad; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-    .verified-badge { background-color: #4CAF50; color: white; padding: 8px 12px; border-radius: 5px; font-weight: bold; margin-bottom: 15px; display: inline-block; width: 100%; text-align: center; }
-    .status-badge { font-weight: bold; color: #ffcc00; }
-    .cycle-badge { font-size: 0.9em; color: #aaaaaa; }
+    /* Light Blue Responsive Transit Cards for High Visibility & Readability */
+    .transit-card { 
+        background-color: #e0f2fe !important; 
+        color: #0f172a !important; 
+        padding: 16px; 
+        border-radius: 12px; 
+        margin-bottom: 12px; 
+        border-left: 6px solid #0284c7 !important; 
+        box-shadow: 0 4px 10px rgba(2, 132, 199, 0.15); 
+        border-top: 1px solid #bae6fd;
+        border-right: 1px solid #bae6fd;
+        border-bottom: 1px solid #bae6fd;
+    }
+    .transit-card h5 {
+        color: #0369a1 !important;
+        font-weight: 700 !important;
+        font-size: 1.05rem !important;
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+    }
+    .transit-card p {
+        color: #1e293b !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 0 !important;
+        line-height: 1.5 !important;
+    }
+    .verified-badge { 
+        background-color: #059669; 
+        color: white; 
+        padding: 8px 12px; 
+        border-radius: 6px; 
+        font-weight: bold; 
+        margin-bottom: 15px; 
+        display: inline-block; 
+        width: 100%; 
+        text-align: center; 
+    }
+    .status-badge { 
+        font-weight: 700; 
+        color: #0369a1; 
+    }
+    .cycle-badge { 
+        font-size: 0.88rem; 
+        color: #475569; 
+        font-weight: 600; 
+    }
+    
+    /* Expander Container Light Blue Styling */
+    div[data-testid="stExpander"] {
+        background-color: #f0f9ff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        margin-top: 8px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. COMPLETE PREDICTION & LANGUAGE DICTIONARY
-# ==========================================
 tara_details_en = {
     0: {"name": "Janma", "status": "Janma (Self)", "H": "Focus on self-care. Your body and digestion may feel sensitive today.", "C": "Maintain your daily routine. Avoid launching major new projects.", "F": "Keep finances stable. Avoid impulsive buying.", "M": "Self-reflective, quiet, and calm.", "R": ""},
     1: {"name": "Sampat", "status": "Sampat (Wealth) 🟢", "H": "Energy levels are high. Great day for recovery and healing.", "C": "Excellent for professional growth, meetings, and new opportunities.", "F": "Highly favorable day for investments and financial gains.", "M": "Positive, confident, and outgoing.", "R": ""},
-    2: {"name": "Vipat", "status": "Vipat (Obstacles) 🔴", "H": "Vulnerable day. Strictly avoid physical strain or risky activities.", "C": "Sudden hurdles or unexpected delays in projects may occur.", "F": "Strictly avoid speculative investments or lending money.", "M": "Prone to sudden anxiety or stress.", "R": "🛡️ Remedy: Recite Hanuman Chalisa. Offer water to plants or birds. Postpone major risky commitments."},
+    2: {"name": "Vipat", "status": "Vipat (Obstacles) 🔴", "H": "Vulnerable day. Strictly avoid physical strain or risky activities.", "C": "Sudden hurdles or unexpected delays in projects may occur.", "F": "Strictly avoid speculative investments or lending money.", "M": "Prone to sudden anxiety or stress.", "R": "🛡️ Remedy (Vipat): Recite Hanuman Chalisa. Offer water to plants or birds. Postpone major risky commitments."},
     3: {"name": "Kshema", "status": "Kshema (Wellbeing)", "H": "Good day for general wellbeing and physical comfort.", "C": "Smooth operations, teamwork, and steady progress.", "F": "Financial security and safe transactions are favored.", "M": "Peaceful, content, and emotionally balanced.", "R": ""},
-    4: {"name": "Pratyari", "status": "Pratyari (Opposition) 🔴", "H": "Mental stress may manifest physically. Ensure you rest well.", "C": "Friction with colleagues or authority is highly possible.", "F": "Unexpected expenses or delayed payments can frustrate you.", "M": "Easily irritated or frustrated.", "R": "🛡️ Remedy: Practice absolute silence during tense arguments. Chant 'Om Sham Shanayscharaya Namah' or donate sesame oil."},
+    4: {"name": "Pratyari", "status": "Pratyari (Opposition) 🔴", "H": "Mental stress may manifest physically. Ensure you rest well.", "C": "Friction with colleagues or authority is highly possible.", "F": "Unexpected expenses or delayed payments can frustrate you.", "M": "Easily irritated or frustrated.", "R": "🛡️ Remedy (Pratyari): Practice absolute silence during tense arguments. Chant 'Om Sham Shanayscharaya Namah' or donate sesame oil."},
     5: {"name": "Sadhaka", "status": "Sadhaka (Success) 🟢", "H": "Strong vitality and quick overcoming of minor ailments.", "C": "Great achievements and successful completion of difficult tasks.", "F": "Profitable ventures and realization of long-term financial goals.", "M": "Determined, highly focused, and sharp.", "R": ""},
-    6: {"name": "Vadha", "status": "Vadha (Danger) 🔴", "H": "High risk of injury or sudden illness. Be extremely cautious driving.", "C": "Major blockages. Do not schedule important meetings today.", "F": "Protect your current assets. High chance of financial loss.", "M": "Overwhelmed, fearful, or highly pessimistic.", "R": "🛡️ Remedy: Chant Mahamrityunjaya mantra or 'Om Namah Shivaya'. Offer milk/water to Lord Shiva. Avoid unnecessary travel."},
+    6: {"name": "Vadha", "status": "Vadha (Danger) 🔴", "H": "High risk of injury or sudden illness. Be extremely cautious driving.", "C": "Major blockages. Do not schedule important meetings today.", "F": "Protect your current assets. High chance of financial loss.", "M": "Overwhelmed, fearful, or highly pessimistic.", "R": "🛡️ Remedy (Vadha): Chant Mahamrityunjaya mantra or 'Om Namah Shivaya'. Offer milk/water to Lord Shiva. Avoid unnecessary travel."},
     7: {"name": "Mitra", "status": "Mitra (Friend)", "H": "Improving health and supportive physical energy.", "C": "Expect help from peers and cooperative success at the workplace.", "F": "Collaborative financial gains and stable wealth.", "M": "Happy, sociable, and emotionally supported.", "R": ""},
     8: {"name": "Ati-Mitra", "status": "Ati-Mitra (Best Friend) 🟢🟢", "H": "Excellent physical vitality and vibrant energy.", "C": "High growth, ultimate success, and public recognition.", "F": "Windfalls, bonuses, or highly favorable financial news.", "M": "Joyous, spiritually uplifted, and deeply fulfilled.", "R": ""}
 }
@@ -71,13 +117,19 @@ translations = {
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
-nakshatra_list = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
-    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
-    "Moola", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+nakshatra_lords = [
+    ("Ashwini", "Ketu"), ("Bharani", "Venus"), ("Krittika", "Sun"),
+    ("Rohini", "Moon"), ("Mrigashira", "Mars"), ("Ardra", "Rahu"),
+    ("Punarvasu", "Jupiter"), ("Pushya", "Saturn"), ("Ashlesha", "Mercury"),
+    ("Magha", "Ketu"), ("Purva Phalguni", "Venus"), ("Uttara Phalguni", "Sun"),
+    ("Hasta", "Moon"), ("Chitra", "Mars"), ("Swati", "Rahu"),
+    ("Vishakha", "Jupiter"), ("Anuradha", "Saturn"), ("Jyeshtha", "Mercury"),
+    ("Moola", "Ketu"), ("Purva Ashadha", "Venus"), ("Uttara Ashadha", "Sun"),
+    ("Shravana", "Moon"), ("Dhanishta", "Mars"), ("Shatabhisha", "Rahu"),
+    ("Purva Bhadrapada", "Jupiter"), ("Uttara Bhadrapada", "Saturn"), ("Revati", "Mercury")
 ]
+
+nakshatra_list = [n[0] for n in nakshatra_lords]
 
 cycles = {
     0: "1st Cycle (Janma Group)",
@@ -85,9 +137,6 @@ cycles = {
     2: "3rd Cycle (Trijanma Group)"
 }
 
-# ==========================================
-# 3. HELPER & ASTRONOMY FUNCTIONS
-# ==========================================
 @st.cache_data(show_spinner=False)
 def search_places_online(query):
     if len(query) < 3: return []
@@ -100,11 +149,25 @@ def search_places_online(query):
     return []
 
 def get_moon_nakshatra_index(dt_obj):
+    """
+    Computes true geocentric sidereal Moon Nakshatra using PyEphem 
+    and Lahiri Ayanamsa correction.
+    """
     observer = ephem.Observer()
     observer.date = ephem.date(dt_obj)
     moon = ephem.Moon(observer)
-    sidereal_lon = (math.degrees(moon.hlon) - 24.1) % 360
-    return int(sidereal_lon / 13.3333) % 27
+    
+    # Calculate geocentric ecliptic longitude of Moon
+    ecl = ephem.Ecliptic(moon)
+    lon_deg = math.degrees(ecl.lon)
+    
+    # Lahiri Ayanamsa formula (~24.18° for 2026)
+    year = dt_obj.year
+    ayanamsa = 23.85 + (year - 2000) * 0.01397
+    sidereal_lon = (lon_deg - ayanamsa) % 360
+    
+    # 27 Nakshatras each spanning 13.3333° (13°20')
+    return int(sidereal_lon / (360.0 / 27.0)) % 27
 
 def calculate_7_day_transits(start_dt):
     transits = []
@@ -123,9 +186,6 @@ def calculate_7_day_transits(start_dt):
     transits.append({"start": window_start, "end": start_dt + datetime.timedelta(days=7), "nak_index": current_nak})
     return transits
 
-# ==========================================
-# 4. MAIN APP LAYOUT & URL STATE
-# ==========================================
 query_params = st.query_params
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
@@ -141,9 +201,6 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
-# ==========================================
-# 5. UNIFIED USER PROFILE WINDOW
-# ==========================================
 st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
@@ -161,20 +218,21 @@ with col2:
     st.write("Time of Birth (24-Hour)")
     tc1, tc2 = st.columns(2)
     with tc1: birth_hour = st.selectbox("HH", [f"{i:02d}" for i in range(24)], index=default_h)
-    with tc2: birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
+    with tc2: birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m) # Defaults to 00
 
 st.write(t['search_prompt'])
 
-# Foolproof Location Entry
-place_query = st.text_input("Search Location:", value=default_place, placeholder="e.g., Panvel, Aurangabad, or 400001")
-selected_place = place_query # Default to whatever the user typed
+place_query = st.text_input("Search Birth Place:", value=default_place, placeholder="e.g., Panvel, Mumbai, Ujjain, or 400001")
+selected_place = place_query
 
 if len(place_query) >= 3 and place_query != default_place:
     places = search_places_online(place_query)
     if places:
         selected_place = st.selectbox("Select verified location from list:", places)
 
-# Highly Visible Action Button
+if selected_place:
+    st.markdown(f"<div class='verified-badge'>📍 Verified Birth Place: {selected_place}</div>", unsafe_allow_html=True)
+
 if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True):
     if len(place_query) < 3:
         st.error("⚠️ Please enter your Birth Place to generate your horoscope.")
@@ -187,17 +245,14 @@ if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=Tr
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
 
-# ==========================================
-# 6. RESULTS & COMBINED TABLE
-# ==========================================
 if st.session_state.get('profile_saved'):
     st.divider()
     
     birth_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
     janma_index = get_moon_nakshatra_index(birth_dt)
-    janma_nakshatra = nakshatra_list[janma_index]
+    janma_nakshatra, janma_lord = nakshatra_lords[janma_index]
     
-    st.success(f"🌟 **{user_name}'s Janma Nakshatra:** {janma_nakshatra}")
+    st.success(f"🌟 **{user_name}'s Janma Nakshatra:** {janma_nakshatra} | **Nakshatra Lord:** {janma_lord} | **Birth Place:** {selected_place}")
     st.header(t['horoscope_title'])
     
     now = datetime.datetime.now()
@@ -209,17 +264,17 @@ if st.session_state.get('profile_saved'):
         cycle_group = cycles[nak_difference // 9] 
         
         tara_data = t["tara"][tara_index]
-        moon_nakshatra = nakshatra_list[transit["nak_index"]]
+        moon_nakshatra, moon_lord = nakshatra_lords[transit["nak_index"]]
         
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
         end_str = transit["end"].strftime('%a, %d %b %I:%M %p')
         
         st.markdown(f"""
         <div class="transit-card">
-            <h5 style='margin-top:0; color: #ffffff;'>🕒 {start_str} ➔ {end_str}</h5>
-            <p style='margin-bottom:5px;'>
+            <h5>🕒 {start_str} ➔ {end_str}</h5>
+            <p>
                 <span class='status-badge'>Status: {tara_data['status']}</span> <br/>
-                <b>Moon Nakshatra:</b> {moon_nakshatra} <br/>
+                <b>Moon Nakshatra:</b> {moon_nakshatra} (Nakshatra Lord: {moon_lord}) <br/>
                 <span class='cycle-badge'>Navtara Series: {cycle_group}</span>
             </p>
         </div>
@@ -233,9 +288,6 @@ if st.session_state.get('profile_saved'):
             if tara_data['R']:
                 st.error(tara_data['R'])
 
-# ==========================================
-# 7. SHARE APP (Direct Link Payload)
-# ==========================================
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
 app_url = "https://navtara-pulse.streamlit.app"
