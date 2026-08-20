@@ -3,6 +3,9 @@ import datetime
 import urllib.parse
 import math
 
+# ==========================================
+# DEPENDENCY CHECKER
+# ==========================================
 try:
     import requests
     import ephem
@@ -12,6 +15,9 @@ except ModuleNotFoundError as e:
     st.code("pip install requests ephem", language="bash")
     st.stop()
 
+# ==========================================
+# 1. PAGE CONFIGURATION & CSS
+# ==========================================
 st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
 
 st.markdown("""
@@ -31,8 +37,8 @@ st.markdown("""
         background-color: #e0f2fe; 
         color: #0f172a;
         padding: 16px; 
-        border-radius: 12px 12px 0 0; 
-        margin-bottom: 0px !important; 
+        border-radius: 12px; 
+        margin-bottom: 12px; 
         border-left: 6px solid #0284c7; 
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
     }
@@ -40,6 +46,11 @@ st.markdown("""
         color: #0369a1 !important;
         margin-top: 0;
         font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
     }
     .transit-card p {
         color: #1e293b !important;
@@ -66,71 +77,23 @@ st.markdown("""
         color: #475569; 
         font-weight: 600;
     }
-
-    /* Glittering Yellow Animation Keyframes */
-    @keyframes glitter {
-        0% { background-position: 0% 50%; box-shadow: 0 0 12px #f59e0b, 0 0 22px #fbbf24; }
-        50% { background-position: 100% 50%; box-shadow: 0 0 22px #f59e0b, 0 0 38px #fef08a, 0 0 12px #d97706; }
-        100% { background-position: 0% 50%; box-shadow: 0 0 12px #f59e0b, 0 0 22px #fbbf24; }
-    }
-
-    /* Glittering Yellow Main Action Button */
-    .glitter-btn div[data-testid="stButton"] > button {
-        background: linear-gradient(135deg, #f59e0b 0%, #fef08a 25%, #fbbf24 50%, #d97706 75%, #f59e0b 100%) !important;
-        background-size: 200% 200% !important;
-        color: #0f172a !important;
-        font-weight: 800 !important;
-        font-size: 1.05rem !important;
-        border: 2px solid #fef08a !important;
-        border-radius: 12px !important;
-        padding: 14px 20px !important;
-        animation: glitter 3s infinite ease-in-out !important;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.7) !important;
-        width: 100% !important;
-    }
-
-    /* Seamless Glittering Yellow Expander Header Attached Below Blue Card */
-    div[data-testid="stExpander"] {
-        margin-top: -16px !important;
-        margin-bottom: 20px !important;
-        border: none !important;
-    }
-    div[data-testid="stExpander"] details {
-        border: none !important;
-    }
-    div[data-testid="stExpander"] details summary {
-        background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #fef08a 100%) !important;
-        color: #0f172a !important;
-        font-weight: 800 !important;
-        border-radius: 0 0 12px 12px !important;
-        padding: 12px 16px !important;
-        border: 2px solid #d97706 !important;
-        border-top: none !important;
-        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
-        animation: glitter 4s infinite ease-in-out !important;
-    }
-    div[data-testid="stExpander"] details summary:hover {
-        box-shadow: 0 0 20px rgba(245, 158, 11, 0.9) !important;
-    }
-
-    /* Mobile Save / PWA Banner Card */
-    .install-banner {
-        background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-        border: 2px solid #818cf8;
+    .current-badge {
+        background-color: #0284c7;
+        color: white;
+        font-size: 0.75rem;
+        padding: 3px 10px;
         border-radius: 12px;
-        padding: 16px;
-        color: #f8fafc;
-        margin-top: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
-    }
-    .install-banner h4 {
-        color: #fbbf24 !important;
-        margin-top: 0;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
     }
     </style>
 """, unsafe_allow_html=True)
 
+# ==========================================
+# 2. CONSTANTS & LOCALIZATION
+# ==========================================
 nakshatra_list = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -149,14 +112,14 @@ nakshatra_lords = [
 ]
 
 navtara_names = [
-    "Janma (Self / Body) ⚪",
+    "Janma (Self / Body)",
     "Sampat (Wealth / Progress) 🟢",
     "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort) 🟢",
+    "Kshema (Wellbeing / Comfort)",
     "Pratyari (Opposition / Tension) 🔴",
     "Sadhaka (Success / Achievement) 🟢",
     "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend) 🟢",
+    "Mitra (Friend)",
     "Ati-Mitra (Best Friend) 🟢🟢"
 ]
 
@@ -168,7 +131,7 @@ cycles = {
 
 tara_details_en = {
     0: {
-        "status": "Janma (1st Tara - Self) ⚪",
+        "status": "Janma (1st Tara - Self)",
         "H": "Focus on self-care and balanced light diet. Body and digestion may feel sensitive today.",
         "C": "Maintain daily routine tasks. Avoid launching major new impulsive projects.",
         "F": "Keep finances stable. Avoid hasty or emotional buying.",
@@ -192,7 +155,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vipat): Recite or listen to Hanuman Chalisa. Offer fresh water to green plants or birds. Postpone major risky commitments."
     },
     3: {
-        "status": "Kshema (4th Tara - Wellbeing) 🟢",
+        "status": "Kshema (4th Tara - Wellbeing)",
         "H": "Good day for general wellbeing, healing, and physical comfort.",
         "C": "Smooth operations, effective teamwork, and steady ongoing progress.",
         "F": "Financial security and safe transactions are favored.",
@@ -224,7 +187,7 @@ tara_details_en = {
         "R": "🛡️ Vedic Remedy (Vadha): Chant Mahamrityunjaya Mantra or 'Om Namah Shivaya'. Offer water or milk to Lord Shiva."
     },
     7: {
-        "status": "Mitra (8th Tara - Friend) 🟢",
+        "status": "Mitra (8th Tara - Friend)",
         "H": "Improving health and supportive physical energy.",
         "C": "Expect cooperation from peers and joint success in group tasks.",
         "F": "Collaborative financial gains and steady wealth.",
@@ -245,25 +208,28 @@ translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
         "intro_desc": "In Vedic astrology, the Moon's transit through the 27 Nakshatras creates a unique daily energy pattern relative to your birth star (Janma Nakshatra). This app provides accurate, astronomical insights into your daily Navtara Pulse, health, career, and financial guidance.",
-        "profile_title": "👤 Birth Profiles Management",
+        "profile_title": "👤 Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
-        "generate_btn": "✨ Click here to know the Horoscope & Predictions ✨",
+        "generate_btn": "Generate Horoscope & Predictions",
         "tara": tara_details_en
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष के ज्ञान को अनलॉक करें",
         "intro_desc": "वैदिक ज्योतिष में, 27 नक्षत्रों के माध्यम से चंद्रमा का गोचर आपके जन्म नक्षत्र के सापेक्ष एक अनूठा दैनिक ऊर्जा पैटर्न बनाता है। यह ऐप आपके दैनिक नवतारा पल्स, स्वास्थ्य, करियर और वित्तीय मार्गदर्शन में सटीक अंतर्दृष्टि प्रदान करता है।",
-        "profile_title": "👤 जन्म प्रोफाइल प्रबंधन",
+        "profile_title": "👤 जन्म विवरण",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
-        "generate_btn": "✨ राशिफल और भविष्यवाणियां जानने के लिए यहां क्लिक करें ✨",
+        "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
         "tara": tara_details_en 
     }
 }
 translations["mr"] = translations["hi"]
 translations["gu"] = translations["hi"]
 
+# ==========================================
+# 3. HELPER & ASTRONOMY FUNCTIONS
+# ==========================================
 @st.cache_data(show_spinner=False)
 def search_places_online(query):
     """Fetch geocoding data from OpenStreetMap Nominatim API."""
@@ -289,7 +255,6 @@ def get_utc_offset_hours(place_obj, place_query):
         lon = float(place_obj.get('lon', 0))
         if lon != 0:
             return round(lon / 15.0 * 2) / 2
-    
     return 5.5
 
 def get_moon_nakshatra_index(dt_utc):
@@ -299,7 +264,6 @@ def get_moon_nakshatra_index(dt_utc):
     moon = ephem.Moon(observer)
     ecl = ephem.Ecliptic(moon)
     
-    # Lahiri Ayanamsa approximation
     year = dt_utc.year + (dt_utc.month - 1) / 12.0
     ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
     
@@ -307,77 +271,61 @@ def get_moon_nakshatra_index(dt_utc):
     nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27
     return nakshatra_index
 
-def find_exact_nakshatra_transition(utc_start, utc_end):
-    """Finds exact minute when Nakshatra changes between utc_start and utc_end using binary search."""
-    start_nak = get_moon_nakshatra_index(utc_start)
-    low = utc_start
-    high = utc_end
+def calculate_7_day_transits(now_local, utc_offset_hours, days=7):
+    """
+    Finds exact start of active Nakshatra and computes future transits.
+    Filters out any past window whose end time is already behind current time.
+    """
+    now_utc = now_local - datetime.timedelta(hours=utc_offset_hours)
+    current_nak = get_moon_nakshatra_index(now_utc)
     
-    while (high - low).total_seconds() > 60:
-        mid = low + datetime.timedelta(seconds=(high - low).total_seconds() / 2)
-        if get_moon_nakshatra_index(mid) == start_nak:
-            low = mid
-        else:
-            high = mid
+    # 1. Step backward in 15-minute intervals to find start of current active Nakshatra
+    start_search = now_local
+    for i in range(1, 120): # up to 30 hours back
+        test_local = now_local - datetime.timedelta(minutes=15 * i)
+        test_utc = test_local - datetime.timedelta(hours=utc_offset_hours)
+        if get_moon_nakshatra_index(test_utc) != current_nak:
+            start_search = test_local
+            break
             
-    return high
-
-def calculate_7_day_transits(now_local, utc_offset_hours):
-    """
-    Calculates exact Moon transit time windows.
-    Scans from 36 hours in the past to 7 days ahead, then strictly excludes 
-    any transit block whose end date and time has passed relative to now_local.
-    """
-    current_utc = now_local - datetime.timedelta(hours=utc_offset_hours)
-    
-    scan_utc = current_utc - datetime.timedelta(hours=36)
-    end_utc_limit = current_utc + datetime.timedelta(days=7)
-    
-    step_minutes = 10
-    prev_utc = scan_utc
-    prev_nak = get_moon_nakshatra_index(prev_utc)
-    
-    raw_transitions = []
-    curr_utc = scan_utc + datetime.timedelta(minutes=step_minutes)
-    
-    while curr_utc <= end_utc_limit:
-        curr_nak = get_moon_nakshatra_index(curr_utc)
-        if curr_nak != prev_nak:
-            exact_trans_utc = find_exact_nakshatra_transition(prev_utc, curr_utc)
-            raw_transitions.append((exact_trans_utc, curr_nak))
-            prev_nak = curr_nak
-            prev_utc = exact_trans_utc
-        
-        curr_utc += datetime.timedelta(minutes=step_minutes)
-        
+    # 2. Step forward from active transit start to build current and future transits
     transits = []
-    for i in range(len(raw_transitions) - 1):
-        start_utc, nak_idx = raw_transitions[i]
-        end_utc, _ = raw_transitions[i + 1]
+    window_start = start_search
+    scan_limit_end = now_local + datetime.timedelta(days=days)
+    
+    total_steps = int((days + 2) * 24 * 4) # 15-min intervals
+    for i in range(1, total_steps):
+        test_local = start_search + datetime.timedelta(minutes=15 * i)
+        test_utc = test_local - datetime.timedelta(hours=utc_offset_hours)
+        test_nak = get_moon_nakshatra_index(test_utc)
         
-        start_local = start_utc + datetime.timedelta(hours=utc_offset_hours)
-        end_local = end_utc + datetime.timedelta(hours=utc_offset_hours)
-        
-        # STRICT FILTER: Exclude any transit block whose end date/time is in the past!
-        if end_local > now_local:
-            transits.append({
-                "start": start_local,
-                "end": end_local,
-                "nak_index": nak_idx
-            })
+        if test_nak != current_nak:
+            # Only include windows that have not expired yet
+            if test_local > now_local:
+                transits.append({
+                    "start": window_start,
+                    "end": test_local,
+                    "nak_index": current_nak,
+                    "is_current": (window_start <= now_local <= test_local)
+                })
+            current_nak = test_nak
+            window_start = test_local
             
+            if window_start >= scan_limit_end:
+                break
+                
     return transits
 
+# ==========================================
+# 4. MAIN APP LAYOUT & URL PARAMETERS
+# ==========================================
 query_params = st.query_params
-
-if 'saved_profiles' not in st.session_state:
-    st.session_state['saved_profiles'] = {}
-
 if 'profile_saved' not in st.session_state:
     st.session_state['profile_saved'] = 'saved' in query_params
 
 st.title("🌙 Navtara Pulse")
 
+# Purple Highlighted Language Selector
 lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
@@ -387,26 +335,16 @@ st.markdown(f"### {t['intro_title']}")
 st.write(t['intro_desc'])
 st.divider()
 
+# ==========================================
+# 5. UNIFIED USER PROFILE WINDOW
+# ==========================================
 st.header(t['profile_title'])
 
-profile_names = ["➕ Create New Profile"] + list(st.session_state['saved_profiles'].keys())
-selected_profile_key = st.selectbox("📁 Select or Switch Saved Profile", profile_names, index=0)
-
-if selected_profile_key != "➕ Create New Profile" and selected_profile_key in st.session_state['saved_profiles']:
-    p = st.session_state['saved_profiles'][selected_profile_key]
-    default_name = p.get('n', '')
-    default_date = p.get('d', datetime.date(1995, 1, 1))
-    default_h = p.get('h', 0)
-    default_m = p.get('m', 0)
-    default_place = p.get('p', '')
-    default_nak_idx = p.get('nak_idx', 0)
-else:
-    default_name = query_params.get('n', '')
-    default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
-    default_h = int(query_params.get('h', '0'))
-    default_m = int(query_params.get('m', '0'))
-    default_place = query_params.get('p', '')
-    default_nak_idx = None
+default_name = query_params.get('n', '')
+default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '%Y-%m-%d').date()
+default_h = int(query_params.get('h', '0'))
+default_m = int(query_params.get('m', '0'))
+default_place = query_params.get('p', '')
 
 col1, col2 = st.columns(2)
 with col1:
@@ -421,6 +359,7 @@ with col2:
     with tc2: 
         birth_minute = st.selectbox("MM", [f"{i:02d}" for i in range(60)], index=default_m)
 
+# Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
 place_query = st.text_input(
     "Search Location", 
@@ -440,38 +379,29 @@ if len(place_query) >= 3:
         selected_place_display = display_names[selected_idx]
         place_obj_data = places_list[selected_idx]
 
+# Auto-calculate UTC offset in background
 utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 
+# Auto-calculate default Janma Nakshatra based on Date/Time
 birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
 birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
-auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt) if default_nak_idx is None else default_nak_idx
+auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt)
 
 st.write("✨ **Janma Nakshatra (Birth Star)**")
 selected_janma_nakshatra = st.selectbox(
     "Verify/Select your exact Kundli Birth Star:",
     nakshatra_list,
     index=auto_janma_idx,
-    help="Auto-calculated based on your birth date and time. You can adjust this if your official Kundli mentions a specific star."
+    help="Auto-calculated based on birth date/time. You can adjust this if your Kundli mentions a specific star."
 )
 
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-st.markdown("<div class='glitter-btn'>", unsafe_allow_html=True)
-if st.button(t['generate_btn'], type="primary", use_container_width=True):
+if st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True):
     if len(place_query) < 3:
         st.error("⚠️ Please enter a valid Birth Place or Pincode to generate your predictions.")
     else:
-        profile_key_name = user_name or selected_place_display or "Saved Profile"
-        st.session_state['saved_profiles'][profile_key_name] = {
-            'n': user_name,
-            'd': birth_date,
-            'h': int(birth_hour),
-            'm': int(birth_minute),
-            'p': selected_place_display,
-            'nak_idx': nakshatra_list.index(selected_janma_nakshatra)
-        }
-        
         st.query_params['n'] = user_name
         st.query_params['d'] = str(birth_date)
         st.query_params['h'] = str(int(birth_hour))
@@ -479,8 +409,10 @@ if st.button(t['generate_btn'], type="primary", use_container_width=True):
         st.query_params['p'] = selected_place_display
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
-st.markdown("</div>", unsafe_allow_html=True)
 
+# ==========================================
+# 6. RESULTS & HOROSCOPE SCHEDULE
+# ==========================================
 if st.session_state.get('profile_saved'):
     st.divider()
     
@@ -488,28 +420,12 @@ if st.session_state.get('profile_saved'):
     janma_lord = nakshatra_lords[janma_index]
     
     st.success(f"🌟 **{user_name or 'User'}'s Janma Nakshatra:** {selected_janma_nakshatra} | **Nakshatra Lord:** {janma_lord}")
-    
-    st.markdown("""
-        <div class="install-banner">
-            <h4>📱 Save & Install for 1-Click Mobile Access</h4>
-            <p>Your birth profile details have been saved to this custom URL. To open this horoscope anytime without re-entering details:</p>
-            <ul>
-                <li><b>iPhone (Safari):</b> Tap the <i>Share</i> icon at the bottom ➔ select <b>"Add to Home Screen"</b>.</li>
-                <li><b>Android (Chrome):</b> Tap the three dots (⋮) at top-right ➔ select <b>"Add to Home screen"</b> or <b>"Install App"</b>.</li>
-            </ul>
-        </div>
-    """, unsafe_allow_html=True)
-
     st.header(t['horoscope_title'])
     
     now_local = datetime.datetime.now()
     transits = calculate_7_day_transits(now_local, utc_offset_val)
     
     for transit in transits:
-        # Extra explicit check: Skip any transit block that has already expired relative to current time
-        if transit["end"] <= now_local:
-            continue
-
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
         cycle_group = cycles[nak_difference // 9]
@@ -522,16 +438,18 @@ if st.session_state.get('profile_saved'):
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
         end_str = transit["end"].strftime('%a, %d %b %I:%M %p')
         
+        current_pill = "<span class='current-badge'>⚡ Active Now</span>" if transit.get("is_current") else ""
+        
         st.markdown(f"""
         <div class="transit-card">
-            <h5>🕒 {start_str} ➔ {end_str}</h5>
+            <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
             <p><b>Status:</b> <span class='status-badge'>{tara_badge_name}</span></p>
             <p><b>Moon Nakshatra:</b> {transit_nak_name} (<b>Nakshatra Lord:</b> {transit_nak_lord})</p>
             <p class='cycle-badge'><b>Navtara Series:</b> {cycle_group}</p>
         </div>
         """, unsafe_allow_html=True)
         
-        with st.expander("✨ Click here to see the Prediction & Life Guidance ✨"):
+        with st.expander("🔮 Daily Prediction & Life Guidance"):
             st.write(f"**Health:** {tara_data['H']}")
             st.write(f"**Career:** {tara_data['C']}")
             st.write(f"**Finance:** {tara_data['F']}")
@@ -539,6 +457,9 @@ if st.session_state.get('profile_saved'):
             if tara_data['R']:
                 st.error(tara_data['R'])
 
+# ==========================================
+# 7. SHARE APP (Direct Link Payload)
+# ==========================================
 st.divider()
 st.subheader("🔗 Share Navtara Pulse")
 app_url = "https://navtara-pulse.streamlit.app"
