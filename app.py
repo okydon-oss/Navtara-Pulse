@@ -37,8 +37,8 @@ st.markdown("""
         background-color: #e0f2fe; 
         color: #0f172a;
         padding: 16px; 
-        border-radius: 12px; 
-        margin-bottom: 12px; 
+        border-radius: 12px 12px 0 0; 
+        margin-bottom: 0px !important; 
         border-left: 6px solid #0284c7; 
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
     }
@@ -95,14 +95,23 @@ st.markdown("""
         width: 100% !important;
     }
 
-    /* Glittering Yellow Expander Header */
+    /* Seamless Glittering Yellow Expander Header Attached Below Blue Card */
+    div[data-testid="stExpander"] {
+        margin-top: -16px !important;
+        margin-bottom: 20px !important;
+        border: none !important;
+    }
+    div[data-testid="stExpander"] details {
+        border: none !important;
+    }
     div[data-testid="stExpander"] details summary {
         background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #fef08a 100%) !important;
         color: #0f172a !important;
         font-weight: 800 !important;
-        border-radius: 10px !important;
+        border-radius: 0 0 12px 12px !important;
         padding: 12px 16px !important;
         border: 2px solid #d97706 !important;
+        border-top: none !important;
         box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4) !important;
         animation: glitter 4s infinite ease-in-out !important;
     }
