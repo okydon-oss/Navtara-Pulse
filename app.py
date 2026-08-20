@@ -88,7 +88,7 @@ st.markdown("""
         display: inline-block;
     }
 
-    /* Yellow Glittering Buttons */
+    /* Yellow Glittering Buttons (Both Save & Generate) */
     div[data-testid="stButton"] > button[kind="primary"] {
         background: linear-gradient(135deg, #f59e0b 0%, #fef08a 50%, #d97706 100%) !important;
         color: #1e1b4b !important;
@@ -393,7 +393,7 @@ translations = {
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
         "generate_btn": "Generate Horoscope & Predictions",
-        "save_btn": "Save Profile & Generate Horoscope",
+        "save_btn": "Save Profile",
         "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
         "tara": tara_details_en
     },
@@ -404,7 +404,7 @@ translations = {
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
         "generate_btn": "राशिफल और भविष्यवाणियां उत्पन्न करें",
-        "save_btn": "प्रोफाइल सहेजें और राशिफल जनरेट करें",
+        "save_btn": "प्रोफाइल सहेजें",
         "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
         "tara": tara_details_en 
     }
@@ -448,19 +448,43 @@ def get_utc_offset_hours(place_obj, place_query):
             return round(lon / 15.0 * 2) / 2
     return 5.5
 
-def get_moon_nakshatra_index(dt_utc):
-    """Calculates exact Sidereal Moon Nakshatra index (0 to 26) using PyEphem + Lahiri Ayanamsa."""
+def get_moon_and_kundli_indices(dt_utc, place_obj=None):
+    """Calculates exact Sidereal Moon Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
     observer = ephem.Observer()
     observer.date = ephem.date(dt_utc)
+    
+    if isinstance(place_obj, dict):
+        lat = float(place_obj.get('lat', 0))
+        lon = float(place_obj.get('lon', 0))
+        if lat != 0 or lon != 0:
+            observer.lat = str(lat)
+            observer.lon = str(lon)
+            
     moon = ephem.Moon(observer)
     ecl = ephem.Ecliptic(moon)
     
     year = dt_utc.year + (dt_utc.month - 1) / 12.0
     ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
     
-    sidereal_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
-    nakshatra_index = int(sidereal_lon / 13.333333333333334) % 27
-    return nakshatra_index
+    sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
+    nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
+    rashi_index = int(sidereal_moon_lon / 30.0) % 12
+    
+    try:
+        lst_deg = math.degrees(observer.sidereal_time())
+        lat_rad = math.radians(float(observer.lat))
+        eps = math.radians(23.439)
+        lst_rad = math.radians(lst_deg)
+        
+        num = math.cos(lst_rad)
+        den = -math.sin(lst_rad) * math.cos(eps) - math.tan(lat_rad) * math.sin(eps)
+        asc_deg = math.degrees(math.atan2(num, den)) % 360
+        sidereal_lagna_lon = (asc_deg - ayanamsa) % 360
+        lagna_index = int(sidereal_lagna_lon / 30.0) % 12
+    except:
+        lagna_index = (rashi_index + 2) % 12
+        
+    return nakshatra_index, rashi_index, lagna_index
 
 def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     """
@@ -468,12 +492,13 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     Discards any past transit whose end time is before current local time.
     """
     now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
-    current_nak = get_moon_nakshatra_index(now_utc)
+    current_nak, _, _ = get_moon_and_kundli_indices(now_utc)
     
     start_search_utc = now_utc
     for i in range(1, 200):
         test_utc = now_utc - datetime.timedelta(minutes=15 * i)
-        if get_moon_nakshatra_index(test_utc) != current_nak:
+        test_nak, _, _ = get_moon_and_kundli_indices(test_utc)
+        if test_nak != current_nak:
             start_search_utc = test_utc + datetime.timedelta(minutes=15)
             break
             
@@ -486,7 +511,7 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     total_steps = int((days + 3) * 24 * 4)
     for i in range(1, total_steps):
         test_utc = start_search_utc + datetime.timedelta(minutes=15 * i)
-        test_nak = get_moon_nakshatra_index(test_utc)
+        test_nak, _, _ = get_moon_and_kundli_indices(test_utc)
         
         if test_nak != curr_nak:
             test_local = test_utc + datetime.timedelta(hours=utc_offset_hours)
@@ -516,7 +541,7 @@ if 'profile_saved' not in st.session_state:
 st.title("🌙 Navtara Pulse")
 
 # Purple Highlighted Language Selector
-lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
+lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાती (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
 t = translations[lang_code]
@@ -535,8 +560,6 @@ default_date = datetime.datetime.strptime(query_params.get('d', '1995-01-01'), '
 default_h = int(query_params.get('h', '0'))
 default_m = int(query_params.get('m', '0'))
 default_place = query_params.get('p', '')
-default_rashi = int(query_params.get('r', '0'))
-default_lagna = int(query_params.get('l', '0'))
 
 col1, col2 = st.columns(2)
 with col1:
@@ -574,44 +597,19 @@ if len(place_query) >= 3:
 # Auto-calculate UTC offset in background
 utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 
-# Auto-calculate default Janma Nakshatra based on Date/Time
+# Auto-calculate fixed Kundali Parameters based on Date/Time/Location
 birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
 birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
-auto_janma_idx = get_moon_nakshatra_index(birth_utc_dt)
-
-# Birth Kundli Details Grid: Nakshatra, Rashi, Lagna
-st.write("✨ **Kundli Astrological Parameters**")
-ck1, ck2, ck3 = st.columns(3)
-
-with ck1:
-    selected_janma_nakshatra = st.selectbox(
-        "Janma Nakshatra (Birth Star)",
-        nakshatra_list,
-        index=auto_janma_idx
-    )
-
-with ck2:
-    selected_rashi = st.selectbox(
-        "Janma Rashi (Moon Sign)",
-        rashi_list,
-        index=default_rashi if default_rashi < len(rashi_list) else 0
-    )
-
-with ck3:
-    selected_lagna = st.selectbox(
-        "Lagna (Ascendant)",
-        lagna_list,
-        index=default_lagna if default_lagna < len(lagna_list) else 0
-    )
+auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(birth_utc_dt, place_obj_data)
 
 # Plain Birth Place Badge
 if selected_place_display:
     st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Dedicated Save Profile & Generate Horoscope Button (Glittering Yellow)
+# Both Save Profile & Generate Horoscope Buttons styled with primary glittering yellow
 btn_col1, btn_col2 = st.columns([1, 1])
 with btn_col1:
-    save_clicked = st.button("💾 Save Profile", use_container_width=True)
+    save_clicked = st.button("💾 Save Profile", type="primary", use_container_width=True)
 
 with btn_col2:
     generate_clicked = st.button(f"🔮 {t['generate_btn']}", type="primary", use_container_width=True)
@@ -625,8 +623,6 @@ if save_clicked or generate_clicked:
         st.query_params['h'] = str(int(birth_hour))
         st.query_params['m'] = str(int(birth_minute))
         st.query_params['p'] = selected_place_display
-        st.query_params['r'] = str(rashi_list.index(selected_rashi))
-        st.query_params['l'] = str(lagna_list.index(selected_lagna))
         st.query_params['saved'] = 'true'
         st.session_state['profile_saved'] = True
         st.toast("✅ Profile saved successfully!", icon="🎉")
@@ -637,10 +633,12 @@ if save_clicked or generate_clicked:
 if st.session_state.get('profile_saved'):
     st.divider()
     
-    # 1. Vedic Nakshatra Details
-    janma_index = nakshatra_list.index(selected_janma_nakshatra)
-    janma_lord = nakshatra_lords[janma_index]
-    janma_traits = nakshatra_traits_map.get(selected_janma_nakshatra, "Balanced vitality, strong intuition, and steady growth.")
+    # 1. Fixed Astrological Kundli Parameters
+    janma_nakshatra_name = nakshatra_list[auto_janma_idx]
+    janma_lord = nakshatra_lords[auto_janma_idx]
+    janma_rashi_name = rashi_list[auto_rashi_idx]
+    janma_lagna_name = lagna_list[auto_lagna_idx]
+    janma_traits = nakshatra_traits_map.get(janma_nakshatra_name, "Balanced vitality, strong intuition, and steady growth.")
     
     # 2. Vedic Numerology Profile Calculation
     moolank = reduce_to_single_digit(birth_date.day)
@@ -653,7 +651,7 @@ if st.session_state.get('profile_saved'):
     
     profile_display_name = user_name.strip() if user_name.strip() else "User"
     
-    # Single Consolidated Light Green Profile Box with Rashi & Lagna Included
+    # Single Consolidated Light Green Profile Box
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
         <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
@@ -661,10 +659,10 @@ if st.session_state.get('profile_saved'):
         </h4>
         <div style="font-size: 0.94rem; color: #14532d; line-height: 1.6;">
             <p style="margin-bottom: 6px;">
-                ⭐ <b>Janma Nakshatra:</b> {selected_janma_nakshatra} &nbsp;|&nbsp; 
+                ⭐ <b>Janma Nakshatra:</b> {janma_nakshatra_name} &nbsp;|&nbsp; 
                 <b>Nakshatra Lord:</b> {janma_lord} &nbsp;|&nbsp; 
-                <b>Rashi:</b> {selected_rashi} &nbsp;|&nbsp; 
-                <b>Lagna:</b> {selected_lagna}
+                <b>Rashi:</b> {janma_rashi_name} &nbsp;|&nbsp; 
+                <b>Lagna:</b> {janma_lagna_name}
             </p>
             <p style="margin-bottom: 12px; padding-left: 10px; border-left: 3.5px solid #22c55e; color: #166534; font-size: 0.91rem;">
                 ✨ <b>Nakshatra Traits:</b> {janma_traits}
@@ -700,7 +698,7 @@ if st.session_state.get('profile_saved'):
     transits = calculate_7_day_transits(now_utc, utc_offset_val)
     
     for transit in transits:
-        nak_difference = (transit["nak_index"] - janma_index) % 27
+        nak_difference = (transit["nak_index"] - auto_janma_idx) % 27
         tara_index = nak_difference % 9
         
         tara_data = t["tara"][tara_index]
