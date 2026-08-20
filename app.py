@@ -327,7 +327,15 @@ def calculate_7_day_transits(start_local_dt, utc_offset_hours):
     
     current_utc = current_local - datetime.timedelta(hours=utc_offset_hours)
     current_nak = get_moon_nakshatra_index(current_utc)
+    
+    # Look back up to 30 hours to find the true start time of the current active Nakshatra
     window_start = current_local
+    for i in range(1, 120):  # 120 * 15 min = 30 hours
+        check_local = start_local_dt - datetime.timedelta(minutes=15 * i)
+        check_utc = check_local - datetime.timedelta(hours=utc_offset_hours)
+        if get_moon_nakshatra_index(check_utc) != current_nak:
+            window_start = check_local + datetime.timedelta(minutes=15)
+            break
     
     # Check at 15-minute intervals over 7 days
     for i in range(1, 7 * 96):
@@ -511,6 +519,10 @@ if st.session_state.get('profile_saved'):
     transits = calculate_7_day_transits(now_local, utc_offset_val)
     
     for transit in transits:
+        # Skip any transit time block that has already passed
+        if transit["end"] <= now_local:
+            continue
+
         # Astronomical Navtara Calculation
         nak_difference = (transit["nak_index"] - janma_index) % 27
         tara_index = nak_difference % 9
