@@ -706,7 +706,7 @@ with col1:
     if not is_name_valid:
         st.markdown(f'<span class="missing-field-warning">{t["warning_name"]}</span>', unsafe_allow_html=True)
 
-    birth_date = st.date_input(t['dob_label'], min_value=datetime.date(1925, 1, 1), max_value=datetime.date.today(), value=default_date)
+    birth_date = st.date_input(t['dob_label'], min_value=datetime.date(1900, 1, 1), max_value=datetime.date.today(), value=default_date)
     is_dob_valid = birth_date is not None
     if not is_dob_valid:
         st.markdown(f'<span class="missing-field-warning">{t["warning_dob"]}</span>', unsafe_allow_html=True)
