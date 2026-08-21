@@ -687,9 +687,9 @@ if default_date_str:
     try:
         default_date = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
     except:
-        default_date = datetime.date(1995, 1, 1)
+        default_date = datetime.date(2000, 1, 1)
 else:
-    default_date = datetime.date(1995, 1, 1)
+    default_date = datetime.date(2000, 1, 1)
 
 hh_param = query_params.get('h')
 hh_index = int(hh_param) + 1 if (hh_param is not None and hh_param.isdigit() and int(hh_param) < 24) else 0
