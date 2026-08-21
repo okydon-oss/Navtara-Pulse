@@ -1152,6 +1152,13 @@ if st.session_state.get('profile_generated') and is_form_valid:
     lang_narrative_dict = dasha_narratives.get(lang_code, dasha_narratives["en"])
     md_narrative = lang_narrative_dict.get(md_lord_key, dasha_narratives["en"]["Ketu"])
     ad_narrative = lang_narrative_dict.get(ad_lord_key, dasha_narratives["en"]["Venus"])
+    pd_lord_key = dasha_hierarchy["PD"]["lord"]
+    sd_lord_key = dasha_hierarchy["SD"]["lord"]
+    prd_lord_key = dasha_hierarchy["PRD"]["lord"]
+    
+    pd_narrative = lang_narrative_dict.get(pd_lord_key, dasha_narratives["en"]["Sun"])
+    sd_narrative = lang_narrative_dict.get(sd_lord_key, dasha_narratives["en"]["Moon"])
+    prd_narrative = lang_narrative_dict.get(prd_lord_key, dasha_narratives["en"]["Mars"])
 
     expander_title_dasha = t.get("dasha_expander_title", "✨ Click here for Active Dasha Predictions & Guidance ✨")
     with st.expander(expander_title_dasha):
@@ -1160,9 +1167,18 @@ if st.session_state.get('profile_generated') and is_form_valid:
         
         st.markdown(f"### 🌙 Active Antardasha Narrative ({ad_disp})")
         st.write(ad_narrative["text"])
+
+        st.markdown(f"### ⚡ Active Pratyantardasha Narrative ({pd_disp})")
+        st.write(pd_narrative["text"])
+
+        st.markdown(f"### 🔬 Active Sookshmadasha Narrative ({sd_disp})")
+        st.write(sd_narrative["text"])
+
+        st.markdown(f"### 💓 Active Pranadasha Narrative ({prd_disp})")
+        st.write(prd_narrative["text"])
         
         st.markdown(f"### 🔮 Dasha Synthesis & Operational Focus")
-        st.write(f"Operating under {md_disp} Mahadasha and {ad_disp} Antardasha creates a unique planetary synergy. The broader long-term trajectory is shaped by {md_disp}, while immediate events, opportunities, and daily focus are directed by {ad_disp}. Aligning your actions with the strengths of both planets provides clarity and steady momentum.")
+        st.write(f"Operating under {md_disp} Mahadasha, {ad_disp} Antardasha, and {pd_disp} Pratyantardasha creates a multi-layered planetary synergy. The major long-term trajectory is defined by {md_disp}, immediate tactical opportunities are guided by {ad_disp}, and short-term operational events are driven by {pd_disp}, {sd_disp}, and {prd_disp}. Aligning your daily actions with the combined strengths of these planets brings optimal focus and momentum.")
         
         st.divider()
         st.info(md_narrative["remedy"])
