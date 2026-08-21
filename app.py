@@ -9,10 +9,13 @@ import math
 try:
     import requests
     import swisseph as swe
-except ModuleNotFoundError as e:
-    st.error(f"🚨 **Missing Library Error:** `{e.name}`")
-    st.info("To fix this, open your terminal/command prompt and run:")
-    st.code("pip install requests pyswisseph", language="bash")
+    HAS_SWISSEPH = True
+except Exception as e:
+    HAS_SWISSEPH = False
+    st.error("🚨 **Missing Library Error:** `pyswisseph` is not installed in your environment.")
+    st.warning("⚡ **Action Required for Streamlit Cloud:** Add `pyswisseph` to your `requirements.txt` file in your GitHub repository.")
+    st.info("If running locally on your computer, run this command in Terminal / Command Prompt:")
+    st.code("pip install pyswisseph requests streamlit", language="bash")
     st.stop()
 
 # ==========================================
