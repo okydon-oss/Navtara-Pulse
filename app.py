@@ -18,7 +18,99 @@ except ModuleNotFoundError as e:
 # ==========================================
 # 1. PAGE CONFIGURATION & CSS
 # ==========================================
-st.set_page_config(page_title="Navtara Pulse", page_icon="🌙", layout="centered")
+# 2. CONSTANTS & LOCALIZATION (UPDATED DASHA NARRATIVES)
+# ==========================================
+dasha_order = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = [7, 20, 6, 10, 7, 18, 16, 19, 17]
+
+dasha_names_map = {
+    "en": {"Ketu": "Ketu", "Venus": "Venus (Shukra)", "Sun": "Sun (Surya)", "Moon": "Moon (Chandra)", "Mars": "Mars (Mangal)", "Rahu": "Rahu", "Jupiter": "Jupiter (Guru)", "Saturn": "Saturn (Shani)", "Mercury": "Mercury (Budh)"},
+    "hi": {"Ketu": "केतु", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगल", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
+    "mr": {"Ketu": "केतू", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगळ", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
+    "gu": {"Ketu": "કેતુ", "Venus": "શુક્ર", "Sun": "સૂર્ય", "Moon": "ચંદ્ર", "Mars": "મંગળ", "Rahu": "રાહુ", "Jupiter": "ગુરુ", "Saturn": "શનિ", "Mercury": "બુધ"}
+}
+
+dasha_narratives = {
+    "en": {
+        "Ketu": {
+            "text": "The energy of Ketu brings deep introspection, technical research drive, and spiritual detachment. During this period, quiet concentration and analytical focus yield significant breakthroughs. External distractions recede, allowing you to master complex technical tasks, investigate underlying truths, and restructure your priorities. It requires maintaining calm, avoiding speculative financial gambles, and cultivating inner peace.",
+            "remedy": "🕉️ Ketu Remedy: Feed stray dogs with bread/roti daily and recite 'Om Kem Ketave Namah'."
+        },
+        "Venus": {
+            "text": "The influence of Venus unfolds a period of creative vitality, harmony, and material comfort. It enhances your diplomatic influence, design vision, and client negotiations, opening avenues for financial expansion, luxury comfort, and asset growth. This phase fosters heartwarming romantic closeness, social appreciation, and deep personal fulfillment.",
+            "remedy": "🌸 Venus Remedy: Offer white flowers to Goddess Lakshmi and donate ghee or rice on Fridays."
+        },
+        "Sun": {
+            "text": "The solar period elevates leadership authority, self-dignity, and career prominence. Recognition from senior officials and institutional bodies highlights this phase, driving bold initiative and administrative breakthroughs. It inspires courageous decision-making and strong capital growth while encouraging humility and steady physical stamina.",
+            "remedy": "☀️ Sun Remedy: Offer fresh water (Arghya) to the rising Sun daily and recite Aditya Hrudayam."
+        },
+        "Moon": {
+            "text": "The Moon brings fluid vitality, heightened intuition, and effective public networking. It supports prosperous deal flow, empathetic communication, and marketing success. This phase nurtures domestic peace, deep emotional bonding, and financial liquidity, encouraging a balanced, observant, and creative approach to life.",
+            "remedy": "🌙 Moon Remedy: Drink water from a silver cup and respect mother or elder matriarchs."
+        },
+        "Mars": {
+            "text": "The martial influence ignites courageous execution, muscular stamina, and competitive victories. It provides the determination needed to complete long-pending goals, master real estate or technical projects, and overcome obstacles. Success comes through active drive, strategic discipline, and patient persistence.",
+            "remedy": "🔥 Mars Remedy: Recite Hanuman Chalisa daily and offer jaggery or red lentils in charity."
+        },
+        "Rahu": {
+            "text": "The period of Rahu opens doors to unconventional expansion, digital innovation, and global opportunities. It inspires ambitious vision, creative problem-solving, and high yields. Navigating this energy effectively requires disciplined financial audits, clear transparent communication, and maintaining emotional grounding.",
+            "remedy": "🪐 Rahu Remedy: Keep your workspace clean and chant 'Om Raam Rahave Namah' in the evening."
+        },
+        "Jupiter": {
+            "text": "Jupiter brings wisdom, optimism, institutional respect, and substantial expansion. It favors long-term wealth security, high-level counsel, spiritual growth, and generous support from mentors and family. This phase creates strong social goodwill, educational achievements, and noble guidance.",
+            "remedy": "💛 Jupiter Remedy: Apply yellow sandalwood tilak on forehead and respect gurus or teachers."
+        },
+        "Saturn": {
+            "text": "Saturn instills pragmatic resilience, structured operational discipline, and enduring achievement. It establishes solid capital foundations, debt management, and authoritative responsibility. Honest, patient, and dedicated effort yields long-lasting progress and high organizational respect.",
+            "remedy": "⚖️ Saturn Remedy: Light a sesame oil lamp on Saturdays and serve aged workers or laborers."
+        },
+        "Mercury": {
+            "text": "Mercury sharpens commercial agility, analytical precision, and fast networking. It accelerates sales pitches, intellectual tasks, and transaction gains, creating versatile opportunities and lively social harmony. Communication flows smoothly, making it ideal for strategic deals and learning.",
+            "remedy": "💚 Mercury Remedy: Feed green fodder to cows and chant 'Om Budhaya Namah'."
+        }
+    },
+    "hi": {
+        "Ketu": {
+            "text": "केतु की दशा गहन आत्मनिरीक्षण, तकनीकी शोध और आध्यात्मिक शांति लाती है। इस अवधि में शांत ध्यान और विश्लेषणात्मक अध्ययन से बड़ी सफलताएं मिलती हैं। बाहरी भटकाव कम होते हैं, जिससे आप जटिल कार्यों और अनुसंधान में निपुणता प्राप्त करते हैं। यह समय शांत रहने, वित्तीय सट्टेबाजी से बचने और आंतरिक शांति बनाए रखने का है।",
+            "remedy": "🕉️ केतु उपाय: आवारा कुत्तों को रोटी खिलाएं और 'ॐ कें केतवे नमः' का जाप करें।"
+        },
+        "Venus": {
+            "text": "शुक्र का प्रभाव जीवन में रचनात्मक ऊर्जा, सौहार्द और सुख-सुविधाओं का विस्तार करता है। यह आपके सौंदर्यबोध, कूटनीतिक प्रभाव और व्यापारिक बातचीत को बढ़ावा देता है, जिससे वित्तीय समृद्धि, संपत्ति वृद्धि और पारिवारिक प्रसन्नता प्राप्त होती है।",
+            "remedy": "🌸 शुक्र उपाय: देवी लक्ष्मी को सफेद फूल अर्पित करें और शुक्रवार को घी या चावल दान करें।"
+        },
+        "Sun": {
+            "text": "सूर्य की महादशा नेतृत्व अधिकार, प्रतिष्ठा और करियर में पदोन्नति प्रदान करती है। वरिष्ठ अधिकारियों और संस्थागत कार्यों से मान्यता मिलती है। यह समय साहसी फैसलों, पूंजी वृद्धि और आत्मविश्वास के साथ आगे बढ़ने की प्रेरणा देता है।",
+            "remedy": "☀️ सूर्य उपाय: सूर्यदेव को तांबे के पात्र से जल अर्पित करें और नित्य आदित्य हृदय स्तोत्र का पाठ करें।"
+        },
+        "Moon": {
+            "text": "चंद्रमा की स्थिति सहज बोध, जनसंपर्क और भावनात्मक संतुलन को मजबूत करती है। यह व्यापारिक नेटवर्किंग, वित्तीय तरलता और पारिवारिक शांति को बढ़ावा देती है। निर्णय क्षमता में स्पष्टता और रचनात्मकता बनी रहती है।",
+            "remedy": "🌙 चंद्र उपाय: चांदी के बर्तन से पानी पीएं और माता का सम्मान करें।"
+        },
+        "Mars": {
+            "text": "मंगल का प्रभाव अदम्य साहस, शारीरिक क्षमता और प्रतिस्पर्धी जीत प्रदान करता है। यह रुके हुए कार्यों को पूरा करने, रियल एस्टेट सौदों और साहसी निर्णय लेने के लिए सर्वोत्तम समय है। धैर्य और निरंतर प्रयास से बड़ी सफलता मिलती है।",
+            "remedy": "🔥 मंगल उपाय: प्रतिदिन हनुमान चालीसा का पाठ करें और गुड़ या लाल मसूर दान करें।"
+        },
+        "Rahu": {
+            "text": "राहु की अवधि डिजिटल उन्नति, नए अवसरों और वैश्विक विस्तार का मार्ग प्रशस्त करती है। यह महत्वाकांक्षी दूरदृष्टि देती है। इस ऊर्जा का सर्वोत्तम लाभ उठाने के लिए अनुशासित वित्तीय प्रबंधन और स्पष्ट बातचीत बनाए रखना आवश्यक है।",
+            "remedy": "🪐 राहु उपाय: कार्यस्थल साफ रखें और शाम को 'ॐ रां राहवे नमः' का जाप करें।"
+        },
+        "Jupiter": {
+            "text": "गुरु की दशा ज्ञान, आशावाद और संस्थागत सम्मान लाती है। यह दीर्घकालिक वित्तीय सुरक्षा, सही मार्गदर्शन और आध्यात्मिक उन्नति के लिए अत्यंत शुभ फलदायी है। वरिष्ठों और परिवार का पूर्ण सहयोग प्राप्त होता है।",
+            "remedy": "💛 गुरु उपाय: मस्तक पर केसर या हल्दी का तिलक लगाएं और गुरुओं का सम्मान करें।"
+        },
+        "Saturn": {
+            "text": "शनि का प्रभाव व्यावहारिक अनुशासन, ठोस वित्तीय प्रबंधन और दीर्घकालिक सफलता प्रदान करता है। यह कड़ी मेहनत, धैर्य और जिम्मेदारियों के निष्पादन से स्थायी प्रगति देता है। ऋण प्रबंधन और बचत मजबूत होती है।",
+            "remedy": "⚖️ शनि उपाय: शनिवार को तिल के तेल का दीपक जलाएं और बुजुर्गों या श्रमिकों की सेवा करें।"
+        },
+        "Mercury": {
+            "text": "बुध की अवधि बौद्धिक तीक्ष्णता, व्यापारिक सफलता और त्वरित नेटवर्किंग प्रदान करती है। यह विश्लेषणात्मक कार्यों, बिक्री सौदों और प्रभावी संचार में तेजी से लाभ देती है। बहुमुखी अवसरों का मार्ग प्रशस्त होता है।",
+            "remedy": "💚 बुध उपाय: गायों को हरा चारा खिलाएं और 'ॐ बुधाय नमः' का जाप करें।"
+        }
+    }
+}
+dasha_narratives["mr"] = dasha_narratives["hi"]
+dasha_narratives["gu"] = dasha_narratives["hi"]
+
 
 st.markdown("""
     <style>
@@ -219,351 +311,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. CONSTANTS & LOCALIZATION
+# 3. HELPER & ASTRONOMY FUNCTIONS (GEOCENTRIC MOON FIX)
 # ==========================================
-nakshatra_list = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
-    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
-    "Moola", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
-
-nakshatra_lords = [
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
-    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
-    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
-]
-
-rashi_list = [
-    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
-    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
-    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
-]
-
-lagna_list = rashi_list
-
-navtara_names = [
-    "Janma (Self / Body) ⚪",
-    "Sampat (Wealth / Progress) 🟢",
-    "Vipat (Obstacles / Delays) 🔴",
-    "Kshema (Wellbeing / Comfort) 🟢",
-    "Pratyari (Opposition / Tension) 🔴",
-    "Sadhaka (Success / Achievement) 🟢",
-    "Vadha (Risk / Danger) 🔴",
-    "Mitra (Friend) 🟢",
-    "Ati-Mitra (Best Friend) 🟢🟢"
-]
-
-dasha_order = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-dasha_years = [7, 20, 6, 10, 7, 18, 16, 19, 17]
-
-dasha_names_map = {
-    "en": {"Ketu": "Ketu", "Venus": "Venus (Shukra)", "Sun": "Sun (Surya)", "Moon": "Moon (Chandra)", "Mars": "Mars (Mangal)", "Rahu": "Rahu", "Jupiter": "Jupiter (Guru)", "Saturn": "Saturn (Shani)", "Mercury": "Mercury (Budh)"},
-    "hi": {"Ketu": "केतु", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगल", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
-    "mr": {"Ketu": "केतू", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगळ", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
-    "gu": {"Ketu": "કેતુ", "Venus": "શુક્ર", "Sun": "સૂર્ય", "Moon": "ચંદ્ર", "Mars": "મંગળ", "Rahu": "રાહુ", "Jupiter": "ગુરુ", "Saturn": "શનિ", "Mercury": "બુધ"}
-}
-
-dasha_predictions = {
-    "en": {
-        "Ketu": {"H": "Prone to sudden nervous exhaustion or skin allergy; maintain spiritual peace.", "C": "Deep analytical focus; research and technical tasks yield breakthroughs.", "F": "Silent financial restructuring; avoid speculative bets.", "M": "Intuitive, detached, and contemplative.", "R": "Seek quiet quality time; avoid unnecessary arguments.", "Remedy": "🕉️ Ketu Remedy: Feed stray dogs with bread/roti and recite 'Om Kem Ketave Namah'."},
-        "Venus": {"H": "Radiant physical vitality and comfort; ensure balanced diet.", "C": "Creative success, design breakthroughs, and smooth client negotiations.", "F": "Prosperous period; favorable for asset expansion and luxury comfort.", "M": "Harmonious, charming, artistic, and peaceful.", "R": "Heartwarming romantic closeness and family joy.", "Remedy": "🌸 Venus Remedy: Offer white flowers to Goddess Lakshmi and donate ghee/rice on Fridays."},
-        "Sun": {"H": "High solar stamina and confidence; care for cardiovascular health and posture.", "C": "Elevated leadership authority, government recognition, and promotion.", "F": "Strong capital growth and support from mentors/senior officials.", "M": "Commanding, dignified, bold, and decisive.", "R": "Lead ties with warmth; guard against ego friction.", "Remedy": "☀️ Sun Remedy: Offer fresh water (Arghya) to the rising Sun daily and recite Aditya Hrudayam."},
-        "Moon": {"H": "Fluid vitality; maintain adequate hydration and mental peace.", "C": "High public networking, marketing success, and intuitive decision-making.", "F": "Steady financial liquidity and prosperous deal flows.", "M": "Empathetic, sensitive, imaginative, and observant.", "R": "Deep emotional bonding and nurturing family atmosphere.", "Remedy": "🌙 Moon Remedy: Drink water from a silver cup and respect mother/elder matriarchs."},
-        "Mars": {"H": "High muscular stamina; avoid hasty movements or heat exhaustion.", "C": "Courageous execution, competitive victories, and swift goal completion.", "F": "Profitable real estate dealings and active capital accumulation.", "M": "Passionate, brave, dynamic, and goal-driven.", "R": "Express feelings directly; maintain patience during discussions.", "Remedy": "🔥 Mars Remedy: Recite Hanuman Chalisa daily and offer jaggery/red lentils in charity."},
-        "Rahu": {"H": "Guard against sudden fatigue or irregular sleep cycles; practice breathwork.", "C": "Unconventional expansion, digital breakthrough, and global opportunities.", "F": "Fluctuating high-yield gains; maintain strict audit control.", "M": "Ambitious, visionary, but guard against overthinking.", "R": "Practice clear communication to prevent sudden miscommunications.", "Remedy": "🪐 Rahu Remedy: Keep workspace clean and chant 'Om Raam Rahave Namah' in the evening."},
-        "Jupiter": {"H": "Robust health and optimism; avoid overindulgent heavy meals.", "C": "Expansion, wisdom counsel, teaching success, and institutional respect.", "F": "Substantial financial expansion, wisdom-backed investments, and long-term security.", "M": "Optimistic, noble, philosophical, and spiritually uplifted.", "R": "Noble family bonding, mentor support, and social respect.", "Remedy": "💛 Jupiter Remedy: Apply yellow sandalwood tilak on forehead and respect gurus/teachers."},
-        "Saturn": {"H": "Saturnian resilience; care for joint flexibility and physical posture.", "C": "Authoritative responsibility, structured operations, and long-term achievement.", "F": "Solid debt management, disciplined savings, and stable capital foundation.", "M": "Pragmatic, cautious, highly disciplined, and resilient.", "R": "Fulfill commitments faithfully; practice patient listening.", "Remedy": "⚖️ Saturn Remedy: Light a sesame oil lamp on Saturdays and serve aged workers/laborers."},
-        "Mercury": {"H": "Active nervous system; take short walking breaks to release mental strain.", "C": "Fast networking, analytical audits, sales pitch triumph, and commercial success.", "F": "Fluid wealth gains through quick strategic transactions.", "M": "Quick-witted, versatile, curious, and sharp.", "R": "Lively communication, joyful outings, and mutual intellectual understanding.", "Remedy": "💚 Mercury Remedy: Feed green fodder to cows and chant 'Om Budhaya Namah'."}
-    },
-    "hi": {
-        "Ketu": {"H": "तंत्रिका थकान या त्वचा संवेदनशीलता की संभावना; आध्यात्मिक शांति बनाए रखें।", "C": "गहन विश्लेषणात्मक ध्यान; शोध और तकनीकी कार्यों में सफलता।", "F": "शांत वित्तीय पुनर्गठन; सट्टेबाजी से बचें।", "M": "सहज, अनासक्त और चिंतनशील।", "R": "शांत गुणवत्तापूर्ण समय बिताएं; बहस से बचें।", "Remedy": "🕉️ केतु उपाय: आवारा कुत्तों को रोटी खिलाएं और 'ॐ कें केतवे नमः' का जाप करें।"},
-        "Venus": {"H": "जीवंत शारीरिक जीवन शक्ति और आराम; संतुलित आहार लें।", "C": "रचनात्मक सफलता, डिजाइन में प्रगति और सुचारू बातचीत।", "F": "समृद्ध काल; संपत्ति विस्तार और सुख-सुविधाओं के लिए अनुकूल।", "M": "सौहार्दपूर्ण, आकर्षक और शांतिपूर्ण।", "R": "रोमांटिक निकटता और पारिवारिक खुशी।", "Remedy": "🌸 शुक्र उपाय: देवी लक्ष्मी को सफेद फूल अर्पित करें और शुक्रवार को घी/चावल दान करें।"},
-        "Sun": {"H": "उच्च सूर्य सहनशक्ति और आत्मविश्वास; हृदय स्वास्थ्य का ध्यान रखें।", "C": "उच्च नेतृत्व अधिकार, सरकारी मान्यता और पदोन्नति।", "F": "मजबूत पूंजी वृद्धि और वरिष्ठों का समर्थन।", "M": "गरिमापूर्ण, साहसी और निर्णायक।", "R": "सहानुभूति के साथ संबंध संभालें; अहंकार से बचें।", "Remedy": "☀️ सूर्य उपाय: सूर्यदेव को तांबे के पात्र से जल अर्पित करें।"},
-        "Moon": {"H": "तरल जीवन शक्ति; पर्याप्त जलयोजन और मानसिक शांति बनाए रखें।", "C": "सार्वजनिक नेटवर्किंग और विपणन में सफलता।", "F": "स्थिर वित्तीय तरलता और लाभदायक सौदे।", "M": "सहानुभूतिपूर्ण, संवेदनशील और कल्पनाशील।", "R": "गहरी भावनात्मक निकटता और पारिवारिक माहौल।", "Remedy": "🌙 चंद्र उपाय: चांदी के बर्तन से पानी पीएं और माता का सम्मान करें।"},
-        "Mars": {"H": "उच्च शारीरिक सहनशक्ति; जल्दबाजी से बचें।", "C": "साहसी निष्पादन, प्रतिस्पर्धी जीत और लक्ष्य पूर्ति।", "F": "रियल एस्टेट और पूंजी संचय से लाभ।", "M": "जुनूनी, साहसी और सक्रिय।", "R": "अपनी भावनाएं स्पष्ट रखें; धैर्य रखें।", "Remedy": "🔥 मंगल उपाय: प्रतिदिन हनुमान चालीसा का पाठ करें और गुड़ दान करें।"},
-        "Rahu": {"H": "अचानक थकान या अनियमित नींद से बचें; प्राणायाम करें।", "C": "डिजिटल सफलता और वैश्विक अवसर।", "F": "उच्च आय के अवसर; सख्त बजट बनाए रखें।", "M": "महत्वाकांक्षी, दूरदर्शी लेकिन तनाव से बचें।", "R": "स्पष्ट बातचीत बनाए रखें।", "Remedy": "🪐 राहु उपाय: कार्यस्थल साफ रखें और 'ॐ रां राहवे नमः' का जाप करें।"},
-        "Jupiter": {"H": "मजबूत स्वास्थ्य और आशावाद; भारी भोजन से बचें।", "C": "विस्तार, ज्ञान, सलाह और संस्थागत सम्मान।", "F": "बड़ा वित्तीय विस्तार और दीर्घकालिक सुरक्षा।", "M": "आशावादी, दार्शनिक और आध्यात्मिक।", "R": "पारिवारिक सामंजस्य और वरिष्ठों का सहयोग।", "Remedy": "💛 गुरु उपाय: मस्तक पर केसर/हल्दी का तिलक लगाएं और गुरुओं का सम्मान करें।"},
-        "Saturn": {"H": "शनि का अनुशासन; जोड़ों के स्वास्थ्य का ध्यान रखें।", "C": "संरचित कार्यभार और दीर्घकालिक सफलता।", "F": "ऋण प्रबंधन और ठोस बचत नींव।", "M": "व्यावहारिक, सतर्क और अनुशासित।", "R": "प्रतिबद्धताओं का ईमानदारी से पालन करें।", "Remedy": "⚖️ शनि उपाय: शनिवार को तिल के तेल का दीपक जलाएं और बुजुर्गों की सेवा करें।"},
-        "Mercury": {"H": "सक्रिय तंत्रिका तंत्र; मानसिक तनाव कम करने के लिए टहलें।", "C": "त्वरित नेटवर्किंग, ऑडिट और व्यापारिक सफलता।", "F": "रणनीतिक सौदों से त्वरित धन लाभ।", "M": "चतुर, बहुमुखी और तीक्ष्ण।", "R": "जीवंत संचार और आपसी समझ।", "Remedy": "💚 बुध उपाय: गायों को हरा चारा खिलाएं और 'ॐ बुधाय नमः' का जाप करें।"}
-    }
-}
-dasha_predictions["mr"] = dasha_predictions["hi"]
-dasha_predictions["gu"] = dasha_predictions["hi"]
-
-num_lords_map = {
-    "en": {1: "Sun (Surya)", 2: "Moon (Chandra)", 3: "Jupiter (Guru)", 4: "Rahu", 5: "Mercury (Budh)", 6: "Venus (Shukra)", 7: "Ketu", 8: "Saturn (Shani)", 9: "Mars (Mangal)"},
-    "hi": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगल"}
-}
-num_lords_map["mr"] = num_lords_map["hi"]
-num_lords_map["gu"] = num_lords_map["hi"]
-
-nakshatra_traits_map = {
-    "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
-    "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
-    "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
-    "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
-    "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
-    "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
-    "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
-    "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
-    "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
-    "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
-    "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
-    "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
-    "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
-    "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
-    "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
-    "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
-    "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
-    "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
-    "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
-    "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
-    "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
-    "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
-    "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
-    "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
-    "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
-    "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
-    "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
-}
-
-moolank_traits_map = {
-    "en": {
-        1: "Solar vitality & original leadership — drives you to take bold independent initiatives.",
-        2: "Lunar sensitivity & diplomatic harmony — excels in teamwork, empathy, and intuitive decisions.",
-        3: "Jupiterian wisdom & expressive growth — fuels creative ideas, optimism, and effective counsel.",
-        4: "Rahu's unconventional vision & practical discipline — excels in structured audits and systematic work.",
-        5: "Mercurial agility & fast networking — thrives in dynamic environments and quick problem-solving.",
-        6: "Venusian harmony & aesthetic balance — focuses on family wellness, design, and relationship bonding.",
-        7: "Ketu's contemplative research & deep intuition — thrives in analytical study and quiet observation.",
-        8: "Saturnian resilience & financial execution — commands authoritative responsibility and solid planning.",
-        9: "Martial stamina & courageous completion — drives completion of pending goals and passionate action."
-    },
-    "hi": {
-        1: "सूर्य की ऊर्जा व मौलिक नेतृत्व — आपको स्वतंत्र और साहसी पहल करने की प्रेरणा देता है।",
-        2: "चंद्रमा की संवेदनशीलता व कूटनीतिक सौहार्द — टीम वर्क, सहानुभूति और अंतर्ज्ञान में श्रेष्ठ।",
-        3: "गुरु का ज्ञान व अभिव्यक्ति — रचनात्मक विचारों, आशावाद और सही सलाह को बढ़ावा देता है।",
-        4: "राहु की व्यावहारिक अनुशासन व अनूठी दृष्टि — संरचित ऑडिट और व्यवस्थित कार्यों में निपुण।",
-        5: "बुध की चपलता व त्वरित नेटवर्किंग — गतिशील वातावरण और त्वरित समस्या समाधान में सफल।",
-        6: "शुक्र का सौंदर्य व सामंजस्य — पारिवारिक कल्याण, डिजाइन और संबंधों के निर्माण पर केंद्रित।",
-        7: "केतु का गहन शोध व अंतर्ज्ञान — विश्लेषणात्मक अध्ययन और शांत अवलोकन में सर्वोत्तम।",
-        8: "शनि का धैर्य व वित्तीय निष्पादन — जिम्मेदारियों और ठोस वित्तीय नियोजन को संभालता है।",
-        9: "मंगल का साहस व लक्ष्य पूर्ति — रुके हुए कार्यों को पूरा करने और साहसी कदमों के लिए प्रेरित करता है।"
-    }
-}
-moolank_traits_map["mr"] = moolank_traits_map["hi"]
-moolank_traits_map["gu"] = moolank_traits_map["hi"]
-
-lucky_numbers_map = {
-    1: "1, 2, 3, 9", 2: "1, 2, 5", 3: "1, 2, 3, 9", 4: "1, 4, 5, 6, 7",
-    5: "1, 5, 6", 6: "1, 5, 6, 7", 7: "1, 4, 7", 8: "3, 5, 6, 8", 9: "1, 2, 3, 9"
-}
-
-personal_day_meanings = {
-    "en": {
-        1: "Good day to launch new goals, lead projects, and pitch ideas. Avoid hesitating or relying on others.",
-        2: "Good day for teamwork, smooth negotiations, and active listening. Avoid emotional impulse buying or arguments.",
-        3: "Good day for meetings, creative tasks, and social networking. Avoid overpromising or heavy overindulgence.",
-        4: "Good day to organize, complete routine audits, and clean your workspace. Avoid taking shortcuts or making speculative bets.",
-        5: "Good day for fast networking, sales pitches, and quick decisions. Avoid being rigid or losing focus.",
-        6: "Good day for family discussions, relationship bonding, and self-care. Avoid unnecessary arguments or neglecting home ties.",
-        7: "Good day for quiet study, deep research, and mental rest. Avoid launching major public changes or making hasty big decisions.",
-        8: "Good day for financial planning, debt management, and structured work. Avoid being overly stern or rushing big tasks.",
-        9: "Good day to finish pending backlogs, clear clutter, and forgive old grievances. Avoid launching brand-new long-term commitments."
-    },
-    "hi": {
-        1: "लक्ष्य शुरू करने, नेतृत्व करने और विचार प्रस्तुत करने के लिए अच्छा दिन। संकोच से बचें।",
-        2: "टीम कार्य, कूटनीति और सक्रिय सुनने के लिए अच्छा दिन। भावनात्मक खरीदारी से बचें।",
-        3: "बैठकों, रचनात्मक कार्यों और नेटवर्किंग के लिए अच्छा दिन। वादों में अतिरंजना से बचें।",
-        4: "संगठित होने, ऑडिट पूरा करने और कार्यक्षेत्र व्यवस्थित करने के लिए अच्छा दिन। शॉर्टकट से बचें।",
-        5: "त्वरित नेटवर्किंग, बिक्री और निर्णयों के लिए अच्छा दिन। कठोरता से बचें।",
-        6: "पारिवारिक चर्चा, संबंधों और आत्म-देखभाल के लिए अच्छा दिन। अनावश्यक विवादों से बचें।",
-        7: "शांत अध्ययन, गहन शोध और मानसिक विश्राम के लिए अच्छा दिन। जल्दबाजी के निर्णयों से बचें।",
-        8: "वित्तीय योजना, ऋण प्रबंधन और संरचित कार्य के लिए अच्छा दिन। अति कठोरता से बचें।",
-        9: "अधूरे कार्यों को पूरा करने, अव्यवस्था दूर करने और माफ करने के लिए अच्छा दिन। नई शुरुआत से बचें।"
-    }
-}
-personal_day_meanings["mr"] = personal_day_meanings["hi"]
-personal_day_meanings["gu"] = personal_day_meanings["hi"]
-
-paya_map = {
-    "en": {
-        2: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        5: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        9: {"name": "Rajat Paya (Silver Feet) 🥈", "grade": "Most Auspicious & Protective", "desc": "Acts as a divine protective shield, cushioning transit friction, bringing financial expansion, debt clearance, and steady career growth."},
-        3: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        7: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        10: {"name": "Tamra Paya (Copper Feet) 🥉", "grade": "Favorable & Productive", "desc": "Brings rewards for honest hard work, steady business growth, positive support from elders/mentors, and strong physical stamina."},
-        1: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        6: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        11: {"name": "Swarna Paya (Gold Feet) 🥇", "grade": "Testing / Mixed Results", "desc": "Brings prestige alongside high personal/family expenses and workload. Requires strict budget discipline, humility, and avoiding ego clashes."},
-        4: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
-        8: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."},
-        12: {"name": "Loha Paya (Iron Feet) 🪙", "grade": "Requires Discipline & Caution", "desc": "Brings delays in key projects, physical fatigue or joint strain. Best managed through routine hard work, avoiding speculative bets, and reciting Hanuman Chalisa daily."}
-    },
-    "hi": {
-        2: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
-        5: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
-        9: {"name": "चांदी का पाया (Rajat Paya) 🥈", "grade": "अति शुभ एवं सुरक्षात्मक", "desc": "दिव्य सुरक्षा कवच के रूप में कार्य करता है; वित्तीय विस्तार, ऋण मुक्ति और स्थिर व्यावसायिक प्रगति प्रदान करता है।"},
-        3: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
-        7: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
-        10: {"name": "तांबे का पाया (Tamra Paya) 🥉", "grade": "शुभ एवं फलदायी", "desc": "ईमानदार कड़ी मेहनत का प्रतिफल, व्यापार में वृद्धि, वरिष्ठों का समर्थन और मजबूत शारीरिक क्षमता प्रदान करता है।"},
-        1: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
-        6: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
-        11: {"name": "सोने का पाया (Swarna Paya) 🥇", "grade": "मध्यम एवं सचेत", "desc": "प्रतिष्ठा के साथ उच्च व्यक्तिगत व पारिवारिक खर्च लाता है। बजट अनुशासन, विनम्रता और अहंकार से बचने की आवश्यकता है।"},
-        4: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"},
-        8: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"},
-        12: {"name": "लोहे का पाया (Loha Paya) 🪙", "grade": "कठिन एवं धैर्यपूर्वक", "desc": "कार्यों में विलंब, शारीरिक थकान या जोड़ों में खिंचाव संभव है। दिनचर्या की मेहनत और हनुमान चालीसा के पाठ से श्रेष्ठ परिणाम मिलते हैं।"}
-    }
-}
-paya_map["mr"] = paya_map["hi"]
-paya_map["gu"] = paya_map["hi"]
-
-vahan_map = {
-    "en": {
-        1: {"name": "Ghoda (Horse) 🐴", "symbolism": "Speed & Rapid Progress", "H": "High physical stamina; guard against overexertion.", "C": "Swift career expansion and quick victory over competitors.", "F": "Fast fluid liquidity and profitable deal momentum.", "M": "Energetic, brave, and proactive mindset.", "R": "Dynamic communication; avoid rushing partner decisions.", "Remedy": "🏇 Shani Vahan Remedy: Feed soaked black chana (chickpeas) to horses or workers on Saturdays."},
-        2: {"name": "Gadha (Donkey) 🫏", "symbolism": "Heavy Labor & Patience", "H": "Physical tiredness or joint strain; ensure adequate rest.", "C": "Heavy workload requiring patience; steady effort yields results.", "F": "Strict budgeting required; focus on routine earnings.", "M": "Resilient stamina against stress.", "R": "Practice gentle listening to prevent domestic friction.", "Remedy": "🫏 Shani Vahan Remedy: Serve aged workers or donate footwear to the underprivileged."},
-        3: {"name": "Siyar (Jackal) 🦊", "symbolism": "Caution & High Vigilance", "H": "Nervous fatigue; stay hydrated and composed.", "C": "Beware of misleading advice; double-check all documents.", "F": "High risk of financial scams; avoid unverified schemes.", "M": "Alert, observant, but guard against overthinking.", "R": "Be direct and transparent in speech.", "Remedy": "🦊 Shani Vahan Remedy: Feed stray animals or birds with chapati/bread on Saturday evenings."},
-        4: {"name": "Hathi (Elephant) 🐘", "symbolism": "Royalty & Financial Gains", "H": "Robust health, dignified energy, and physical stability.", "C": "Recognition from authority, promotions, and elevated prestige.", "F": "Financial windfalls, luxury acquisitions, and asset stability.", "M": "Dignified, generous, confident, and peaceful.", "R": "Generous presence in family and social ties.", "Remedy": "🐘 Shani Vahan Remedy: Respect mentors/teachers and offer mustard oil or sesame seeds in charity."},
-        5: {"name": "Bail (Bull) 🐂", "symbolism": "Steady Persistence & Growth", "H": "Solid stamina; maintain neck and joint flexibility.", "C": "Methodical progress in core tasks; ideal for groundwork.", "F": "Steady accumulation through real estate or long-term assets.", "M": "Grounded, persistent, patient, and focused.", "R": "Dependable, committed, and stable bonding.", "Remedy": "🐂 Shani Vahan Remedy: Feed green fodder or jaggery to black bulls or cows on Saturdays."},
-        6: {"name": "Sher (Lion) 🦁", "symbolism": "Power & Leadership Courage", "H": "Strong confidence; keep cardiovascular stress low.", "C": "Commanding leadership authority; triumph in challenges.", "F": "Strong capital protection and negotiation leverage.", "M": "Bold, fearless, authoritative, and decisive.", "R": "Protect loved ones warmly; guard against dominating tone.", "Remedy": "🦁 Shani Vahan Remedy: Recite Hanuman Chalisa or offer red flowers to Lord Hanuman or Lord Shiva."},
-        7: {"name": "Kowwa (Crow) 🐦‍⬛", "symbolism": "Restlessness & Scattered Focus", "H": "Restless nerves or light sleep; practice calming breathwork.", "C": "Frequent travel, scattered attention, or unexpected delays.", "F": "Flustered small expenses; avoid impulsive online purchases.", "M": "Anxious mindset; practice silence (Mouna) and meditation.", "R": "Avoid impatient retorts or arguments with close family.", "Remedy": "🐦‍⬛ Shani Vahan Remedy: Feed crows or stray birds with grains or bread every morning."},
-        8: {"name": "Mayur (Peacock) 🦚", "symbolism": "Joy & Creative Breakthroughs", "H": "Vibrant vitality, aesthetic radiance, and emotional warmth.", "C": "Creative breakthroughs, social applause, and team harmony.", "F": "Heartwarming financial gains and pleasant surprises.", "M": "Joyous, optimistic, creative, and socially uplifted.", "R": "Romantic warmth, heartwarming family news, and social joy.", "Remedy": "🦚 Shani Vahan Remedy: Keep a peacock feather at your desk or chant 'Om Sham Shanayscharaya Namah'."},
-        9: {"name": "Hans (Swan) 🦢", "symbolism": "Supreme Wisdom & Peace", "H": "Peaceful vitality, mental composure, and holistic health.", "C": "Wise decision-making, excellent judgment, and peer respect.", "F": "Strong financial security, debt clearance, and prudent investments.", "M": "Deep spiritual clarity, tranquil, and intuitive.", "R": "Pure, soul-nourishing harmony and mutual respect.", "Remedy": "🦢 Shani Vahan Remedy: Practice quiet meditation; offer milk or fresh water to birds or Lord Shiva."}
-    },
-    "hi": {
-        1: {"name": "घोड़ा (Horse) 🐴", "symbolism": "गति और तीव्र प्रगति", "H": "उच्च शारीरिक सहनशक्ति; अत्यधिक परिश्रम से बचें।", "C": "तेजी से करियर विस्तार और प्रतिस्पर्धियों पर विजय।", "F": "तेज वित्तीय प्रवाह और लाभदायक सौदों की गति।", "M": "ऊर्जावान, साहसी और सक्रिय मानसिकता।", "R": "गतिशील संचार; साझेदार के निर्णयों में जल्दबाजी से बचें।", "Remedy": "🏇 शनि वाहन उपाय: शनिवार को घोड़ों या श्रमिकों को भिगोए हुए काले चने खिलाएं।"},
-        2: {"name": "गधा (Donkey) 🫏", "symbolism": "कड़ा परिश्रम और धैर्य", "H": "शारीरिक थकान या जोड़ों में खिंचाव; पर्याप्त आराम सुनिश्चित करें।", "C": "धैर्य की आवश्यकता वाला भारी कार्यभार; निरंतर प्रयास से परिणाम मिलते हैं।", "F": "सख्त बजट की आवश्यकता; नियमित आय पर ध्यान दें।", "M": "तनाव के खिलाफ लचिलापन।", "R": "घरेलू विवादों से बचने के लिए सुनने का अभ्यास करें।", "Remedy": "🫏 शनि वाहन उपाय: बुजुर्ग श्रमिकों की सेवा करें या जरूरतमंदों को जूते-चप्पल दान करें।"},
-        3: {"name": "सियार (Jackal) 🦊", "symbolism": "सावधानी और सतर्कता", "H": "तंत्रिका थकान; हाइड्रेटेड और शांत रहें।", "C": "गुमराह करने वाली सलाह से बचें; सभी दस्तावेजों की दो बार जांच करें।", "F": "वित्तीय धोखाधड़ी का जोखिम; असत्यापित योजनाओं से बचें।", "M": "सतर्क, सूक्ष्मदर्शी लेकिन अधिक सोचने से बचें।", "R": "बातचीत में प्रत्यक्ष और पारदर्शी रहें।", "Remedy": "🦊 शनि वाहन उपाय: शनिवार की शाम आवारा पशुओं या पक्षियों को रोटी/ब्रेड खिलाएं।"},
-        4: {"name": "हाथी (Elephant) 🐘", "symbolism": "राजसी प्रतिष्ठा और वित्तीय लाभ", "H": "मजबूत स्वास्थ्य, गरिमापूर्ण ऊर्जा और स्थिरता।", "C": "अधिकारियों से मान्यता, पदोन्नति और उच्च प्रतिष्ठा।", "F": "वित्तीय लाभ, लग्जरी संपत्ति और स्थिरता।", "M": "गरिमापूर्ण, उदार, आत्मविश्वासी और शांत।", "R": "परिवार और सामाजिक संबंधों में उदार उपस्थिति।", "Remedy": "🐘 शनि वाहन उपाय: गुरुओं का सम्मान करें और सरसों का तेल या तिल दान करें।"},
-        5: {"name": "बैल (Bull) 🐂", "symbolism": "निरंतर दृढ़ता और वृद्धि", "H": "ठोस सहनशक्ति; गर्दन और जोड़ों की लचक बनाए रखें।", "C": "मूल कार्यों में व्यवस्थित प्रगति; जमीनी कार्य के लिए आदर्श।", "F": "रियल एस्टेट या संपत्ति के माध्यम से स्थिर संचय।", "M": "व्यावहारिक, निरंतर, धैर्यवान और केंद्रित।", "R": "भरोसेमंद, प्रतिबद्ध और स्थिर संबंध।", "Remedy": "🐂 शनि वाहन उपाय: शनिवार को काले बैलों या गायों को हरा चारा या गुड़ खिलाएं।"},
-        6: {"name": "शेर (Lion) 🦁", "symbolism": "शक्ति और नेतृत्व का साहस", "H": "मजबूत आत्मविश्वास; हृदय के तनाव को कम रखें।", "C": "कमांडिंग नेतृत्व अधिकार; चुनौतियों पर विजय।", "F": "मजबूत पूंजी सुरक्षा और बातचीत में बढ़त।", "M": "साहसी, निडर, आधिकारिक और निर्णायक।", "R": "अपनों की सुरक्षा करें; दबदबा बनाने से बचें।", "Remedy": "🦁 शनि वाहन उपाय: हनुमान चालीसा का पाठ करें या भगवान हनुमान या शिव को लाल फूल अर्पित करें।"},
-        7: {"name": "कौवा (Crow) 🐦‍⬛", "symbolism": "बेचैनी और बिखरा हुआ ध्यान", "H": "बेचैन नसें या हल्की नींद; प्राणायाम का अभ्यास करें।", "C": "बार-बार यात्रा, बिखरा हुआ ध्यान या अप्रत्याशित देरी।", "F": "छोटे-मोटे खर्च; ऑनलाइन आवेगपूर्ण खरीदारी से बचें।", "M": "चिंताजनक मानसिकता; मौन और ध्यान का अभ्यास करें।", "R": "निकटतम परिवार के साथ बहस से बचें।", "Remedy": "🐦‍⬛ शनि वाहन उपाय: हर सुबह कौवों या पक्षियों को अनाज या रोटी खिलाएं।"},
-        8: {"name": "मयूर (Peacock) 🦚", "symbolism": "आनंद और रचनात्मक सफलता", "H": "जीवंत जीवन शक्ति, सौंदर्य और भावात्मक चमक।", "C": "रचनात्मक सफलता, सामाजिक प्रशंसा और टीम में सामंजस्य।", "F": "सुखद वित्तीय लाभ और सुखद आश्चर्य।", "M": "आनंदमय, आशावादी, रचनात्मक और प्रसन्न।", "R": "रोमांटिक गर्माहट, सुखद पारिवारिक समाचार और सामाजिक खुशी।", "Remedy": "🦚 शनि वाहन उपाय: अपने डेस्क पर मोर पंख रखें या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
-        9: {"name": "हंस (Swan) 🦢", "symbolism": "सर्वोच्च ज्ञान और शांति", "H": "शांतिपूर्ण जीवन शक्ति, मानसिक शांति और समग्र स्वास्थ्य।", "C": "बुद्धिमत्तापूर्ण निर्णय, उत्कृष्ट निर्णय क्षमता और सम्मान।", "F": "मजबूत वित्तीय सुरक्षा, ऋण मुक्ति और बुद्धिमान निवेश।", "M": "गहरी आध्यात्मिक स्पष्टता, शांत और सहज।", "R": "शुद्ध, आत्मा को पोषण देने वाला सामंजस्य और आपसी सम्मान।", "Remedy": "🦢 शनि वाहन उपाय: शांत ध्यान का अभ्यास करें; पक्षियों या भगवान शिव को दूध या ताजा पानी अर्पित करें।"}
-    }
-}
-vahan_map["mr"] = vahan_map["hi"]
-vahan_map["gu"] = vahan_map["hi"]
-
-tara_details_en = {
-    0: {"status": "Janma ⚪", "H": "Focus on self-care and light diet.", "C": "Maintain daily routine tasks.", "F": "Keep finances stable.", "M": "Self-reflective mindset.", "Rel": "Maintain emotional balance in relationships.", "R": ""},
-    1: {"status": "Sampat 🟢", "H": "High physical energy and vitality.", "C": "Excellent day for professional growth.", "F": "Favorable for wealth accumulation.", "M": "Positive and confident mindset.", "Rel": "Great day for bonding and mutual trust.", "R": ""},
-    2: {"status": "Vipat 🔴", "H": "Physically vulnerable; avoid strain.", "C": "Unexpected hurdles or project delays.", "F": "Strictly avoid speculative investments.", "M": "Prone to sudden stress.", "Rel": "Practice patient listening to prevent friction.", "R": "🛡️ Vedic Remedy: Recite Hanuman Chalisa or offer fresh water to green plants/birds."},
-    3: {"status": "Kshema 🟢", "H": "Good health and physical comfort.", "C": "Smooth operations and steady progress.", "F": "Financial security is favored.", "M": "Peaceful and emotionally balanced.", "Rel": "Warm family moments and comfort.", "R": ""},
-    4: {"status": "Pratyari 🔴", "H": "Ensure adequate sleep and hydration.", "C": "Possible friction with authority figures.", "F": "Unexpected small expenses.", "M": "Easily irritated; practice mindfulness.", "Rel": "Practice silence during arguments.", "R": "🛡️ Vedic Remedy: Practice Mouna (silence) during arguments or chant 'Om Sham Shanayscharaya Namah'."},
-    5: {"status": "Sadhaka 🟢", "H": "Strong physical vitality.", "C": "Breakthroughs and goal achievements.", "F": "Profitable long-term investments.", "M": "Determined and highly focused.", "Rel": "Resolve past issues and deepen bonds.", "R": ""},
-    6: {"status": "Vadha 🔴", "H": "Higher fatigue or vulnerability; caution.", "C": "Major blockages; avoid confrontations.", "F": "Protect capital; avoid risky deals.", "M": "Overwhelmed or defensive.", "Rel": "Avoid bringing up past grievances.", "R": "🛡️ Vedic Remedy: Chant Mahamrityunjaya Mantra or offer water/milk to Lord Shiva."},
-    7: {"status": "Mitra 🟢", "H": "Improving physical energy.", "C": "Good team cooperation and support.", "F": "Collaborative financial gains.", "M": "Happy and socially supported.", "Rel": "Supportive and friendly vibration.", "R": ""},
-    8: {"status": "Ati-Mitra 🟢🟢", "H": "Vibrant energy and health.", "C": "High growth and public recognition.", "F": "Financial windfalls or good news.", "M": "Joyous and spiritually uplifted.", "Rel": "Deep emotional joy and family harmony.", "R": ""}
-}
-
-translations = {
-    "en": {
-        "intro_title": "Unlocking the Wisdom of Vedic Astrology",
-        "intro_desc": "In Vedic astrology and numerology, the Moon's transit through the 27 Nakshatras and daily numerical vibrations create a unique energy pattern relative to your birth profile. This app provides accurate, astronomical, and numerological insights into your health, career, finance, mindset, and relationships.",
-        "profile_title": "👤 Birth Profile",
-        "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
-        "dasha_title": "🔮 Vimshottari Dasha Analysis & Life Guidance",
-        "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
-        "generate_btn": "Save Profile & Generate Predictions",
-        "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
-        "dasha_expander_title": "✨ Click here for Active Dasha Impact & Predictions ✨",
-        "name_label": "Name", "dob_label": "Date of Birth", "tob_label": "Time of Birth (24-Hour)",
-        "birth_place_label": "Birth Place",
-        "mobile_banner_title": "📱 Save & Install for 1-Click Mobile Access",
-        "mobile_banner_desc": "Your birth profile details have been saved to this custom URL. To open this horoscope anytime without re-entering details:",
-        "mobile_banner_ios": "iPhone (Safari): Tap the Share icon ➔ select 'Add to Home Screen'.",
-        "mobile_banner_android": "Android (Chrome): Tap the three dots (⋮) ➔ select 'Add to Home screen' or 'Install App'.",
-        "navtara_head": "🌙 Navtara Transit:", "num_head": "🔢 Numerology Vibration:", "vahan_head": "🪐 Shani Vahan:",
-        "health_head": "🩺 Health:", "career_head": "💼 Career:", "finance_head": "💰 Finance:", "mindset_head": "🧘 Mindset:", "rel_head": "❤️ Relationships:",
-        "share_title": "🔗 Share Navtara Pulse",
-        "active_now": "⚡ Active Now",
-        "warning_name": "⚠️ Name is required", "warning_dob": "⚠️ Date of Birth is required",
-        "warning_hh": "⚠️ Hour (HH) is required", "warning_mm": "⚠️ Minute (MM) is required",
-        "warning_place": "⚠️ Birth Place or 6-digit Pincode is required",
-        "tara": tara_details_en,
-        "vahan_details": vahan_map["en"],
-        "paya_details": paya_map["en"],
-        "moolank_details": moolank_traits_map["en"],
-        "nak_details": nakshatra_traits_map
-    },
-    "hi": {
-        "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
-        "intro_desc": "वैदिक ज्योतिष और अंकशास्त्र में, 27 नक्षत्रों में चंद्रमा का गोचर और दैनिक अंक कंपन आपके जन्म विवरण के सापेक्ष एक अनूठा ऊर्जा पैटर्न बनाते हैं। यह ऐप स्वास्थ्य, करियर, वित्त, मानसिकता और संबंधों में सटीक अंतर्दृष्टि प्रदान करता है।",
-        "profile_title": "👤 जन्म विवरण",
-        "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
-        "dasha_title": "🔮 विंशोत्तरी दशा विश्लेषण एवं जीवन मार्गदर्शन",
-        "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
-        "generate_btn": "प्रोफाइल सहेजें और भविष्यवाणियां उत्पन्न करें",
-        "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
-        "dasha_expander_title": "✨ सक्रिय दशा प्रभाव एवं भविष्यवाणियां देखने के लिए यहां क्लिक करें ✨",
-        "name_label": "नाम", "dob_label": "जन्म तिथि", "tob_label": "जन्म समय (24-घंटे)",
-        "birth_place_label": "जन्म स्थान",
-        "mobile_banner_title": "📱 1-क्लिक मोबाइल एक्सेस के लिए सहेजें और इंस्टॉल करें",
-        "mobile_banner_desc": "आपके जन्म विवरण इस URL में सहेजे गए हैं। बिना दोबारा विवरण भरे कभी भी देखने के लिए:",
-        "mobile_banner_ios": "iPhone (Safari): शेयर (Share) आइकन ➔ 'Add to Home Screen' चुनें।",
-        "mobile_banner_android": "Android (Chrome): तीन बिंदु (⋮) ➔ 'Add to Home screen' या 'Install App' चुनें।",
-        "navtara_head": "🌙 नवतारा गोचर:", "num_head": "🔢 अंकशास्त्र कंपन:", "vahan_head": "🪐 शनि वाहन:",
-        "health_head": "🩺 स्वास्थ्य:", "career_head": "💼 करियर:", "finance_head": "💰 वित्त:", "mindset_head": "🧘 मानसिकता:", "rel_head": "❤️ संबंध:",
-        "share_title": "🔗 नवतारा पल्स शेयर करें",
-        "active_now": "⚡ अभी सक्रिय",
-        "warning_name": "⚠️ नाम आवश्यक है", "warning_dob": "⚠️ जन्म तिथि आवश्यक है",
-        "warning_hh": "⚠️ घंटा (HH) आवश्यक है", "warning_mm": "⚠️ मिनट (MM) आवश्यक है",
-        "warning_place": "⚠️ जन्म स्थान या 6-अंकीय पिनकोड आवश्यक है",
-        "tara": tara_details_en,
-        "vahan_details": vahan_map["hi"],
-        "paya_details": paya_map["hi"],
-        "moolank_details": moolank_traits_map["hi"],
-        "nak_details": nakshatra_traits_map
-    }
-}
-translations["mr"] = translations["hi"]
-translations["gu"] = translations["hi"]
-
-# ==========================================
-# 3. HELPER & ASTRONOMY FUNCTIONS
-# ==========================================
-def reduce_to_single_digit(n: int) -> int:
-    """Reduce any number to a single digit 1-9."""
-    while n > 9:
-        n = sum(int(d) for d in str(n))
-    return n
-
-@st.cache_data(show_spinner=False)
-def search_places_online(query):
-    """Fetch geocoding data from OpenStreetMap Nominatim API."""
-    if len(query) < 3:
-        return []
-    url = f"https://nominatim.openstreetmap.org/search?q={urllib.parse.quote(query)}&format=json&limit=5"
-    headers = {'User-Agent': 'NavtaraPulse/1.0'}
-    try:
-        res = requests.get(url, headers=headers, timeout=5)
-        if res.status_code == 200:
-            return res.json()
-    except:
-        pass
-    return []
-
-def get_utc_offset_hours(place_obj, place_query):
-    """Automatically determine UTC offset in hours based on place data."""
-    if isinstance(place_obj, dict):
-        addr = place_obj.get('address', {})
-        country_code = addr.get('country_code', '').lower()
-        if country_code == 'in':
-            return 5.5
-        lon = float(place_obj.get('lon', 0))
-        if lon != 0:
-            return round(lon / 15.0 * 2) / 2
-    return 5.5
-
 def get_moon_and_kundli_indices(dt_utc, place_obj=None):
-    """Calculates exact Sidereal Moon Lon, Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
+    """Calculates exact Sidereal Geocentric Moon Lon, Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
+    # Geocentric Moon for accurate Nakshatra Lon & Dasha calculations (removes topocentric parallax shift)
+    moon_geo = ephem.Moon(dt_utc)
+    ecl = ephem.Ecliptic(moon_geo)
+    
+    year = dt_utc.year + (dt_utc.month - 1) / 12.0
+    ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
+    
+    sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
+    nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
+    rashi_index = int(sidereal_moon_lon / 30.0) % 12
+    
+    # Topocentric Observer for Ascendant (Lagna) calculation only
     observer = ephem.Observer()
     observer.date = ephem.date(dt_utc)
     
@@ -574,16 +337,6 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
             observer.lat = str(lat)
             observer.lon = str(lon)
             
-    moon = ephem.Moon(observer)
-    ecl = ephem.Ecliptic(moon)
-    
-    year = dt_utc.year + (dt_utc.month - 1) / 12.0
-    ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
-    
-    sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
-    nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
-    rashi_index = int(sidereal_moon_lon / 30.0) % 12
-    
     try:
         lst_deg = math.degrees(observer.sidereal_time())
         lat_rad = math.radians(float(observer.lat))
@@ -600,69 +353,27 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
         
     return nakshatra_index, rashi_index, lagna_index, sidereal_moon_lon
 
-def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
-    """Computes current and future transits anchored strictly to UTC time."""
-    now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
-    current_nak, _, _, _ = get_moon_and_kundli_indices(now_utc)
-    
-    start_search_utc = now_utc
-    for i in range(1, 200):
-        test_utc = now_utc - datetime.timedelta(minutes=15 * i)
-        test_nak, _, _, _ = get_moon_and_kundli_indices(test_utc)
-        if test_nak != current_nak:
-            start_search_utc = test_utc + datetime.timedelta(minutes=15)
-            break
-            
-    window_start_local = start_search_utc + datetime.timedelta(hours=utc_offset_hours)
-    
-    transits = []
-    curr_nak = current_nak
-    scan_limit_utc = now_utc + datetime.timedelta(days=days)
-    
-    total_steps = int((days + 3) * 24 * 4)
-    for i in range(1, total_steps):
-        test_utc = start_search_utc + datetime.timedelta(minutes=15 * i)
-        test_nak, _, _, _ = get_moon_and_kundli_indices(test_utc)
-        
-        if test_nak != curr_nak:
-            test_local = test_utc + datetime.timedelta(hours=utc_offset_hours)
-            
-            if test_local > now_local:
-                transits.append({
-                    "start": window_start_local,
-                    "end": test_local,
-                    "nak_index": curr_nak,
-                    "is_current": (window_start_local <= now_local < test_local)
-                })
-            curr_nak = test_nak
-            window_start_local = test_local
-            
-            if test_utc >= scan_limit_utc:
-                break
-                
-    return transits
-
 def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
-    """Calculates 5-level Vimshottari Dasha hierarchy for a target date."""
+    """Calculates exact 5-level Vimshottari Dasha hierarchy for a target date."""
     nak_span = 13.333333333333334
     nak_idx = int(moon_lon_deg / nak_span) % 27
     lord_idx = nak_idx % 9
     
     traversed = (moon_lon_deg % nak_span) / nak_span
-    remaining = 1.0 - traversed
     
-    first_md_years = dasha_years[lord_idx] * remaining
-    consumed_first_md_years = dasha_years[lord_idx] - first_md_years
+    YEAR_DAYS = 365.242189
     
-    first_md_start = birth_utc_dt - datetime.timedelta(days=consumed_first_md_years * 365.25)
+    # Balance of first Mahadasha at birth
+    consumed_first_md_days = dasha_years[lord_idx] * traversed * YEAR_DAYS
+    first_md_start = birth_utc_dt - datetime.timedelta(days=consumed_first_md_days)
     
     curr_start = first_md_start
     active_md_idx = lord_idx
     
     # 1. Mahadasha Loop
-    for step in range(30):
-        dur_years = dasha_years[active_md_idx]
-        curr_end = curr_start + datetime.timedelta(days=dur_years * 365.25)
+    for _ in range(30):
+        dur_days = dasha_years[active_md_idx] * YEAR_DAYS
+        curr_end = curr_start + datetime.timedelta(days=dur_days)
         if curr_start <= target_utc_dt < curr_end:
             break
         curr_start = curr_end
@@ -673,8 +384,8 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     # 2. Antardasha Loop
     ad_curr_start = md_start
     active_ad_idx = active_md_idx
-    for step in range(9):
-        ad_dur_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * 365.25
+    for _ in range(9):
+        ad_dur_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * YEAR_DAYS
         ad_curr_end = ad_curr_start + datetime.timedelta(days=ad_dur_days)
         if ad_curr_start <= target_utc_dt < ad_curr_end:
             break
@@ -686,8 +397,8 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     # 3. Pratyantardasha Loop
     pd_curr_start = ad_start
     active_pd_idx = active_ad_idx
-    ad_total_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * 365.25
-    for step in range(9):
+    ad_total_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * YEAR_DAYS
+    for _ in range(9):
         pd_dur_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
         pd_curr_end = pd_curr_start + datetime.timedelta(days=pd_dur_days)
         if pd_curr_start <= target_utc_dt < pd_curr_end:
@@ -701,7 +412,7 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     sd_curr_start = pd_start
     active_sd_idx = active_pd_idx
     pd_total_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
-    for step in range(9):
+    for _ in range(9):
         sd_dur_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
         sd_curr_end = sd_curr_start + datetime.timedelta(days=sd_dur_days)
         if sd_curr_start <= target_utc_dt < sd_curr_end:
@@ -715,7 +426,7 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     prd_curr_start = sd_start
     active_prd_idx = active_sd_idx
     sd_total_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
-    for step in range(9):
+    for _ in range(9):
         prd_dur_days = (sd_total_days * dasha_years[active_prd_idx] / 120.0)
         prd_curr_end = prd_curr_start + datetime.timedelta(days=prd_dur_days)
         if prd_curr_start <= target_utc_dt < prd_curr_end:
@@ -1031,7 +742,93 @@ if st.session_state.get('profile_generated') and is_form_valid:
                 st.warning(vahan_info["Remedy"])
 
     # ==========================================
-    # 7. VIMSHOTTARI DASHA ANALYSIS SECTION
+    # 7. VIMSHOTTARI DASHA ANALYSIS SECTION (PARAGRAPH PREDICTIONS)
+    # ==========================================
+    st.divider()
+    st.header(t.get('dasha_title', '🔮 Vimshottari Dasha Analysis & Life Guidance'))
+    
+    dasha_hierarchy = calculate_vimshottari_dasha(birth_utc_dt, birth_moon_lon, now_utc)
+    
+    md_lord_key = dasha_hierarchy["MD"]["lord"]
+    ad_lord_key = dasha_hierarchy["AD"]["lord"]
+    
+    md_disp = dasha_names_map[lang_code].get(md_lord_key, md_lord_key)
+    ad_disp = dasha_names_map[lang_code].get(ad_lord_key, ad_lord_key)
+    pd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["PD"]["lord"], dasha_hierarchy["PD"]["lord"])
+    sd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["SD"]["lord"], dasha_hierarchy["SD"]["lord"])
+    prd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["PRD"]["lord"], dasha_hierarchy["PRD"]["lord"])
+    
+    md_s = (dasha_hierarchy["MD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    md_e = (dasha_hierarchy["MD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    ad_s = (dasha_hierarchy["AD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    ad_e = (dasha_hierarchy["AD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    pd_s = (dasha_hierarchy["PD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    pd_e = (dasha_hierarchy["PD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    sd_s = (dasha_hierarchy["SD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    sd_e = (dasha_hierarchy["SD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    prd_s = (dasha_hierarchy["PRD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y %I:%M %p')
+    prd_e = (dasha_hierarchy["PRD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y %I:%M %p')
+
+    # Dasha Hierarchy Visual Top Card
+    st.markdown(f"""
+    <div class="dasha-card">
+        <h4>✨ Active Vimshottari Dasha Hierarchy</h4>
+        <p style="margin-bottom: 8px; font-size: 0.92rem; color: #451a03;">
+            <b>Active Period:</b> <span style="background-color: #fef08a; padding: 3px 10px; border-radius: 6px; font-weight: 800; color: #78350f;">{md_disp} Mahadasha ➔ {ad_disp} Antardasha</span>
+        </p>
+        <div class="dasha-grid">
+            <div class="dasha-item">
+                <div class="title">Mahadasha</div>
+                <div class="planet">{md_disp}</div>
+                <div class="dates">{md_s}<br>to {md_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Antardasha</div>
+                <div class="planet">{ad_disp}</div>
+                <div class="dates">{ad_s}<br>to {ad_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Pratyantar</div>
+                <div class="planet">{pd_disp}</div>
+                <div class="dates">{pd_s}<br>to {pd_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Sookshma</div>
+                <div class="planet">{sd_disp}</div>
+                <div class="dates">{sd_s}<br>to {sd_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Prana Dasha</div>
+                <div class="planet">{prd_disp}</div>
+                <div class="dates">{prd_s}<br>to {prd_e}</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Active Dasha Impact Expander (Narrative Paragraph Predictions without headings)
+    md_narrative = dasha_narratives[lang_code].get(md_lord_key, dasha_narratives["en"]["Ketu"])
+    ad_narrative = dasha_narratives[lang_code].get(ad_lord_key, dasha_narratives["en"]["Venus"])
+
+    expander_title_dasha = t.get("dasha_expander_title", "✨ Click here for Active Dasha Predictions & Guidance ✨")
+    with st.expander(expander_title_dasha):
+        st.markdown(f"### 🪐 Active Mahadasha Narrative ({md_disp})")
+        st.write(md_narrative["text"])
+        
+        st.markdown(f"### 🌙 Active Antardasha Narrative ({ad_disp})")
+        st.write(ad_narrative["text"])
+        
+        st.markdown(f"### 🔮 Dasha Synthesis & Operational Focus")
+        st.write(f"Operating under {md_disp} Mahadasha and {ad_disp} Antardasha creates a unique planetary synergy. The broader long-term trajectory is shaped by {md_disp}, while immediate events, opportunities, and daily focus are directed by {ad_disp}. Aligning your actions with the strengths of both planets provides clarity and steady momentum.")
+        
+        st.divider()
+        st.info(md_narrative["remedy"])
+        st.warning(ad_narrative["remedy"])
+
     # ==========================================
     st.divider()
     st.header(t['dasha_title'])
