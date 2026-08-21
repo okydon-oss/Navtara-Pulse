@@ -683,13 +683,22 @@ st.header(t['profile_title'])
 
 default_name = query_params.get('n', '')
 default_date_str = query_params.get('d', '')
+
+dob_day_idx = 0
+dob_month_idx = 0
+dob_year_idx = 0
+
+year_options_list = [str(y) for y in range(2026, 1899, -1)]
+
 if default_date_str:
     try:
-        default_date = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
+        parsed_d = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
+        dob_day_idx = parsed_d.day
+        dob_month_idx = parsed_d.month
+        if str(parsed_d.year) in year_options_list:
+            dob_year_idx = year_options_list.index(str(parsed_d.year)) + 1
     except:
-        default_date = datetime.date(2000, 1, 1)
-else:
-    default_date = datetime.date(2000, 1, 1)
+        pass
 
 hh_param = query_params.get('h')
 hh_index = int(hh_param) + 1 if (hh_param is not None and hh_param.isdigit() and int(hh_param) < 24) else 0
@@ -706,14 +715,31 @@ with col1:
     if not is_name_valid:
         st.markdown(f'<span class="missing-field-warning">{t["warning_name"]}</span>', unsafe_allow_html=True)
 
-    birth_date = st.date_input(
-        t['dob_label'], 
-        min_value=datetime.date(1900, 1, 1), 
-        max_value=datetime.date.today(), 
-        value=default_date
-    )
-    is_dob_valid = birth_date is not None
-    if not is_dob_valid:
+    st.write(t['dob_label'])
+    dob_c1, dob_c2, dob_c3 = st.columns(3)
+    
+    day_options = ["--"] + [f"{i:02d}" for i in range(1, 32)]
+    month_options = ["--", "Jan (01)", "Feb (02)", "Mar (03)", "Apr (04)", "May (05)", "Jun (06)", "Jul (07)", "Aug (08)", "Sep (09)", "Oct (10)", "Nov (11)", "Dec (12)"]
+    year_options = ["--"] + year_options_list
+
+    with dob_c1:
+        selected_day = st.selectbox("DD", day_options, index=dob_day_idx)
+    with dob_c2:
+        selected_month = st.selectbox("MM", month_options, index=dob_month_idx)
+    with dob_c3:
+        selected_year = st.selectbox("YYYY", year_options, index=dob_year_idx)
+
+    is_dob_valid = False
+    birth_date = None
+
+    if selected_day != "--" and selected_month != "--" and selected_year != "--":
+        try:
+            m_num = month_options.index(selected_month)
+            birth_date = datetime.date(int(selected_year), m_num, int(selected_day))
+            is_dob_valid = True
+        except ValueError:
+            st.markdown(f'<span class="missing-field-warning">{t["warning_dob"]} (Invalid Date)</span>', unsafe_allow_html=True)
+    else:
         st.markdown(f'<span class="missing-field-warning">{t["warning_dob"]}</span>', unsafe_allow_html=True)
 
 with col2:
