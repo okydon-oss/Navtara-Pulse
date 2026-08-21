@@ -614,14 +614,18 @@ def get_utc_offset_hours(place_obj, place_query):
     return 5.5
 
 def get_moon_and_kundli_indices(dt_utc, place_obj=None):
-    """Calculates exact Sidereal Geocentric Moon Lon, Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
-    moon_geo = ephem.Moon(dt_utc)
-    ecl = ephem.Ecliptic(moon_geo)
+    """
+    Calculates Geocentric Sidereal Moon Lon, Nakshatra, Rashi, and Lagna indices.
+    Geocentric Moon coordinates are strictly used for exact Vimshottari Dasha alignment with AstroSage.
+    """
+    geo_moon = ephem.Moon(dt_utc)
+    ecl_geo = ephem.Ecliptic(geo_moon)
     
-    year = dt_utc.year + (dt_utc.month - 1) / 12.0
-    ayanamsa = 23.85306 + (year - 2000.0) * 0.01397
+    # High-precision Chitrapaksha (Lahiri) Ayanamsa polynomial
+    year_float = dt_utc.year + (dt_utc.month - 1) / 12.0 + (dt_utc.day - 1) / 365.25 + (dt_utc.hour + dt_utc.minute / 60.0) / 8766.0
+    ayanamsa = 23.8530556 + (year_float - 2000.0) * 0.0139722222
     
-    sidereal_moon_lon = (math.degrees(ecl.lon) - ayanamsa) % 360
+    sidereal_moon_lon = (math.degrees(ecl_geo.lon) - ayanamsa) % 360
     nakshatra_index = int(sidereal_moon_lon / 13.333333333333334) % 27
     rashi_index = int(sidereal_moon_lon / 30.0) % 12
     
@@ -652,16 +656,20 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
     return nakshatra_index, rashi_index, lagna_index, sidereal_moon_lon
 
 def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
-    """Calculates exact 5-level Vimshottari Dasha hierarchy for a target date."""
+    """Calculates exact 5-level Vimshottari Dasha hierarchy for a target date (AstroSage standard)."""
     nak_span = 13.333333333333334
     nak_idx = int(moon_lon_deg / nak_span) % 27
     lord_idx = nak_idx % 9
     
-    traversed = (moon_lon_deg % nak_span) / nak_span
-    YEAR_DAYS = 365.242189
+    traversed_fraction = (moon_lon_deg % nak_span) / nak_span
+    remaining_fraction = 1.0 - traversed_fraction
+    YEAR_DAYS = 365.2425  # Astronomical Solar Calendar year standard
     
-    consumed_first_md_days = dasha_years[lord_idx] * traversed * YEAR_DAYS
-    first_md_start = birth_utc_dt - datetime.timedelta(days=consumed_first_md_days)
+    first_md_years = dasha_years[lord_idx]
+    remaining_first_md_days = first_md_years * remaining_fraction * YEAR_DAYS
+    
+    first_md_end = birth_utc_dt + datetime.timedelta(days=remaining_first_md_days)
+    first_md_start = first_md_end - datetime.timedelta(days=first_md_years * YEAR_DAYS)
     
     curr_start = first_md_start
     active_md_idx = lord_idx
@@ -695,7 +703,7 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     active_pd_idx = active_ad_idx
     ad_total_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * YEAR_DAYS
     for _ in range(9):
-        pd_dur_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
+        pd_dur_days = ad_total_days * (dasha_years[active_pd_idx] / 120.0)
         pd_curr_end = pd_curr_start + datetime.timedelta(days=pd_dur_days)
         if pd_curr_start <= target_utc_dt < pd_curr_end:
             break
@@ -707,9 +715,9 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     # 4. Sookshmadasha Loop
     sd_curr_start = pd_start
     active_sd_idx = active_pd_idx
-    pd_total_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
+    pd_total_days = ad_total_days * (dasha_years[active_pd_idx] / 120.0)
     for _ in range(9):
-        sd_dur_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
+        sd_dur_days = pd_total_days * (dasha_years[active_sd_idx] / 120.0)
         sd_curr_end = sd_curr_start + datetime.timedelta(days=sd_dur_days)
         if sd_curr_start <= target_utc_dt < sd_curr_end:
             break
@@ -721,9 +729,9 @@ def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
     # 5. Pranadasha Loop
     prd_curr_start = sd_start
     active_prd_idx = active_sd_idx
-    sd_total_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
+    sd_total_days = pd_total_days * (dasha_years[active_sd_idx] / 120.0)
     for _ in range(9):
-        prd_dur_days = (sd_total_days * dasha_years[active_prd_idx] / 120.0)
+        prd_dur_days = sd_total_days * (dasha_years[active_prd_idx] / 120.0)
         prd_curr_end = prd_curr_start + datetime.timedelta(days=prd_dur_days)
         if prd_curr_start <= target_utc_dt < prd_curr_end:
             break
@@ -1089,12 +1097,15 @@ if st.session_state.get('profile_generated') and is_form_valid:
     
     md_lord_key = dasha_hierarchy["MD"]["lord"]
     ad_lord_key = dasha_hierarchy["AD"]["lord"]
+    pd_lord_key = dasha_hierarchy["PD"]["lord"]
+    sd_lord_key = dasha_hierarchy["SD"]["lord"]
+    prd_lord_key = dasha_hierarchy["PRD"]["lord"]
     
     md_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(md_lord_key, md_lord_key)
     ad_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(ad_lord_key, ad_lord_key)
-    pd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(dasha_hierarchy["PD"]["lord"], dasha_hierarchy["PD"]["lord"])
-    sd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(dasha_hierarchy["SD"]["lord"], dasha_hierarchy["SD"]["lord"])
-    prd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(dasha_hierarchy["PRD"]["lord"], dasha_hierarchy["PRD"]["lord"])
+    pd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(pd_lord_key, pd_lord_key)
+    sd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(sd_lord_key, sd_lord_key)
+    prd_disp = dasha_names_map.get(lang_code, dasha_names_map["en"]).get(prd_lord_key, prd_lord_key)
     
     md_s = (dasha_hierarchy["MD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
     md_e = (dasha_hierarchy["MD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
@@ -1148,14 +1159,10 @@ if st.session_state.get('profile_generated') and is_form_valid:
     </div>
     """, unsafe_allow_html=True)
 
-    # Active Dasha Narrative Predictions (Continuous Paragraphs without sub-headings)
+    # Active 5-Level Dasha Narrative Predictions (Continuous Paragraphs)
     lang_narrative_dict = dasha_narratives.get(lang_code, dasha_narratives["en"])
     md_narrative = lang_narrative_dict.get(md_lord_key, dasha_narratives["en"]["Ketu"])
     ad_narrative = lang_narrative_dict.get(ad_lord_key, dasha_narratives["en"]["Venus"])
-    pd_lord_key = dasha_hierarchy["PD"]["lord"]
-    sd_lord_key = dasha_hierarchy["SD"]["lord"]
-    prd_lord_key = dasha_hierarchy["PRD"]["lord"]
-    
     pd_narrative = lang_narrative_dict.get(pd_lord_key, dasha_narratives["en"]["Sun"])
     sd_narrative = lang_narrative_dict.get(sd_lord_key, dasha_narratives["en"]["Moon"])
     prd_narrative = lang_narrative_dict.get(prd_lord_key, dasha_narratives["en"]["Mars"])
