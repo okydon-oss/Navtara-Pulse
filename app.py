@@ -687,9 +687,9 @@ if default_date_str:
     try:
         default_date = datetime.datetime.strptime(default_date_str, '%Y-%m-%d').date()
     except:
-        default_date = None
+        default_date = datetime.date(1995, 1, 1)
 else:
-    default_date = None
+    default_date = datetime.date(1995, 1, 1)
 
 hh_param = query_params.get('h')
 hh_index = int(hh_param) + 1 if (hh_param is not None and hh_param.isdigit() and int(hh_param) < 24) else 0
@@ -706,7 +706,12 @@ with col1:
     if not is_name_valid:
         st.markdown(f'<span class="missing-field-warning">{t["warning_name"]}</span>', unsafe_allow_html=True)
 
-    birth_date = st.date_input(t['dob_label'], min_value=datetime.date(1900, 1, 1), max_value=datetime.date.today(), value=default_date)
+    birth_date = st.date_input(
+        t['dob_label'], 
+        min_value=datetime.date(1900, 1, 1), 
+        max_value=datetime.date.today(), 
+        value=default_date
+    )
     is_dob_valid = birth_date is not None
     if not is_dob_valid:
         st.markdown(f'<span class="missing-field-warning">{t["warning_dob"]}</span>', unsafe_allow_html=True)
