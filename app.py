@@ -33,14 +33,6 @@ st.markdown("""
     footer {visibility: hidden;}
     
     /* Red Border & Glowing Highlight for Missing Input Fields */
-    .missing-field div[data-baseweb="input"], 
-    .missing-field div[data-baseweb="select"] > div,
-    .missing-field input {
-        border: 2px solid #ef4444 !important;
-        border-radius: 8px !important;
-        background-color: #fef2f2 !important;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.35) !important;
-    }
     .missing-field-warning {
         color: #dc2626 !important;
         font-size: 0.82rem !important;
@@ -76,6 +68,57 @@ st.markdown("""
         margin-bottom: 4px;
         font-size: 0.95rem;
     }
+
+    /* Dasha Card Styling */
+    .dasha-card {
+        background-color: #fefce8;
+        color: #1e1b4b;
+        padding: 18px;
+        border-radius: 12px 12px 0 0;
+        border-left: 6px solid #d97706;
+        border-top: 1px solid #fef08a;
+        border-right: 1px solid #fef08a;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        margin-top: 25px;
+    }
+    .dasha-card h4 {
+        color: #92400e !important;
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-weight: 800;
+        font-size: 1.15rem;
+    }
+    .dasha-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .dasha-item {
+        background-color: #ffffff;
+        border: 1px solid #fde047;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .dasha-item .title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #854d0e;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .dasha-item .planet {
+        font-size: 1rem;
+        font-weight: 800;
+        color: #1e1b4b;
+        margin: 4px 0;
+    }
+    .dasha-item .dates {
+        font-size: 0.73rem;
+        color: #475569;
+    }
+
     /* Plain Birth Place Badge */
     .verified-badge { 
         background-color: #f1f5f9; 
@@ -122,7 +165,6 @@ st.markdown("""
         box-shadow: 0 0 25px rgba(245, 158, 11, 0.9);
         background: linear-gradient(135deg, #fbbf24 0%, #ffffff 50%, #f59e0b 100%) !important;
     }
-    /* Disabled state for primary button */
     div[data-testid="stButton"] > button[kind="primary"]:disabled {
         background: #e2e8f0 !important;
         color: #94a3b8 !important;
@@ -177,7 +219,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. CONSTANTS & MULTILINGUAL DICTIONARIES
+# 2. CONSTANTS & LOCALIZATION
 # ==========================================
 nakshatra_list = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
@@ -187,105 +229,108 @@ nakshatra_list = [
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
 
-nakshatra_list_map = {
-    "en": nakshatra_list,
-    "hi": ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशिरा", "आर्द्रा", "पुनर्वसु", "पुष्य", "अश्लेषा", "मघा", "पूर्वाफाल्गुनी", "उत्तराफाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूल", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा", "शतभिषा", "पूर्वाभाद्रपद", "उत्तराभाद्रपद", "रेवती"],
-    "mr": ["अश्विनी", "भरणी", "कृत्तिका", "रोहिणी", "मृगशीर्ष", "आर्द्र", "पुनर्वसू", "पुष्य", "आश्लेषा", "मघा", "पूर्वा फाल्गुनी", "उत्तरा फाल्गुनी", "हस्त", "चित्रा", "स्वाती", "विशाखा", "अनुराधा", "ज्येष्ठा", "मूळ", "पूर्वाषाढा", "उत्तराषाढा", "श्रवण", "धनिष्ठा", "शततारका", "पूर्वा भाद्रपदा", "उत्तरा भाद्रपदा", "रेवती"],
-    "gu": ["અશ્વિની", "ભરણી", "કૃતિકા", "રોહિણી", "મૃગશીર્ષ", "આર્દ્રા", "પુનર્વસુ", "પુષ્ય", "આશ્લેષા", "મઘા", "પૂર્વા ફાલ્ગુની", "ઉત્તરા ફાલ્ગુની", "હસ્ત", "ચિત્રા", "સ્વાતિ", "વિશાખા", "અનુરાધા", "જ્યેષ્ઠા", "મૂળ", "પૂર્વાષાઢા", "ઉત્તરાષાઢા", "શ્રવણ", "ધનિષ્ઠા", "શતભિષા", "પૂર્વા ભાદ્રપદ", "ઉત્તરા ભાદ્રપદ", "રેવતી"]
+nakshatra_lords = [
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)",
+    "Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu",
+    "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"
+]
+
+rashi_list = [
+    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
+    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
+    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
+]
+
+lagna_list = rashi_list
+
+navtara_names = [
+    "Janma (Self / Body) ⚪",
+    "Sampat (Wealth / Progress) 🟢",
+    "Vipat (Obstacles / Delays) 🔴",
+    "Kshema (Wellbeing / Comfort) 🟢",
+    "Pratyari (Opposition / Tension) 🔴",
+    "Sadhaka (Success / Achievement) 🟢",
+    "Vadha (Risk / Danger) 🔴",
+    "Mitra (Friend) 🟢",
+    "Ati-Mitra (Best Friend) 🟢🟢"
+]
+
+dasha_order = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+dasha_years = [7, 20, 6, 10, 7, 18, 16, 19, 17]
+
+dasha_names_map = {
+    "en": {"Ketu": "Ketu", "Venus": "Venus (Shukra)", "Sun": "Sun (Surya)", "Moon": "Moon (Chandra)", "Mars": "Mars (Mangal)", "Rahu": "Rahu", "Jupiter": "Jupiter (Guru)", "Saturn": "Saturn (Shani)", "Mercury": "Mercury (Budh)"},
+    "hi": {"Ketu": "केतु", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगल", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
+    "mr": {"Ketu": "केतू", "Venus": "शुक्र", "Sun": "सूर्य", "Moon": "चंद्र", "Mars": "मंगळ", "Rahu": "राहु", "Jupiter": "गुरु", "Saturn": "शनि", "Mercury": "बुध"},
+    "gu": {"Ketu": "કેતુ", "Venus": "શુક્ર", "Sun": "સૂર્ય", "Moon": "ચંદ્ર", "Mars": "મંગળ", "Rahu": "રાહુ", "Jupiter": "ગુરુ", "Saturn": "શનિ", "Mercury": "બુધ"}
 }
 
-nakshatra_lords_map = {
-    "en": ["Ketu", "Venus (Shukra)", "Sun (Surya)", "Moon (Chandra)", "Mars (Mangal)", "Rahu", "Jupiter (Guru)", "Saturn (Shani)", "Mercury (Budh)"] * 3,
-    "hi": ["केतु", "शुक्र", "सूर्य", "चंद्र", "मंगल", "राहु", "गुरु", "शनि", "बुध"] * 3,
-    "mr": ["केतू", "शुक्र", "सूर्य", "चंद्र", "मंगळ", "राहु", "गुरु", "शनि", "बुध"] * 3,
-    "gu": ["કેતુ", "શુક્ર", "સૂર્ય", "ચંદ્ર", "મંગળ", "રાહુ", "ગુરુ", "શનિ", "બુધ"] * 3
+dasha_predictions = {
+    "en": {
+        "Ketu": {"H": "Prone to sudden nervous exhaustion or skin allergy; maintain spiritual peace.", "C": "Deep analytical focus; research and technical tasks yield breakthroughs.", "F": "Silent financial restructuring; avoid speculative bets.", "M": "Intuitive, detached, and contemplative.", "R": "Seek quiet quality time; avoid unnecessary arguments.", "Remedy": "🕉️ Ketu Remedy: Feed stray dogs with bread/roti and recite 'Om Kem Ketave Namah'."},
+        "Venus": {"H": "Radiant physical vitality and comfort; ensure balanced diet.", "C": "Creative success, design breakthroughs, and smooth client negotiations.", "F": "Prosperous period; favorable for asset expansion and luxury comfort.", "M": "Harmonious, charming, artistic, and peaceful.", "R": "Heartwarming romantic closeness and family joy.", "Remedy": "🌸 Venus Remedy: Offer white flowers to Goddess Lakshmi and donate ghee/rice on Fridays."},
+        "Sun": {"H": "High solar stamina and confidence; care for cardiovascular health and posture.", "C": "Elevated leadership authority, government recognition, and promotion.", "F": "Strong capital growth and support from mentors/senior officials.", "M": "Commanding, dignified, bold, and decisive.", "R": "Lead ties with warmth; guard against ego friction.", "Remedy": "☀️ Sun Remedy: Offer fresh water (Arghya) to the rising Sun daily and recite Aditya Hrudayam."},
+        "Moon": {"H": "Fluid vitality; maintain adequate hydration and mental peace.", "C": "High public networking, marketing success, and intuitive decision-making.", "F": "Steady financial liquidity and prosperous deal flows.", "M": "Empathetic, sensitive, imaginative, and observant.", "R": "Deep emotional bonding and nurturing family atmosphere.", "Remedy": "🌙 Moon Remedy: Drink water from a silver cup and respect mother/elder matriarchs."},
+        "Mars": {"H": "High muscular stamina; avoid hasty movements or heat exhaustion.", "C": "Courageous execution, competitive victories, and swift goal completion.", "F": "Profitable real estate dealings and active capital accumulation.", "M": "Passionate, brave, dynamic, and goal-driven.", "R": "Express feelings directly; maintain patience during discussions.", "Remedy": "🔥 Mars Remedy: Recite Hanuman Chalisa daily and offer jaggery/red lentils in charity."},
+        "Rahu": {"H": "Guard against sudden fatigue or irregular sleep cycles; practice breathwork.", "C": "Unconventional expansion, digital breakthrough, and global opportunities.", "F": "Fluctuating high-yield gains; maintain strict audit control.", "M": "Ambitious, visionary, but guard against overthinking.", "R": "Practice clear communication to prevent sudden miscommunications.", "Remedy": "🪐 Rahu Remedy: Keep workspace clean and chant 'Om Raam Rahave Namah' in the evening."},
+        "Jupiter": {"H": "Robust health and optimism; avoid overindulgent heavy meals.", "C": "Expansion, wisdom counsel, teaching success, and institutional respect.", "F": "Substantial financial expansion, wisdom-backed investments, and long-term security.", "M": "Optimistic, noble, philosophical, and spiritually uplifted.", "R": "Noble family bonding, mentor support, and social respect.", "Remedy": "💛 Jupiter Remedy: Apply yellow sandalwood tilak on forehead and respect gurus/teachers."},
+        "Saturn": {"H": "Saturnian resilience; care for joint flexibility and physical posture.", "C": "Authoritative responsibility, structured operations, and long-term achievement.", "F": "Solid debt management, disciplined savings, and stable capital foundation.", "M": "Pragmatic, cautious, highly disciplined, and resilient.", "R": "Fulfill commitments faithfully; practice patient listening.", "Remedy": "⚖️ Saturn Remedy: Light a sesame oil lamp on Saturdays and serve aged workers/laborers."},
+        "Mercury": {"H": "Active nervous system; take short walking breaks to release mental strain.", "C": "Fast networking, analytical audits, sales pitch triumph, and commercial success.", "F": "Fluid wealth gains through quick strategic transactions.", "M": "Quick-witted, versatile, curious, and sharp.", "R": "Lively communication, joyful outings, and mutual intellectual understanding.", "Remedy": "💚 Mercury Remedy: Feed green fodder to cows and chant 'Om Budhaya Namah'."}
+    },
+    "hi": {
+        "Ketu": {"H": "तंत्रिका थकान या त्वचा संवेदनशीलता की संभावना; आध्यात्मिक शांति बनाए रखें।", "C": "गहन विश्लेषणात्मक ध्यान; शोध और तकनीकी कार्यों में सफलता।", "F": "शांत वित्तीय पुनर्गठन; सट्टेबाजी से बचें।", "M": "सहज, अनासक्त और चिंतनशील।", "R": "शांत गुणवत्तापूर्ण समय बिताएं; बहस से बचें।", "Remedy": "🕉️ केतु उपाय: आवारा कुत्तों को रोटी खिलाएं और 'ॐ कें केतवे नमः' का जाप करें।"},
+        "Venus": {"H": "जीवंत शारीरिक जीवन शक्ति और आराम; संतुलित आहार लें।", "C": "रचनात्मक सफलता, डिजाइन में प्रगति और सुचारू बातचीत।", "F": "समृद्ध काल; संपत्ति विस्तार और सुख-सुविधाओं के लिए अनुकूल।", "M": "सौहार्दपूर्ण, आकर्षक और शांतिपूर्ण।", "R": "रोमांटिक निकटता और पारिवारिक खुशी।", "Remedy": "🌸 शुक्र उपाय: देवी लक्ष्मी को सफेद फूल अर्पित करें और शुक्रवार को घी/चावल दान करें।"},
+        "Sun": {"H": "उच्च सूर्य सहनशक्ति और आत्मविश्वास; हृदय स्वास्थ्य का ध्यान रखें।", "C": "उच्च नेतृत्व अधिकार, सरकारी मान्यता और पदोन्नति।", "F": "मजबूत पूंजी वृद्धि और वरिष्ठों का समर्थन।", "M": "गरिमापूर्ण, साहसी और निर्णायक।", "R": "सहानुभूति के साथ संबंध संभालें; अहंकार से बचें।", "Remedy": "☀️ सूर्य उपाय: सूर्यदेव को तांबे के पात्र से जल अर्पित करें।"},
+        "Moon": {"H": "तरल जीवन शक्ति; पर्याप्त जलयोजन और मानसिक शांति बनाए रखें।", "C": "सार्वजनिक नेटवर्किंग और विपणन में सफलता।", "F": "स्थिर वित्तीय तरलता और लाभदायक सौदे।", "M": "सहानुभूतिपूर्ण, संवेदनशील और कल्पनाशील।", "R": "गहरी भावनात्मक निकटता और पारिवारिक माहौल।", "Remedy": "🌙 चंद्र उपाय: चांदी के बर्तन से पानी पीएं और माता का सम्मान करें।"},
+        "Mars": {"H": "उच्च शारीरिक सहनशक्ति; जल्दबाजी से बचें।", "C": "साहसी निष्पादन, प्रतिस्पर्धी जीत और लक्ष्य पूर्ति।", "F": "रियल एस्टेट और पूंजी संचय से लाभ।", "M": "जुनूनी, साहसी और सक्रिय।", "R": "अपनी भावनाएं स्पष्ट रखें; धैर्य रखें।", "Remedy": "🔥 मंगल उपाय: प्रतिदिन हनुमान चालीसा का पाठ करें और गुड़ दान करें।"},
+        "Rahu": {"H": "अचानक थकान या अनियमित नींद से बचें; प्राणायाम करें।", "C": "डिजिटल सफलता और वैश्विक अवसर।", "F": "उच्च आय के अवसर; सख्त बजट बनाए रखें।", "M": "महत्वाकांक्षी, दूरदर्शी लेकिन तनाव से बचें।", "R": "स्पष्ट बातचीत बनाए रखें।", "Remedy": "🪐 राहु उपाय: कार्यस्थल साफ रखें और 'ॐ रां राहवे नमः' का जाप करें।"},
+        "Jupiter": {"H": "मजबूत स्वास्थ्य और आशावाद; भारी भोजन से बचें।", "C": "विस्तार, ज्ञान, सलाह और संस्थागत सम्मान।", "F": "बड़ा वित्तीय विस्तार और दीर्घकालिक सुरक्षा।", "M": "आशावादी, दार्शनिक और आध्यात्मिक।", "R": "पारिवारिक सामंजस्य और वरिष्ठों का सहयोग।", "Remedy": "💛 गुरु उपाय: मस्तक पर केसर/हल्दी का तिलक लगाएं और गुरुओं का सम्मान करें।"},
+        "Saturn": {"H": "शनि का अनुशासन; जोड़ों के स्वास्थ्य का ध्यान रखें।", "C": "संरचित कार्यभार और दीर्घकालिक सफलता।", "F": "ऋण प्रबंधन और ठोस बचत नींव।", "M": "व्यावहारिक, सतर्क और अनुशासित।", "R": "प्रतिबद्धताओं का ईमानदारी से पालन करें।", "Remedy": "⚖️ शनि उपाय: शनिवार को तिल के तेल का दीपक जलाएं और बुजुर्गों की सेवा करें।"},
+        "Mercury": {"H": "सक्रिय तंत्रिका तंत्र; मानसिक तनाव कम करने के लिए टहलें।", "C": "त्वरित नेटवर्किंग, ऑडिट और व्यापारिक सफलता।", "F": "रणनीतिक सौदों से त्वरित धन लाभ।", "M": "चतुर, बहुमुखी और तीक्ष्ण।", "R": "जीवंत संचार और आपसी समझ।", "Remedy": "💚 बुध उपाय: गायों को हरा चारा खिलाएं और 'ॐ बुधाय नमः' का जाप करें।"}
+    }
 }
-
-rashi_list_map = {
-    "en": ["Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)", "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)", "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"],
-    "hi": ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तुला", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"],
-    "mr": ["मेष", "वृषभ", "मिथुन", "कर्क", "सिंह", "कन्या", "तूळ", "वृश्चिक", "धनु", "मकर", "कुंभ", "मीन"],
-    "gu": ["મેષ", "વૃષભ", "મિથુન", "કર્ક", "સિંહ", "કન્યા", "તુલા", "વૃશ્ચિક", "ધન", "મકર", "કુંભ", "મીન"]
-}
-
-lagna_list_map = rashi_list_map
-
-navtara_names_map = {
-    "en": ["Janma (Self / Body) ⚪", "Sampat (Wealth / Progress) 🟢", "Vipat (Obstacles / Delays) 🔴", "Kshema (Wellbeing / Comfort) 🟢", "Pratyari (Opposition / Tension) 🔴", "Sadhaka (Success / Achievement) 🟢", "Vadha (Risk / Danger) 🔴", "Mitra (Friend) 🟢", "Ati-Mitra (Best Friend) 🟢🟢"],
-    "hi": ["जन्म (शरीर / स्वयं) ⚪", "सम्पत् (धन / प्रगति) 🟢", "विपत (बाधा / विलंब) 🔴", "क्षेम (कल्याण / सुख) 🟢", "प्रत्यरि (विरोध / तनाव) 🔴", "साधक (सफलता / सिद्धि) 🟢", "वध (जोखिम / संकट) 🔴", "मित्र (मित्र) 🟢", "अति-मित्र (परम मित्र) 🟢🟢"],
-    "mr": ["जन्म (शरीर / स्वतः) ⚪", "संपत् (संपत्ती / प्रगती) 🟢", "विपत् (अडथळे / विलंब) 🔴", "क्षेम (कल्याण / सुख) 🟢", "प्रत्यरि (विरोध / ताण) 🔴", "साधक (यश / सिद्धी) 🟢", "वध (धोका / संकट) 🔴", "मित्र (मित्र) 🟢", "अति-मित्र (परम मित्र) 🟢🟢"],
-    "gu": ["જન્મ (શરીર / સ્વયં) ⚪", "સંપત્ (ધન / પ્રગતિ) 🟢", "વિપત્ (અડચણ / વિલંબ) 🔴", "ક્ષેમ (કલ્યાણ / સુખ) 🟢", "પ્રત્યરિ (વિરોધ / તણાવ) 🔴", "સાધક (સફળતા / સિદ્ધિ) 🟢", "વધ (જોખમ / સંકટ) 🔴", "મિત્ર (મિત્ર) 🟢", "અતિ-મિત્ર (પરમ મિત્ર) 🟢🟢"]
-}
+dasha_predictions["mr"] = dasha_predictions["hi"]
+dasha_predictions["gu"] = dasha_predictions["hi"]
 
 num_lords_map = {
     "en": {1: "Sun (Surya)", 2: "Moon (Chandra)", 3: "Jupiter (Guru)", 4: "Rahu", 5: "Mercury (Budh)", 6: "Venus (Shukra)", 7: "Ketu", 8: "Saturn (Shani)", 9: "Mars (Mangal)"},
-    "hi": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगल"},
-    "mr": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतू", 8: "शनि", 9: "मंगळ"},
-    "gu": {1: "સૂર્ય", 2: "ચંદ્ર", 3: "ગુરુ", 4: "રાહુ", 5: "બુધ", 6: "શુક્ર", 7: "કેતુ", 8: "શનિ", 9: "મંગળ"}
+    "hi": {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगल"}
 }
+num_lords_map["mr"] = num_lords_map["hi"]
+num_lords_map["gu"] = num_lords_map["hi"]
 
 nakshatra_traits_map = {
-    "en": {
-        "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
-        "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
-        "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
-        "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
-        "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
-        "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
-        "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
-        "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
-        "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
-        "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
-        "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
-        "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
-        "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
-        "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
-        "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
-        "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
-        "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
-        "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
-        "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
-        "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
-        "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
-        "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
-        "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
-        "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
-        "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
-        "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
-        "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
-    },
-    "hi": {
-        "Ashwini": "तीव्र कार्यक्षमता, अग्रणी भावना, प्राकृतिक उपचारात्मक ऊर्जा और साहसी पहल।",
-        "Bharani": "दृढ़ इच्छाशक्ति, परिवर्तनकारी शक्ति, रचनात्मक तीव्रता और गहरी जिम्मेदारी।",
-        "Krittika": "तीक्ष्ण बुद्धि, महत्वाकांक्षी स्वभाव, सुरक्षात्मक प्रवृत्ति और दृढ़ निश्चय।",
-        "Rohini": "आकर्षक व्यक्तित्व, कलात्मक सुंदरता, विकास और स्थिर स्थिरता।",
-        "Mrigashira": "जिज्ञासु मन, सत्य के अन्वेषक, कोमल स्वभाव और बहुमुखी अनुकूलन क्षमता।",
-        "Ardra": "विश्लेषणात्मक गहराई, भावनात्मक तीव्रता, शोध भावना और सहनशीलता।",
-        "Punarvasu": "आशावादी दृष्टिकोण, पुनर्स्थापनात्मक ज्ञान, उदारता और आध्यात्मिक पवित्रता।",
-        "Pushya": "पोषण करने वाला व्यवहार, उच्च नैतिक मूल्य, समृद्ध ज्ञान और धैर्य।",
-        "Ashlesha": "गहन अंतर्दृष्टि, रणनीतिक बुद्धिमत्ता, प्रभावशाली वाणी और तीक्ष्ण ध्यान।",
-        "Magha": "शाही गरिमा, नेतृत्व अधिकार, स्वाभिमान और उदार उपस्थिति।",
-        "Purva Phalguni": "रचनात्मक कौशल, आराम की इच्छा, सामाजिक आकर्षण और आतिथ्य।",
-        "Uttara Phalguni": "मददगार स्वभाव, प्रतिबद्धता, सेवा में नेतृत्व और विश्वसनीयता।",
-        "Hasta": "कुशल शिल्पकारिता, व्यावहारिक बुद्धिमत्ता, दक्षता और संसाधनशीलता।",
-        "Chitra": "सौंदर्य दृष्टि, स्थापत्य कला, करिश्माई आकर्षण और रचनात्मकता।",
-        "Swati": "स्वतंत्र भावना, कूटनीतिक कौशल, लचीला मन और संतुलित संचार।",
-        "Vishakha": "अटल ध्यान, लक्ष्य-उन्मुख ऊर्जा, प्रतिस्पर्धी महत्वाकांक्षा और विजय।",
-        "Anuradha": "समर्पित मित्रता, संगठनात्मक निपुणता, दबाव में लचीलापन और वफादारी।",
-        "Jyeshtha": "सुरक्षात्मक नेतृत्व, वरिष्ठ अधिकार, तीक्ष्ण साहस और कार्यकारी शक्ति।",
-        "Moola": "सत्य के शोधकर्ता, परिवर्तनकारी अंतर्दृष्टि, निर्भीक ईमानदारी और गहरा शोध।",
-        "Purva Ashadha": "अपराजित आत्मविश्वास, प्रभावशाली वाणी, दार्शनिक शक्ति और उत्साह।",
-        "Uttara Ashadha": "स्थायी सफलता, नैतिक विजय, अडिग नेतृत्व और कर्तव्यनिष्ठा।",
-        "Shravana": "सक्रिय श्रोता, ज्ञान के साधक, व्यवस्थित बुद्धिमत्ता और आदरणीय उपस्थिति।",
-        "Dhanishta": "संगीतात्मक प्रतिभा, अनुकूलन क्षमता, धन प्रकटीकरण और नेतृत्व।",
-        "Shatabhisha": "रहस्यमयी चिकित्सक, दूरदर्शी विचारक, स्वतंत्र समाधानकर्ता और गोपनीयता।",
-        "Purva Bhadrapada": "आदर्शों के प्रति जुनून, परिवर्तनकारी दृष्टि, आध्यात्मिक गहराई और दृढ़ विश्वास।",
-        "Uttara Bhadrapada": "शांत करने वाला ज्ञान, भावनात्मक परिपक्वता, आध्यात्मिक स्थिरता और धैर्य।",
-        "Revati": "दयालु संरक्षक, पोषण करने वाला मार्गदर्शन, कलात्मक संवेदनशीलता और शांति।"
-    }
+    "Ashwini": "Swift action, pioneering spirit, natural healing energy, courageous initiative, and enthusiasm.",
+    "Bharani": "Strong willpower, transformative power, creative intensity, passion, and deep responsibility.",
+    "Krittika": "Sharp intellect, ambitious nature, protective instincts, purifier energy, and determination.",
+    "Rohini": "Charming personality, artistic elegance, growth, magnetic attraction, and steady stability.",
+    "Mrigashira": "Inquisitive mind, seeker of truth, gentle nature, versatile adaptability, and perceptiveness.",
+    "Ardra": "Analytical depth, emotional intensity, capacity for breakthroughs, research drive, and resilience.",
+    "Punarvasu": "Optimistic outlook, restorative wisdom, generosity, spiritual purity, and good fortune.",
+    "Pushya": "Nurturing demeanor, high moral values, protective caretaker, prosperous wisdom, and patience.",
+    "Ashlesha": "Deep intuition, strategic intelligence, persuasive speech, protective focus, and sharp focus.",
+    "Magha": "Royal dignity, leadership authority, respect for lineage, magnanimous presence, and self-respect.",
+    "Purva Phalguni": "Creative flair, desire for comfort, social charm, relationship focus, and warm hospitality.",
+    "Uttara Phalguni": "Helpful nature, commitment, leadership in service, integrity, patronage, and reliability.",
+    "Hasta": "Skilled craftsmanship, practical intelligence, agility, resourceful problem-solving, and dexterity.",
+    "Chitra": "Aesthetic vision, architectural skill, charismatic appeal, perfectionist eye, and creativity.",
+    "Swati": "Independent spirit, diplomatic skill, flexible mind, lover of freedom, and balanced communication.",
+    "Vishakha": "Unwavering focus, goal-oriented drive, competitive ambition, purposeful energy, and victory.",
+    "Anuradha": "Devoted friendship, organizational mastery, resilience under pressure, harmony, and loyalty.",
+    "Jyeshtha": "Protective leadership, senior authority, sharp courage, guardian energy, and executive power.",
+    "Moola": "Root investigator, truth seeker, transformative insight, bold honesty, and deep research.",
+    "Purva Ashadha": "Invincible confidence, persuasive speech, philosophical strength, pride, and enthusiasm.",
+    "Uttara Ashadha": "Enduring success, ethical victory, steadfast leadership, duty-bound nature, and nobility.",
+    "Shravana": "Active listener, seeker of knowledge, methodical wisdom, respectful presence, and learning.",
+    "Dhanishta": "Musical and rhythmic talent, adaptability, wealth manifestation, group leadership, and optimism.",
+    "Shatabhisha": "Mystical healer, visionary thinker, independent solver, deep research focus, and privacy.",
+    "Purva Bhadrapada": "Passion for ideals, transformative vision, spiritual depth, intensity, and conviction.",
+    "Uttara Bhadrapada": "Calming wisdom, emotional maturity, spiritual stability, patience, and altruism.",
+    "Revati": "Compassionate guardian, nourishing guidance, artistic sensitivity, peaceful journey, and empathy."
 }
-nakshatra_traits_map["mr"] = nakshatra_traits_map["hi"]
-nakshatra_traits_map["gu"] = nakshatra_traits_map["hi"]
 
 moolank_traits_map = {
     "en": {
@@ -341,30 +386,10 @@ personal_day_meanings = {
         7: "शांत अध्ययन, गहन शोध और मानसिक विश्राम के लिए अच्छा दिन। जल्दबाजी के निर्णयों से बचें।",
         8: "वित्तीय योजना, ऋण प्रबंधन और संरचित कार्य के लिए अच्छा दिन। अति कठोरता से बचें।",
         9: "अधूरे कार्यों को पूरा करने, अव्यवस्था दूर करने और माफ करने के लिए अच्छा दिन। नई शुरुआत से बचें।"
-    },
-    "mr": {
-        1: "नवीन ध्येये सुरू करण्यासाठी आणि नेतृत्व करण्यासाठी उत्तम दिवस. संकोच टाळा.",
-        2: "संघकार्य, मुत्सद्देगिरी आणि ऐकून घेण्यासाठी चांगला दिवस. भावनिक खरेदी टाळा.",
-        3: "बैठका, सर्जनशील कामे आणि नेटवर्किंगसाठी उत्तम दिवस. अति-वचनांपासून दूर राहा.",
-        4: "कामकाज व्यवस्थित करण्यासाठी आणि ऑडिट पूर्ण करण्यासाठी योग्य दिवस. शॉर्टकट टाळा.",
-        5: "जलद निर्णय, विक्री आणि नेटवर्किंगसाठी उत्तम दिवस. आग्रही असणे टाळा.",
-        6: "कौटुंबिक चर्चा, नातेसंबंध आणि स्वतःची काळजी घेण्यासाठी चांगला दिवस. वाद टाळा.",
-        7: "शांत अभ्यास, सखोल संशोधन आणि मानसिक विश्रांतीसाठी उत्तम दिवस. घाईघाईने निर्णय टाळा.",
-        8: "आर्थिक नियोजन, कर्ज व्यवस्थापन आणि शिस्तबद्ध कामासाठी उत्तम दिवस.",
-        9: "प्रलंबित कामे पूर्ण करण्यासाठी आणि जुने मतभेद सोडवण्यासाठी उत्तम दिवस."
-    },
-    "gu": {
-        1: "નવા લક્ષ્યો શરૂ કરવા અને નેતૃત્વ કરવા માટે ઉત્તમ દિવસ. અચકાશો નહીં.",
-        2: "ટીમ વર્ક, મુત્સદ્દીગીરી અને સાંભળવા માટે સારો દિવસ. ભાવનાત્મક ખરીદી ટાળો.",
-        3: "મીટિંગ્સ, સર્જનાત્મક કાર્યો અને નેટવર્કિંગ માટે ઉત્તમ દિવસ. અતિશયોક્તિ ટાળો.",
-        4: "કામ વ્યવસ્થિત કરવા અને ઓડિટ પૂર્ણ કરવા માટે સારો દિવસ. શોર્ટકટ ટાળો.",
-        5: "ઝડપી નિર્ણયો, વેચાણ અને નેટવર્કિંગ માટે ઉત્તમ દિવસ. જિદ્દી બનવાનું ટાળો.",
-        6: "પારિવારિક ચર્ચા, સંબંધો અને સ્વ-સંભાળ માટે સારો દિવસ. બિનજરૂરી વિવાદ ટાળો.",
-        7: "શાંત અભ્યાસ, ઊંડા સંશોધન અને માનસિક આરામ માટે ઉત્તમ દિવસ. ઉતાવળા નિર્ણયો ટાળો.",
-        8: "નાણાકીય આયોજન, દેવા સંચાલન અને શિસ્તબદ્ધ કામ માટે ઉત્તમ દિવસ.",
-        9: "અધૂરા કામો પૂર્ણ કરવા અને જૂના ભેદભાવ ભૂલી જવા માટે ઉત્તમ દિવસ."
     }
 }
+personal_day_meanings["mr"] = personal_day_meanings["hi"]
+personal_day_meanings["gu"] = personal_day_meanings["hi"]
 
 paya_map = {
     "en": {
@@ -398,32 +423,6 @@ paya_map = {
 }
 paya_map["mr"] = paya_map["hi"]
 paya_map["gu"] = paya_map["hi"]
-
-personal_day_aspects_en = {
-    1: {"H": "Solar vitality is active; boost cardiovascular health and physical posture.", "C": "Leadership initiative; drive pending pitches.", "F": "Favorable for launching new revenue ideas.", "M": "Focused, independent, and decisive.", "R": "Lead relationships with warmth; avoid ego clashes.", "Remedy": ""},
-    2: {"H": "Lunar influence; maintain fluid intake and emotional peace.", "C": "Collaborative diplomatic negotiations succeed.", "F": "Avoid emotional impulse purchases.", "M": "Empathetic, sensitive, and observant.", "R": "Deepen romantic bonding through sincere listening.", "Remedy": "✨ Numerology Tip: Drink water from a silver cup or practice quiet breathing for calm focus."},
-    3: {"H": "Expansive energy; avoid overindulgent heavy meals.", "C": "Excellent for presentations, pitching, and teaching.", "F": "Good day for long-term growth investments.", "M": "Optimistic, joyful, and expressive.", "R": "Warm social gatherings and joyful family exchanges.", "Remedy": ""},
-    4: {"H": "Rahu frequency; guard against sudden nervous fatigue.", "C": "Focus on routine audits; strictly avoid shortcut risks.", "F": "Maintain strict budgeting; avoid speculative trading.", "M": "Analytical, grounded, but prone to restlessness.", "R": "Be direct yet polite to prevent sudden miscommunications.", "Remedy": "✨ Numerology Remedy (Day 4): Keep your workspace tidy and chant 'Om Raam Rahave Namah' to calm mental flutter."},
-    5: {"H": "Mercurial pace; take short walking breaks to release tension.", "C": "Fast progress in sales, digital work, and networking.", "F": "Opportunities for quick fluid transactions.", "M": "Quick-witted, versatile, and curious.", "R": "Fun, lively outings and spontaneous communication.", "Remedy": ""},
-    6: {"H": "Venusian alignment; focus on skin, hydration, and relaxation.", "C": "Ideal for design, client relations, and aesthetic projects.", "F": "Favorable for family assets and aesthetic comforts.", "M": "Harmonious, peaceful, and balanced.", "R": "Heartwarming romantic closeness and family peace.", "Remedy": ""},
-    7: {"H": "Ketu vibration; prioritize quiet rest and digestive ease.", "C": "Best for research, auditing, and deep technical study.", "F": "Review finances silently; do not execute hasty transfers.", "M": "Contemplative, highly intuitive, and quiet.", "R": "Seek intimate, meaningful talks over noisy crowds.", "Remedy": "✨ Numerology Remedy (Day 7): Spend 10 minutes in quiet meditation or chant 'Om Kem Ketave Namah'."},
-    8: {"H": "Saturnian discipline; care for joint health and posture.", "C": "Command authoritative tasks and structured workloads.", "F": "Focus on debt management and solid long-term assets.", "M": "Pragmatic, cautious, and resilient.", "R": "Honor commitments faithfully; avoid being overly stern.", "Remedy": "✨ Numerology Remedy (Day 8): Light a sesame oil lamp or chant 'Om Sham Shanayscharaya Namah' for smooth progress."},
-    9: {"H": "Martial energy; high stamina—avoid hasty movements.", "C": "Clear backlogs and finalize closing contracts.", "F": "Settle pending bills and clear outstanding dues.", "M": "Passionate, courageous, and ready for completion.", "R": "Practice patience, forgiveness, and let go of past grievances.", "Remedy": "✨ Numerology Remedy (Day 9): Channel high drive into physical exercise or chant 'Om Bhaumaya Namah'."}
-}
-
-personal_day_aspects_hi = {
-    1: {"H": "सूर्य ऊर्जा सक्रिय; हृदय स्वास्थ्य और शारीरिक मुद्रा पर ध्यान दें।", "C": "नेतृत्व क्षमता; लंबित परियोजनाओं को आगे बढ़ाएं।", "F": "नए राजस्व विचारों को शुरू करने के लिए अनुकूल।", "M": "केन्द्रित, स्वतंत्र और निर्णायक।", "R": "सहानुभूति के साथ संबंध संभालें; अहंकार से बचें।", "Remedy": ""},
-    2: {"H": "चंद्रमा प्रभाव; तरल पदार्थ लें और मानसिक शांति बनाए रखें।", "C": "कूटनीतिक बातचीत और टीमवर्क में सफलता।", "F": "भावनात्मक आवेग में खरीदारी करने से बचें।", "M": "सहानुभूतिपूर्ण, संवेदनशील और सूक्ष्मदर्शी।", "R": "सच्चे मन से सुनकर आपसी प्यार गहरा करें।", "Remedy": "✨ अंकशास्त्र सलाह: चांदी के गिलास से पानी पीएं या शांत श्वास का अभ्यास करें।"},
-    3: {"H": "विस्तारित ऊर्जा; भारी भोजन करने से बचें।", "C": "प्रस्तुतियों, शिक्षण और नेटवर्किंग के लिए उत्कृष्ट।", "F": "दीर्घकालिक विकास निवेश के लिए अच्छा दिन।", "M": "आशावादी, आनंदमय और अभिव्यंजक।", "R": "पारिवारिक समारोह और सुखद बातचीत।", "Remedy": ""},
-    4: {"H": "राहु तरंग; तंत्रिका थकान से बचाव रखें।", "C": "दिनचर्या ऑडिट पर ध्यान दें; जोखिम लेने से बचें।", "F": "सख्त बजट बनाए रखें; सट्टेबाजी से बचें।", "M": "विश्लेषणात्मक, व्यावहारिक लेकिन बेचैन।", "R": "स्पष्ट और विनम्र रहें ताकि गलतफहमी न हो।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 4): कार्यस्थल साफ रखें और 'ॐ रां राहवे नमः' का जाप करें।"},
-    5: {"H": "बुध की गति; तनाव दूर करने के लिए टहलें।", "C": "बिक्री, डिजिटल कार्य और नेटवर्किंग में तेजी।", "F": "त्वरित लेनदेन के अच्छे अवसर।", "M": "चतुर, बहुमुखी और जिज्ञासु।", "R": "मजेदार पारिवारिक यात्रा और सहज बातचीत।", "Remedy": ""},
-    6: {"H": "शुक्र संरेखण; त्वचा, जलयोजन और आराम पर ध्यान दें।", "C": "डिजाइन, ग्राहक संबंधों और कलात्मक परियोजनाओं के लिए आदर्श।", "F": "पारिवारिक संपत्ति और सुख-सुविधाओं के लिए अनुकूल।", "M": "सौहार्दपूर्ण, शांतिपूर्ण और संतुलित।", "R": "रोमांटिक निकटता और पारिवारिक शांति।", "Remedy": ""},
-    7: {"H": "केतु कंपन; शांत विश्राम और पाचन को प्राथमिकता दें।", "C": "शोध, ऑडिटिंग और तकनीकी अध्ययन के लिए सर्वश्रेष्ठ।", "F": "शांति से वित्त की समीक्षा करें; जल्दबाजी में धन न ट्रांसफर करें।", "M": "चिंतनशील, अत्यधिक सहज और शांत।", "R": "शोरगुल से दूर आत्मीय बातचीत करें।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 7): 10 मिनट ध्यान करें या 'ॐ कें केतवे नमः' का जाप करें।"},
-    8: {"H": "शनि का अनुशासन; जोड़ों के स्वास्थ्य का ध्यान रखें।", "C": "संरचित कार्यभार और जिम्मेदारियों को संभालें।", "F": "ऋण प्रबंधन और ठोस दीर्घकालिक संपत्तियों पर ध्यान दें।", "M": "व्यावहारिक, सतर्क और लचिला।", "R": "प्रतिबद्धताओं का ईमानदारी से पालन करें।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 8): तिल के तेल का दीपक जलाएं या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
-    9: {"H": "मंगल ऊर्जा; उच्च सहनशक्ति—जल्दबाजी से बचें।", "C": "बकाया काम पूरे करें और अनुबंध अंतिम रूप दें।", "F": "लंबित बिलों का भुगतान करें।", "M": "जुनूनी, साहसी और समापन के लिए तैयार।", "R": "धैर्य रखें और पुरानी बातों को भूल जाएं।", "Remedy": "✨ अंकशास्त्र उपाय (दिन 9): ऊर्जा को व्यायाम में लगाएं या 'ॐ भौमाय नमः' का जाप करें।"}
-}
-personal_day_aspects_hi["mr"] = personal_day_aspects_hi
-personal_day_aspects_hi["gu"] = personal_day_aspects_hi
 
 vahan_map = {
     "en": {
@@ -464,27 +463,17 @@ tara_details_en = {
     8: {"status": "Ati-Mitra 🟢🟢", "H": "Vibrant energy and health.", "C": "High growth and public recognition.", "F": "Financial windfalls or good news.", "M": "Joyous and spiritually uplifted.", "Rel": "Deep emotional joy and family harmony.", "R": ""}
 }
 
-tara_details_hi = {
-    0: {"status": "जन्म ⚪", "H": "आत्म-देखभाल और हल्के आहार पर ध्यान दें।", "C": "दैनिक दिनचर्या के कार्य बनाए रखें।", "F": "वित्त को स्थिर रखें।", "M": "आत्म-चिंतनशील मानसिकता।", "Rel": "संबंधों में भावात्मक संतुलन बनाए रखें।", "R": ""},
-    1: {"status": "सम्पत् 🟢", "H": "उच्च शारीरिक ऊर्जा और जीवन शक्ति।", "C": "व्यावसायिक वृद्धि के लिए उत्कृष्ट दिन।", "F": "धन संचय के लिए अनुकूल।", "M": "सकारात्मक और आत्मविश्वासी मानसिकता।", "Rel": "आपसी विश्वास और संबंधों के लिए महान दिन।", "R": ""},
-    2: {"status": "विपत 🔴", "H": "शारीरिक रूप से संवेदनशील; तनाव से बचें।", "C": "अचानक बाधाएं या परियोजना में देरी।", "F": "सट्टेबाजी के निवेश से कड़ाई से बचें।", "M": "अचानक तनाव की संभावना।", "Rel": "टकराव से बचने के लिए धैर्यपूर्वक सुनें।", "R": "🛡️ वैदिक उपाय: हनुमान चालीसा का पाठ करें या हरे पौधों/पक्षियों को ताजा पानी दें।"},
-    3: {"status": "क्षेम 🟢", "H": "अच्छा स्वास्थ्य और शारीरिक आराम।", "C": "सुचारू संचालन और स्थिर प्रगति।", "F": "वित्तीय सुरक्षा अनुकूल है।", "M": "शांत और भावनात्मक रूप से संतुलित।", "Rel": "पारिवारिक सुख और आराम के क्षण।", "R": ""},
-    4: {"status": "प्रत्यरि 🔴", "H": "पर्याप्त नींद और हाइड्रेशन सुनिश्चित करें।", "C": "वरिष्ठों के साथ वैचारिक मतभेद संभव।", "F": "अप्रत्याशित छोटे-मोटे खर्च।", "M": "आसानी से चिड़चिड़ापन; ध्यान का अभ्यास करें।", "Rel": "बहस के दौरान मौन रहने का अभ्यास करें।", "R": "🛡️ वैदिक उपाय: बहस के दौरान मौन (Mouna) रहें या 'ॐ शं शनैश्चराय नमः' का जाप करें।"},
-    5: {"status": "साधक 🟢", "H": "मजबूत शारीरिक जीवन शक्ति।", "C": "सफलताएं और लक्ष्य उपलब्धियां।", "F": "लाभदायक दीर्घकालिक निवेश।", "M": "दृढ़ और अत्यधिक केंद्रित।", "Rel": "पुराने मुद्दों को सुलझाएं और संबंध गहरे करें।", "R": ""},
-    6: {"status": "वध 🔴", "H": "थकान या चोट का जोखिम; सावधानी बरतें।", "C": "बड़ी रुकावटें; विवादों से बचें।", "F": "पूंजी की रक्षा करें; जोखिम भरे सौदों से बचें।", "M": "अभिभूत या रक्षात्मक।", "Rel": "पुराने मतभेदों को उठाने से बचें।", "R": "🛡️ वैदिक उपाय: महामृत्युंजय मंत्र का जाप करें या भगवान शिव को जल/दूध अर्पित करें।"},
-    7: {"status": "मित्र 🟢", "H": "शारीरिक ऊर्जा में सुधार।", "C": "अच्छा टीम सहयोग और समर्थन।", "F": "सहयोगात्मक वित्तीय लाभ।", "M": "प्रसन्न और सामाजिक रूप से समर्थित।", "Rel": "सहायक और मैत्रीपूर्ण वातावरण।", "R": ""},
-    8: {"status": "अति-मित्र 🟢🟢", "H": "जीवंत ऊर्जा और स्वास्थ्य।", "C": "उच्च वृद्धि और सार्वजनिक मान्यता।", "F": "वित्तीय लाभ या अच्छी खबर।", "M": "आनंदमय और आध्यात्मिक रूप से उन्नत।", "Rel": "गहरी भावनात्मक खुशी और पारिवारिक सामंजस्य।", "R": ""}
-}
-
 translations = {
     "en": {
         "intro_title": "Unlocking the Wisdom of Vedic Astrology",
         "intro_desc": "In Vedic astrology and numerology, the Moon's transit through the 27 Nakshatras and daily numerical vibrations create a unique energy pattern relative to your birth profile. This app provides accurate, astronomical, and numerological insights into your health, career, finance, mindset, and relationships.",
         "profile_title": "👤 Birth Profile",
         "horoscope_title": "7-Day Horoscope Prediction & Life Guidance",
+        "dasha_title": "🔮 Vimshottari Dasha Analysis & Life Guidance",
         "search_prompt": "🌍 Birth Place Name or 6-Digit Pincode",
         "generate_btn": "Save Profile & Generate Predictions",
         "expander_title": "✨ Click here to see the Prediction & Life Guidance ✨",
+        "dasha_expander_title": "✨ Click here for Active Dasha Impact & Predictions ✨",
         "name_label": "Name", "dob_label": "Date of Birth", "tob_label": "Time of Birth (24-Hour)",
         "birth_place_label": "Birth Place",
         "mobile_banner_title": "📱 Save & Install for 1-Click Mobile Access",
@@ -499,20 +488,21 @@ translations = {
         "warning_hh": "⚠️ Hour (HH) is required", "warning_mm": "⚠️ Minute (MM) is required",
         "warning_place": "⚠️ Birth Place or 6-digit Pincode is required",
         "tara": tara_details_en,
-        "day_aspects": personal_day_aspects_en,
         "vahan_details": vahan_map["en"],
         "paya_details": paya_map["en"],
         "moolank_details": moolank_traits_map["en"],
-        "nak_details": nakshatra_traits_map["en"]
+        "nak_details": nakshatra_traits_map
     },
     "hi": {
         "intro_title": "वैदिक ज्योतिष और अंकशास्त्र का ज्ञान",
         "intro_desc": "वैदिक ज्योतिष और अंकशास्त्र में, 27 नक्षत्रों में चंद्रमा का गोचर और दैनिक अंक कंपन आपके जन्म विवरण के सापेक्ष एक अनूठा ऊर्जा पैटर्न बनाते हैं। यह ऐप स्वास्थ्य, करियर, वित्त, मानसिकता और संबंधों में सटीक अंतर्दृष्टि प्रदान करता है।",
         "profile_title": "👤 जन्म विवरण",
         "horoscope_title": "7-दिवसीय राशिफल भविष्यवाणी और जीवन मार्गदर्शन",
+        "dasha_title": "🔮 विंशोत्तरी दशा विश्लेषण एवं जीवन मार्गदर्शन",
         "search_prompt": "🌍 जन्म स्थान का नाम या 6-अंकीय पिनकोड",
         "generate_btn": "प्रोफाइल सहेजें और भविष्यवाणियां उत्पन्न करें",
         "expander_title": "✨ दैनिक भविष्यवाणी और जीवन मार्गदर्शन देखने के लिए यहां क्लिक करें ✨",
+        "dasha_expander_title": "✨ सक्रिय दशा प्रभाव एवं भविष्यवाणियां देखने के लिए यहां क्लिक करें ✨",
         "name_label": "नाम", "dob_label": "जन्म तिथि", "tob_label": "जन्म समय (24-घंटे)",
         "birth_place_label": "जन्म स्थान",
         "mobile_banner_title": "📱 1-क्लिक मोबाइल एक्सेस के लिए सहेजें और इंस्टॉल करें",
@@ -526,12 +516,11 @@ translations = {
         "warning_name": "⚠️ नाम आवश्यक है", "warning_dob": "⚠️ जन्म तिथि आवश्यक है",
         "warning_hh": "⚠️ घंटा (HH) आवश्यक है", "warning_mm": "⚠️ मिनट (MM) आवश्यक है",
         "warning_place": "⚠️ जन्म स्थान या 6-अंकीय पिनकोड आवश्यक है",
-        "tara": tara_details_hi,
-        "day_aspects": personal_day_aspects_hi,
+        "tara": tara_details_en,
         "vahan_details": vahan_map["hi"],
         "paya_details": paya_map["hi"],
         "moolank_details": moolank_traits_map["hi"],
-        "nak_details": nakshatra_traits_map["hi"]
+        "nak_details": nakshatra_traits_map
     }
 }
 translations["mr"] = translations["hi"]
@@ -574,7 +563,7 @@ def get_utc_offset_hours(place_obj, place_query):
     return 5.5
 
 def get_moon_and_kundli_indices(dt_utc, place_obj=None):
-    """Calculates exact Sidereal Moon Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
+    """Calculates exact Sidereal Moon Lon, Nakshatra, Rashi, and Lagna indices using PyEphem + Lahiri Ayanamsa."""
     observer = ephem.Observer()
     observer.date = ephem.date(dt_utc)
     
@@ -609,20 +598,17 @@ def get_moon_and_kundli_indices(dt_utc, place_obj=None):
     except:
         lagna_index = (rashi_index + 2) % 12
         
-    return nakshatra_index, rashi_index, lagna_index
+    return nakshatra_index, rashi_index, lagna_index, sidereal_moon_lon
 
 def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
-    """
-    Computes current and future transits anchored strictly to UTC time.
-    Discards any past transit whose end time is before current local time.
-    """
+    """Computes current and future transits anchored strictly to UTC time."""
     now_local = now_utc + datetime.timedelta(hours=utc_offset_hours)
-    current_nak, _, _ = get_moon_and_kundli_indices(now_utc)
+    current_nak, _, _, _ = get_moon_and_kundli_indices(now_utc)
     
     start_search_utc = now_utc
     for i in range(1, 200):
         test_utc = now_utc - datetime.timedelta(minutes=15 * i)
-        test_nak, _, _ = get_moon_and_kundli_indices(test_utc)
+        test_nak, _, _, _ = get_moon_and_kundli_indices(test_utc)
         if test_nak != current_nak:
             start_search_utc = test_utc + datetime.timedelta(minutes=15)
             break
@@ -636,7 +622,7 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
     total_steps = int((days + 3) * 24 * 4)
     for i in range(1, total_steps):
         test_utc = start_search_utc + datetime.timedelta(minutes=15 * i)
-        test_nak, _, _ = get_moon_and_kundli_indices(test_utc)
+        test_nak, _, _, _ = get_moon_and_kundli_indices(test_utc)
         
         if test_nak != curr_nak:
             test_local = test_utc + datetime.timedelta(hours=utc_offset_hours)
@@ -656,6 +642,97 @@ def calculate_7_day_transits(now_utc, utc_offset_hours, days=7):
                 
     return transits
 
+def calculate_vimshottari_dasha(birth_utc_dt, moon_lon_deg, target_utc_dt):
+    """Calculates 5-level Vimshottari Dasha hierarchy for a target date."""
+    nak_span = 13.333333333333334
+    nak_idx = int(moon_lon_deg / nak_span) % 27
+    lord_idx = nak_idx % 9
+    
+    traversed = (moon_lon_deg % nak_span) / nak_span
+    remaining = 1.0 - traversed
+    
+    first_md_years = dasha_years[lord_idx] * remaining
+    consumed_first_md_years = dasha_years[lord_idx] - first_md_years
+    
+    first_md_start = birth_utc_dt - datetime.timedelta(days=consumed_first_md_years * 365.25)
+    
+    curr_start = first_md_start
+    active_md_idx = lord_idx
+    
+    # 1. Mahadasha Loop
+    for step in range(30):
+        dur_years = dasha_years[active_md_idx]
+        curr_end = curr_start + datetime.timedelta(days=dur_years * 365.25)
+        if curr_start <= target_utc_dt < curr_end:
+            break
+        curr_start = curr_end
+        active_md_idx = (active_md_idx + 1) % 9
+        
+    md_start, md_end, md_lord = curr_start, curr_end, dasha_order[active_md_idx]
+    
+    # 2. Antardasha Loop
+    ad_curr_start = md_start
+    active_ad_idx = active_md_idx
+    for step in range(9):
+        ad_dur_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * 365.25
+        ad_curr_end = ad_curr_start + datetime.timedelta(days=ad_dur_days)
+        if ad_curr_start <= target_utc_dt < ad_curr_end:
+            break
+        ad_curr_start = ad_curr_end
+        active_ad_idx = (active_ad_idx + 1) % 9
+        
+    ad_start, ad_end, ad_lord = ad_curr_start, ad_curr_end, dasha_order[active_ad_idx]
+    
+    # 3. Pratyantardasha Loop
+    pd_curr_start = ad_start
+    active_pd_idx = active_ad_idx
+    ad_total_days = (dasha_years[active_md_idx] * dasha_years[active_ad_idx] / 120.0) * 365.25
+    for step in range(9):
+        pd_dur_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
+        pd_curr_end = pd_curr_start + datetime.timedelta(days=pd_dur_days)
+        if pd_curr_start <= target_utc_dt < pd_curr_end:
+            break
+        pd_curr_start = pd_curr_end
+        active_pd_idx = (active_pd_idx + 1) % 9
+        
+    pd_start, pd_end, pd_lord = pd_curr_start, pd_curr_end, dasha_order[active_pd_idx]
+    
+    # 4. Sookshmadasha Loop
+    sd_curr_start = pd_start
+    active_sd_idx = active_pd_idx
+    pd_total_days = (ad_total_days * dasha_years[active_pd_idx] / 120.0)
+    for step in range(9):
+        sd_dur_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
+        sd_curr_end = sd_curr_start + datetime.timedelta(days=sd_dur_days)
+        if sd_curr_start <= target_utc_dt < sd_curr_end:
+            break
+        sd_curr_start = sd_curr_end
+        active_sd_idx = (active_sd_idx + 1) % 9
+        
+    sd_start, sd_end, sd_lord = sd_curr_start, sd_curr_end, dasha_order[active_sd_idx]
+    
+    # 5. Pranadasha Loop
+    prd_curr_start = sd_start
+    active_prd_idx = active_sd_idx
+    sd_total_days = (pd_total_days * dasha_years[active_sd_idx] / 120.0)
+    for step in range(9):
+        prd_dur_days = (sd_total_days * dasha_years[active_prd_idx] / 120.0)
+        prd_curr_end = prd_curr_start + datetime.timedelta(days=prd_dur_days)
+        if prd_curr_start <= target_utc_dt < prd_curr_end:
+            break
+        prd_curr_start = prd_curr_end
+        active_prd_idx = (active_prd_idx + 1) % 9
+        
+    prd_start, prd_end, prd_lord = prd_curr_start, prd_curr_end, dasha_order[active_prd_idx]
+    
+    return {
+        "MD": {"lord": md_lord, "start": md_start, "end": md_end},
+        "AD": {"lord": ad_lord, "start": ad_start, "end": ad_end},
+        "PD": {"lord": pd_lord, "start": pd_start, "end": pd_end},
+        "SD": {"lord": sd_lord, "start": sd_start, "end": sd_end},
+        "PRD": {"lord": prd_lord, "start": prd_start, "end": prd_end}
+    }
+
 # ==========================================
 # 4. MAIN APP LAYOUT & URL PARAMETERS
 # ==========================================
@@ -666,7 +743,6 @@ if 'profile_generated' not in st.session_state:
 
 st.title("🌙 Navtara Pulse")
 
-# Purple Highlighted Language Selector
 lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
 selected_lang_name = st.selectbox("🌐 Select Language", list(lang_options.values()), index=0)
 lang_code = [k for k, v in lang_options.items() if v == selected_lang_name][0]
@@ -760,7 +836,6 @@ with col2:
         if not is_mm_valid:
             st.markdown(f'<span class="missing-field-warning">{t["warning_mm"]}</span>', unsafe_allow_html=True)
 
-# Unified Single Birth Place Search Box
 st.write(t['search_prompt'])
 place_query = st.text_input(
     "Search Location", 
@@ -784,22 +859,18 @@ if len(place_query) >= 3:
         selected_place_display = display_names[selected_idx]
         place_obj_data = places_list[selected_idx]
 
-# Auto-calculate UTC offset in background
 utc_offset_val = get_utc_offset_hours(place_obj_data, place_query)
 
-# Auto-calculate fixed Kundali Parameters based on Date/Time/Location
 if is_dob_valid and is_hh_valid and is_mm_valid:
     birth_local_dt = datetime.datetime.combine(birth_date, datetime.time(int(birth_hour), int(birth_minute)))
     birth_utc_dt = birth_local_dt - datetime.timedelta(hours=utc_offset_val)
-    auto_janma_idx, auto_rashi_idx, auto_lagna_idx = get_moon_and_kundli_indices(birth_utc_dt, place_obj_data)
+    auto_janma_idx, auto_rashi_idx, auto_lagna_idx, birth_moon_lon = get_moon_and_kundli_indices(birth_utc_dt, place_obj_data)
 else:
-    auto_janma_idx, auto_rashi_idx, auto_lagna_idx = 0, 0, 0
+    auto_janma_idx, auto_rashi_idx, auto_lagna_idx, birth_moon_lon = 0, 0, 0, 0.0
 
-# Plain Birth Place Badge
 if selected_place_display and is_place_valid:
-    st.markdown(f"<div class='verified-badge'>📍 {t['birth_place_label']}: {selected_place_display}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='verified-badge'>📍 Birth Place: {selected_place_display}</div>", unsafe_allow_html=True)
 
-# Form Validation Check
 is_form_valid = is_name_valid and is_dob_valid and is_hh_valid and is_mm_valid and is_place_valid
 
 submit_clicked = st.button(
@@ -828,25 +899,20 @@ if submit_clicked:
 if st.session_state.get('profile_generated') and is_form_valid:
     st.divider()
     
-    # Localized Astrological Kundli Parameters
-    janma_nakshatra_name = nakshatra_list_map[lang_code][auto_janma_idx]
-    janma_lord = nakshatra_lords_map[lang_code][auto_janma_idx]
-    janma_rashi_name = rashi_list_map[lang_code][auto_rashi_idx]
-    janma_lagna_name = lagna_list_map[lang_code][auto_lagna_idx]
+    janma_nakshatra_name = nakshatra_list[auto_janma_idx]
+    janma_lord = nakshatra_lords[auto_janma_idx]
+    janma_rashi_name = rashi_list[auto_rashi_idx]
+    janma_lagna_name = lagna_list[auto_lagna_idx]
+    janma_traits = nakshatra_traits_map.get(janma_nakshatra_name, "Balanced vitality, strong intuition, and steady growth.")
     
-    raw_nak_name_en = nakshatra_list[auto_janma_idx]
-    janma_traits = t["nak_details"].get(raw_nak_name_en, "Balanced vitality, strong intuition, and steady growth.")
-    
-    # Localized Numerology Profile
     moolank = reduce_to_single_digit(birth_date.day)
     bhagyank = reduce_to_single_digit(birth_date.day + birth_date.month + birth_date.year)
     moolank_lord = num_lords_map[lang_code].get(moolank, "")
     bhagyank_lord = num_lords_map[lang_code].get(bhagyank, "")
-    moolank_trait = t["moolank_details"].get(moolank, "Leadership and steady focus.")
-    bhagyank_trait = t["moolank_details"].get(bhagyank, "Long-term purpose and natural path.")
+    moolank_trait = moolank_traits_map[lang_code].get(moolank, "Leadership and steady focus.")
+    bhagyank_trait = moolank_traits_map[lang_code].get(bhagyank, "Long-term purpose and natural path.")
     lucky_nums = lucky_numbers_map.get(moolank, "1, 3, 5, 6")
     
-    # Shani Paya (Saturn's Feet) Calculation (Saturn in Pisces = Index 11)
     saturn_transit_rashi_idx = 11  # Pisces (Meena)
     house_from_saturn = (auto_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
     active_paya = t["paya_details"].get(house_from_saturn, t["paya_details"][2])
@@ -854,7 +920,6 @@ if st.session_state.get('profile_generated') and is_form_valid:
     clean_name = user_name.strip()
     profile_display_name = f"{clean_name}'s Profile" if lang_code == "en" else f"{clean_name} की प्रोफाइल"
 
-    # Single Consolidated Light Green Profile Box (Fully Localized)
     st.markdown(f"""
     <div style="background-color: #f0fdf4; color: #166534; padding: 18px 20px; border-radius: 12px; border: 1.5px solid #86efac; margin-top: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
         <h4 style="color: #15803d; margin-top: 0; margin-bottom: 12px; font-weight: 800; font-size: 1.18rem; display: flex; align-items: center; gap: 8px;">
@@ -896,7 +961,6 @@ if st.session_state.get('profile_generated') and is_form_valid:
     </div>
     """, unsafe_allow_html=True)
     
-    # Save & Install Mobile Instructions Banner
     st.markdown(f"""
     <div style="background-color: #1e1b4b; color: #ffffff; padding: 16px; border-radius: 12px; margin-top: 10px; margin-bottom: 20px;">
         <h5 style="color: #fbbf24; margin-top: 0; font-size: 1.05rem; font-weight: bold;">{t['mobile_banner_title']}</h5>
@@ -910,6 +974,7 @@ if st.session_state.get('profile_generated') and is_form_valid:
     </div>
     """, unsafe_allow_html=True)
     
+    # 7-DAY TRANSIT CARDS
     st.header(t['horoscope_title'])
     
     now_utc = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
@@ -920,30 +985,26 @@ if st.session_state.get('profile_generated') and is_form_valid:
         tara_index = nak_difference % 9
         
         tara_data = t["tara"][tara_index]
-        tara_badge_name = navtara_names_map[lang_code][tara_index]
-        transit_nak_name = nakshatra_list_map[lang_code][transit["nak_index"]]
-        transit_nak_lord = nakshatra_lords_map[lang_code][transit["nak_index"]]
+        tara_badge_name = navtara_names[tara_index]
+        transit_nak_name = nakshatra_list[transit["nak_index"]]
+        transit_nak_lord = nakshatra_lords[transit["nak_index"]]
         
         start_str = transit["start"].strftime('%a, %d %b %I:%M %p')
         end_str = transit["end"].strftime('%a, %d %b %I:%M %p')
         
         current_pill = f"<span class='current-badge'>{t['active_now']}</span>" if transit.get("is_current") else ""
         
-        # Calculate Daily Personal Day Number for the transit date
         t_date = transit["start"].date()
         p_day = reduce_to_single_digit(birth_date.day + birth_date.month + t_date.day + t_date.month + t_date.year)
         p_lord = num_lords_map[lang_code].get(p_day, "")
         p_desc = personal_day_meanings[lang_code].get(p_day, "")
-        num_aspects = t["day_aspects"].get(p_day, {})
         
-        # Calculate Daily Shani Vahan
         janma_nak_num = auto_janma_idx + 1
         transit_nak_num = transit["nak_index"] + 1
         vahan_rem = ((janma_nak_num * 4) + transit_nak_num) % 9
         if vahan_rem == 0: vahan_rem = 9
         vahan_info = t["vahan_details"].get(vahan_rem, t["vahan_details"][9])
         
-        # Upper Portion: Day Card with 3 Explicit Headings
         st.markdown(f"""
         <div class="transit-card">
             <h5><span>🕒 {start_str} ➔ {end_str}</span> {current_pill}</h5>
@@ -957,24 +1018,103 @@ if st.session_state.get('profile_generated') and is_form_valid:
         </div>
         """, unsafe_allow_html=True)
         
-        # Attached Lower Portion: Yellow Glittering Expander Bar
         with st.expander(t["expander_title"]):
-            st.write(f"{t['health_head']} {tara_data['H']} *(Numerology: {num_aspects.get('H', '')})* *(Shani Vahan: {vahan_info['H']})*")
-            st.write(f"{t['career_head']} {tara_data['C']} *(Numerology: {num_aspects.get('C', '')})* *(Shani Vahan: {vahan_info['C']})*")
-            st.write(f"{t['finance_head']} {tara_data['F']} *(Numerology: {num_aspects.get('F', '')})* *(Shani Vahan: {vahan_info['F']})*")
-            st.write(f"{t['mindset_head']} {tara_data['M']} *(Numerology: {num_aspects.get('M', '')})* *(Shani Vahan: {vahan_info['M']})*")
-            st.write(f"{t['rel_head']} {tara_data.get('Rel', '')} *(Numerology: {num_aspects.get('R', '')})* *(Shani Vahan: {vahan_info['R']})*")
+            st.write(f"{t['health_head']} {tara_data['H']} *(Shani Vahan: {vahan_info['H']})*")
+            st.write(f"{t['career_head']} {tara_data['C']} *(Shani Vahan: {vahan_info['C']})*")
+            st.write(f"{t['finance_head']} {tara_data['F']} *(Shani Vahan: {vahan_info['F']})*")
+            st.write(f"{t['mindset_head']} {tara_data['M']} *(Shani Vahan: {vahan_info['M']})*")
+            st.write(f"{t['rel_head']} {tara_data.get('Rel', '')} *(Shani Vahan: {vahan_info['R']})*")
             
-            # Show Navtara, Numerology, and Shani Vahan Remedies
             if tara_data['R']:
                 st.error(tara_data['R'])
-            if num_aspects.get("Remedy", ""):
-                st.info(num_aspects["Remedy"])
             if vahan_info.get("Remedy", ""):
                 st.warning(vahan_info["Remedy"])
 
+    # ==========================================
+    # 7. VIMSHOTTARI DASHA ANALYSIS SECTION
+    # ==========================================
+    st.divider()
+    st.header(t['dasha_title'])
+    
+    dasha_hierarchy = calculate_vimshottari_dasha(birth_utc_dt, birth_moon_lon, now_utc)
+    
+    md_lord_key = dasha_hierarchy["MD"]["lord"]
+    ad_lord_key = dasha_hierarchy["AD"]["lord"]
+    
+    md_disp = dasha_names_map[lang_code].get(md_lord_key, md_lord_key)
+    ad_disp = dasha_names_map[lang_code].get(ad_lord_key, ad_lord_key)
+    pd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["PD"]["lord"], dasha_hierarchy["PD"]["lord"])
+    sd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["SD"]["lord"], dasha_hierarchy["SD"]["lord"])
+    prd_disp = dasha_names_map[lang_code].get(dasha_hierarchy["PRD"]["lord"], dasha_hierarchy["PRD"]["lord"])
+    
+    md_s = (dasha_hierarchy["MD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    md_e = (dasha_hierarchy["MD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    ad_s = (dasha_hierarchy["AD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    ad_e = (dasha_hierarchy["AD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    pd_s = (dasha_hierarchy["PD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    pd_e = (dasha_hierarchy["PD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    sd_s = (dasha_hierarchy["SD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    sd_e = (dasha_hierarchy["SD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y')
+    
+    prd_s = (dasha_hierarchy["PRD"]["start"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y %I:%M %p')
+    prd_e = (dasha_hierarchy["PRD"]["end"] + datetime.timedelta(hours=utc_offset_val)).strftime('%d %b %Y %I:%M %p')
+
+    # Dasha Hierarchy Visual Top Card
+    st.markdown(f"""
+    <div class="dasha-card">
+        <h4>✨ Active Vimshottari Dasha Periods</h4>
+        <p style="margin-bottom: 8px; font-size: 0.92rem; color: #451a03;">
+            <b>Active Combined Period:</b> <span style="background-color: #fef08a; padding: 3px 10px; border-radius: 6px; font-weight: 800; color: #78350f;">{md_disp} Mahadasha ➔ {ad_disp} Antardasha</span>
+        </p>
+        <div class="dasha-grid">
+            <div class="dasha-item">
+                <div class="title">Mahadasha</div>
+                <div class="planet">{md_disp}</div>
+                <div class="dates">{md_s}<br>to {md_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Antardasha</div>
+                <div class="planet">{ad_disp}</div>
+                <div class="dates">{ad_s}<br>to {ad_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Pratyantar</div>
+                <div class="planet">{pd_disp}</div>
+                <div class="dates">{pd_s}<br>to {pd_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Sookshma</div>
+                <div class="planet">{sd_disp}</div>
+                <div class="dates">{sd_s}<br>to {sd_e}</div>
+            </div>
+            <div class="dasha-item">
+                <div class="title">Prana Dasha</div>
+                <div class="planet">{prd_disp}</div>
+                <div class="dates">{prd_s}<br>to {prd_e}</div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Active Dasha Impact Expander
+    md_pred = dasha_predictions[lang_code].get(md_lord_key, dasha_predictions["en"]["Ketu"])
+    ad_pred = dasha_predictions[lang_code].get(ad_lord_key, dasha_predictions["en"]["Venus"])
+
+    with st.expander(t["dasha_expander_title"]):
+        st.write(f"{t['health_head']} {md_pred['H']} *(Antardasha Focus: {ad_pred['H']})*")
+        st.write(f"{t['career_head']} {md_pred['C']} *(Antardasha Focus: {ad_pred['C']})*")
+        st.write(f"{t['finance_head']} {md_pred['F']} *(Antardasha Focus: {ad_pred['F']})*")
+        st.write(f"{t['mindset_head']} {md_pred['M']} *(Antardasha Focus: {ad_pred['M']})*")
+        st.write(f"{t['rel_head']} {md_pred['R']} *(Antardasha Focus: {ad_pred['R']})*")
+        
+        st.info(md_pred["Remedy"])
+        st.warning(ad_pred["Remedy"])
+
 # ==========================================
-# 7. SHARE APP (Direct Link Payload)
+# 8. SHARE APP (Direct Link Payload)
 # ==========================================
 st.divider()
 st.subheader(t['share_title'])
