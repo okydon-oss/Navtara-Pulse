@@ -1,7 +1,6 @@
 import os
 import json
 import datetime
-import urllib.parse
 import streamlit as st
 
 # Dependency checking for Swiss Ephemeris
@@ -16,19 +15,101 @@ except ImportError:
     st.code("pip install pyswisseph requests streamlit", language="bash")
     st.stop()
 
+# Streamlit Page Config - 'centered' provides a natural mobile layout
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="centered",
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS styling for cards, badges, and table elements
+# Mobile-Optimized CSS Styling
 st.markdown("""
     <style>
+    /* Hide Streamlit default headers & footers for native app feel */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
     
+    /* Make block container adapt gracefully to mobile screens */
+    .block-container {
+        padding-top: 1.5rem !important;
+        padding-bottom: 2.5rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+        max-width: 650px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Prevent auto-zooming on mobile inputs & ensure touch-friendly size */
+    input[type="text"], input[type="email"], select {
+        font-size: 16px !important;
+        min-height: 46px !important;
+        border-radius: 10px !important;
+    }
+    
+    /* Primary buttons touch-friendly */
+    .stButton > button {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        min-height: 48px !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+    }
+
+    /* Headings and labels scaling */
+    h1 {
+        font-size: 1.75rem !important;
+        font-weight: 800 !important;
+        text-align: center !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    h2 {
+        font-size: 1.35rem !important;
+        font-weight: 700 !important;
+    }
+    
+    h3 {
+        font-size: 1.15rem !important;
+        font-weight: 600 !important;
+    }
+
+    /* Mobile-optimized Login Card */
+    .mobile-login-card {
+        background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
+        color: #ffffff;
+        padding: 22px 18px;
+        border-radius: 16px;
+        border: 1px solid #4338ca;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        margin-bottom: 1.25rem;
+    }
+
+    .mobile-login-card h3 {
+        color: #fbbf24 !important;
+        margin-top: 0 !important;
+        margin-bottom: 8px !important;
+        font-size: 1.2rem !important;
+        text-align: center;
+    }
+
+    .mobile-login-card p {
+        color: #cbd5e1 !important;
+        font-size: 0.92rem !important;
+        line-height: 1.45 !important;
+        text-align: center;
+        margin-bottom: 0 !important;
+    }
+
+    /* Transit cards & Table responsiveness */
+    .stTable {
+        font-size: 0.88rem !important;
+        overflow-x: auto !important;
+        display: block !important;
+    }
+
+    /* Custom badges */
     .status-badge-danger {
         color: #ef4444 !important;
         font-weight: 800;
@@ -36,22 +117,6 @@ st.markdown("""
     .status-badge-golden {
         color: #10b981 !important;
         font-weight: 800;
-    }
-    .login-container {
-        background-color: #1e1b4b;
-        color: #ffffff;
-        padding: 24px;
-        border-radius: 14px;
-        border: 1px solid #4338ca;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-    }
-    .transit-card {
-        background-color: #0f172a;
-        color: #f8fafc;
-        padding: 16px;
-        border-radius: 10px;
-        border-left: 5px solid #6366f1;
-        margin-bottom: 12px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -225,42 +290,48 @@ def find_7day_transitions(start_utc_dt: datetime.datetime):
     })
     return transitions
 
+# Session State Auth Setup
 if "user_info" not in st.session_state:
     st.session_state.user_info = None
 
+# ---------------------------------------------------------
+# AUTHENTICATION SCREEN (FULL MOBILE FIT)
+# ---------------------------------------------------------
 if not st.session_state.user_info:
-    st.markdown("<h1 style='text-align: center;'>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
-    st.divider()
+    st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #94a3b8; margin-top: -6px; font-size: 0.92rem;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
+    st.write("")
 
-    col_l, col_m, col_r = st.columns([1, 2, 1])
-    with col_m:
-        st.markdown("""
-        <div class="login-container">
-            <h3 style="margin-top: 0; color: #fbbf24;">🔐 User Sign-In</h3>
-            <p style="color: #cbd5e1; font-size: 0.95rem;">
-                Sign in with your email or Google Account. Your Janma Nakshatra and birth parameters will be permanently saved to your profile.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+    # Full-width responsive card (no squishing columns)
+    st.markdown("""
+    <div class="mobile-login-card">
+        <h3>🔐 User Sign-In</h3>
+        <p>
+            Sign in with your Gmail address. Your Janma Nakshatra and birth parameters will be permanently saved to your profile.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.write("")
-        login_email = st.text_input("Email / Gmail Address", placeholder="e.g. yourname@gmail.com")
-        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
+    login_email = st.text_input("Email / Gmail Address", placeholder="e.g. yourname@gmail.com")
+    display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
 
-        if st.button("🚀 Continue to Navtara Pulse", use_container_width=True, type="primary"):
-            if login_email and "@" in login_email:
-                cleaned_email = login_email.strip().lower()
-                cleaned_name = display_name.strip() if display_name else cleaned_email.split("@")[0]
-                st.session_state.user_info = {
-                    "email": cleaned_email,
-                    "name": cleaned_name
-                }
-                st.rerun()
-            else:
-                st.warning("⚠️ Please provide a valid email address.")
+    st.write("")
+    if st.button("🚀 Continue to Navtara Pulse", use_container_width=True, type="primary"):
+        if login_email and "@" in login_email:
+            cleaned_email = login_email.strip().lower()
+            cleaned_name = display_name.strip() if display_name else cleaned_email.split("@")[0]
+            st.session_state.user_info = {
+                "email": cleaned_email,
+                "name": cleaned_name
+            }
+            st.rerun()
+        else:
+            st.warning("⚠️ Please provide a valid email address.")
     st.stop()
 
+# ---------------------------------------------------------
+# LOGGED-IN MOBILE DASHBOARD
+# ---------------------------------------------------------
 user_email = st.session_state.user_info["email"]
 user_display = st.session_state.user_info["name"]
 
@@ -272,6 +343,7 @@ if (
 
 prof = st.session_state.current_profile
 
+# Sidebar Configuration for Profiles
 with st.sidebar:
     st.markdown(f"**Logged in as:** `{user_email}`")
     if st.button("🚪 Sign Out", use_container_width=True):
@@ -317,20 +389,24 @@ with st.sidebar:
 janma_idx = prof.get("nakshatra_idx", 1)
 janma_name = NAKSHATRAS[janma_idx]
 
-st.title("✨ Navtara Pulse")
+st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
 st.markdown(
-    f"Welcome, **{prof.get('name')}** | Janma Nakshatra: **{janma_name}** (`Index {janma_idx + 1}/27`) | Location: **{prof.get('place')}**"
+    f"<p style='text-align: center; font-size: 0.95rem; margin-top: -6px;'>"
+    f"Welcome, <b>{prof.get('name')}</b><br>"
+    f"Janma Nakshatra: <b>{janma_name}</b> (<code>#{janma_idx + 1}/27</code>)"
+    f"</p>",
+    unsafe_allow_html=True
 )
 
 tab1, tab2, tab3 = st.tabs([
-    "🗓️ 7-Day Navtara Matrix",
-    "🔮 Energy Forecast & Guidance",
-    "🪐 Planetary Positions"
+    "🗓️ 7-Day Matrix",
+    "🔮 Forecast",
+    "🪐 Planetary"
 ])
 
 with tab1:
     st.subheader("Daily Moon Transition Table (Next 7 Days)")
-    st.caption("Continuous lunar transits computed with Swiss Ephemeris Chitrapaksha Lahiri Ayanamsa.")
+    st.caption("Computed with Swiss Ephemeris Chitrapaksha Lahiri Ayanamsa.")
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
     ist_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
@@ -351,30 +427,30 @@ with tab1:
         else:
             status_str = cat
 
-        start_ist = t["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
+        start_ist = t["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M)")
         end_ist = t["end"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
 
         table_rows.append({
             "Status": status_str,
-            "Day, Date & Time to Day, Date & Time": f"**{start_ist} – {end_ist}**",
-            "Nakshatra Name": f"**{nak_name}**",
-            "Navtara Series": f"{cat} ({NAVTARA_DESCRIPTIONS.get(cat, '')}) — *Series {series}*"
+            "Time Range (IST)": f"{start_ist} – {end_ist}",
+            "Nakshatra": f"{nak_name}",
+            "Series": f"{cat} ({series})"
         })
 
-    st.table(table_rows)
+    st.dataframe(table_rows, use_container_width=True, hide_index=True)
 
 with tab2:
-    st.subheader("7-Day Transit Energy Forecast & Life Strategy")
-    st.caption("Strategic guidance tailored to your Janma Nakshatra for each upcoming window.")
+    st.subheader("7-Day Energy Forecast & Guidance")
+    st.caption("Strategic guidance tailored to your Janma Nakshatra.")
 
     guidance_map = {
         "Janma": "Focus on self-care, physical vitality, and routine grounding. Avoid starting high-strain structural tasks.",
         "Sampat": "Prime window for capital growth, investment evaluation, contract discussions, and financial planning.",
         "Vipat": "High-risk window. Avoid speculative trades, high-leverage positions, and unverified business commitments.",
         "Kshema": "Supportive and protective window. Excellent for health recovery, operational maintenance, and family time.",
-        "Pratyari": "Keep communication gentle and diplomatic. Avoid arguments, confrontations, or aggressive sales negotiations.",
+        "Pratyari": "Keep communication gentle and diplomatic. Avoid arguments, confrontations, or aggressive negotiations.",
         "Sadhana": "Peak productivity window. Outstanding for completing complex research, technical challenges, and major milestones.",
-        "Vadha": "Maximum caution window. Exercise restraint, keep physical strain low, and postpone non-essential high-stakes meetings.",
+        "Vadha": "Maximum caution window. Exercise restraint, keep physical strain low, and postpone high-stakes meetings.",
         "Mitra": "Friendly, cooperative energy. Ideal for networking, partnership building, and harmonious team collaboration.",
         "Ati-Mitra": "Supreme auspicious window. Highest support for ambitious launches, major milestones, and strategic decisions."
     }
@@ -386,20 +462,15 @@ with tab2:
         end_ist = t["end"].astimezone(ist_tz).strftime("%a, %d %b %H:%M IST")
 
         status_prefix = "🔴" if cat in ["Vipat", "Pratyari", "Vadha"] else ("🟢🟢" if cat == "Ati-Mitra" else ("🟢" if cat in ["Mitra", "Sampat"] else "⚪"))
-        card_label = f"{status_prefix} {cat} — Moon in {nak_name} ({start_ist} to {end_ist})"
+        card_label = f"{status_prefix} {cat} — {nak_name} ({start_ist} to {end_ist})"
 
-        with st.expander(card_label, expanded=(idx < 2)):
-            col_a, col_b = st.columns([1, 2])
-            with col_a:
-                st.markdown(f"**Navtara Category:** {cat}")
-                st.markdown(f"**Cycle Series:** Series {series}")
-                st.markdown(f"**Core Archetype:** {NAVTARA_DESCRIPTIONS.get(cat, '')}")
-            with col_b:
-                st.markdown("**Operational Directive:**")
-                st.write(guidance_map.get(cat, "Maintain steady, disciplined focus on ongoing priorities."))
+        with st.expander(card_label, expanded=(idx == 0)):
+            st.markdown(f"**Navtara Category:** {cat} (Series {series})")
+            st.markdown(f"**Core Archetype:** {NAVTARA_DESCRIPTIONS.get(cat, '')}")
+            st.markdown(f"**Operational Directive:** {guidance_map.get(cat, 'Maintain steady, disciplined focus.')}")
 
 with tab3:
-    st.subheader("Current Sidereal Planetary Positions (Lahiri Ayanamsa)")
+    st.subheader("Sidereal Planetary Positions (Lahiri)")
     jd_now = dt_to_jd(now_utc)
     planets = [
         ("Sun", swe.SUN), ("Moon", swe.MOON), ("Mars", swe.MARS),
@@ -413,27 +484,24 @@ with tab3:
         r_idx, r_deg = lon_to_rashi(lon)
         n_idx, pada = lon_to_nakshatra(lon)
         coords.append({
-            "Planetary Body": name,
-            "Sidereal Longitude": f"{lon:.2f}°",
-            "Zodiac Sign (Rashi)": RASHIS[r_idx],
-            "Degrees in Sign": f"{r_deg:.2f}°",
-            "Nakshatra Placement": f"{NAKSHATRAS[n_idx]} (Pada {pada})"
+            "Planet": name,
+            "Sign": RASHIS[r_idx].split(" ")[0],
+            "Deg": f"{r_deg:.1f}°",
+            "Nakshatra": f"{NAKSHATRAS[n_idx]} ({pada})"
         })
 
-    # Ketu placement (180 degrees from Rahu)
     rahu_lon = get_sidereal_lon(jd_now, swe.MEAN_NODE)
     ketu_lon = (rahu_lon + 180.0) % 360.0
     kr_idx, kr_deg = lon_to_rashi(ketu_lon)
     kn_idx, k_pada = lon_to_nakshatra(ketu_lon)
     coords.append({
-        "Planetary Body": "Ketu",
-        "Sidereal Longitude": f"{ketu_lon:.2f}°",
-        "Zodiac Sign (Rashi)": RASHIS[kr_idx],
-        "Degrees in Sign": f"{kr_deg:.2f}°",
-        "Nakshatra Placement": f"{NAKSHATRAS[kn_idx]} (Pada {k_pada})"
+        "Planet": "Ketu",
+        "Sign": RASHIS[kr_idx].split(" ")[0],
+        "Deg": f"{kr_deg:.1f}°",
+        "Nakshatra": f"{NAKSHATRAS[kn_idx]} ({k_pada})"
     })
 
-    st.dataframe(coords, use_container_width=True)
+    st.dataframe(coords, use_container_width=True, hide_index=True)
 
 st.divider()
-st.caption("Navtara Pulse Engine • Powered by Swiss Ephemeris Chitrapaksha Lahiri Sidereal Astronomical Framework")
+st.caption("Navtara Pulse Engine • Swiss Ephemeris Lahiri Sidereal Framework")
