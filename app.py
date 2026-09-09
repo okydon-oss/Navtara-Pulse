@@ -802,22 +802,19 @@ if "selected_transit_idx" not in st.session_state:
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
-col_top_l, col_top_r = st.columns([2.8, 1.2])
-with col_top_l:
-    render_html(f"""
-        <div style='display:flex; align-items:center; gap:12px; margin-bottom:4px;'>
-            <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.65rem; box-shadow:0 4px 12px rgba(245,158,11,0.28); flex-shrink:0;'>
-                ✨
-            </div>
-            <div>
-                <h1 style='margin:0; font-size:1.52rem; color:#0f172a; font-weight:900; line-height:1.2;'>{t('app_title', current_lang)}</h1>
-                <div style='font-size:0.86rem; color:#64748b; font-weight:600; margin-top:2px;'>{t('app_subtitle', current_lang)}</div>
-            </div>
+render_html(f"""
+    <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
+        <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:72px; height:72px; border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:2.35rem; box-shadow:0 8px 26px rgba(245,158,11,0.35); margin-bottom:10px;'>
+            ✨
         </div>
-    """)
+        <h1 style='margin:0; font-size:2.15rem; color:#0f172a; font-weight:900; line-height:1.2; text-align:center;'>{t('app_title', current_lang)}</h1>
+        <div style='font-size:1rem; color:#64748b; font-weight:600; margin-top:6px; text-align:center;'>{t('app_subtitle', current_lang)}</div>
+    </div>
+""")
 
-with col_top_r:
-    lang_opts = {"en": "English", "hi": "हिन्दी", "mr": "मराठी", "gu": "ગુજરાતી"}
+col_lang_l, col_lang_c, col_lang_r = st.columns([1, 1.4, 1])
+with col_lang_c:
+    lang_opts = {"en": "🌐 English", "hi": "🌐 हिन्दी", "mr": "🌐 मराठी", "gu": "🌐 ગુજરાતી"}
     selected_lang_code = st.selectbox(
         "Language",
         options=list(lang_opts.keys()),
