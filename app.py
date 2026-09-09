@@ -23,7 +23,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Mobile-Optimized CSS Styling
+# Mobile-Optimized & Light Catchy CSS Styling
 st.markdown("""
     <style>
     /* Hide Streamlit default headers & footers for native app feel */
@@ -33,7 +33,7 @@ st.markdown("""
     
     /* Make block container adapt gracefully to mobile screens */
     .block-container {
-        padding-top: 1.5rem !important;
+        padding-top: 1.25rem !important;
         padding-bottom: 2.5rem !important;
         padding-left: 1rem !important;
         padding-right: 1rem !important;
@@ -57,7 +57,7 @@ st.markdown("""
         width: 100% !important;
     }
 
-    /* Headings and labels scaling */
+    /* Headings scaling */
     h1 {
         font-size: 1.75rem !important;
         font-weight: 800 !important;
@@ -69,54 +69,97 @@ st.markdown("""
         font-size: 1.35rem !important;
         font-weight: 700 !important;
     }
-    
-    h3 {
-        font-size: 1.15rem !important;
-        font-weight: 600 !important;
-    }
 
-    /* Mobile-optimized Login Card */
-    .mobile-login-card {
-        background: linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%);
-        color: #ffffff;
-        padding: 22px 18px;
-        border-radius: 16px;
-        border: 1px solid #4338ca;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+    /* Light, Catchy & Fresh Mobile Login Card */
+    .mobile-login-card-light {
+        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 45%, #eff6ff 100%);
+        padding: 22px 18px 18px 18px;
+        border-radius: 20px;
+        border: 1.5px solid #cbd5e1;
+        box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.16), 0 6px 12px -4px rgba(16, 185, 129, 0.1);
         margin-bottom: 1.25rem;
+        text-align: center;
     }
 
-    .mobile-login-card h3 {
-        color: #fbbf24 !important;
+    .mobile-login-card-light h3 {
+        color: #0f172a !important;
         margin-top: 0 !important;
-        margin-bottom: 8px !important;
-        font-size: 1.2rem !important;
-        text-align: center;
+        margin-bottom: 6px !important;
+        font-size: 1.28rem !important;
+        font-weight: 800 !important;
     }
 
-    .mobile-login-card p {
-        color: #cbd5e1 !important;
-        font-size: 0.92rem !important;
+    .mobile-login-card-light p {
+        color: #475569 !important;
+        font-size: 0.90rem !important;
         line-height: 1.45 !important;
-        text-align: center;
-        margin-bottom: 0 !important;
+        margin-bottom: 12px !important;
     }
 
-    /* Transit cards & Table responsiveness */
-    .stTable {
-        font-size: 0.88rem !important;
-        overflow-x: auto !important;
-        display: block !important;
+    /* Social Badge Chips */
+    .social-pills-wrap {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 6px;
     }
 
-    /* Custom badges */
-    .status-badge-danger {
-        color: #ef4444 !important;
-        font-weight: 800;
+    .social-badge-google {
+        background: #ffffff;
+        color: #dc2626;
+        border: 1px solid #fca5a5;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    .status-badge-golden {
-        color: #10b981 !important;
-        font-weight: 800;
+
+    .social-badge-whatsapp {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #6ee7b7;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .social-badge-facebook {
+        background: #eff6ff;
+        color: #2563eb;
+        border: 1px solid #93c5fd;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    /* Provider notification banner */
+    .provider-banner {
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 0.88rem;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+    .provider-banner-google {
+        background-color: #fef2f2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+    .provider-banner-whatsapp {
+        background-color: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+    }
+    .provider-banner-facebook {
+        background-color: #eff6ff;
+        color: #1e40af;
+        border: 1px solid #bfdbfe;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -156,7 +199,7 @@ NAVTARA_DESCRIPTIONS = {
 DB_FILE = "users_database.json"
 
 def load_all_users():
-    """Reads the JSON database containing user profiles keyed by email address."""
+    """Reads the JSON database containing user profiles keyed by identifier."""
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, "r") as f:
@@ -165,11 +208,11 @@ def load_all_users():
             return {}
     return {}
 
-def get_user_profile(user_email: str, default_name: str = "User"):
+def get_user_profile(user_id: str, default_name: str = "User", auth_provider: str = "Google"):
     """Fetches user record from disk or creates default template."""
     db = load_all_users()
-    if user_email in db:
-        record = db[user_email]
+    if user_id in db:
+        record = db[user_id]
         if "dob" in record and isinstance(record["dob"], str):
             try:
                 record["dob"] = datetime.date.fromisoformat(record["dob"])
@@ -183,8 +226,9 @@ def get_user_profile(user_email: str, default_name: str = "User"):
         return record
 
     return {
-        "email": user_email,
+        "user_id": user_id,
         "name": default_name,
+        "auth_provider": auth_provider,
         "dob": datetime.date(1990, 1, 1),
         "tob": datetime.time(12, 0),
         "place": "Chhatrapati Sambhajinagar, India",
@@ -194,7 +238,7 @@ def get_user_profile(user_email: str, default_name: str = "User"):
         "nakshatra_idx": 1  # Bharani default
     }
 
-def save_user_profile(user_email: str, profile_data: dict) -> bool:
+def save_user_profile(user_id: str, profile_data: dict) -> bool:
     """Serializes and saves the user record to JSON storage."""
     try:
         db = load_all_users()
@@ -203,7 +247,7 @@ def save_user_profile(user_email: str, profile_data: dict) -> bool:
             to_store["dob"] = to_store["dob"].isoformat()
         if isinstance(to_store.get("tob"), datetime.time):
             to_store["tob"] = to_store["tob"].isoformat()
-        db[user_email] = to_store
+        db[user_id] = to_store
         with open(DB_FILE, "w") as f:
             json.dump(db, f, indent=2)
         return True
@@ -295,57 +339,93 @@ if "user_info" not in st.session_state:
     st.session_state.user_info = None
 
 # ---------------------------------------------------------
-# AUTHENTICATION SCREEN (FULL MOBILE FIT)
+# AUTHENTICATION SCREEN (LIGHT & CATCHY + GOOGLE / WHATSAPP / FACEBOOK)
 # ---------------------------------------------------------
 if not st.session_state.user_info:
     st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #94a3b8; margin-top: -6px; font-size: 0.92rem;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #64748b; margin-top: -6px; font-size: 0.92rem;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
     st.write("")
 
-    # Full-width responsive card (no squishing columns)
+    # Light, catchy and welcoming card
     st.markdown("""
-    <div class="mobile-login-card">
-        <h3>🔐 User Sign-In</h3>
+    <div class="mobile-login-card-light">
+        <h3>🌟 Welcome to Navtara Pulse</h3>
         <p>
-            Sign in with your Gmail address. Your Janma Nakshatra and birth parameters will be permanently saved to your profile.
+            Choose your preferred sign-in method to sync and permanently save your Janma Nakshatra and birth parameters.
         </p>
+        <div class="social-pills-wrap">
+            <span class="social-badge-google">🔴 Google</span>
+            <span class="social-badge-whatsapp">🟢 WhatsApp</span>
+            <span class="social-badge-facebook">🔵 Facebook</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-    login_email = st.text_input("Email / Gmail Address", placeholder="e.g. yourname@gmail.com")
-    display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
+    # Multi-Provider Selector
+    auth_choice = st.radio(
+        "Select Sign-in Method",
+        ["Google", "WhatsApp", "Facebook"],
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+
+    if auth_choice == "Google":
+        st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign in with your Google / Gmail Account</div>', unsafe_allow_html=True)
+        login_input = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com")
+        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
+        btn_label = "🚀 Continue with Google"
+        btn_color = "primary"
+
+    elif auth_choice == "WhatsApp":
+        st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign in with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
+        login_input = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210")
+        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
+        btn_label = "💬 Continue with WhatsApp"
+        btn_color = "primary"
+
+    else:  # Facebook
+        st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign in with your Facebook Account</div>', unsafe_allow_html=True)
+        login_input = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com")
+        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
+        btn_label = "📘 Continue with Facebook"
+        btn_color = "primary"
 
     st.write("")
-    if st.button("🚀 Continue to Navtara Pulse", use_container_width=True, type="primary"):
-        if login_email and "@" in login_email:
-            cleaned_email = login_email.strip().lower()
-            cleaned_name = display_name.strip() if display_name else cleaned_email.split("@")[0]
+    if st.button(btn_label, use_container_width=True, type=btn_color):
+        cleaned_id = login_input.strip().lower() if login_input else ""
+        if cleaned_id:
+            cleaned_name = display_name.strip() if display_name else cleaned_id.split("@")[0]
             st.session_state.user_info = {
-                "email": cleaned_email,
-                "name": cleaned_name
+                "user_id": cleaned_id,
+                "name": cleaned_name,
+                "provider": auth_choice
             }
             st.rerun()
         else:
-            st.warning("⚠️ Please provide a valid email address.")
+            st.warning(f"⚠️ Please enter a valid {auth_choice} credential to continue.")
     st.stop()
 
 # ---------------------------------------------------------
 # LOGGED-IN MOBILE DASHBOARD
 # ---------------------------------------------------------
-user_email = st.session_state.user_info["email"]
+user_id = st.session_state.user_info["user_id"]
 user_display = st.session_state.user_info["name"]
+auth_provider = st.session_state.user_info.get("provider", "Google")
 
 if (
     "current_profile" not in st.session_state
-    or st.session_state.current_profile.get("email") != user_email
+    or st.session_state.current_profile.get("user_id") != user_id
 ):
-    st.session_state.current_profile = get_user_profile(user_email, user_display)
+    st.session_state.current_profile = get_user_profile(user_id, user_display, auth_provider)
 
 prof = st.session_state.current_profile
 
 # Sidebar Configuration for Profiles
 with st.sidebar:
-    st.markdown(f"**Logged in as:** `{user_email}`")
+    provider_icon = "🔴" if auth_provider == "Google" else ("🟢" if auth_provider == "WhatsApp" else "🔵")
+    st.markdown(f"**Signed in via {auth_provider} {provider_icon}**")
+    st.code(user_id, language=None)
+    
     if st.button("🚪 Sign Out", use_container_width=True):
         st.session_state.user_info = None
         st.session_state.current_profile = None
@@ -353,7 +433,7 @@ with st.sidebar:
 
     st.divider()
     st.header("👤 Your Birth Profile")
-    st.caption("Saved birth settings load automatically upon signing in.")
+    st.caption(f"Linked permanently to your {auth_provider} account.")
 
     name_in = st.text_input("Full Name", value=prof.get("name", user_display))
     dob_in = st.date_input("Date of Birth", value=prof.get("dob", datetime.date(1990, 1, 1)))
@@ -372,8 +452,9 @@ with st.sidebar:
 
     if st.button("💾 Save Profile to Account", use_container_width=True, type="primary"):
         updated_prof = {
-            "email": user_email,
+            "user_id": user_id,
             "name": name_in,
+            "auth_provider": auth_provider,
             "dob": dob_in,
             "tob": tob_in,
             "place": place_in,
@@ -383,7 +464,7 @@ with st.sidebar:
             "nakshatra_idx": selected_nak_idx
         }
         st.session_state.current_profile = updated_prof
-        if save_user_profile(user_email, updated_prof):
+        if save_user_profile(user_id, updated_prof):
             st.success("✅ Profile successfully saved to your account!")
 
 janma_idx = prof.get("nakshatra_idx", 1)
@@ -392,7 +473,7 @@ janma_name = NAKSHATRAS[janma_idx]
 st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
 st.markdown(
     f"<p style='text-align: center; font-size: 0.95rem; margin-top: -6px;'>"
-    f"Welcome, <b>{prof.get('name')}</b><br>"
+    f"Welcome, <b>{prof.get('name')}</b> ({auth_provider} {provider_icon})<br>"
     f"Janma Nakshatra: <b>{janma_name}</b> (<code>#{janma_idx + 1}/27</code>)"
     f"</p>",
     unsafe_allow_html=True
