@@ -685,6 +685,176 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "lucky_dir": "South and North-East (Ishanya)"
         }
 
+def get_numerology_avoidance(mulank: int, bhagyank: int, lang: str = "en") -> dict:
+    """Computes comprehensive inauspicious numbers, colors, days, directions, and behavioral cautions."""
+    avoidance_data = {
+        1: {
+            "num": "8, 6, 4 (Saturn, Venus, Rahu clashes)",
+            "colors": "Pitch Black, Dark Navy Blue, Muddy Charcoal Brown",
+            "days": "Saturday (delays & red tape), Friday (energy diffusion)",
+            "dir": "South-West (Nairutya) and West",
+            "habits": {
+                "en": "• Avoid aggressive ego-driven confrontations or unilateral ultimatums.\n• Never sign binding contracts during sunset twilight or on Saturdays.\n• Do not lend large sums of cash on Saturdays without solid collateral.\n• Avoid skipping morning sunlight or allowing toxic pride to override sound advice.",
+                "hi": "• अहंकारवश लिए गए निर्णयों और तीखी बहसबाजी से बचें।\n• शनिवार अथवा सूर्यास्त के समय बड़े अनुबंधों पर हस्ताक्षर न करें।\n• शनिवार को किसी को बड़ी धनराशी उधार देने से परहेज करें।\n• प्रातःकालीन सूर्य के प्रकाश की उपेक्षा न करें और दूसरों के सुझावों का सम्मान करें।",
+                "mr": "• अहंकारापोटी घेतलेले निर्णय आणि वादविवाद टाळावेत.\n• शनिवारी किंवा सूर्यास्ताच्या वेळी मोठे व्यावसायिक करार करणे टाळा.\n• शनिवारी कोणालाही मोठी रक्कम उसनी देऊ नका.\n• सकाळी सूर्यप्रकाशाचा लाभ घ्या आणि इतरांच्या चांगल्या सल्ल्यांचा आदर करा.",
+                "gu": "• અહંકાર અને ક્રોધમાં આવીને નિર્ણયો લેવાનું ટાળો.\n• શનિવારે અથવા સંધ્યાકાળના સમયે મહત્વપૂર્ણ કરાર પર હસ્તાક્ષર ન કરો.\n• શનિવારે કોઈને મોટી રકમ ઉધાર આપવાનું ટાળો.\n• સૂર્યોદય સમયે થોડો સમય સૂર્યપ્રકાશમાં રહો અને વડીલોની સલાહ અવગણશો નહીં."
+            }
+        },
+        2: {
+            "num": "8, 4, 9 (Saturn sorrow, Rahu eclipse, Mars fire)",
+            "colors": "Dark Scarlet Red, Pitch Black, Dull Muddy Gray",
+            "days": "Saturday (depression resonance), Tuesday (emotional friction)",
+            "dir": "South and South-West",
+            "habits": {
+                "en": "• Avoid taking high-stakes financial decisions late at night under emotional fatigue.\n• Do not isolate yourself during bouts of pessimism; seek grounded conversation.\n• Avoid speculative gambles and high-volatility financial schemes.\n• Never waste clean water or leave dripping taps unrepaired in the house.",
+                "hi": "• देर रात भावुकता या तनाव में आकर महत्वपूर्ण आर्थिक निर्णय न लें।\n• निराशा के क्षणों में स्वयं को अकेला न छोड़ें, विश्वासपात्र लोगों से संवाद रखें।\n• बिना सोचे-समझे सट्टेबाजी और जोखिम भरे निवेश से बचें।\n• पीने के पानी का अपव्यय न करें और नल को टपकता हुआ न छोड़ें।",
+                "mr": "• रात्रीच्या वेळी भावनेच्या भरात कोणतेही मोठे आर्थिक निर्णय घेऊ नका.\n• नैराश्याच्या वेळी स्वतःला एकटे पाडू नका, विश्वासू माणसांशी संवाद साधा.\n• सट्टेबाजी आणि जोखमीच्या व्यवहारांपासून दूर राहा.\n• पाण्याचा अपव्यय टाळा आणि घरात गळणारे नळ दुरुस्त करा.",
+                "gu": "• રાત્રિના સમયે ભાવનાત્મક આવેશમાં આવીને આર્થિક નિર્ણયો ન લો.\n• નકારાત્મક વિચારો આવે ત્યારે એકલા રહેવાને બદલે વિશ્વાસુ લોકો સાથે વાત કરો.\n• અતિ-જોખમી સટ્ટાબાજી કે યોજનાઓથી દૂર રહો.\n• પાણીનો બગાડ ન કરો અને ઘરમાં ટપકતા નળ તરત જ રિપેર કરાવો."
+            }
+        },
+        3: {
+            "num": "6, 8 (Venus ideological opposition, Saturn friction)",
+            "colors": "Pitch Black, Dark Green, Murky Muddy Brown",
+            "days": "Friday (clash with Venusian materialism)",
+            "dir": "South-West (Nairutya)",
+            "habits": {
+                "en": "• Avoid offering unsolicited counsel or lecturing peers who did not ask.\n• Do not disrespect teachers, gurus, or senior mentors in public or private.\n• Avoid hoarding stale, unused books, torn study notes, and intellectual clutter.\n• Beware of taking high-interest debts for superficial status symbols.",
+                "hi": "• बिना मांगे दूसरों को उपदेश देने या ज्ञान थोपने से बचें।\n• शिक्षकों, गुरुओं और वयोवृद्ध मार्गदर्शकों का भूलकर भी अनादर न करें।\n• पुरानी फटी पुस्तकें, रद्दी और निरुपयोगी कागजातों का ढेर न लगाएं।\n• दिखावे और आडंबर के लिए कर्ज लेने से परहेज करें।",
+                "mr": "• समोरच्याने विचारल्याशिवाय विनाकारण उपदेश देणे टाळा.\n• शिक्षक, गुरू आणि घरातील वडीलधाऱ्यांचा अनादर करू नका.\n• जुनी रद्दी, फाटलेली पुस्तके आणि कचरा साठवून ठेवू नका.\n• केवळ दिखाव्यासाठी कर्ज काढणे पूर्णपणे टाळा.",
+                "gu": "• કોઈના પૂછ્યા વગર સલાહ કે ઉપદેશ આપવાનું ટાળો.\n• ગુરુજનો, શિક્ષકો અને વડીલોનું ક્યારેય અપમાન ન કરો.\n• જૂના નકામા કાગળો અને ફાટેલા પુસ્તકોનો કચરો ન રાખો.\n• માત્ર દેખાડો કરવા માટે દેવું કરવાનું ટાળો."
+            }
+        },
+        4: {
+            "num": "2, 8, and repeated 4s (Avoid 4, 13, 22, 31 for critical pacts)",
+            "colors": "Jet Black, Murky Dark Brown, Dull Khaki & Muddy Gray",
+            "days": "Saturday (Shani delay resonance) and Monday (Chandra eclipse anxiety)",
+            "dir": "South-West (Nairutya - over-amplifies restlessness) and West",
+            "habits": {
+                "en": "• Avoid speculative day trading, casino bets, and unverified fast-money schemes.\n• Never sign binding long-term contracts on Saturdays or during Rahu Kaal.\n• Do not accumulate non-working electronics, dead batteries, or rusted iron scrap in your living or workspace.\n• Refrain from harsh confrontational arguments during twilight hours (Sandhya Kaal).\n• Avoid wearing dark, unwashed, or torn black clothing when attending career-defining meetings.",
+                "hi": "• अचानक अमीर बनाने वाली सट्टेबाजी, अनधिकृत क्रिप्टो या बिना सोचे-समझे किए गए सट्टे से पूर्णतः दूर रहें।\n• शनिवार के दिन अथवा राहुकाल में महत्वपूर्ण अनुबंधों या कानूनी समझौतों पर हस्ताक्षर करने से बचें।\n• घर या कार्यालय में बंद घड़ियां, टूटे इलेक्ट्रॉनिक उपकरण अथवा जंग लगा लोहा कभी जमा न होने दें।\n• क्रोध के आवेश में संध्याकाल के समय कटु वचन बोलने या संबंध विच्छेद करने से बचें।\n• अति-महत्वपूर्ण बैठकों में मैले, कटे-फटे या अत्यधिक काले वस्त्र पहनने से परहेज करें।",
+                "mr": "• अति-लोभाच्या सट्टेबाजी किंवा झटपट नफा देणाऱ्या अनधिकृत योजनांपासून पूर्णपणे दूर राहा.\n• शनिवारी किंवा राहू काळात महत्त्वाच्या कायदेशीर कागदपत्रांवर सह्या करणे टाळा.\n• घरात किंवा कामाच्या ठिकाणी बंद पडलेली घड्याळे, निकामी इलेक्ट्रॉनिक्स सामान किंवा गंजलेले लोखंड ठेवू नका.\n• संध्याकाळी वादविवाद टाळा; रागाच्या भरात कठोर बोलून जुने संबंध तोडू नका.\n• महत्त्वाच्या कामाला जाताना फाटलेले किंवा अति-गडद काळे कपडे घालणे टाळा.",
+                "gu": "• ઝડપી નફો આપતી સટ્ટાબાજી અથવા અજાણી સ્કીમોમાં મોટું જોખમ લેવાનું ટાળો.\n• શનિવારે કે રાહુકાળમાં મહત્વપૂર્ણ દસ્તાવેજો કે કરાર પર હસ્તાક્ષર ન કરો.\n• ઘરમાં કે ઓફિસમાં બંધ ઘડિયાળો કે બગડેલા ઇલેક્ટ્રોનિક્સ સાધનોનો કચરો જમા ન થવા દો.\n• ક્રોધમાં આવીને કડવા વચનો બોલવાથી બચો, ખાસ કરીને સંધ્યાકાળના સમયે.\n• મહત્વપૂર્ણ મીટિંગ વખતે ફાટેલા કે અત્યંત કાળા કપડાં પહેરવાનું ટાળો."
+            }
+        },
+        5: {
+            "num": "9, 2 (Mars aggression clashes with Mercury intellect, Moon volatility)",
+            "colors": "Dark Scarlet Red, Deep Bright Orange",
+            "days": "Tuesday (Mars combat energy triggers nervous burnout)",
+            "dir": "South",
+            "habits": {
+                "en": "• Avoid impulsive job jumping or venture hopping without concrete safety cushions.\n• Do not sign legally binding agreements without thoroughly parsing the fine print.\n• Beware of nervous restlessness, excessive caffeine, and doom-scrolling before sleep.\n• Avoid making promises purely to please people when your schedule is already stretched.",
+                "hi": "• बिना किसी ठोस योजना या वित्तीय आधार के बार-बार कार्यक्षेत्र बदलने से बचें।\n• दस्तावेजों की सूक्ष्म शर्तों को पढ़े बिना किसी कानूनी पत्र पर हस्ताक्षर न करें।\n• अत्यधिक कैफीन, देर रात तक फोन स्क्रीन देखने और मानसिक बेचैनी से बचें।\n• केवल लोगों को खुश करने के लिए ऐसे वादे न करें जिन्हें आप पूरा न कर सकें।",
+                "mr": "• ठोस आर्थिक आधार नसताना वारंवार व्यवसाय किंवा नोकरी बदलणे टाळा.\n• कागदपत्रांच्या अटी नीट वाचल्याशिवाय स्वाक्षरी करू नका.\n• अति चहा-कॉफी पिणे आणि रात्री उशिरापर्यंत मोबाईल वापरणे टाळा.\n• केवळ दुसऱ्यांना खूश करण्यासाठी असमर्थ असलेली आश्वासने देऊ नका.",
+                "gu": "• યોગ્ય પ્લાનિંગ વગર વારંવાર નોકરી કે ધંધો બદલવાનું ટાળો.\n• કોઈપણ દસ્તાવેજ ઝીણવટપૂર્વક વાંચ્યા વગર સહી ન કરો.\n• વધુ પડતી ચા-કોફી અને મોડી રાત સુધી મોબાઈલ વાપરવાથી બચો.\n• લોકોને માત્ર ખુશ કરવા માટે ખોટા વચનો આપવાનું ટાળો."
+            }
+        },
+        6: {
+            "num": "3, 1 (Jupiter moral friction, Sun scorched Venus energy)",
+            "colors": "Pitch Black, Muddy Dark Yellow, Pale Saffron",
+            "days": "Thursday (Jupiterian austerity curbs Venusian joy)",
+            "dir": "North-East (Ishanya)",
+            "habits": {
+                "en": "• Avoid overspending on luxury status symbols merely to impress casual acquaintances.\n• Do not neglect personal hygiene, clean surroundings, or wardrobe neatness.\n• Beware of sweet-talking flatterers who exploit your generous hospitality.\n• Avoid toxic domestic disputes with women or mother figures in the family.",
+                "hi": "• दूसरों को प्रभावित करने के लिए दिखावटी विलासिता पर फिजूलखर्ची से बचें।\n• व्यक्तिगत स्वच्छता, स्वच्छ परिवेश और सुव्यवस्थित परिधान की उपेक्षा न करें।\n• मीठी बातें करने वाले चापलूसों से सतर्क रहें जो आपकी उदारता का लाभ उठाते हैं।\n• परिवार की स्त्रियों अथवा मातृ-तुल्य व्यक्तियों से विवाद करने से बचें।",
+                "mr": "• केवळ लोकांवर प्रभाव पाडण्यासाठी नको तितका दिखाऊ खर्च करू नका.\n• वैयक्तिक स्वच्छता आणि राहणीमानाकडे दुर्लक्ष करू नका.\n• गोड बोलणाऱ्या आणि फायदा घेणाऱ्या लोकांपासून सावध राहा.\n• घरातील महिलांशी किंवा ज्येष्ठ व्यक्तींशी वाद घालणे टाळा.",
+                "gu": "• માત્ર બીજાને પ્રભાવિત કરવા માટે મોંઘી વસ્તુઓ પર ખોટો ખર્ચ ન કરો.\n• વ્યક્તિગત સ્વચ્છતા અને ઘરની વ્યવસ્થા પ્રત્યે બેદરકાર ન રહો.\n• મીઠી વાતો કરીને ફાયદો ઉઠાવતા લોકોથી ચેતો.\n• ઘરની સ્ત્રીઓ કે વડીલો સાથે વિવાદમાં પડવાનું ટાળો."
+            }
+        },
+        7: {
+            "num": "1, 2, 9 (Sun dominance, Moon whirlpool, Mars combat)",
+            "colors": "Bright Fire Red, Pitch Black, Blazing Neon Shades",
+            "days": "Sunday, Tuesday",
+            "dir": "South, South-East",
+            "habits": {
+                "en": "• Avoid blind trust in unvetted business partners or smooth-talking strangers.\n• Do not suppress your intuitive hunches when something feels fundamentally off.\n• Avoid complete self-isolation during life challenges; stay connected to reality.\n• Refrain from cynicism or bitter skepticism towards genuine well-wishers.",
+                "hi": "• नए अथवा असत्यापित व्यापारिक साझेदारों पर आंख मूंदकर भरोसा न करें।\n• जब आपका अंतर्ज्ञान किसी बात के लिए मना करे, तो उसकी अनदेखी न करें।\n• संकट के समय समाज से पूरी तरह कटने या एकांतवास में डूबने से बचें।\n• अपने सच्चे शुभचिंतकों के प्रति अविश्वास अथवा कड़वाहट रखने से परहेज करें।",
+                "mr": "• नवीन किंवा अपरिचित व्यवसाय भागीदारांवर आंधळा विश्वास ठेवू नका.\n• अंतर्मनाचा आवाज ज्या गोष्टीला नकार देतो, त्याकडे दुर्लक्ष करू नका.\n• अडचणीच्या काळात स्वतःला पूर्णपणे एकांतात कोंडून घेऊ नका.\n• आपल्या हितचिंतकांवर विनाकारण संशय घेणे टाळा.",
+                "gu": "• અજાણ્યા કે નવા ભાગીદારો પર આંધળો વિશ્વાસ મૂકવાનું ટાળો.\n• તમારું અંતરમન જે બાબત માટે ના પાડે, તેની અવગણના ન કરો.\n• મુશ્કેલ સમયમાં સાવ એકલા પડી જવાને બદલે સ્વજનો સાથે રહો.\n• પોતાના સાચા હિતેચ્છુઓ પ્રત્યે અવિશ્વાસ ન રાખો."
+            }
+        },
+        8: {
+            "num": "1, 2, 4, and double 8 (Sun authority enmity, Moon delay, double Saturn load)",
+            "colors": "Blazing Crimson Red, Bright Saffron, Radiant Golden Yellow",
+            "days": "Sunday (Sun clashes directly with Saturn ruler)",
+            "dir": "East (Surya's cardinal point causes friction)",
+            "habits": {
+                "en": "• Avoid unethical shortcuts, tax loopholes, and deceptive legal maneuvers.\n• Never mistreat blue-collar workers, service staff, or subordinate laborers.\n• Do not complain about delays; Saturn rewards methodical, patient endurance.\n• Avoid brooding over past grievances or harboring revengeful thoughts.",
+                "hi": "• अनैतिक शॉर्टकट, कानूनी हेरफेर अथवा किसी को ठगने वाले रास्तों से पूर्णतः बचें।\n• घर या कार्यस्थल पर काम करने वाले सहायकों, मजदूरों व अधीनस्थों का कभी अपमान न करें।\n• कार्यों में देरी होने पर झुंझलाएं नहीं; शनि धैर्यवान व निष्ठावान कर्मों को ही पुरस्कृत करते हैं।\n• पुरानी शिकायतों या बदले की भावना को मन में पालने से बचें।",
+                "mr": "• चुकीचे शॉर्टकट, गैरकायदेशीर मार्ग किंवा कोणाची फसवणूक करणे पूर्णपणे टाळा.\n• हाताखाली काम करणारे कामगार आणि मदतनीसांचा कधीही अनादर करू नका.\n• कामात उशीर झाला तरी चिडू नका; शनी केवळ संयमी प्रयत्नांनाच मोठे फळ देतो.\n• मनामध्ये जुनी अढी किंवा सूडबुद्धी बाळगणे टाळा.",
+                "gu": "• અનૈતિક શોર્ટકટ કે ખોટા કાયદાકીય રસ્તાઓ અપનાવવાનું ટાળો.\n• હાથ નીચે કામ કરતા કર્મચારીઓ કે શ્રમિકોનું ક્યારેય અપમાન ન કરો.\n• કામમાં વિલંબ થાય તો અકળાવાને બદલે ધીરજપૂર્વક મહેનત ચાલુ રાખો.\n• ભૂતકાળના વેરઝેર કે બદલાની ભાવના મનમાં રાખવાનું ટાળો."
+            }
+        },
+        9: {
+            "num": "2, 4, 5 (Moon emotional conflict, Rahu recklessness, Mercury clash)",
+            "colors": "Pitch Black, Dark Moss Green, Stark Milky White",
+            "days": "Wednesday, Saturday",
+            "dir": "North (Mercury cardinal direction triggers friction)",
+            "habits": {
+                "en": "• Avoid sudden outbursts of temper, road rage, and impulsive verbal aggression.\n• Never sign personal loan guarantees for casual acquaintances or friends.\n• Do not rush into competitive ventures without doing prior reconnaissance.\n• Avoid excessive consumption of hyper-spicy, acidic, and heavy greasy food under stress.",
+                "hi": "• अचानक आने वाले तीव्र क्रोध, सड़क पर उग्रता और कटु वाणी के प्रयोग से बचें।\n• मित्रों या परिचितों के व्यक्तिगत ऋण के लिए कभी भी अपनी गारंटी न दें।\n• बिना पूरी तैयारी या जानकारी के किसी प्रतिस्पर्धी कार्य में कूदने से बचें।\n• तनाव के समय अत्यधिक मिर्च-मसालेदार, गरिष्ठ या तामसिक भोजन से परहेज करें।",
+                "mr": "• अचानक येणारा राग, रस्त्यावरील वाद आणि संतापाच्या भरात अपशब्द वापरणे टाळा.\n• मित्रांच्या किंवा ओळखीच्या लोकांच्या कर्जासाठी जामीनदार राहणे टाळा.\n• योग्य माहिती आणि तयारीनिशीच नवीन स्पर्धात्मक कामात उतरा.\n• मानसिक तणावाच्या वेळी अति तिखट, तेलकट किंवा जड अन्न खाणे टाळा.",
+                "gu": "• એકદમ ક્રોધિત થઈ જવું, રોડ પર ગુસ્સો કરવો કે કડવા શબ્દો બોલવાનું ટાળો.\n• કોઈ મિત્ર કે પરિચિતની લોનમાં ગેરંટર બનવાનું ટાળો.\n• પૂરતી માહિતી કે તૈયારી વગર કોઈપણ સ્પર્ધામાં કૂદી પડવાનું ટાળો.\n• તણાવના સમયે વધુ પડતો તીખો, તળેલો કે ભારે ખોરાક લેવાનું ટાળો."
+            }
+        }
+    }
+
+    base = avoidance_data.get(mulank, avoidance_data[4])
+    habits_text = base["habits"].get(lang, base["habits"]["en"])
+
+    titles = {
+        "en": "⚠️ Cosmic Caution & Avoidance Matrix (What to Avoid)",
+        "hi": "⚠️ क्या वर्जित है: अशुभ अंक, रंग, दिन एवं विशेष सावधानियां",
+        "mr": "⚠️ काय टाळावे: अशुभ अंक, रंग, वार आणि महत्त्वाच्या दक्षता",
+        "gu": "⚠️ શું ટાળવું: અશુભ અંકો, રંગો, વાર અને વિશેષ સાવચેતીઓ"
+    }
+
+    labels = {
+        "en": {
+            "num": "⚠️ Numbers to Avoid:",
+            "colors": "🚫 Colors to Avoid:",
+            "days": "📅 Days to Avoid:",
+            "dir": "🧭 Direction to Avoid:",
+            "habits_hdr": "🚫 Strategic Actions & Pitfalls to Avoid:"
+        },
+        "hi": {
+            "num": "⚠️ वर्जित अंक (Friction Numbers):",
+            "colors": "🚫 वर्जित रंग (Draining Colors):",
+            "days": "📅 प्रतिकूल दिन (Avoid Days):",
+            "dir": "🧭 वर्जित दिशा (Avoid Direction):",
+            "habits_hdr": "🚫 आचरण व आदतें जिन्हें टालना चाहिए (Actions to Avoid):"
+        },
+        "mr": {
+            "num": "⚠️ वर्ज्य अंक (Friction Numbers):",
+            "colors": "🚫 वर्ज्य रंग (Draining Colors):",
+            "days": "📅 प्रतिकूल वार (Avoid Days):",
+            "dir": "🧭 वर्ज्य दिशा (Avoid Direction):",
+            "habits_hdr": "🚫 टाळावयाच्या कृती व सवयी (Actions to Avoid):"
+        },
+        "gu": {
+            "num": "⚠️ વર્જ્ય અંકો (Friction Numbers):",
+            "colors": "🚫 વર્જ્ય રંગો (Draining Colors):",
+            "days": "📅 પ્રતિકૂળ વાર (Avoid Days):",
+            "dir": "🧭 વર્જ્ય દિશા (Avoid Direction):",
+            "habits_hdr": "🚫 ટાળવા જેવી આદતો અને કાર્યો (Actions to Avoid):"
+        }
+    }
+
+    curr_lbl = labels.get(lang, labels["en"])
+
+    return {
+        "title": titles.get(lang, titles["en"]),
+        "lbl_num": curr_lbl["num"],
+        "lbl_colors": curr_lbl["colors"],
+        "lbl_days": curr_lbl["days"],
+        "lbl_dir": curr_lbl["dir"],
+        "lbl_habits": curr_lbl["habits_hdr"],
+        "avoid_num": base["num"],
+        "avoid_colors": base["colors"],
+        "avoid_days": base["days"],
+        "avoid_dir": base["dir"],
+        "avoid_habits": habits_text
+    }
+
 def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
     """Calculates Saturn's foot metal based on Moon Sign relative to Saturn's sign."""
     house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
@@ -1344,6 +1514,7 @@ def render_page_profile():
 
 def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
+    num_avoid = get_numerology_avoidance(mulank, bhagyank, current_lang)
     p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
     p_b_label = NUM_PLANET_NAMES.get(bhagyank, {}).get(current_lang, f"Planet {bhagyank}")
     p_n_label = NUM_PLANET_NAMES.get(namank, {}).get(current_lang, f"Planet {namank}")
@@ -1392,7 +1563,8 @@ def render_page_numerology():
             </div>
         </div>
 
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
+        <!-- A. HARMONIC LUCK MATRIX -->
+        <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:8px;">{num_domains['luck_title']}</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.95rem; line-height:1.6;">
                 <div><b>✨ Lucky Numbers:</b> {num_domains['lucky_num']}</div>
@@ -1400,6 +1572,37 @@ def render_page_numerology():
                 <div><b>📅 Auspicious Days:</b> {num_domains['lucky_days']}</div>
                 <div><b>🧭 Favorable Direction:</b> {num_domains['lucky_dir']}</div>
                 <div style="grid-column: 1 / -1;"><b>🎨 Energizing Colors:</b> {num_domains['lucky_colors']}</div>
+            </div>
+        </div>
+
+        <!-- B. DEDICATED COSMIC CAUTION & AVOIDANCE MATRIX -->
+        <div style="background:#fff1f2; border-radius:14px; padding:14px; border:1.5px solid #fecdd3;">
+            <div style="font-weight:900; font-size:1.1rem; color:#9f1239; margin-bottom:10px; border-bottom:1.5px solid #fecdd3; padding-bottom:6px;">
+                {num_avoid['title']}
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:10px; margin-bottom:12px;">
+                <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #fecdd3;">
+                    <div style="font-size:0.82rem; font-weight:800; color:#e11d48; text-transform:uppercase;">{num_avoid['lbl_num']}</div>
+                    <div style="font-size:0.94rem; font-weight:900; color:#881337; margin-top:2px;">{num_avoid['avoid_num']}</div>
+                </div>
+                <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #fecdd3;">
+                    <div style="font-size:0.82rem; font-weight:800; color:#e11d48; text-transform:uppercase;">{num_avoid['lbl_colors']}</div>
+                    <div style="font-size:0.94rem; font-weight:900; color:#881337; margin-top:2px;">{num_avoid['avoid_colors']}</div>
+                </div>
+                <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #fecdd3;">
+                    <div style="font-size:0.82rem; font-weight:800; color:#e11d48; text-transform:uppercase;">{num_avoid['lbl_days']}</div>
+                    <div style="font-size:0.94rem; font-weight:900; color:#881337; margin-top:2px;">{num_avoid['avoid_days']}</div>
+                </div>
+                <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #fecdd3;">
+                    <div style="font-size:0.82rem; font-weight:800; color:#e11d48; text-transform:uppercase;">{num_avoid['lbl_dir']}</div>
+                    <div style="font-size:0.94rem; font-weight:900; color:#881337; margin-top:2px;">{num_avoid['avoid_dir']}</div>
+                </div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border-left:4px solid #e11d48; border:1px solid #fecdd3; border-left-width:4px;">
+                <div style="font-weight:900; font-size:0.98rem; color:#9f1239; margin-bottom:6px;">{num_avoid['lbl_habits']}</div>
+                <div style="font-size:0.93rem; line-height:1.7; color:#881337; white-space:pre-line;">{num_avoid['avoid_habits']}</div>
             </div>
         </div>
     </div>
