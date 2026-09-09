@@ -4,7 +4,7 @@ import urllib.parse
 import json
 import os
 
-# Initialize Swiss Ephemeris engine with fail-safe fallback
+# Initialize Swiss Ephemeris engine with fail-safe sidereal Lahiri configuration
 try:
     import swisseph as swe
     HAS_SWISSEPH = True
@@ -12,6 +12,7 @@ try:
 except Exception:
     HAS_SWISSEPH = False
 
+# Configure Streamlit page layout
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -19,18 +20,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Helper function to inject clean HTML without triggering Markdown code block formatting
 def render_html(html_string: str):
     """
-    Renders HTML safely by stripping leading whitespace from each line.
-    Prevents Streamlit Markdown engine from mistaking indented HTML for code blocks.
+    Renders HTML safely by stripping all leading whitespace from every line.
+    Prevents Streamlit Markdown engine from mistaking indented HTML for pre/code blocks.
     """
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
 render_html("""
 <style>
-    /* Responsive mobile typography adhering to system scale */
+    /* Fluid responsive typography adhering to system-wide mobile font scale */
     html {
         font-size: 16px;
     }
@@ -106,7 +106,7 @@ render_html("""
         box-shadow: 0 4px 14px rgba(14, 165, 233, 0.06);
     }
 
-    /* Tactile navigation buttons */
+    /* Top navigation dock buttons */
     .stButton button {
         border-radius: 12px !important;
         font-weight: 700 !important;
@@ -249,6 +249,7 @@ TRANSLATIONS = {
 }
 
 def t(key: str, lang: str = "en") -> str:
+    """Translates key to target language with fallback to English."""
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
 NAKHATRAS = [
@@ -343,7 +344,7 @@ NAKSHATRA_BIO_DATA = {
 }
 
 def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
-    """Returns detailed Nakshatra bio, personality breakdown, prediction, and remedies."""
+    """Returns detailed Nakshatra bio, personality breakdown, prediction, and remedies with safe key aliasing."""
     bio = NAKSHATRA_BIO_DATA.get(star_idx, NAKSHATRA_BIO_DATA[2])
     
     star_details = {
@@ -391,6 +392,10 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
         }
     })
     
+    personality_text = selected_star["personality"].get(lang, selected_star["personality"]["en"])
+    prediction_text = selected_star["prediction"].get(lang, selected_star["prediction"]["en"])
+    remedies_text = selected_star["remedies"].get(lang, selected_star["remedies"]["en"])
+    
     return {
         "deity": bio["deity"],
         "symbol": bio["symbol"],
@@ -398,9 +403,11 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
         "bird": bio["bird"],
         "animal": bio["animal"],
         "lord": bio["lord"],
-        "personality": selected_star["personality"].get(lang, selected_star["personality"]["en"]),
-        "prediction": selected_star["prediction"].get(lang, selected_star["prediction"]["en"]),
-        "remedies": selected_star["remedies"].get(lang, selected_star["remedies"]["en"])
+        "personality": personality_text,
+        "desc": personality_text,  # Safe alias preventing KeyError: 'desc'
+        "traits": personality_text, # Safe alias preventing KeyError: 'traits'
+        "prediction": prediction_text,
+        "remedies": remedies_text
     }
 
 def get_moon_rashi_details(rashi_idx: int, lang: str = "en") -> dict:
@@ -455,11 +462,13 @@ def get_moon_rashi_details(rashi_idx: int, lang: str = "en") -> dict:
         }
     })
     
+    prof_text = selected["profile"].get(lang, selected["profile"]["en"])
     return {
         "name": selected["name"],
         "element": selected["element"],
         "ruler": selected["ruler"],
-        "profile": selected["profile"].get(lang, selected["profile"]["en"]),
+        "profile": prof_text,
+        "desc": prof_text,
         "prediction": selected["prediction"].get(lang, selected["prediction"]["en"]),
         "remedies": selected["remedies"].get(lang, selected["remedies"]["en"])
     }
@@ -516,11 +525,13 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
         }
     })
     
+    prof_text = selected["profile"].get(lang, selected["profile"]["en"])
     return {
         "name": selected["name"],
         "element": selected["element"],
         "lord": selected["lord"],
-        "profile": selected["profile"].get(lang, selected["profile"]["en"]),
+        "profile": prof_text,
+        "desc": prof_text,
         "prediction": selected["prediction"].get(lang, selected["prediction"]["en"]),
         "remedies": selected["remedies"].get(lang, selected["remedies"]["en"])
     }
@@ -1050,12 +1061,7 @@ with nav_r2_c4:
 
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
-
-# ==============================================================================
-# PAGE 1: ABOUT APP, SCIENTIFIC AUTHENTICITY, INSTALL & SHARE
-# ==============================================================================
 def render_page_about():
-    # Language Selector exclusively on this About page
     st.markdown("#### 🌐 Choose Display Language")
     lang_options = [("en", "🇬🇧 English"), ("hi", "🇮🇳 हिन्दी (Hindi)"), ("mr", "🚩 मराठी (Marathi)"), ("gu", "🪔 ગુજરાતી (Gujarati)")]
     lang_codes = [c for c, _ in lang_options]
@@ -1091,7 +1097,9 @@ def render_page_about():
             <p><b>4. The Biophysics of Vedic Remedies:</b> Vedic remedies are bio-resonance tools. Reciting root Sanskrit mantras creates focused acoustic resonance that down-regulates cortisol and stabilizes autonomic neural networks. Targeted charity (<i>Dana</i>) balances elemental psychological feedback loops, neutralizing karmic friction.</p>
         </div>
     </div>
+    """)
 
+    render_html("""
     <!-- PWA INSTALLATION GUIDE -->
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.6rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
@@ -1117,7 +1125,6 @@ def render_page_about():
     </div>
     """)
 
-    # Social Sharing Section
     app_url = "https://navtara-pulse.streamlit.app"
     share_msg = "Discover your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
     encoded_url = urllib.parse.quote(app_url)
@@ -1162,12 +1169,7 @@ def render_page_about():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 2: USER PROFILE & COMPREHENSIVE ASTROLOGICAL PROFILE
-# ==============================================================================
 def render_page_profile():
-    # Smart User Profile Box with Inline Edit
     with st.container(border=True):
         col_p1, col_p2 = st.columns([3, 1])
         with col_p1:
@@ -1183,7 +1185,6 @@ def render_page_profile():
                 st.session_state.edit_mode = not st.session_state.edit_mode
                 st.rerun()
 
-    # Expandable edit form
     if st.session_state.edit_mode:
         with st.expander("✏️ Update Birth Information", expanded=True):
             e_name = st.text_input(t("name_label", current_lang), value=prof["name"])
@@ -1208,12 +1209,10 @@ def render_page_profile():
                     st.session_state.edit_mode = False
                     st.rerun()
 
-    # Fetch deep data for Star, Moon Sign, and Lagna
     n_info = get_nakshatra_traits(chart_info["star_idx"], current_lang)
     m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
     l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
     
-    # Main Astrological Profile Box
     render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.35rem; color:#9a3412; margin-bottom:1rem; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -1326,10 +1325,6 @@ def render_page_profile():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 3: CORE NUMEROLOGY BLUEPRINT & LIFE DOMAINS
-# ==============================================================================
 def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
     p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
@@ -1393,10 +1388,6 @@ def render_page_numerology():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 4: SHANI PAYA, TRANSIT & SADE SATI
-# ==============================================================================
 def render_page_shani():
     render_html(f"""
     <div class="light-card-shani">
@@ -1430,10 +1421,6 @@ def render_page_shani():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 5: LIVE DAILY PREDICTION & TODAY'S COSMIC PULSE
-# ==============================================================================
 def render_page_live():
     now_ist = datetime.datetime.now()
     cur_star_idx, s_dt, e_dt = get_current_nakshatra_window(now_ist)
@@ -1442,7 +1429,6 @@ def render_page_live():
     vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
-    # Deterministic strategy resolution avoiding nested quote issues
     if "🟢" in icon:
         decision_protocol = "🟢 High green light for critical ventures, agreements, property, and financial investments."
     else:
@@ -1497,10 +1483,6 @@ def render_page_live():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 6: 7-DAY PREDICTION TABLE WITH INTERACTIVE PREDICTION
-# ==============================================================================
 def render_page_forecast():
     now_ist = datetime.datetime.now()
     transits = get_7_day_moon_transits(now_ist, chart_info["star_idx"])
@@ -1550,10 +1532,6 @@ def render_page_forecast():
     </div>
     """)
 
-
-# ==============================================================================
-# PAGE 7: REAL-TIME PLANETARY COORDINATES (SIDEREAL LAHIRI)
-# ==============================================================================
 def render_page_planets():
     now_ist = datetime.datetime.now()
     planets_data = get_sidereal_planet_positions(now_ist)
@@ -1577,10 +1555,6 @@ def render_page_planets():
         </div>
         """)
 
-
-# ==============================================================================
-# PAGE 8: CONSOLIDATED VEDIC REMEDIES SANCTUARY
-# ==============================================================================
 def render_page_remedies():
     render_html(f"""
     <div class="light-card-num">
@@ -1615,20 +1589,17 @@ def render_page_remedies():
     </div>
     """)
 
-
-# ==============================================================================
-# ROUTER DISPATCHER: RENDER THE SELECTED PAGE SAFELY
-# ==============================================================================
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
-    "navtara": render_page_profile,  # Alias for backward compatibility
+    "navtara": render_page_profile,  # Safe alias for backward compatibility
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
     "planets": render_page_planets,
     "remedies": render_page_remedies,
+    "share": render_page_about,      # Safe alias routing share requests directly to About
 }
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
