@@ -105,16 +105,16 @@ TRANSLATIONS = {
         "btn_view_forecast": "🔮 View Predictions for Today & Next 7 Days ➔",
         "btn_back_profile": "⬅️ Back to Astrological Profile",
         "tab_today": "⚡ Today's Live Pulse",
-        "tab_7days": "🗓️ 7-Day Moon Transition Matrix",
+        "tab_7days": "🗓️ 7-Day Prediction",
         "active_navtara_title": "Active Navtara Energy Right Now",
-        "shani_vahan_title": "Today's Saturn Vehicle (Shani Vahan)",
+        "shani_vahan_title": "Saturn Vehicle (Shani Vahan)",
         "personal_day_title": "Personal Day Number Vibration",
         "three_directives_title": "🎯 Three Tactical Rules for Today",
         "matrix_table_title": "Daily Moon Transition Table (Next 7 Days)",
         "col_status": "Status",
-        "col_timing": "Day, Date & Time to Day, Date & Time",
-        "col_star": "Nakshatra Name",
-        "col_series": "Navtara Series",
+        "col_timing": "Day, Date & Time Window",
+        "col_star": "Nakshatra & Series",
+        "col_action": "Prediction",
         "view_planets_btn": "🔭 Toggle Real-Time Sidereal Planetary Coordinates",
         "auth_badge": "🔬 100% Precision Astronomical Engine",
         "auth_headline": "Why Navtara Pulse? Real Cosmic Timing, Zero Guesswork",
@@ -127,10 +127,12 @@ TRANSLATIONS = {
         "btn_cancel_edit": "✕ Cancel",
         "new_user_title": "📝 User Profile & Birth Details",
         "today_transit_window": "Active Moon Transit Window",
-        "today_detailed_pred_title": "🔮 In-Depth Cosmic Prediction for Today",
-        "today_remedies_title": "🪔 Targeted Daily Vedic & Numerology Remedies",
+        "today_detailed_pred_title": "🔮 In-Depth Cosmic Prediction",
+        "today_remedies_title": "🪔 Targeted Vedic & Numerology Remedies",
         "timing_from": "Starts",
-        "timing_to": "Ends"
+        "timing_to": "Ends",
+        "btn_view_prediction": "🔮 Prediction",
+        "selected_day_pred_header": "🔮 Detailed Prediction & Remedies for Selected Window"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स",
@@ -164,16 +166,16 @@ TRANSLATIONS = {
         "btn_view_forecast": "🔮 आज एवं आगामी 7 दिनों का फलादेश देखें ➔",
         "btn_back_profile": "⬅️ जन्म कुंडली प्रोफाइल पर वापस जाएं",
         "tab_today": "⚡ आज का सक्रिय गोचर",
-        "tab_7days": "🗓️ 7 दिवसीय चन्द्र गोचर चक्र",
+        "tab_7days": "🗓️ 7 दिवसीय भविष्यवाणी",
         "active_navtara_title": "वर्तमान सक्रिय नवतारा स्थिति",
-        "shani_vahan_title": "आज का शनि वाहन",
-        "personal_day_title": "आज का व्यक्तिगत अंक (Personal Day)",
+        "shani_vahan_title": "शनि वाहन (Shani Vahan)",
+        "personal_day_title": "व्यक्तिगत अंक (Personal Day)",
         "three_directives_title": "🎯 आज के लिए तीन स्वर्णिम नियम",
         "matrix_table_title": "दैनिक चन्द्र गोचर तालिका (आगामी 7 दिन)",
         "col_status": "स्थिति (Status)",
-        "col_timing": "वार, दिनांक व समय से वार, दिनांक व समय तक",
-        "col_star": "नक्षत्र नाम",
-        "col_series": "नवतारा चक्र (Series)",
+        "col_timing": "वार, दिनांक व समय समयावधि",
+        "col_star": "नक्षत्र एवं नवतारा चक्र",
+        "col_action": "फलादेश",
         "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्पष्ट स्थिति देखें",
         "auth_badge": "🔬 100% प्रामाणिक स्विस एफिमेरिस खगोलीय गणना",
         "auth_headline": "नवतारा पल्स क्यों? शुद्ध खगोलीय गणित, अंधविश्वास नहीं",
@@ -186,10 +188,12 @@ TRANSLATIONS = {
         "btn_cancel_edit": "✕ निरस्त",
         "new_user_title": "📝 जन्म विवरण एवं प्रोफाइल",
         "today_transit_window": "वर्तमान चन्द्र नक्षत्र गोचर समयावधि",
-        "today_detailed_pred_title": "🔮 आज का विस्तृत ज्योतिषीय फलादेश",
-        "today_remedies_title": "🪔 आज के अचूक वैदिक एवं अंक ज्योतिषीय उपाय",
+        "today_detailed_pred_title": "🔮 विस्तृत ज्योतिषीय फलादेश",
+        "today_remedies_title": "🪔 अचूक वैदिक एवं अंक ज्योतिषीय उपाय",
         "timing_from": "आरंभ",
-        "timing_to": "समाप्ति"
+        "timing_to": "समाप्ति",
+        "btn_view_prediction": "🔮 फलादेश",
+        "selected_day_pred_header": "🔮 चयनित समयावधि का विस्तृत फलादेश एवं उपाय"
     },
     "mr": {
         "app_title": "✨ नवतारा पल्स",
@@ -223,16 +227,16 @@ TRANSLATIONS = {
         "btn_view_forecast": "🔮 आजचे व पुढील ७ दिवसांचे भविष्य पहा ➔",
         "btn_back_profile": "⬅️ जन्म प्रोफाइलवर परत या",
         "tab_today": "⚡ आजचे सक्रिय नक्षत्र",
-        "tab_7days": "🗓️ ७ दिवसांचे नक्षत्र संक्रमण",
+        "tab_7days": "🗓️ ७ दिवसांचे भविष्य",
         "active_navtara_title": "सद्य सक्रिय नवतारा ऊर्जा",
-        "shani_vahan_title": "आजचे शनी वाहन",
-        "personal_day_title": "आजचा व्यक्तिगत अंक",
+        "shani_vahan_title": "शनी वाहन (Shani Vahan)",
+        "personal_day_title": "व्यक्तिगत अंक",
         "three_directives_title": "🎯 आजच्या दिवसाचे ३ महत्त्वाचे नियम",
         "matrix_table_title": "दैनिक चंद्र संक्रमण तक्ता (पुढील ७ दिवस)",
         "col_status": "स्थिती",
-        "col_timing": "वार, दिनांक व वेळ ते वार, दिनांक व वेळ",
-        "col_star": "नक्षत्र नाव",
-        "col_series": "नवतारा चक्र",
+        "col_timing": "वार, दिनांक व वेळ कालावधी",
+        "col_star": "नक्षत्र व नवतारा चक्र",
+        "col_action": "भविष्य",
         "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्थिती तपासा",
         "auth_badge": "🔬 १००% वैज्ञानिक स्विस एफिमेरिस खगोलीय शुद्धता",
         "auth_headline": "नवतारा पल्स का? अचूक खगोलीय गणित, अंधश्रद्धा नाही",
@@ -244,11 +248,13 @@ TRANSLATIONS = {
         "btn_edit_details": "✏️ तपशील बदला",
         "btn_cancel_edit": "✕ रद्द",
         "new_user_title": "📝 जन्म तपशील व प्रोफाइल",
-        "today_transit_window": "सद्य चंद्र नक्षत्र गोचर कालावधी",
-        "today_detailed_pred_title": "🔮 आजचे सविस्तर ज्योतिषीय फलादेश",
-        "today_remedies_title": "🪔 आजचे अचूक वैदिक व अंकशास्त्र उपाय",
+        "today_transit_window": "चंद्र नक्षत्र गोचर कालावधी",
+        "today_detailed_pred_title": "🔮 सविस्तर ज्योतिषीय फलादेश",
+        "today_remedies_title": "🪔 अचूक वैदिक व अंकशास्त्र उपाय",
         "timing_from": "सुरुवात",
-        "timing_to": "समाप्ती"
+        "timing_to": "समाप्ती",
+        "btn_view_prediction": "🔮 भविष्य",
+        "selected_day_pred_header": "🔮 निवडलेल्या कालावधीचे सविस्तर फलादेश व उपाय"
     },
     "gu": {
         "app_title": "✨ નવતારા પલ્સ",
@@ -282,16 +288,16 @@ TRANSLATIONS = {
         "btn_view_forecast": "🔮 આજનું અને આગામી ૭ દિવસનું ફળકથન જુઓ ➔",
         "btn_back_profile": "⬅️ જન્મ પ્રોફાઇલ પર પાછા જાઓ",
         "tab_today": "⚡ આજનું સક્રિય ગોચર",
-        "tab_7days": "🗓️ ૭ દિવસનું ચંદ્ર ગોચર કોષ્ટક",
+        "tab_7days": "🗓️ ૭ દિવસનું ફળકથન",
         "active_navtara_title": "હાલનું સક્રિય નવતારા ફળ",
-        "shani_vahan_title": "આજનું શનિ વાહન",
-        "personal_day_title": "આજનો વ્યક્તિગત અંક",
+        "shani_vahan_title": "શનિ વાહન (Shani Vahan)",
+        "personal_day_title": "વ્યક્તિગત અંક",
         "three_directives_title": "🎯 આજના ૩ સોનેરી નિયમો",
         "matrix_table_title": "દૈનિક ચંદ્ર ગોચર કોષ્ટક (આગામી ૭ દિવસ)",
         "col_status": "સ્થિતિ",
-        "col_timing": "વાર, તારીખ અને સમય થી વાર, તારીખ અને સમય સુધી",
-        "col_star": "નક્ષત્ર નામ",
-        "col_series": "નવતારા શ્રેણી",
+        "col_timing": "વાર, તારીખ અને સમયગાળો",
+        "col_star": "નક્ષત્ર અને નવતારા શ્રેણી",
+        "col_action": "ફળકથન",
         "view_planets_btn": "🔭 વર્તમાન ગ્રહ સ્પષ્ટ સ્થિતિ જુઓ",
         "auth_badge": "🔬 ૧૦૦% શુદ્ધ સ્વિસ એફિમેરિસ ખગોળીય ગણતરી",
         "auth_headline": "નવતારા પલ્સ કેમ? શુદ્ધ ખગોળીય ગણિત, અંધશ્રદ્ધા મુક્ત",
@@ -303,11 +309,13 @@ TRANSLATIONS = {
         "btn_edit_details": "✏️ વિગત બદલો",
         "btn_cancel_edit": "✕ રદ કરો",
         "new_user_title": "📝 જન્મ વિગત અને પ્રોફાઇલ",
-        "today_transit_window": "વર્તમાન ચંદ્ર નક્ષત્ર ગોચર સમયગાળો",
-        "today_detailed_pred_title": "🔮 આજનું વિસ્તૃત જ્યોતિષીય ફળકથન",
-        "today_remedies_title": "આજના સચોટ વૈદિક અને અંકશાસ્ત્ર ઉપાયો",
+        "today_transit_window": "ચંદ્ર નક્ષત્ર ગોચર સમયગાળો",
+        "today_detailed_pred_title": "🔮 વિસ્તૃત જ્યોતિષીય ફળકથન",
+        "today_remedies_title": "સચોટ વૈદિક અને અંકશાસ્ત્ર ઉપાયો",
         "timing_from": "શરૂઆત",
-        "timing_to": "સમાપ્તિ"
+        "timing_to": "સમાપ્તિ",
+        "btn_view_prediction": "🔮 ફળકથન",
+        "selected_day_pred_header": "🔮 પસંદ કરેલ સમયગાળાનું વિસ્તૃત ફળકથન અને ઉપાયો"
     }
 }
 
@@ -1336,7 +1344,7 @@ elif st.session_state.current_page == "forecast":
         st.markdown(remedies_card_html, unsafe_allow_html=True)
 
     with tab_7day:
-        st.subheader(t("matrix_table_title", current_lang))
+        st.subheader(t("tab_7days", current_lang))
         
         nak_span = 360.0 / 27.0
         start_time = now_utc
@@ -1366,50 +1374,185 @@ elif st.session_state.current_page == "forecast":
                 active_nak = nak
         transitions.append({"nak_idx": active_nak, "start": interval_start, "end": end_time})
 
-        matrix_rows = []
-        for tr in transitions:
-            nak_name = NAKSHATRAS[tr["nak_idx"]]
-            cat, series = calculate_navtara(janma_idx, tr["nak_idx"])
-            
-            if cat in ["Vipat", "Pratyari", "Vadha"]:
-                status_str = f"🔴 {cat}"
-            elif cat == "Ati-Mitra":
-                status_str = "🟢🟢 Ati-Mitra"
-            elif cat in ["Mitra", "Sampat"]:
-                status_str = f"🟢 {cat}"
-            else:
-                status_str = cat
+        if "selected_7day_idx" not in st.session_state:
+            st.session_state.selected_7day_idx = 0
+        if st.session_state.selected_7day_idx >= len(transitions):
+            st.session_state.selected_7day_idx = 0
 
-            s_ist = tr["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
-            e_ist = tr["end"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
+        # Table Header
+        header_cols = st.columns([1.1, 2.3, 1.8, 1.2])
+        with header_cols[0]:
+            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_status', current_lang)}</div>", unsafe_allow_html=True)
+        with header_cols[1]:
+            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_timing', current_lang)}</div>", unsafe_allow_html=True)
+        with header_cols[2]:
+            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_star', current_lang)}</div>", unsafe_allow_html=True)
+        with header_cols[3]:
+            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569; text-align:center;'>{t('col_action', current_lang)}</div>", unsafe_allow_html=True)
 
-            matrix_rows.append({
-                t("col_status", current_lang): status_str,
-                t("col_timing", current_lang): f"**{s_ist} – {e_ist}**",
-                t("col_star", current_lang): f"**{nak_name}**",
-                t("col_series", current_lang): f"{cat} — *Series {series}*"
-            })
-
-        st.table(matrix_rows)
-
-        st.markdown("---")
-        st.markdown("#### 🔍 Daily Actionable Predictions & Targeted Remedies")
+        st.markdown("<div style='height:2px; background:#e2e8f0; margin-bottom:8px;'></div>", unsafe_allow_html=True)
 
         for idx, tr in enumerate(transitions):
             nak_name = NAKSHATRAS[tr["nak_idx"]]
             cat, series = calculate_navtara(janma_idx, tr["nak_idx"])
             s_ist = tr["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M)")
             e_ist = tr["end"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
-            
-            _, d_vahan = calculate_shani_vahan(janma_idx + 1, tr["nak_idx"] + 1, current_lang)
-            _, d_pday, _, _, d_remedy = get_personal_day_vibe(mulank, tr["start"].astimezone(ist_tz).date(), current_lang)
 
-            with st.expander(f"{s_ist} to {e_ist} • {cat} ({nak_name})", expanded=(idx == 0)):
-                st.markdown(f"**Navtara Status:** {cat} (Series {series})")
-                st.markdown(f"**Saturn Mount (Vahan):** {d_vahan}")
-                st.markdown(f"**Personal Day Number:** Day {d_pday}")
-                st.markdown(f"**Action Strategy:** {'Exercise protective restraint and delay high-stakes contracts.' if cat in ['Vipat', 'Pratyari', 'Vadha'] else 'Excellent window for key executions, purchases, and negotiations.'}")
-                st.markdown(f"**Remedy for Window:** {d_remedy}")
+            if cat in ["Vipat", "Pratyari", "Vadha"]:
+                badge_style = "background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"
+                status_icon = "🔴"
+            elif cat == "Ati-Mitra":
+                badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
+                status_icon = "🟢🟢"
+            elif cat in ["Mitra", "Sampat"]:
+                badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
+                status_icon = "🟢"
+            else:
+                badge_style = "background:#f1f5f9; color:#334155; border:1px solid #cbd5e1;"
+                status_icon = "⚪"
+
+            is_selected = (st.session_state.selected_7day_idx == idx)
+            row_bg = "background:#eff6ff; border:1.5px solid #60a5fa;" if is_selected else "background:#ffffff; border:1px solid #e2e8f0;"
+
+            with st.container():
+                st.markdown(f"""
+                <div style="{row_bg} border-radius:10px; padding:8px 10px; margin-bottom:6px;">
+                """, unsafe_allow_html=True)
+                
+                c_stat, c_time, c_star, c_btn = st.columns([1.1, 2.3, 1.8, 1.2])
+                with c_stat:
+                    st.markdown(f"""
+                    <div style="{badge_style} border-radius:6px; padding:3px 6px; font-size:11.5px; font-weight:800; display:inline-block; margin-top:4px;">
+                        {status_icon} {cat}
+                    </div>
+                    """, unsafe_allow_html=True)
+                with c_time:
+                    st.markdown(f"""
+                    <div style="font-size:12.5px; font-weight:700; color:#0f172a; margin-top:4px;">
+                        {s_ist} – {e_ist}
+                    </div>
+                    """, unsafe_allow_html=True)
+                with c_star:
+                    st.markdown(f"""
+                    <div style="font-size:12.5px; color:#1e293b; margin-top:4px;">
+                        <b>{nak_name}</b> <span style="font-size:11px; color:#64748b;">(Series {series})</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                with c_btn:
+                    btn_label = f"✅ {t('btn_view_prediction', current_lang)}" if is_selected else t('btn_view_prediction', current_lang)
+                    if st.button(btn_label, key=f"btn_sel_{idx}", use_container_width=True, type="primary" if is_selected else "secondary"):
+                        st.session_state.selected_7day_idx = idx
+                        st.rerun()
+
+                st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("<div style='margin-top:18px;'></div>", unsafe_allow_html=True)
+
+        sel_idx = st.session_state.selected_7day_idx
+        sel_tr = transitions[sel_idx]
+        sel_nak_idx = sel_tr["nak_idx"]
+        sel_nak_name = NAKSHATRAS[sel_nak_idx]
+        sel_cat, sel_series = calculate_navtara(janma_idx, sel_nak_idx)
+        
+        sel_start_ist = sel_tr["start"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+        sel_end_ist = sel_tr["end"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+        sel_date = sel_tr["start"].astimezone(ist_tz).date()
+
+        sel_u_day, sel_p_day, _, _, _ = get_personal_day_vibe(mulank, sel_date, current_lang)
+        sel_vahan_num, sel_vahan = calculate_shani_vahan(janma_idx + 1, sel_nak_idx + 1, current_lang)
+
+        sel_status_badge = (
+            "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
+            if sel_cat in ["Vipat", "Pratyari", "Vadha"] else
+            "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
+        )
+
+        st.markdown(f"""
+        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:2px solid #3b82f6; border-radius:16px; padding:18px 20px; margin-top:10px; margin-bottom:14px; box-shadow:0 4px 14px rgba(59, 130, 246, 0.08);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+            <div>
+                <div style="font-weight:800; font-size:16px; color:#0f172a;">
+                    ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{sel_cat}</span>
+                </div>
+                <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+                    Navtara Cycle: <b>Series {sel_series}</b> | Transiting: <b>{sel_nak_name}</b> | Janma: <b>{janma_name}</b>
+                </div>
+            </div>
+            {sel_status_badge}
+        </div>
+
+        <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px 14px; margin-top:8px;">
+            <div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
+                ⏱️ {t('today_transit_window', current_lang)}
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
+                <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+                    <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
+                    <span style="color:#0f172a; font-weight:800;">{sel_start_ist}</span>
+                </div>
+                <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+                    <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
+                    <span style="color:#0f172a; font-weight:800;">{sel_end_ist}</span>
+                </div>
+            </div>
+        </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        col_svahan, col_spday = st.columns(2)
+        with col_svahan:
+            st.markdown(f"""
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
+                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{sel_vahan.split('—')[0]}</div>
+                <div style="font-size:11.5px; color:#475569;">{sel_vahan.split('—')[1] if '—' in sel_vahan else ''}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col_spday:
+            st.markdown(f"""
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
+                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {sel_p_day} Vibration</div>
+                <div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {sel_u_day}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        sel_pred = get_detailed_today_forecast(
+            sel_cat, sel_series, sel_nak_name, janma_name,
+            sel_vahan.split('—')[0], sel_p_day, current_lang
+        )
+
+        st.markdown(f"""
+        <div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
+            <div style="font-weight:800; font-size:15px; color:#9a3412; margin-bottom:10px; border-bottom:1.5px solid #ffedd5; padding-bottom:6px;">
+                {t('today_detailed_pred_title', current_lang)} ({sel_start_ist.split('(')[0]} – {sel_nak_name})
+            </div>
+            <div style="font-size:13.2px; line-height:1.65; color:#431407; margin-bottom:8px;">
+                {sel_pred['mind']}
+            </div>
+            <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13px; color:#7c2d12; line-height:1.6; margin-bottom:8px; border:1px solid #ffedd5;">
+                {sel_pred['career']}
+            </div>
+            <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:13px; color:#78350f; line-height:1.6; border:1px solid #fef3c7;">
+                {sel_pred['advice']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        sel_remedies = get_today_actionable_remedies(sel_cat, sel_vahan_num, sel_p_day, current_lang)
+        sel_remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in sel_remedies])
+
+        st.markdown(f"""
+        <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
+            <div style="font-weight:800; font-size:15px; color:#065f46; margin-bottom:10px; border-bottom:1.5px solid #dcfce7; padding-bottom:6px;">
+                {t('today_remedies_title', current_lang)}
+            </div>
+            <div>
+                {sel_remedies_items_html}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
     with st.expander(t("view_planets_btn", current_lang), expanded=False):
