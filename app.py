@@ -812,21 +812,6 @@ render_html(f"""
     </div>
 """)
 
-col_lang_l, col_lang_c, col_lang_r = st.columns([1, 1.4, 1])
-with col_lang_c:
-    lang_opts = {"en": "🌐 English", "hi": "🌐 हिन्दी", "mr": "🌐 मराठी", "gu": "🌐 ગુજરાતી"}
-    selected_lang_code = st.selectbox(
-        "Language",
-        options=list(lang_opts.keys()),
-        format_func=lambda x: lang_opts[x],
-        index=list(lang_opts.keys()).index(current_lang) if current_lang in lang_opts else 0,
-        label_visibility="collapsed"
-    )
-    if selected_lang_code != current_lang:
-        st.session_state.user_profile["lang"] = selected_lang_code
-        save_user_profile(st.session_state.user_profile)
-        st.rerun()
-
 # Row 1: About App, Navtara, Numerology, Shani
 nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
 with nav_r1_c1:
@@ -904,6 +889,25 @@ shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx
 # PAGE 1: ABOUT APP, SCIENTIFIC ASTRO-FOUNDATION & SHARING PORTAL
 # ==============================================================================
 def render_page_about():
+    lang_opts = {"en": "🌐 English", "hi": "🌐 हिन्दी", "mr": "🌐 मराठी", "gu": "🌐 ગુજરાતી"}
+    col_lang_l, col_lang_c, col_lang_r = st.columns([1, 1.4, 1])
+    with col_lang_c:
+        st.markdown("<div style='text-align:center; font-weight:800; color:#64748b; font-size:0.88rem; margin-bottom:6px;'>Choose Language / भाषा निवडा:</div>", unsafe_allow_html=True)
+        selected_lang_code = st.selectbox(
+            "Language Selector",
+            options=list(lang_opts.keys()),
+            format_func=lambda x: lang_opts[x],
+            index=list(lang_opts.keys()).index(current_lang) if current_lang in lang_opts else 0,
+            label_visibility="collapsed",
+            key="about_page_lang_select"
+        )
+        if selected_lang_code != current_lang:
+            st.session_state.user_profile["lang"] = selected_lang_code
+            save_user_profile(st.session_state.user_profile)
+            st.rerun()
+
+    render_html("<div style='margin-bottom:1rem;'></div>")
+
     app_url = "https://navtara-pulse.streamlit.app"
     share_msg = "Discover your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
     encoded_url = urllib.parse.quote(app_url)
