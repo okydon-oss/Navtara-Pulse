@@ -862,78 +862,92 @@ def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> 
         return {
             "paya": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
             "metal": "Silver",
-            "status": "Highly Auspicious (अति शुभ)",
-            "desc": "Saturn arrives bearing silver gifts. Bestows financial liquidity, career elevation, relief from long-standing stress, and divine protection during Sade Sati.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+            "status": "Highly Auspicious (अति शुभ - Supreme Divine Cushion)",
+            "desc": (
+                "Saturn arrives bearing silver gifts. In classical Vedic astrology, Rajat Paya occurs when transit Saturn moves "
+                "through the 2nd, 5th, or 9th house from your natal Moon sign. Silver is ruled by the Moon and Venus, directly cooling "
+                "Saturn's dry, restrictive heat. Even during challenging transits or Sade Sati, Rajat Paya functions as an energetic shock-absorber—converting "
+                "severe karmic friction into long-term professional stature, wealth preservation, intellectual breakthroughs, and unexpected societal patronage."
+            ),
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
         }
     elif house_diff in [3, 7, 10]:
         return {
             "paya": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
             "metal": "Copper",
-            "status": "Favorable (शुभ)",
-            "desc": "Brings steady professional growth, success through hard work, balanced family relationships, and gradual financial gains.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+            "status": "Favorable & Productive (शुभ - Dynamic Growth)",
+            "desc": (
+                "Saturn steps with copper feet (3rd, 7th, or 10th from natal Moon). Governed by Mars and Sun, Copper Paya stimulates executive stamina, "
+                "relentless work ethic, victory over competitors, and tangible career advancement through sustained disciplined labor."
+            ),
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
         }
     elif house_diff in [1, 6, 11]:
         return {
             "paya": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
             "metal": "Gold",
-            "status": "Testing & Demanding (कठिन)",
-            "desc": "Tests character through ego challenges, high expenditures, and health concerns. Requires humility, discipline, and charity.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+            "status": "Testing & High Friction (कठिन - Character Crucible)",
+            "desc": (
+                "Saturn steps with golden feet (1st, 6th, or 11th from natal Moon). Although gold symbolizes luxury, Saturn's relationship with gold "
+                "is paradoxical: it tests character through inflated egos, sudden expenditures, and deceptive allure. Requires rigorous humility, grounded lifestyle, and charity."
+            ),
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
         }
     else:
         return {
             "paya": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
             "metal": "Iron",
-            "status": "Difficult / High Friction (संघर्षमय)",
-            "desc": "Indicates delays, mental fatigue, and heavy responsibilities. Requires patient endurance and regular Hanuman Chalisa chanting.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+            "status": "Demanding & Heavy (संघर्षमय - Rigorous Karmic Labor)",
+            "desc": (
+                "Saturn steps with iron feet (4th, 8th, or 12th from natal Moon in certain traditions). Represents heavy responsibilities, delays, and psychological trials. "
+                "Demands relentless patience, ethical integrity, blue-collar charity, and daily Hanuman Chalisa chanting."
+            ),
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
         }
 
 def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    """Determines active Sade Sati or Dhaiya phase."""
+    """Determines active Sade Sati or Dhaiya phase with complete multi-phase roadmap."""
     diff = (saturn_transit_rashi_idx - moon_rashi_idx) % 12
     if diff == 11:
         return {
             "active": True,
-            "type": "Sade Sati Phase 1 (Rising Phase / 12th House Transit)",
-            "impact": "Saturn transits the 12th from your Moon. Focus on strategic budgeting, foreign avenues, spiritual grounding, and avoiding mental overthinking.",
+            "type": "Sade Sati Phase 1 (Rising Phase / Aarohi Charana - 12th House Transit)",
+            "impact": "Saturn transits the 12th house from your natal Moon. Focus on strategic financial management, curbing unvetted investments, foreign ventures, and spiritual grounding.",
             "dates": "29 March 2025 – 23 February 2028"
         }
     elif diff == 0:
         return {
             "active": True,
-            "type": "Sade Sati Phase 2 (Peak Phase / 1st House Janma Transit)",
-            "impact": "Saturn transits your natal Moon. Deep personal restructuring, high responsibilities, and major life decisions.",
+            "type": "Sade Sati Phase 2 (Peak Phase / Janma Shani - 1st House Transit)",
+            "impact": "Saturn transits over your natal Moon. The mental and physical core undergoes profound restructuring. Demands utmost discipline, health vigilance, and ego surrender.",
             "dates": "February 2028 – April 2030"
         }
     elif diff == 1:
         return {
             "active": True,
-            "type": "Sade Sati Phase 3 (Setting Phase / 2nd House Transit)",
-            "impact": "Saturn transits the 2nd from Moon. Financial realignment, family consolidation, and long-term asset stabilization.",
+            "type": "Sade Sati Phase 3 (Setting Phase / Avarohi Charana - 2nd House Transit)",
+            "impact": "Saturn transits the 2nd house from your Moon. Wealth stabilization, family realignment, speech refinement, and the harvesting of matured karmic lessons.",
             "dates": "April 2030 – May 2032"
         }
     elif diff == 3:
         return {
             "active": True,
-            "type": "Kantaka Shani (4th House Dhaiya)",
-            "impact": "Tests domestic peace and work-life balance. Steady focus brings long-term rewards.",
+            "type": "Kantaka Shani (4th House Dhaiya / Ardh-Ashtama Shani)",
+            "impact": "Tests domestic tranquility, property matters, maternal health, and emotional peace. Steady inner calm builds unshakable resilience.",
             "dates": "Active 2.5-Year Cycle"
         }
     elif diff == 7:
         return {
             "active": True,
-            "type": "Ashtama Shani (8th House Dhaiya)",
-            "impact": "Sudden transformations, spiritual deepening, and rigorous health discipline.",
+            "type": "Ashtama Shani (8th House Dhaiya - Deep Transformational Crucible)",
+            "impact": "Sudden structural shifts, unearthing hidden resources, spiritual awakening, and mandatory metabolic discipline.",
             "dates": "Active 2.5-Year Cycle"
         }
     else:
         return {
             "active": False,
             "type": "No Active Sade Sati or Dhaiya",
-            "impact": "Saturn is transiting a neutral/favorable house relative to your Moon. Unobstructed progress.",
+            "impact": "Saturn is transiting a harmonious or neutral house relative to your natal Moon. Unhindered operational expansion.",
             "dates": "N/A"
         }
 
@@ -1611,31 +1625,192 @@ def render_page_numerology():
 def render_page_shani():
     render_html(f"""
     <div class="light-card-shani">
-        <div style="font-weight:900; font-size:1.35rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem;">
-            {t('shani_paya_title', current_lang)}
+        <div style="font-weight:900; font-size:1.35rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>{t('shani_paya_title', current_lang)}</span>
+            <span style="font-size:0.85rem; background:#ede9fe; color:#6d28d9; padding:4px 12px; border-radius:20px; font-weight:900;">SATURN TRANSIT MATRIX</span>
         </div>
         
-        <div style="background:#f5f3ff; border-radius:12px; padding:14px; border:1.5px solid #e9d5ff; margin-bottom:1.1rem;">
-            <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE TRANSIT PAYA</div>
-            <div style="font-size:1.35rem; font-weight:900; color:#5b21b6; margin:4px 0;">{shani_paya_data['paya']}</div>
-            <div style="font-size:0.95rem; color:#7c3aed; font-weight:800;">Status: {shani_paya_data['status']}</div>
-            <div style="font-size:0.92rem; color:#475569; margin-top:3px;"><b>Timeline:</b> {shani_paya_data['timeline']}</div>
-            <div style="font-size:0.96rem; line-height:1.65; color:#3b0764; margin-top:8px;">{shani_paya_data['desc']}</div>
+        <!-- 1. ACTIVE SHANI PAYA CARD -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:16px; border:1.5px solid #e9d5ff; margin-bottom:1.15rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE 2.5-YEAR SHANI PAYA</div>
+                <div style="font-size:0.88rem; background:#dcfce7; color:#15803d; padding:3px 10px; border-radius:12px; font-weight:800;">{shani_paya_data['status']}</div>
+            </div>
+            <div style="font-size:1.4rem; font-weight:900; color:#5b21b6; margin:6px 0;">{shani_paya_data['paya']}</div>
+            <div style="font-size:0.92rem; color:#475569; margin-bottom:8px;"><b>Active Timeline:</b> {shani_paya_data['timeline']}</div>
+            <div style="font-size:0.96rem; line-height:1.7; color:#3b0764;">{shani_paya_data['desc']}</div>
         </div>
 
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #ddd6fe; border-left:5px solid #7c3aed; margin-bottom:1.1rem;">
-            <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:5px;">{t('sadesati_title', current_lang)}</div>
-            <div style="font-size:1rem; font-weight:800; color:#6d28d9;">{shani_sadesati_data['type']}</div>
-            <div style="font-size:0.92rem; color:#64748b; margin-bottom:6px;">Timeline: {shani_sadesati_data['dates']}</div>
-            <div style="font-size:0.96rem; line-height:1.65; color:#1e293b;">{shani_sadesati_data['impact']}</div>
+        <!-- 2. THE FOUR PAYAS COMPARATIVE GUIDE -->
+        <div style="background:#ffffff; border-radius:14px; padding:15px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.1rem; color:#5b21b6; margin-bottom:10px; border-bottom:1.5px solid #ede9fe; padding-bottom:6px;">
+                🏛️ Classical Science of the 4 Shani Payas (Saturn's Metallic Footing)
+            </div>
+            <div style="font-size:0.94rem; line-height:1.65; color:#334155; margin-bottom:10px;">
+                In Vedic Jyotish, when Saturn enters any zodiac sign, his arrival energy crystallizes through one of four metallic footings based on the angular distance of your natal Moon sign:
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; font-size:0.92rem;">
+                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0; border-left:4px solid #94a3b8;">
+                    <b style="color:#0f172a;">🥈 Rajat Paya (Silver - 2nd, 5th, 9th from Moon):</b><br>
+                    <span style="color:#475569;">Governed by Chandra & Shukra. Most auspicious footing; bestows financial shields, executive intellect, and relief from long-standing health burdens.</span>
+                </div>
+                <div style="background:#fff7ed; border-radius:10px; padding:10px; border:1px solid #fed7aa; border-left:4px solid #ea580c;">
+                    <b style="color:#9a3412;">🥉 Tamra Paya (Copper - 3rd, 7th, 10th from Moon):</b><br>
+                    <span style="color:#7c2d12;">Governed by Surya & Mangal. Drives high stamina, aggressive professional expansion, courage in litigation, and steady compounding wealth through labor.</span>
+                </div>
+                <div style="background:#fefce8; border-radius:10px; padding:10px; border:1px solid #fef08a; border-left:4px solid #eab308;">
+                    <b style="color:#854d0e;">🥇 Swarna Paya (Gold - 1st, 6th, 11th from Moon):</b><br>
+                    <span style="color:#713f12;">High ego tests, sudden spikes in overhead expenses, and health vulnerabilities. Demands strict humility, modesty, and avoidance of vanity.</span>
+                </div>
+                <div style="background:#f1f5f9; border-radius:10px; padding:10px; border:1px solid #cbd5e1; border-left:4px solid #475569;">
+                    <b style="color:#1e293b;">🪙 Loha Paya (Iron - 4th, 8th, 12th from Moon):</b><br>
+                    <span style="color:#334155;">Demands heavy patience, blue-collar endurance, and silent labor. High delays reward those who do not complain and remain honest.</span>
+                </div>
+            </div>
         </div>
 
-        <div style="background:#f5f3ff; border-radius:12px; padding:14px; border:1.5px solid #ddd6fe;">
-            <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:8px;">🪔 Shani Protective Remedies:</div>
-            <div style="font-size:0.95rem; line-height:1.65; color:#3b0764;">
-                • Recite the <b>Hanuman Chalisa</b> daily, especially on Saturday and Tuesday evenings.<br>
-                • Offer mustard oil and black sesame seeds in an iron or steel bowl to Shani Dev, or light a mustard oil lamp near a sacred Peepal tree on Saturdays.<br>
-                • Because you operate under <b>Silver Feet (Rajat Paya)</b>, offering raw milk mixed with clean water on a Shiva Lingam on Mondays activates an exceptional shield against Sade Sati friction.
+        <!-- 3. ELABORATIVE SHANI SADE SATI & DHAIYA 3-PHASE ROADMAP -->
+        <div style="background:#ffffff; border-radius:14px; padding:16px; border:1.5px solid #ddd6fe; border-left:6px solid #7c3aed; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:4px;">
+                {t('sadesati_title', current_lang)}
+            </div>
+            <div style="font-size:1.05rem; font-weight:900; color:#6d28d9; margin-bottom:2px;">
+                {shani_sadesati_data['type']}
+            </div>
+            <div style="font-size:0.92rem; color:#64748b; margin-bottom:12px;">
+                <b>Active Phase Period:</b> {shani_sadesati_data['dates']} &nbsp;|&nbsp; <b>Overall Cycle:</b> 7.5 Years Total
+            </div>
+
+            <!-- Complete 3-Phase Roadmap -->
+            <div style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                <!-- PHASE 1 -->
+                <div style="background:#f5f3ff; border-radius:12px; padding:13px; border:1px solid #ddd6fe; border-left:5px solid #9333ea;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <b style="color:#6b21a8; font-size:1rem;">Phase 1: Rising Phase (Aarohi Charana / 12th House Transit)</b>
+                        <span style="background:#d8b4fe; color:#581c87; font-size:0.8rem; padding:2px 8px; border-radius:10px; font-weight:800;">ACTIVE NOW</span>
+                    </div>
+                    <div style="font-size:0.88rem; color:#7e22ce; font-weight:700; margin-bottom:5px;">📅 29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)</div>
+                    <div style="font-size:0.93rem; line-height:1.65; color:#3b0764;">
+                        <b>Detailed Prediction:</b> Saturn enters the 12th house from your natal Moon (Mesha), initiating the 7.5-year cycle. This phase audits subconscious habits, sleep architecture, and financial outflows. Unnecessary expenditures increase unless directed toward constructive long-term investments (real estate, foreign connections, asset creation). Mental anxiety and restless sleep can occur due to subconscious purging. Your active <b>Silver Paya (Rajat Paya)</b> acts as a divine protective shield, turning potential losses into strategic investments and spiritual elevation.
+                    </div>
+                    <div style="background:#ffffff; border-radius:8px; padding:8px 10px; margin-top:8px; border:1px solid #e9d5ff; font-size:0.9rem; color:#581c87;">
+                        <b>🪔 Phase 1 Remedies:</b> Maintain strict budgeting. Avoid high-interest loans. Feed soaked black grams (chana) to stray cattle on Tuesdays and Saturdays. Keep your bedroom free of clutter and sleep with your head towards the South or East.
+                    </div>
+                </div>
+
+                <!-- PHASE 2 -->
+                <div style="background:#fdf2f8; border-radius:12px; padding:13px; border:1px solid #fbcfe8; border-left:5px solid #db2777;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <b style="color:#9d174d; font-size:1rem;">Phase 2: Peak Phase (Janma Shani / 1st House Core Transit)</b>
+                        <span style="background:#fce7f3; color:#9d174d; font-size:0.8rem; padding:2px 8px; border-radius:10px; font-weight:800;">UPCOMING</span>
+                    </div>
+                    <div style="font-size:0.88rem; color:#be185d; font-weight:700; margin-bottom:5px;">📅 February 2028 – April 2030 (Saturn in Aries / Mesha Rashi)</div>
+                    <div style="font-size:0.93rem; line-height:1.65; color:#831843;">
+                        <b>Detailed Prediction:</b> Saturn transits directly over your natal Moon. This is the heart of Sade Sati—the psychological and physical crucible. Saturn directly scrutinizes your self-identity, health vitality, executive decision-making, and relationship dynamics. You are tasked with massive leadership responsibilities. While work pressure peaks, those who work with meticulous discipline emerge as unshakeable industry leaders. Personal ego is dismantled to make room for genuine authority.
+                    </div>
+                    <div style="background:#ffffff; border-radius:8px; padding:8px 10px; margin-top:8px; border:1px solid #fbcfe8; font-size:0.9rem; color:#9d174d;">
+                        <b>🪔 Phase 2 Remedies:</b> Recite the <b>Hanuman Chalisa</b> or <b>Sundarkand</b> every Tuesday and Saturday evening. Perform Shani Telabhishekam (offer mustard oil with black sesame seeds) on Saturdays. Practice daily morning Surya Namaskar and Pranayama to maintain biological Prana.
+                    </div>
+                </div>
+
+                <!-- PHASE 3 -->
+                <div style="background:#f0fdf4; border-radius:12px; padding:13px; border:1px solid #bbf7d0; border-left:5px solid #16a34a;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                        <b style="color:#166534; font-size:1rem;">Phase 3: Setting Phase (Avarohi Charana / 2nd House Transit)</b>
+                        <span style="background:#dcfce7; color:#166534; font-size:0.8rem; padding:2px 8px; border-radius:10px; font-weight:800;">UPCOMING</span>
+                    </div>
+                    <div style="font-size:0.88rem; color:#15803d; font-weight:700; margin-bottom:5px;">📅 April 2030 – May 2032 (Saturn in Taurus / Vrishabha Rashi)</div>
+                    <div style="font-size:0.93rem; line-height:1.65; color:#14532d;">
+                        <b>Detailed Prediction:</b> Saturn moves to the 2nd house of accumulated wealth (Dhana Bhava), family lineage, and speech. The turbulent storms of Phase 2 settle completely. You now harvest the fruits of the hard lessons learned. Financial stability returns, new permanent income assets are locked in, and family relations consolidate. Saturn teaches mindful speech—avoiding arrogance or sharp criticism cements permanent domestic peace.
+                    </div>
+                    <div style="background:#ffffff; border-radius:8px; padding:8px 10px; margin-top:8px; border:1px solid #bbf7d0; font-size:0.9rem; color:#166534;">
+                        <b>🪔 Phase 3 Remedies:</b> Feed wheat dough balls with jaggery to cows on Thursdays and Saturdays. Maintain absolute honesty in business accounting and tax filings. Practice sweet, measured speech (Mita-bhashi).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. CRITICAL CAUTIONS: WHAT TO AVOID DURING SADE SATI & DHAIYA -->
+        <div style="background:#fff1f2; border-radius:14px; padding:16px; border:1.5px solid #fecdd3; border-left:6px solid #e11d48; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#9f1239; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <span>⚠️</span> <span>What to Avoid During Active Sade Sati or Dhaiya (वर्जित कर्म व सावधानियां)</span>
+            </div>
+            <div style="font-size:0.94rem; line-height:1.7; color:#881337;">
+                Saturn is the cosmic Chief Justice (Dharmaraja / Karma-Phaladata). When operating under active Sade Sati or Dhaiya, strictly avoid the following pitfalls:
+                <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+                    <div>🚫 <b>Never Mistreat Subordinates or Laborers:</b> Saturn represents blue-collar workers, cleaners, drivers, and service staff. Cheating, delaying wages, or speaking disrespectfully to service staff directly activates Saturn's severe wrath. Treat them with generosity and respect.</div>
+                    <div>🚫 <b>No Speculative Gambles or Fast-Money Shortcuts:</b> Avoid high-leverage day trading, unauthorized crypto bets, and illegal tax evasion schemes. Saturn punishes shortcuts with compounding penalties.</div>
+                    <div>🚫 <b>Avoid Saturday Binding Contracts & Sunset Signings:</b> Refrain from signing long-term partnership pacts or high-stakes debt commitments on Saturdays or during twilight (Sandhya Kaal).</div>
+                    <div>🚫 <b>Do Not Buy Iron, Mustard Oil, or Leather on Saturdays:</b> Buying iron scrap, black footwear, or mustard oil on Saturdays invites transit friction. These items may be donated on Saturdays, but never purchased for personal use.</div>
+                    <div>🚫 <b>Avoid Alcohol, Intoxicants & Tamasic Greasy Food on Tuesdays/Saturdays:</b> Intoxicants cloud cognitive discernment, leading to impulsive words that cause lasting professional and domestic rifts.</div>
+                    <div>🚫 <b>Avoid Harboring Vengeful Thoughts or Arrogant Ultimatums:</b> Saturn demands egoless objectivity. If someone wrongs you, let cosmic Dharma handle justice—do not stoop to vindictive retaliations.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. AUTHENTIC VEDIC & PURANIC SHANI MANTRAS -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:16px; border:1.5px solid #ddd6fe;">
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <span>🪔</span> <span>Authentic Vedic & Puranic Shani Mantras (सिद्ध वैदिक एवं पौराणिक मंत्र)</span>
+            </div>
+            <div style="font-size:0.93rem; color:#475569; margin-bottom:12px;">
+                Chanting these consecrated mantras during twilight hours facing West neutralizes heavy karmic density and activates protective cosmic shields:
+            </div>
+
+            <!-- Mantra 1: Vedic Samhita Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe; margin-bottom:10px; border-left:4px solid #7c3aed;">
+                <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">1. Rigvedic / Yajurvedic Samhita Shani Mantra (परम वैदिक शांति मंत्र)</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#1e1b4b; margin:6px 0; font-family:'Noto Sans Devanagari', sans-serif;">
+                    ॐ शं नो देवीरभिष्टय आपो भवन्तु पीतये। शं योरभि स्रवन्तु नः॥
+                </div>
+                <div style="font-size:0.92rem; color:#4338ca; font-weight:700;">
+                    <i>Om Sham No Deveerabhishtaya Aapo Bhavantu Peetaye, Sham Yorabhi Sravantu Nah.</i>
+                </div>
+                <div style="font-size:0.88rem; color:#475569; margin-top:4px;">
+                    <b>Meaning & Count:</b> "May the divine cosmic waters bestow bliss and fulfillment upon us; may auspiciousness flow upon us from all directions." Chant <b>21 times daily</b> during sunrise or sunset.
+                </div>
+            </div>
+
+            <!-- Mantra 2: Shani Beej Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe; margin-bottom:10px; border-left:4px solid #7c3aed;">
+                <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">2. Shani Beej Mantra (तांत्रिक बीज मंत्र - Acoustic Karmic Purifier)</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#1e1b4b; margin:6px 0; font-family:'Noto Sans Devanagari', sans-serif;">
+                    ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥
+                </div>
+                <div style="font-size:0.92rem; color:#4338ca; font-weight:700;">
+                    <i>Om Praam Preem Proum Sah Shanaishcharaya Namah.</i>
+                </div>
+                <div style="font-size:0.88rem; color:#475569; margin-top:4px;">
+                    <b>Count & Guidance:</b> Chant <b>108 times on a Rudraksha or Blue Hakik mala</b> on Saturday evenings facing West. Calms nervous agitation and aligns the root chakra.
+                </div>
+            </div>
+
+            <!-- Mantra 3: Shani Gayatri Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe; margin-bottom:10px; border-left:4px solid #7c3aed;">
+                <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">3. Shani Gayatri Mantra (शनि गायत्री मंत्र - Divine Mental Illumination)</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#1e1b4b; margin:6px 0; font-family:'Noto Sans Devanagari', sans-serif;">
+                    ॐ काकध्वजाय विद्महे खड्गहस्ताय धीमहि तन्नो मन्दः प्रचोदयात्॥
+                </div>
+                <div style="font-size:0.92rem; color:#4338ca; font-weight:700;">
+                    <i>Om Kaakadhwajaaya Vidmahe Khadgahastaaya Dheemahi Tanno Mandah Prachodayaat.</i>
+                </div>
+                <div style="font-size:0.88rem; color:#475569; margin-top:4px;">
+                    <b>Count & Guidance:</b> Chant <b>11 times on Saturdays</b> to banish fear of the future, remove mental despair, and awaken tactical clarity.
+                </div>
+            </div>
+
+            <!-- Mantra 4: Maha Mrityunjaya Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe; border-left:4px solid #7c3aed;">
+                <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">4. Maha Mrityunjaya Shield (महामृत्युंजय रक्षा कवच - Supreme Overcoming of Shani)</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#1e1b4b; margin:6px 0; font-family:'Noto Sans Devanagari', sans-serif;">
+                    ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्। उर्वारुकमिव बन्धनान् मृत्योर्मुक्षीय मामृतात्॥
+                </div>
+                <div style="font-size:0.92rem; color:#4338ca; font-weight:700;">
+                    <i>Om Tryambakam Yajaamahe Sugandhim Pushti-Vardhanam, Urvaarukamiva Bandhanaan Mrityor-Muksheeya Maamritaat.</i>
+                </div>
+                <div style="font-size:0.88rem; color:#475569; margin-top:4px;">
+                    <b>Count & Guidance:</b> Because Lord Shiva is the supreme Guru and sovereign master of Shani Dev, chanting this mantra <b>11 times every morning</b> completely neutralizes sudden health risks, accidents, and psychological paralysis during Sade Sati.
+                </div>
             </div>
         </div>
     </div>
