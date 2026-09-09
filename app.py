@@ -22,8 +22,13 @@ st.set_page_config(
 
 # Helper function to inject clean HTML without triggering Markdown code block formatting
 def render_html(html_string: str):
-    """Renders dedented HTML safely, eliminating 4-space markdown code block parsing."""
-    st.markdown(textwrap.dedent(html_string).strip(), unsafe_allow_html=True)
+    """
+    Renders HTML safely by stripping all leading whitespace from every line.
+    This completely prevents Streamlit's Markdown engine from misinterpreting 
+    indented HTML as a 4-space indented <pre><code> block.
+    """
+    clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
+    st.markdown(clean_html, unsafe_allow_html=True)
 
 render_html("""
 <style>
@@ -867,7 +872,7 @@ def render_page_profile():
             <div style="font-weight:800; font-size:13.5px; color:#9a3412; margin-bottom:4px;">🪔 Vedic Nakshatra Remedies:</div>
             <div style="font-size:12.8px; line-height:1.55; color:#431407;">
                 • <b>Deity Worship:</b> Offer prayers to Lord Shiva or Lord Yama to harmonize vital life energy.<br>
-                • <b>Vedic Mantra:</b> Chanting <code>Om Hreem Bharanyai Namah</code> or <code>Maha Mrityunjaya Mantra</code> on Fridays and Tuesdays removes heavy burdens.<br>
+                • <b>Vedic Mantra:</b> Chanting <b>Om Hreem Bharanyai Namah</b> or <b>Maha Mrityunjaya Mantra</b> on Fridays and Tuesdays removes heavy burdens.<br>
                 • <b>Sacred Tree:</b> Nurture or water an Amla (Indian Gooseberry) plant.
             </div>
         </div>
@@ -1032,7 +1037,7 @@ def render_page_live():
             <div style="font-size:13px; line-height:1.55; color:#0c4a6e;">
                 • <b>Decision Protocol:</b> {"High green light for key ventures and financial commitments." if "🟢" in icon else "Pause speculative ventures, keep communication mild and avoid avoidable friction."}<br>
                 • <b>Vahan Remedy:</b> Feed birds or stray animals this morning to balance the active Saturn vehicle.<br>
-                • <b>Aura Mantra:</b> Recite <code>Om Namah Shivaya</code> 11 times before stepping out.
+                • <b>Aura Mantra:</b> Recite <b>Om Namah Shivaya</b> 11 times before stepping out.
             </div>
         </div>
     </div>
@@ -1125,7 +1130,7 @@ def render_page_remedies():
             <div style="font-weight:800; font-size:14px; color:#065f46; margin-bottom:4px;">1. Janma Nakshatra Protection ({chart_info['star_name']})</div>
             <div style="font-size:12.8px; line-height:1.55; color:#1e293b;">
                 • Worship Lord Shiva or Lord Yama to clear heavy ancestral and life burdens.<br>
-                • Chant <code>Om Hreem Bharanyai Namah</code> or <code>Maha Mrityunjaya Mantra</code> 11 times every morning.
+                • Chant <b>Om Hreem Bharanyai Namah</b> or <b>Maha Mrityunjaya Mantra</b> 11 times every morning.
             </div>
         </div>
 
@@ -1191,7 +1196,7 @@ def render_page_share():
 
         <div style="background:#fff7ed; border-radius:10px; padding:10px; border:1px solid #fed7aa; text-align:center;">
             <div style="font-size:11.5px; color:#9a3412; font-weight:700;">Direct App Link:</div>
-            <div style="font-size:13px; font-weight:800; color:#431407; margin-top:2px;"><code>{app_url}</code></div>
+            <div style="font-size:13px; font-weight:800; color:#431407; margin-top:2px;"><b>{app_url}</b></div>
         </div>
     </div>
     """)
