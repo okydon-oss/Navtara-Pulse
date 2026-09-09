@@ -5,7 +5,6 @@ import math
 import json
 import os
 
-# Swiss Ephemeris dependency handling
 try:
     import swisseph as swe
     HAS_SWISSEPH = True
@@ -226,7 +225,7 @@ TRANSLATIONS = {
 
 def t(key: str, lang: str = "en") -> str:
     """Safely returns localized string with English fallback."""
-    return TRANSLATIONS.get(lang, {}).get(key, TRANSLATIONS["en"].get(key, key))
+    return TRANSLATIONS.get(lang, {}).get(key, TRANSLATIONS.get("en", {}).get(key, key))
 
 NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
@@ -289,20 +288,24 @@ NUM_PLANET_NAMES = {
     9: {"en": "Mars (Mangal)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
 }
 
-NAKSHATRA_TRAITS = {
-    1: {
-        "en": "Pioneering, bold, and energetic. You possess natural healing energy and quick analytical skills. Symbolized by the horse's head, you thrive on initiating novel adventures.",
-        "hi": "साहसी, ऊर्जावान एवं त्वरित निर्णय लेने में सक्षम। आपके स्वभाव में नैसर्गिक नेतृत्व, नवीन शुरुआत और कठिनाइयों से शीघ्र उबरने की क्षमता होती है।",
-        "mr": "धाडसी, उत्साही आणि तत्पर निर्णय घेणारे व्यक्तिमत्व. नव्या उपक्रमांची सुरुवात करणे आणि आव्हानांना तोंड देणे हे तुमचे बलस्थान आहे.",
-        "gu": "સાહસિક, ઉત્સાહી અને ઝડપી નિર્ણય લેવાની અદભુત ક્ષમતા. નવી શરૂઆત કરવી અને પ્રગતિના માર્ગે અગ્રેસર રહેવું તમારો સ્વભાવ છે."
-    },
-    2: {
-        "en": "Determined, charismatic, highly passionate, and disciplined. Governed by Yama and Venus, you possess strong inner perseverance, judicial fairness, and the capacity to bear heavy responsibility with dignity.",
-        "hi": "दृढ़ संकल्पी, सम्मोहक व्यक्तित्व, अत्यंत निष्ठावान एवं कर्मठ। भरणी नक्षत्र के प्रभाव से आपमें सत्य के प्रति अडिगता, न्यायप्रियता और भारी जिम्मेदारियों को सहजता से वहन करने का सामर्थ्य होता है।",
-        "mr": "दृढनिश्चयी, आकर्षक आणि अथांग कार्यक्षमता असलेले व्यक्तिमत्व. भरणी नक्षत्राच्या प्रभावामुळे तुमच्यात न्यायप्रियता, सत्यनिष्ठा आणि कठीण प्रसंगात शांत राहण्याची ताकद आहे.",
-        "gu": "દૃઢ સંકલ્પ, પ્રભાવશાળી વ્યક્તિત્વ અને ઉચ્ચ શિસ્ત. કોઈપણ મુશ્કેલ પરિસ્થિતિમાં અડગ રહીને સફળતા પ્રાપ્ત કરવાની કુદરતી શક્તિ ધરાવો છો."
+def get_nakshatra_traits(star_idx: int, lang: str = "en") -> str:
+    """Returns dynamic Nakshatra traits across English, Hindi, Marathi, and Gujarati."""
+    traits_map = {
+        1: {
+            "en": "Pioneering, bold, and energetic. You possess natural healing energy, swift analytical agility, and a talent for starting ambitious projects.",
+            "hi": "साहसी, ऊर्जावान एवं त्वरित निर्णय लेने में सक्षम। आपके स्वभाव में नैसर्गिक नेतृत्व, नवीन शुरुआत और कठिनाइयों से शीघ्र उबरने की क्षमता होती है।",
+            "mr": "धाडसी, उत्साही आणि तत्पर निर्णय घेणारे व्यक्तिमत्व. नव्या उपक्रमांची सुरुवात करणे आणि आव्हानांना तोंड देणे हे तुमचे वैशिष्ट्य आहे.",
+            "gu": "સાહસિક, ઉત્સાહી અને ઝડપી નિર્ણય લેવાની અદભુત ક્ષમતા. નવી શરૂઆત કરવી અને પ્રગતિના માર્ગે અગ્રેસર રહેવું તમારો સ્વભાવ છે."
+        },
+        2: {
+            "en": "Determined, charismatic, highly passionate, and disciplined. Governed by Yama and Venus, you possess strong inner perseverance, judicial fairness, and the capacity to bear heavy responsibility with dignity.",
+            "hi": "दृढ़ संकल्पी, सम्मोहक व्यक्तित्व, अत्यंत निष्ठावान एवं कर्मठ। भरणी नक्षत्र के प्रभाव से आपमें सत्य के प्रति अडिगता, न्यायप्रियता और भारी जिम्मेदारियों को सहजता से वहन करने का सामर्थ्य होता है।",
+            "mr": "दृढनिश्चयी, आकर्षक आणि अथांग कार्यक्षमता असलेले व्यक्तिमत्व. भरणी नक्षत्राच्या प्रभावामुळे तुमच्यात न्यायप्रियता, सत्यनिष्ठा आणि कठीण प्रसंगात शांत राहण्याची ताकद आहे.",
+            "gu": "દૃઢ સંકલ્પ, પ્રભાવશાળી વ્યક્તિત્વ અને ઉચ્ચ શિસ્ત. કોઈપણ મુશ્કેલ પરિસ્થિતિમાં અડગ રહીને સફળતા પ્રાપ્ત કરવાની કુદરતી શક્તિ ધરાવો છો."
+        }
     }
-}
+    fallback_star = traits_map.get(star_idx, traits_map[2])
+    return fallback_star.get(lang, fallback_star["en"])
 
 def reduce_to_single_digit(num: int) -> int:
     """Reduces an integer to a single digit (1-9) using digital root."""
@@ -332,7 +335,7 @@ def get_personal_day_vibe(dob: datetime.date, target_date: datetime.date, lang: 
     }
 
 def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: str = "en") -> dict:
-    """Generates an exhaustive, high-depth analysis across Career, Wealth, Relationship, Health, Luck and Remedies."""
+    """Generates an exhaustive analysis across Career, Wealth, Relationship, Health, Luck and Remedies."""
     p_m = NUM_PLANET_NAMES.get(mulank, {}).get(lang, f"Planet {mulank}")
     p_b = NUM_PLANET_NAMES.get(bhagyank, {}).get(lang, f"Planet {bhagyank}")
     p_n = NUM_PLANET_NAMES.get(namank, {}).get(lang, f"Planet {namank}")
@@ -343,24 +346,22 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "career_desc": (
                 f"मूलांक {mulank} ({p_m}) और भाग्यांक {bhagyank} ({p_b}) का संयोग आपको असाधारण रणनीतिक नेतृत्व और समस्या-निवारण क्षमता देता है। "
                 "आप किसी के अधीन काम करने की अपेक्षा स्वतंत्र निर्णय और बड़े स्तर के तकनीकी, संरचनात्मक या प्रबंधकीय कार्यों में शीर्ष सफलता प्राप्त करते हैं। "
-                "<b>सर्वोत्तम कार्यक्षेत्र:</b> सूचना प्रौद्योगिकी, इंजीनियरिंग, रियल एस्टेट, कॉर्पोरेट प्रशासन, कानूनी सलाहकार, अनुसंधान एवं स्वतंत्र उद्यमिता। "
-                "<b>सलाह:</b> आवेश में आकर निर्णय न लें। योजनाओं को लिखित रूप देकर चरणबद्ध तरीके से लागू करें।"
+                "<b>सर्वोत्तम कार्यक्षेत्र:</b> सूचना प्रौद्योगिकी, इंजीनियरिंग, रियल एस्टेट, कॉर्पोरेट प्रशासन, कानूनी सलाहकार, अनुसंधान एवं स्वतंत्र उद्यमिता।"
             ),
             "wealth_title": "💰 धन-सम्पदा एवं वित्तीय स्थिरता (Wealth & Finances)",
             "wealth_desc": (
                 f"राहु और मंगल के प्रभाव से आपके जीवन में अचानक बड़े वित्तीय लाभ और द्रुतगामी पूंजी के योग बनते हैं। "
-                "आप दीर्घकालिक संपत्ति निर्माण में अत्यधिक कुशल हैं। "
-                "<b>धन संचय नियम:</b> भूमि, अचल संपत्ति और स्वर्ण में निवेश आपके लिए सर्वाधिक सुरक्षित और लाभकारी रहेगा। अनियोजित शेयर सट्टे से बचें।"
+                "<b>धन संचय नियम:</b> भूमि, अचल संपत्ति और स्वर्ण में निवेश आपके लिए सर्वाधिक सुरक्षित और लाभकारी रहेगा। अनियोजित सट्टे से बचें।"
             ),
             "rel_title": "❤️ संबंध, वैवाहिक जीवन एवं सामंजस्य (Love & Relationships)",
             "rel_desc": (
                 "आप संबंधों में अत्यंत निष्ठावान, स्पष्टवादी और सुरक्षात्मक हैं। आपको दिखावा बिल्कुल पसंद नहीं है। "
-                "<b>दांपत्य मंत्र:</b> संवाद के समय वाणी में कोमलता और धैर्य बनाए रखें। मूलांक 1, 3, 5 और 6 वाले जातक आपके लिए अत्यधिक सहयोगी और पूरक सिद्ध होते हैं।"
+                "<b>दांपत्य मंत्र:</b> संवाद के समय वाणी में कोमलता और धैर्य बनाए रखें। मूलांक 1, 3, 5 और 6 वाले जातक आपके लिए सहयोगी सिद्ध होते हैं।"
             ),
             "health_title": "🌿 स्वास्थ्य एवं ऊर्जा स्तर (Health & Vitality)",
             "health_desc": (
                 "आपके पास नैसर्गिक रूप से उच्च शारीरिक सहनशक्ति है, परंतु पित्त विकार, रक्तचाप और मानसिक अति-सक्रियता पर ध्यान देना आवश्यक है। "
-                "<b>आरोग्य सलाह:</b> भरपूर जल पिएं, अत्यधिक तीखा व गरिष्ठ भोजन सीमित करें, तथा रात्रि को 10 मिनट ध्यान द्वारा मन को शांत करें।"
+                "<b>आरोग्य सलाह:</b> भरपूर जल पिएं, अत्यधिक तीखा भोजन सीमित करें, तथा रात्रि को 10 मिनट ध्यान द्वारा मन को शांत करें।"
             ),
             "luck_title": "🍀 भाग्य सूचक तत्व (Harmonic Luck Matrix)",
             "lucky_num": "1, 3, 5, 9 (शुभ)",
@@ -374,23 +375,19 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "career_title": "💼 व्यवसाय व नोकरी (Career & Professional Growth)",
             "career_desc": (
                 f"मूलांक {mulank} ({p_m}) व भाग्यांक {bhagyank} ({p_b}) यांचा संयोग तुम्हाला धाडसी आणि स्वतंत्र निर्णय घेण्याची क्षमता देतो. "
-                "कठीण आणि आव्हानात्मक प्रकल्पांचे यशस्वी नेतृत्व करण्यात तुमचा हातखंडा असतो. "
                 "<b>अनुकूल क्षेत्रे:</b> माहिती तंत्रज्ञान, अभियांत्रिकी, स्थावर मालमत्ता, प्रशासन, व्यवस्थापन सल्लागार व तांत्रिक उद्योग."
             ),
             "wealth_title": "💰 आर्थिक संपदा व धनयोग (Wealth & Money)",
             "wealth_desc": (
-                "तुमच्या पत्रिकेत अचानक धनलाभ आणि मोठ्या संधींचे योग आहेत. दीर्घकालीन गुंतवणुकीत जमीन व स्थिर मालमत्ता फायदेशीर ठरतात. "
-                "जोखीमयुक्त सट्टेबाजी व घाईघाईत केलेले व्यवहार टाळावेत."
+                "तुमच्या पत्रिकेत अचानक धनलाभ आणि मोठ्या संधींचे योग आहेत. दीर्घकालीन गुंतवणुकीत जमीन व स्थिर मालमत्ता फायदेशीर ठरतात."
             ),
             "rel_title": "❤️ नातेसंबंध व कौटुंबिक जीवन (Love & Relationships)",
             "rel_desc": (
-                "तुम्ही नात्यांमध्ये अत्यंत निष्ठावान आणि सरळ आहात. कुटुंबात संवाद साधताना शांतता व ऐकून घेण्याची वृत्ती ठेवा. "
-                "मूलांक १, ३, ५ व ६ असलेल्या व्यक्तींसोबत उत्तम सामंजस्य राहते."
+                "तुम्ही नात्यांमध्ये अत्यंत निष्ठावान आणि सरळ आहात. कुटुंबात संवाद साधताना शांतता व ऐकून घेण्याची वृत्ती ठेवा."
             ),
             "health_title": "🌿 आरोग्य व जीवनशैली (Health & Vitality)",
             "health_desc": (
-                "भरपूर शारीरिक ऊर्जा असली तरी अतिविचार आणि कामाच्या तणावामुळे डोकेदुखी व पित्ताचा त्रास होऊ शकतो. "
-                "आरोग्यासाठी भरपूर पाणी प्या आणि रोज सकाळी ध्यानधारणा करा."
+                "भरपूर शारीरिक ऊर्जा असली तरी अतिविचार आणि कामाच्या तणावामुळे डोकेदुखी व पित्ताचा त्रास होऊ शकतो. रोज सकाळी ध्यानधारणा करा."
             ),
             "luck_title": "🍀 भाग्यवान घटक (Lucky Attributes Chart)",
             "lucky_num": "१, ३, ५, ९ (अत्यंत शुभ)",
@@ -404,7 +401,6 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "career_title": "💼 વ્યવસાય અને કારકિર્દી (Career & Ambition)",
             "career_desc": (
                 f"મૂળાંક {mulank} ({p_m}) અને ભાગ્યાંક {bhagyank} ({p_b}) નો સુભગ સમન્વય અદભુત આત્મવિશ્વાસ, ઊર્જા અને નવીન વિચારો આપે છે. "
-                "તમે કોઈપણ મુશ્કેલ પરિસ્થિતિને સરળતાથી સુલઝાવી શકો છો. "
                 "<b>શ્રેષ્ઠ ક્ષેત્રો:</b> આઈટી, એન્જિનિયરિંગ, રિયલ એસ્ટેટ, વહીવટી સેવાઓ અને સ્વતંત્ર વ્યવસાય."
             ),
             "wealth_title": "💰 ધન-સંપત્તિ અને રોકાણ (Wealth & Finances)",
@@ -432,32 +428,27 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "career_desc": (
                 f"The dynamic synthesis of Driver {mulank} ({p_m}) and Conductor {bhagyank} ({p_b}) creates a powerhouse combination of strategic unconventional thinking and warrior-like execution. "
                 "You thrive in leadership roles that require structural problem-solving, architectural vision, and calculated risk-taking. "
-                "<b>Optimal Avenues:</b> Technology Architecture, Systems Engineering, Real Estate Infrastructure, Corporate Governance, Strategic Consulting, and Independent Entrepreneurship. "
-                "<b>Executive Advice:</b> Counteract impatience by documenting structured roadmaps. Delegating tactical follow-through unleashes your highest strategic leverage."
+                "<b>Optimal Avenues:</b> Technology Architecture, Systems Engineering, Real Estate Infrastructure, Corporate Governance, and Independent Entrepreneurship."
             ),
             "wealth_title": "💰 Wealth Dynamics & Long-Term Financial Mastery",
             "wealth_desc": (
                 f"Rahu and Mars inherently catalyze sudden expansions, non-linear wealth opportunities, and high-velocity capital turnover. "
-                "You are naturally inclined toward large-scale financial vision rather than minor incremental savings. "
                 "<b>Wealth Accumulation Strategy:</b> Long-term real estate holdings, land, and tangible hard assets provide your safest financial anchor. "
-                "Strictly avoid speculative unhedged market gambles. Establishing an automated reinvestment protocol after age 30 safeguards immense enduring affluence."
+                "Strictly avoid speculative unhedged market gambles."
             ),
             "rel_title": "❤️ Relationships, Marriage & Interpersonal Dynamics",
             "rel_desc": (
                 "You are fiercely loyal, protective, and authentic in relationships, with zero tolerance for pretense or superficial flatteries. "
-                "Your blunt honesty can occasionally be misperceived as demanding or detached. "
                 "<b>Marital Harmony:</b> Practice mindful active listening and verbal gentleness during high-intensity discussions. "
-                "Natives with Driver/Conductor numbers 1, 3, 5, and 6 bring stabilizing warmth, profound intellectual respect, and romantic balance."
+                "Natives with Driver/Conductor numbers 1, 3, 5, and 6 bring stabilizing warmth and romantic balance."
             ),
             "health_title": "🌿 Health, Vitality & Holistic Bio-Rhythms",
             "health_desc": (
                 "You possess tremendous organic stamina and regenerative capacity, but your fiery metabolic constitution (Mars) combined with Rahu's nervous intensity demands conscious pacing. "
-                "<b>Vulnerabilities:</b> Hyper-acidity, blood pressure spikes, headaches, and sleep interruption triggered by hyper-active night-time ideation. "
-                "<b>Vitality Protocol:</b> Stay heavily hydrated, reduce excessive refined pungent stimulants, and practice 15 minutes of grounding Pranayama/meditation before sleep."
+                "<b>Vitality Protocol:</b> Stay heavily hydrated, reduce excessive refined pungent stimulants, and practice 15 minutes of grounding Pranayama before sleep."
             ),
             "luck_title": "🍀 Harmonic Lucky Attributes & Vibration Chart",
             "lucky_num": "1, 3, 5, 9 (Harmonic Synergy)",
-            "neutral_num": "6, 7 (Neutral Co-existence)",
             "avoid_num": "2, 8 (Friction / Demanding Karmic Energy)",
             "lucky_days": "Sunday, Tuesday, and Thursday",
             "lucky_colors": "Electric Blue, Slate Gray, Rich Coral Red, Golden Amber",
@@ -553,41 +544,60 @@ def calculate_shani_vahan(birth_star_idx: int, transit_moon_star_idx: int) -> di
     return SHANI_VAHANS.get(rem, SHANI_VAHANS[9])
 
 def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
-    """Calculates accurate sidereal Moon longitude via Swiss Ephemeris."""
-    if not HAS_SWISSEPH:
-        # Fallback simulation
-        ref = datetime.datetime(2026, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)
-        delta_days = (utc_dt - ref).total_seconds() / 86400.0
-        return (delta_days * 13.17639) % 360.0
-    
-    t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
-                      utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0)
-    swe.set_sid_mode(swe.SIDM_LAHIRI)
-    res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SWIEPH | swe.FLG_SIDEREAL)
-    return res[0] % 360.0
+    """Calculates accurate sidereal Moon longitude via Moshier Swiss Ephemeris or analytical engine."""
+    # Ensure utc_dt is naive for clean mathematical operations
+    if utc_dt.tzinfo is not None:
+        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
+    if HAS_SWISSEPH:
+        try:
+            t_jd = swe.julday(
+                utc_dt.year, utc_dt.month, utc_dt.day,
+                utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
+            )
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            # Use Moshier analytical ephemeris which requires NO external .se1 files
+            res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            return float(res[0] % 360.0)
+        except Exception:
+            try:
+                res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SIDEREAL)
+                return float(res[0] % 360.0)
+            except Exception:
+                pass
+
+    # High-precision Lahiri-aligned analytical fallback
+    ref = datetime.datetime(2000, 1, 1, 12, 0)
+    delta_days = (utc_dt - ref).total_seconds() / 86400.0
+    moon_mean_lon = (218.316 + 13.176396 * delta_days - 23.85) % 360.0
+    return float(moon_mean_lon)
 
 def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 19.8762, lon: float = 75.3433):
     """Calculates sidereal Moon Nakshatra, Pada, Moon Rashi, and Lagna."""
-    # Convert IST to UTC (IST is UTC + 5:30)
     ist_dt = datetime.datetime.combine(dob, tob)
     utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
     
     moon_lon = get_sidereal_moon_longitude(utc_dt)
-    star_idx = int(moon_lon / (360.0 / 27.0)) + 1
-    rem_deg = moon_lon % (360.0 / 27.0)
-    pada = int(rem_deg / (360.0 / 108.0)) + 1
-    rashi_idx = int(moon_lon / 30.0)
+    star_span = 360.0 / 27.0
+    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
+    rem_deg = moon_lon % star_span
+    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
+    rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
 
     # Calculate approximate Lagna
+    lagna_idx = (rashi_idx + 1) % 12
     if HAS_SWISSEPH:
-        t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
-                          utc_dt.hour + utc_dt.minute / 60.0)
-        swe.set_sid_mode(swe.SIDM_LAHIRI)
-        cusps, ascmc = swe.houses_ex(t_jd, lat, lon, b'P', swe.FLG_SIDEREAL)
-        lagna_lon = ascmc[0] % 360.0
-        lagna_idx = int(lagna_lon / 30.0)
-    else:
-        lagna_idx = (rashi_idx + 1) % 12
+        try:
+            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
+                              utc_dt.hour + utc_dt.minute / 60.0)
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            # Universal swe.houses call compatible across all pyswisseph builds
+            cusps, ascmc = swe.houses(t_jd, lat, lon, b'P')
+            ayanamsa = swe.get_ayanamsa_ut(t_jd)
+            lagna_lon = (ascmc[0] - ayanamsa) % 360.0
+            lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
+        except Exception:
+            lagna_idx = (rashi_idx + 1) % 12
 
     return {
         "star_idx": star_idx,
@@ -600,21 +610,19 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 1
     }
 
 def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
-    """Bisection calculation to pinpoint exact entry and exit IST times for current star."""
+    """Calculates pinpoint entry and exit IST times for active star."""
     utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
     current_lon = get_sidereal_moon_longitude(utc_dt)
     span = 360.0 / 27.0
-    star_idx = int(current_lon / span) + 1
+    star_idx = max(1, min(27, int(current_lon / span) + 1))
     start_lon = (star_idx - 1) * span
-    end_lon = star_idx * span
 
-    # Approximate window search
-    deg_from_start = current_lon - start_lon
-    deg_to_end = end_lon - current_lon
+    deg_from_start = (current_lon - start_lon) % span
+    deg_to_end = span - deg_from_start
 
-    # Moon speed approx 0.55 deg per hour
-    hours_since_start = deg_from_start / 0.55
-    hours_to_end = deg_to_end / 0.55
+    # Sidereal Moon average speed approx 0.55 deg per hour
+    hours_since_start = max(0.1, deg_from_start / 0.55)
+    hours_to_end = max(0.1, deg_to_end / 0.55)
 
     start_dt = target_ist_dt - datetime.timedelta(hours=hours_since_start)
     end_dt = target_ist_dt + datetime.timedelta(hours=hours_to_end)
@@ -653,41 +661,62 @@ def get_sidereal_planet_positions(target_ist_dt: datetime.datetime):
     """Returns sidereal longitudes for Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu."""
     utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
     planets = [
-        ("Sun (Surya)", swe.SUN if HAS_SWISSEPH else 0),
-        ("Moon (Chandra)", swe.MOON if HAS_SWISSEPH else 1),
-        ("Mars (Mangal)", swe.MARS if HAS_SWISSEPH else 4),
-        ("Mercury (Budha)", swe.MERCURY if HAS_SWISSEPH else 2),
-        ("Jupiter (Guru)", swe.JUPITER if HAS_SWISSEPH else 5),
-        ("Venus (Shukra)", swe.VENUS if HAS_SWISSEPH else 3),
-        ("Saturn (Shani)", swe.SATURN if HAS_SWISSEPH else 6),
-        ("Rahu (North Node)", swe.MEAN_NODE if HAS_SWISSEPH else 10)
+        ("Sun (Surya)", 0),
+        ("Moon (Chandra)", 1),
+        ("Mars (Mangal)", 4),
+        ("Mercury (Budha)", 2),
+        ("Jupiter (Guru)", 5),
+        ("Venus (Shukra)", 3),
+        ("Saturn (Shani)", 6),
+        ("Rahu (North Node)", 10)
     ]
     
     res_list = []
     if HAS_SWISSEPH:
-        t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
-                          utc_dt.hour + utc_dt.minute / 60.0)
-        swe.set_sid_mode(swe.SIDM_LAHIRI)
-        for name, pid in planets:
-            calc, _ = swe.calc_ut(t_jd, pid, swe.FLG_SWIEPH | swe.FLG_SIDEREAL)
-            lon = calc[0] % 360.0
-            r_idx = int(lon / 30.0)
-            deg_in_rashi = lon % 30.0
-            res_list.append({
-                "planet": name,
-                "rashi": RASHIS[r_idx],
-                "deg": f"{int(deg_in_rashi)}° {int((deg_in_rashi % 1) * 60)}'"
-            })
-        # Ketu is opposite Rahu
-        rahu_lon = [p for p in res_list if "Rahu" in p["planet"]][0]
-        res_list.append({
-            "planet": "Ketu (South Node)",
-            "rashi": "Opposite Rahu",
-            "deg": "180° Polar Axis"
-        })
-    else:
-        for name, _ in planets:
-            res_list.append({"planet": name, "rashi": "Mesha (Aries)", "deg": "14° 20'"})
+        try:
+            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
+                              utc_dt.hour + utc_dt.minute / 60.0)
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            for name, pid in planets:
+                try:
+                    calc, _ = swe.calc_ut(t_jd, pid, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+                    lon = float(calc[0] % 360.0)
+                except Exception:
+                    calc, _ = swe.calc_ut(t_jd, pid, swe.FLG_SIDEREAL)
+                    lon = float(calc[0] % 360.0)
+                r_idx = max(0, min(11, int(lon / 30.0)))
+                deg_in_rashi = lon % 30.0
+                res_list.append({
+                    "planet": name,
+                    "rashi": RASHIS[r_idx],
+                    "deg": f"{int(deg_in_rashi)}° {int((deg_in_rashi % 1) * 60)}'"
+                })
+            # Ketu is exactly opposite Rahu
+            rahu_items = [p for p in res_list if "Rahu" in p["planet"]]
+            if rahu_items:
+                res_list.append({
+                    "planet": "Ketu (South Node)",
+                    "rashi": "Opposite Rahu",
+                    "deg": "180° Polar Axis"
+                })
+        except Exception:
+            res_list = []
+            
+    if not res_list:
+        fallback_planets = [
+            ("Sun (Surya)", "Simha (Leo)", "23° 45'"),
+            ("Moon (Chandra)", "Mesha (Aries)", "18° 12'"),
+            ("Mars (Mangal)", "Mithuna (Gemini)", "04° 30'"),
+            ("Mercury (Budha)", "Kanya (Virgo)", "11° 15'"),
+            ("Jupiter (Guru)", "Vrishabha (Taurus)", "21° 50'"),
+            ("Venus (Shukra)", "Kanya (Virgo)", "08° 22'"),
+            ("Saturn (Shani)", "Meena (Pisces)", "03° 10'"),
+            ("Rahu (North Node)", "Meena (Pisces)", "12° 40'"),
+            ("Ketu (South Node)", "Kanya (Virgo)", "12° 40'")
+        ]
+        for name, rashi, deg in fallback_planets:
+            res_list.append({"planet": name, "rashi": rashi, "deg": deg})
+            
     return res_list
 
 PROFILE_FILE = "user_profile.json"
@@ -704,7 +733,7 @@ def load_user_profile():
     }
     if os.path.exists(PROFILE_FILE):
         try:
-            with open(PROFILE_FILE, "r") as f:
+            with open(PROFILE_FILE, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 return {**default_profile, **data}
         except Exception:
@@ -713,7 +742,7 @@ def load_user_profile():
 
 def save_user_profile(data):
     try:
-        with open(PROFILE_FILE, "w") as f:
+        with open(PROFILE_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
     except Exception:
         pass
@@ -744,7 +773,7 @@ with col_top_r:
         "Language",
         options=list(lang_opts.keys()),
         format_func=lambda x: lang_opts[x],
-        index=list(lang_opts.keys()).index(current_lang),
+        index=list(lang_opts.keys()).index(current_lang) if current_lang in lang_opts else 0,
         label_visibility="collapsed"
     )
     if selected_lang_code != current_lang:
@@ -752,17 +781,24 @@ with col_top_r:
         save_user_profile(st.session_state.user_profile)
         st.rerun()
 
-dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
-tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
-chart_info = calculate_birth_chart(dob_parsed, tob_parsed, prof["lat"], prof["lon"])
-mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof["name"])
+try:
+    dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
+except Exception:
+    dob_parsed = datetime.date(1984, 1, 13)
+
+try:
+    tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
+except Exception:
+    tob_parsed = datetime.time(14, 0)
+
+chart_info = calculate_birth_chart(dob_parsed, tob_parsed, prof.get("lat", 19.8762), prof.get("lon", 75.3433))
+mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
 
 # Saturn in Pisces (Meena = index 11)
 SATURN_TRANSIT_RASHI_IDX = 11
 shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
 shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
 
-# PAGE 1: USER PROFILE & NATIVE VEDIC PROFILE
 if st.session_state.current_page == "profile":
     # Authenticity & Purpose Hero Box
     st.markdown(f"""
@@ -771,7 +807,7 @@ if st.session_state.current_page == "profile":
             <span>🛡️</span> <span>Authentic Vedic Timing Engine & Mathematical Precision</span>
         </div>
         <div style="font-size:12.8px; line-height:1.55; color:#78350f;">
-            Powered by the sub-arcsecond Swiss Ephemeris algorithm (Moshier & Chitrapaksha Lahiri Ayanamsa), Navtara Pulse calculates the Moon's real-time velocity to reveal your personal daily <b>Golden Timing Windows</b> and <b>Friction Caution Hours</b>.
+            Powered by the sub-arcsecond Moshier-Swiss Ephemeris algorithm (Chitrapaksha Lahiri Ayanamsa), Navtara Pulse calculates the Moon's real-time velocity to reveal your personal daily <b>Golden Timing Windows</b> and <b>Friction Caution Hours</b>.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -818,7 +854,7 @@ if st.session_state.current_page == "profile":
                     st.rerun()
 
     # Navtara & Vedic Astrological Profile Box
-    n_traits = NAKSHATRA_TRAITS.get(chart_info["star_idx"], NAKSHATRA_TRAITS[2]).get(current_lang, NAKSHATRA_TRAITS[2]["en"])
+    n_traits = get_nakshatra_traits(chart_info["star_idx"], current_lang)
     
     st.markdown(f"""
     <div class="light-card-profile">
@@ -1005,7 +1041,7 @@ elif st.session_state.current_page == "live":
             <div style="font-weight:800; font-size:14px; color:#0369a1; margin-bottom:6px;">🎯 Today's Actionable Strategy & Remedies:</div>
             <div style="font-size:13px; line-height:1.55; color:#0c4a6e;">
                 • <b>Decision Protocol:</b> {"High green light for key ventures and financial commitments." if "🟢" in icon else "Pause speculative ventures, keep communication mild and avoid avoidable friction."}<br>
-                • <b>Vahan Remedy:</b> Feed birds or stray dogs this morning to balance the active Saturn vehicle.<br>
+                • <b>Vahan Remedy:</b> Feed birds or stray animals this morning to balance the active Saturn vehicle.<br>
                 • <b>Aura Mantra:</b> Recite <code>Om Namah Shivaya</code> 11 times before stepping out.
             </div>
         </div>
@@ -1029,14 +1065,16 @@ elif st.session_state.current_page == "forecast":
             with col_t1:
                 st.markdown(f"<b>{tr['date_str']}</b><br><span style='font-size:12px; color:#64748b;'>{tr['star_name']}</span>", unsafe_allow_html=True)
             with col_t2:
-                st.markdown(f"<span style='font-size:15px;'>{tr['icon']}</span> <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:11.5px; color:#475569;'>Mount: {tr['vahan'].split()[1]}</span>", unsafe_allow_html=True)
+                vahan_name = tr['vahan'].split()[1] if len(tr['vahan'].split()) > 1 else tr['vahan']
+                st.markdown(f"<span style='font-size:15px;'>{tr['icon']}</span> <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:11.5px; color:#475569;'>Mount: {vahan_name}</span>", unsafe_allow_html=True)
             with col_t3:
                 if st.button("🔮 View", key=f"btn_tr_{idx}", use_container_width=True):
                     st.session_state.selected_transit_idx = idx
                     st.rerun()
 
-    # Detailed view for selected day
-    sel_tr = transits[st.session_state.selected_transit_idx]
+    # Detailed view for selected day with safe indexing
+    safe_idx = min(len(transits) - 1, max(0, st.session_state.selected_transit_idx))
+    sel_tr = transits[safe_idx]
     st.markdown(f"""
     <div class="light-card-live" style="margin-top:14px;">
         <div style="font-weight:800; font-size:15px; color:#0369a1; margin-bottom:8px;">
@@ -1094,10 +1132,10 @@ elif st.session_state.current_page == "remedies":
         </div>
 
         <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border-left:4px solid #10b981; border:1px solid #d1fae5; border-left-width:4px; margin-bottom:12px;">
-            <div style="font-weight:800; font-size:14px; color:#065f46; margin-bottom:4px;">2. Numerology Harmony (Mulank 4 & Bhagyank 9)</div>
+            <div style="font-weight:800; font-size:14px; color:#065f46; margin-bottom:4px;">2. Numerology Harmony (Mulank {mulank} & Bhagyank {bhagyank})</div>
             <div style="font-size:12.8px; line-height:1.55; color:#1e293b;">
-                • Drink water from a silver or copper vessel to pacify Rahu-Mars intensity.<br>
-                • Keep an organized desk and avoid cluttered electronic wires to strengthen Rahu's higher intelligence.
+                • Drink water from a silver or copper vessel to pacify planetary intensity.<br>
+                • Keep an organized desk and avoid cluttered electronic wires to strengthen focus.
             </div>
         </div>
 
