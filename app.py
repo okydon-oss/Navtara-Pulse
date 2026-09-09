@@ -2,6 +2,7 @@ import os
 import json
 import datetime
 import math
+import textwrap
 import streamlit as st
 
 # Swiss Ephemeris import with fallback check
@@ -75,7 +76,7 @@ TRANSLATIONS = {
     "en": {
         "app_title": "✨ Navtara Pulse",
         "app_subtitle": "Vedic Nakshatra Timing, Numerology & Shani Transit Intelligence",
-        "lang_label": "🌐 Language / भाषा / भाषा / ભાષા",
+        "lang_label": "🌐 Language Selection",
         "edit_profile_expander": "✏️ Update / Edit Birth Details",
         "input_name": "Full Name",
         "input_dob": "Birth Date",
@@ -105,7 +106,6 @@ TRANSLATIONS = {
         "btn_back_profile": "⬅️ Back to Astrological Profile",
         "tab_today": "⚡ Today's Live Pulse",
         "tab_7days": "🗓️ 7-Day Moon Transition Matrix",
-        "tab_planets": "🪐 Sidereal Lahiri Ephemeris",
         "active_navtara_title": "Active Navtara Energy Right Now",
         "shani_vahan_title": "Today's Saturn Vehicle (Shani Vahan)",
         "personal_day_title": "Personal Day Number Vibration",
@@ -150,7 +150,6 @@ TRANSLATIONS = {
         "btn_back_profile": "⬅️ जन्म कुंडली प्रोफाइल पर वापस जाएं",
         "tab_today": "⚡ आज का सक्रिय गोचर",
         "tab_7days": "🗓️ 7 दिवसीय चन्द्र गोचर चक्र",
-        "tab_planets": "🪐 प्रत्यक्ष ग्रह स्पष्ट (लाहिड़ी)",
         "active_navtara_title": "वर्तमान सक्रिय नवतारा स्थिति",
         "shani_vahan_title": "आज का शनि वाहन",
         "personal_day_title": "आज का व्यक्तिगत अंक (Personal Day)",
@@ -195,7 +194,6 @@ TRANSLATIONS = {
         "btn_back_profile": "⬅️ जन्म प्रोफाइलवर परत या",
         "tab_today": "⚡ आजचे सक्रिय नक्षत्र",
         "tab_7days": "🗓️ ७ दिवसांचे नक्षत्र संक्रमण",
-        "tab_planets": "🪐 ग्रह स्थिती (लाहिरी)",
         "active_navtara_title": "सद्य सक्रिय नवतारा ऊर्जा",
         "shani_vahan_title": "आजचे शनी वाहन",
         "personal_day_title": "आजचा व्यक्तिगत अंक",
@@ -240,7 +238,6 @@ TRANSLATIONS = {
         "btn_back_profile": "⬅️ જન્મ પ્રોફાઇલ પર પાછા જાઓ",
         "tab_today": "⚡ આજનું સક્રિય ગોચર",
         "tab_7days": "🗓️ ૭ દિવસનું ચંદ્ર ગોચર કોષ્ટક",
-        "tab_planets": "🪐 ગ્રહ સ્થિતિ (લાહિરી)",
         "active_navtara_title": "હાલનું સક્રિય નવતારા ફળ",
         "shani_vahan_title": "આજનું શનિ વાહન",
         "personal_day_title": "આજનો વ્યક્તિગત અંક",
@@ -357,31 +354,31 @@ def get_nakshatra_remedy(nak_idx: int, lang: str = "en") -> list:
 
     if lang == "hi":
         return [
-            f"**नक्षत्र आराध्य देव:** भगवान {deity} एवं नक्षत्र स्वामी {lord} की नित्य आराधना करें।",
-            f"**बीज मंत्र जप:** प्रतिदिन अथवा जन्म नक्षत्र के दिन `{mantra}` का 108 बार शांत मन से जप करें।",
-            f"**पवित्र वृक्ष संरक्षण:** {tree} के पौधे का संवर्धन करें या उसे नियमित जल अर्पित करें।",
-            "**सात्विक दान:** शुक्रवार को श्वेत वस्त्र, चावल, दूध अथवा मिश्री का जरूरतमंदों को दान करें।"
+            f"<b>नक्षत्र आराध्य देव:</b> भगवान {deity} एवं नक्षत्र स्वामी {lord} की नित्य आराधना करें।",
+            f"<b>बीज मंत्र जप:</b> प्रतिदिन अथवा जन्म नक्षत्र के दिन <code>{mantra}</code> का 108 बार शांत मन से जप करें।",
+            f"<b>पवित्र वृक्ष संरक्षण:</b> {tree} के पौधे का संवर्धन करें या उसे नियमित जल अर्पित करें।",
+            "<b>सात्विक दान:</b> शुक्रवार को श्वेत वस्त्र, चावल, दूध अथवा मिश्री का जरूरतमंदों को दान करें।"
         ]
     elif lang == "mr":
         return [
-            f"**नक्षत्र आराध्य दैवत:** {deity} आणि नक्षत्र स्वामी {lord} यांचे नित्य स्मरण व नामस्मरण करा.",
-            f"**बीज मंत्र जप:** दररोज किंवा जन्म नक्षत्राच्या दिवशी `{mantra}` चा १०८ वेळा शांतपणे जप करा.",
-            f"**पवित्र वृक्ष सेवा:** {tree} वृक्षाचे संवर्धन करा किंवा त्याला जल अर्पण करा.",
-            "**सात्विक दान:** शुक्रवारी गरजूंना पांढरे वस्त्र अथवा दुधाचे पदार्थ दान करून पुण्य संपादन करा."
+            f"<b>नक्षत्र आराध्य दैवत:</b> {deity} आणि नक्षत्र स्वामी {lord} यांचे नित्य स्मरण व नामस्मरण करा.",
+            f"<b>बीज मंत्र जप:</b> दररोज किंवा जन्म नक्षत्राच्या दिवशी <code>{mantra}</code> चा १०८ वेळा शांतपणे जप करा.",
+            f"<b>पवित्र वृक्ष सेवा:</b> {tree} वृक्षाचे संवर्धन करा किंवा त्याला जल अर्पण करा.",
+            "<b>सात्विक दान:</b> शुक्रवारी गरजूंना पांढरे वस्त्र अथवा दुधाचे पदार्थ दान करून पुण्य संपादन करा."
         ]
     elif lang == "gu":
         return [
-            f"**નક્ષત્ર આરાધ્ય દેવ:** {deity} અને નક્ષત્ર સ્વામી {lord} ની નિયમિત ભક્તિ કરો.",
-            f"**બીજ મંત્ર જાપ:** દરરોજ અથવા જન્મ નક્ષત્રના દિવસે `{mantra}` નો ૧૦૮ વખત જાપ કરવો.",
-            f"**પવિત્ર વૃક્ષ સેવન:** {tree} ના વૃક્ષનું જતન કરો અથવા તેને જળ અર્પણ કરવું.",
-            "**કલ્યાણકારી દાન:** શુક્રવારે જરૂરિયાતમંદોને સફેદ વસ્ત્ર, અન્ન કે સાકરનું દાન કરવું."
+            f"<b>નક્ષત્ર આરાધ્ય દેવ:</b> {deity} અને નક્ષત્ર સ્વામી {lord} ની નિયમિત ભક્તિ કરો.",
+            f"<b>બીજ મંત્ર જાપ:</b> દરરોજ અથવા જન્મ નક્ષત્રના દિવસે <code>{mantra}</code> નો ૧૦૮ વખત જાપ કરવો.",
+            f"<b>પવિત્ર વૃક્ષ સેવન:</b> {tree} ના વૃક્ષનું જતન કરો અથવા તેને જળ અર્પણ કરવું.",
+            "<b>કલ્યાણકારી દાન:</b> શુક્રવારે જરૂરિયાતમંદોને સફેદ વસ્ત્ર, અન્ન કે સાકરનું દાન કરવું."
         ]
     else:
         return [
-            f"**Nakshatra Deity Worship:** Offer prayers to {deity} and honor planetary ruler {lord}.",
-            f"**Sacred Japa:** Recite `{mantra}` 108 times daily or on Moon transit over your birth star.",
-            f"**Sacred Plant Connection:** Honor, plant, or water the {tree} to harmonize stellar frequencies.",
-            "**Sattvic Charity:** Donate white grains, milk sweets, or clothes to harmonize Venusian currents."
+            f"<b>Nakshatra Deity Worship:</b> Offer prayers to {deity} and honor planetary ruler {lord}.",
+            f"<b>Sacred Japa:</b> Recite <code>{mantra}</code> 108 times daily or on Moon transit over your birth star.",
+            f"<b>Sacred Plant Connection:</b> Honor, plant, or water the {tree} to harmonize stellar frequencies.",
+            "<b>Sattvic Charity:</b> Donate white grains, milk sweets, or clothes to harmonize Venusian currents."
         ]
 
 def dt_to_jd(utc_dt: datetime.datetime) -> float:
@@ -447,7 +444,7 @@ def calculate_numerology(dob: datetime.date, name: str):
 def get_fixed_numerology_prediction(mulank: int, bhagyank: int, lang: str = "en") -> str:
     if lang == "hi":
         return (
-            f"**मूलांक {mulank} (राहु) + भाग्यांक {bhagyank} (मंगल) अद्वितीय विश्लेषण:**\n"
+            f"<b>मूलांक {mulank} (राहु) + भाग्यांक {bhagyank} (मंगल) अद्वितीय विश्लेषण:</b><br>"
             "राहु और मंगल का संयोग आपको अत्यंत कुशाग्र, खोजी और साहसी व्यक्तित्व प्रदान करता है। "
             "आप स्थापित लीक से हटकर नए रास्ते तलाशने में सक्षम हैं। मूलांक 4 आपको विश्लेषणात्मक दृष्टि और दूरदर्शिता देता है, "
             "जबकि भाग्यांक 9 आपके भीतर अदम्य ऊर्जा, मानवीय संवेदना और कर्मठता भरता है। अत्यधिक जल्दबाजी या आवेश से बचें; "
@@ -455,21 +452,21 @@ def get_fixed_numerology_prediction(mulank: int, bhagyank: int, lang: str = "en"
         )
     elif lang == "mr":
         return (
-            f"**मूलांक {mulank} (राहु) + भाग्यांक {bhagyank} (मंगळ) सखोल व्यक्तिमत्त्व:**\n"
-            "राहु आणि मंगळ यांचा हा संयोग तुम्हाला तीक्ष्ण बुद्धिमत्ता, संशोधक दृष्टी आणि अफाट धैर्य प्रदान करतो. "
-            "मूलांक ४ मुळे तुमच्यात पद्धतशीर काम करण्याची क्षमता येते, तर भाग्यांक ९ मुळे दृढ निश्चय आणि नेतृत्व कौशल्य लाभते. "
-            "कोणत्याही कामात संयम बाळगल्यास तुम्हाला मोठे यश आणि आर्थिक प्रगती निश्चित मिळते."
+            f"<b>मूलांक {mulank} (राहु) + भाग्यांक {bhagyank} (मंगळ) सखोल व्यक्तिमत्त्व:</b><br>"
+            "राहु आणि मंगळ यांचा हा संयोग तुम्हाला तीक्ष्ण बुद्धिमत्ता, संशोधक दृष्टी आणि अफाट धैर्य प्रदान करतो। "
+            "मूलांक ४ मुळे तुमच्यात पद्धतशीर काम करण्याची क्षमता येते, तर भाग्यांक ९ मुळे दृढ निश्चय आणि नेतृत्व कौशल्य लाभते। "
+            "कोणत्याही कामात संयम बाळगल्यास तुम्हाला मोठे यश आणि आर्थिक प्रगती निश्चित मिळते।"
         )
     elif lang == "gu":
         return (
-            f"**મૂળાંક {mulank} (રાહુ) + ભાગ્યાંક {bhagyank} (મંગળ) વિશ્લેષણ:**\n"
-            "રાહુ અને મંગળનો આ સમન્વય અદભુત આત્મવિશ્વાસ, ઊર્જા અને નવીન વિચારોનું સર્જન કરે છે. "
-            "મૂળાંક ૪ વિશ્લેષણાત્મક શક્તિ આપે છે અને ભાગ્યાંક ૯ લક્ષ્યપ્રાપ્તિ માટે પ્રબળ ઉત્સાહ પૂરો પાડે છે. "
-            "શાંતિ અને દીર્ઘદ્રષ્ટિથી કામ લેવાથી જીવનમાં અપેક્ષિત માન-સન્માન અને પ્રગતિ પ્રાપ્ત થશે."
+            f"<b>મૂળાંક {mulank} (રાહુ) + ભાગ્યાંક {bhagyank} (મંગળ) વિશ્લેષણ:</b><br>"
+            "રાહુ અને મંગળનો આ સમન્વય અદભુત આત્મવિશ્વાસ, ઊર્જા અને નવીન વિચારોનું સર્જન કરે છે। "
+            "મૂળાંક ૪ વિશ્લેષણાત્મક શક્તિ આપે છે અને ભાગ્યાંક ૯ લક્ષ્યપ્રાપ્તિ માટે પ્રબળ ઉત્સાહ પૂરો પાડે છે। "
+            "શાંતિ અને દીર્ઘદ્રષ્ટિથી કામ લેવાથી જીવનમાં અપેક્ષિત માન-સન્માન અને પ્રગતિ પ્રાપ્ત થશે।"
         )
     else:
         return (
-            f"**Driver {mulank} (Rahu) + Conductor {bhagyank} (Mars) Synthesis:**\n"
+            f"<b>Driver {mulank} (Rahu) + Conductor {bhagyank} (Mars) Synthesis:</b><br>"
             "The electrifying combination of Rahu (analytical innovator) and Mars (warrior executor) endows you with "
             "unorthodox brilliance, relentless drive, and strong leadership instincts. You naturally identify structural "
             "loopholes and execute strategic solutions. Balancing impulsive enthusiasm with disciplined routine unlocks "
@@ -479,31 +476,31 @@ def get_fixed_numerology_prediction(mulank: int, bhagyank: int, lang: str = "en"
 def get_numerology_remedies(mulank: int, bhagyank: int, lang: str = "en") -> list:
     if lang == "hi":
         return [
-            f"**अनुकूल शुभ रंग:** मूलांक {mulank} (राहु) व भाग्यांक {bhagyank} (मंगल) हेतु नीला, हल्का धूसर और गहरा लाल रंग श्रेष्ठ हैं।",
-            "**वैदिक मंत्र जप:** प्रतिदिन 'गायत्री मंत्र' का 11 बार शांतिपूर्वक स्मरण करें।",
-            "**आहार एवं जीवनशैली:** मंगलवार और शनिवार को सात्विक भोजन ग्रहण करें तथा तांबे अथवा चाँदी के पात्र से जल पिएं।",
-            "**ग्रह शांति दान:** शनिवार को श्वान (कुत्ते) को रोटी खिलाएं तथा मंगलवार को गुड़ या लाल मसूर की दाल का दान करें।"
+            f"<b>अनुकूल शुभ रंग:</b> मूलांक {mulank} (राहु) व भाग्यांक {bhagyank} (मंगल) हेतु नीला, हल्का धूसर और गहरा लाल रंग श्रेष्ठ हैं।",
+            "<b>वैदिक मंत्र जप:</b> प्रतिदिन 'गायत्री मंत्र' का 11 बार शांतिपूर्वक स्मरण करें।",
+            "<b>आहार एवं जीवनशैली:</b> मंगलवार और शनिवार को सात्विक भोजन ग्रहण करें तथा तांबे अथवा चाँदी के पात्र से जल पिएं।",
+            "<b>ग्रह शांति दान:</b> शनिवार को श्वान (कुत्ते) को रोटी खिलाएं तथा मंगलवार को गुड़ या लाल मसूर की दाल का दान करें।"
         ]
     elif lang == "mr":
         return [
-            f"**शुभ रंग:** मूलांक {mulank} आणि भाग्यांक {bhagyank} साठी आकाशी निळा, लाल व चॉकलेटी रंग लाभदायक ठरतील.",
-            "**वैदिक मंत्र:** दररोज गायत्री मंत्र व 'ॐ अं अंगारकाय नमः' चा जप करा.",
-            "**सात्विक दिनचर्या:** मंगळवार व शनिवारी सात्विक आहार ठेवा; तांब्याच्या भांड्यातील पाणी प्या.",
-            "**पुण्य कार्य:** शनिवारी मुक्या प्राण्यांना अन्न द्या व मंगळवारी गुळाचे दान करा."
+            f"<b>शुभ रंग:</b> मूलांक {mulank} आणि भाग्यांक {bhagyank} साठी आकाशी निळा, लाल व चॉकलेटी रंग लाभदायक ठरतील।",
+            "<b>वैदिक मंत्र:</b> दररोज गायत्री मंत्र व 'ॐ अं अंगारकाय नमः' चा जप करा।",
+            "<b>सात्विक दिनचर्या:</b> मंगळवार व शनिवारी सात्विक आहार ठेवा; तांब्याच्या भांड्यातील पाणी प्या।",
+            "<b>पुण्य कार्य:</b> शनिवारी मुक्या प्राण्यांना अन्न द्या व मंगळवारी गुळाचे दान करा।"
         ]
     elif lang == "gu":
         return [
-            f"**અનુકૂળ રંગો:** મૂળાંક {mulank} અને ભાગ્યાંક {bhagyank} માટે વાદળી, કેસરી અને લાલ રંગ શુભ રહેશે.",
-            "**મંત્ર ઉપાસના:** ગાયત્રી મંત્ર તેમજ હનુમાન ચાલીસાનો નિત્ય પાઠ કરવો.",
-            "**જીવનશૈલી:** મંગળવાર અને શનિવારે સાત્વિક ભોજન લેવું; તાંબાના પાત્રમાંથી જળ પીવું.",
-            "**દાન પુણ્ય:** શનિવારે પક્ષીઓ/પ્રાણીઓને ચણ નાખવું અને મંગળવારે ગોળનું દાન કરવું."
+            f"<b>અનુકૂળ રંગો:</b> મૂળાંક {mulank} અને ભાગ્યાંક {bhagyank} માટે વાદળી, કેસરી અને લાલ રંગ શુભ રહેશે।",
+            "<b>મંત્ર ઉપાસના:</b> ગાયત્રી મંત્ર તેમજ હનુમાન ચાલીસાનો નિત્ય પાઠ કરવો।",
+            "<b>જીવનશૈલી:</b> મંગળવાર અને શનિવારે સાત્વિક ભોજન લેવું; તાંબાના પાત્રમાંથી જળ પીવું।",
+            "<b>દાન પુણ્ય:</b> શનિવારે પક્ષીઓ/પ્રાણીઓને ચણ નાખવું અને મંગળવારે ગોળનું દાન કરવું।"
         ]
     else:
         return [
-            f"**Harmonizing Colors:** Integrate tones aligned with Driver {mulank} (Electric Blue, Slate Gray) and Conductor {bhagyank} (Warm Coral, Red).",
-            "**Vedic Japa:** Chant the Gayatri Mantra 11 times daily to balance analytical fire with mental clarity.",
-            "**Astro-Nutrition:** Keep Tuesdays and Saturdays light; hydrate from a copper or silver vessel.",
-            "**Charity on Key Days:** Feed stray dogs on Saturdays (Rahu pacification) and donate red lentils or jaggery on Tuesdays."
+            f"<b>Harmonizing Colors:</b> Integrate tones aligned with Driver {mulank} (Electric Blue, Slate Gray) and Conductor {bhagyank} (Warm Coral, Red).",
+            "<b>Vedic Japa:</b> Chant the Gayatri Mantra 11 times daily to balance analytical fire with mental clarity.",
+            "<b>Astro-Nutrition:</b> Keep Tuesdays and Saturdays light; hydrate from a copper or silver vessel.",
+            "<b>Charity on Key Days:</b> Feed stray dogs on Saturdays (Rahu pacification) and donate red lentils or jaggery on Tuesdays."
         ]
 
 def calculate_shani_paya(natal_moon_rashi_idx: int, saturn_rashi_idx: int, lang: str = "en"):
@@ -562,14 +559,14 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_rashi_idx: int, 
             "आर्थिक मामलों में अत्यधिक सतर्कता और स्वास्थ्य व निद्रा का ध्यान रखें। अनुशासित दिनचर्या से यह समय जीवन को सुदृढ़ आधार देता है।"
         )
         impact_mr = (
-            "शनी महाराज आपल्या चंद्र राशीपासून १२ व्या भावात गोचर करत आहेत. हा साडेसातीचा प्रथम (चढती साडेसाती) टप्पा आहे. "
-            "या काळात खर्च वाढू शकतो, कामाच्या निमित्ताने प्रवास होतात व जीवनशैलीत मोठे बदल घडून येतात. "
-            "आर्थिक व्यवहारात सावधगिरी बाळगा आणि आरोग्याकडे लक्ष द्या. प्रामाणिक परिश्रमाने मोठी प्रगती साध्य होते."
+            "शनी महाराज आपल्या चंद्र राशीपासून १२ व्या भावात गोचर करत आहेत। हा साडेसातीचा प्रथम (चढती साडेसाती) टप्पा आहे। "
+            "या काळात खर्च वाढू शकतो, कामाच्या निमित्ताने प्रवास होतात व जीवनशैलीत मोठे बदल घडून येतात। "
+            "आर्थिक व्यवहारात सावधगिरी बाळगा आणि आरोग्याकडे लक्ष द्या। प्रामाणिक परिश्रमाने मोठी प्रगती साध्य होते।"
         )
         impact_gu = (
-            "શનિ દેવ તમારી ચંદ્ર રાશિથી ૧૨મા ભાવમાં ગોચર કરી રહ્યા છે. આ સાડાસાતીનો પ્રથમ તબક્કો છે. "
-            "આ સમયગાળામાં ખર્ચ પર અંકુશ રાખવો, લાંબા ગાળાનું આયોજન કરવું અને બિનજરૂરી દોડધામથી બચવું હિતાવહ છે. "
-            "ધૈર્ય અને આધ્યાત્મિક સાધનાથી મુશ્કેલ કાર્યો પણ સરળતાથી પાર પડી શકે છે."
+            "શનિ દેવ તમારી ચંદ્ર રાશિથી ૧૨મા ભાવમાં ગોચર કરી રહ્યા છે। આ સાડાસાતીનો પ્રથમ તબક્કો છે। "
+            "આ સમયગાળામાં ખર્ચ પર અંકુશ રાખવો, લાંબા ગાળાનું આયોજન કરવું અને બિનજરૂરી દોડધામથી બચવું હિતાવહ છે। "
+            "ધૈર્ય અને આધ્યાત્મિક સાધનાથી મુશ્કેલ કાર્યો પણ સરળતાથી પાર પડી શકે છે।"
         )
         remedies = [
             "Light a mustard oil lamp beneath a Peepal tree on Saturday evenings and perform 7 circumambulations." if lang == "en" else "शनिवार की संध्या पीपल के वृक्ष के नीचे सरसों के तेल का दीपक प्रज्वलित करें एवं 7 परिक्रमा करें।",
@@ -692,7 +689,6 @@ if "current_page" not in st.session_state:
 prof = st.session_state.profile
 saved_lang = prof.get("language", "en")
 
-# Top header and single language selector
 col_top_l, col_top_r = st.columns([3, 2])
 with col_top_l:
     st.markdown("<h2 style='margin:0; font-weight:900; color:#1e1b4b;'>✨ Navtara Pulse</h2>", unsafe_allow_html=True)
@@ -723,7 +719,6 @@ user_dob = prof.get("dob", datetime.date(1984, 1, 13))
 user_tob = prof.get("tob", datetime.time(14, 0))
 user_place = prof.get("place", "Chhatrapati Sambhajinagar, India")
 
-# Calculate Janma Nakshatra, Pada, Moon Rashi, and Lagna (Ascendant)
 janma_idx, janma_pada, natal_moon_rashi_idx, natal_rashi_deg, lagna_rashi_idx, lagna_deg = calculate_birth_chart(
     user_dob, user_tob, user_place
 )
@@ -783,153 +778,145 @@ if st.session_state.current_page == "profile":
                 st.success(t("profile_saved_msg", current_lang))
                 st.rerun()
 
-    # -------------------------------------------------------------------------
-    # SUBSECTION 1: NAVTARA & VEDIC ASTROLOGICAL PROFILE
-    # -------------------------------------------------------------------------
-    st.markdown(f"""
-    <div class="light-card-profile">
-        <div style="font-weight:800; font-size:16px; color:#78350f; margin-bottom:12px; border-bottom:1.5px solid #fed7aa; padding-bottom:6px;">
-            {t('sec1_title', current_lang)}
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <h3 style="margin:0; font-size:1.35rem; font-weight:800; color:#431407;">👤 {user_name}</h3>
-                <div style="font-size:13.5px; color:#78350f; margin-top:3px;">
-                    🎂 {user_dob.strftime('%d %B %Y')} • ⏰ {user_tob.strftime('%H:%M')} • 📍 {user_place}
-                </div>
-            </div>
-            <div>
-                <span class="badge-favorable" style="font-size:13px; padding:6px 12px;">
-                    🌙 {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
-                </span>
-            </div>
-        </div>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:14px; text-align:center;">
-            <div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
-                <div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('janma_star_label', current_lang)}</div>
-                <div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{janma_name}</div>
-                <div style="font-size:11px; color:#b45309;">(#{janma_idx + 1} • Pada {janma_pada})</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
-                <div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('moon_rashi_label', current_lang)}</div>
-                <div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{RASHIS[natal_moon_rashi_idx].split(' ')[0]}</div>
-                <div style="font-size:11px; color:#b45309;">{natal_rashi_deg:.2f}° Sidereal</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
-                <div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('lagna_label', current_lang)}</div>
-                <div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{RASHIS[lagna_rashi_idx].split(' ')[0]}</div>
-                <div style="font-size:11px; color:#b45309;">{lagna_deg:.2f}° Ascendant</div>
-            </div>
-        </div>
+    # SECTION 1: NAVTARA & VEDIC ASTROLOGICAL PROFILE
+    nak_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#7c2d12; margin-bottom:4px;'>• {nr}</div>" for nr in nak_remedies])
+    sec1_html = f"""<div class="light-card-profile">
+<div style="font-weight:800; font-size:16px; color:#78350f; margin-bottom:12px; border-bottom:1.5px solid #fed7aa; padding-bottom:6px;">
+{t('sec1_title', current_lang)}
+</div>
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div>
+<h3 style="margin:0; font-size:1.35rem; font-weight:800; color:#431407;">👤 {user_name}</h3>
+<div style="font-size:13.5px; color:#78350f; margin-top:3px;">
+🎂 {user_dob.strftime('%d %B %Y')} • ⏰ {user_tob.strftime('%H:%M')} • 📍 {user_place}
+</div>
+</div>
+<div>
+<span class="badge-favorable" style="font-size:13px; padding:6px 12px;">
+🌙 {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
+</span>
+</div>
+</div>
 
-        <div style="margin-top:12px; background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #fed7aa;">
-            <div style="font-weight:700; font-size:13.5px; color:#9a3412; margin-bottom:4px;">
-                {t('nak_personality_title', current_lang)} ({janma_name}):
-            </div>
-            <div style="font-size:13px; line-height:1.6; color:#431407;">
-                {nak_personality_desc}
-            </div>
-        </div>
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:14px; text-align:center;">
+<div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
+<div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('janma_star_label', current_lang)}</div>
+<div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{janma_name}</div>
+<div style="font-size:11px; color:#b45309;">(#{janma_idx + 1} • Pada {janma_pada})</div>
+</div>
+<div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
+<div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('moon_rashi_label', current_lang)}</div>
+<div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{RASHIS[natal_moon_rashi_idx].split(' ')[0]}</div>
+<div style="font-size:11px; color:#b45309;">{natal_rashi_deg:.2f}° Sidereal</div>
+</div>
+<div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
+<div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('lagna_label', current_lang)}</div>
+<div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{RASHIS[lagna_rashi_idx].split(' ')[0]}</div>
+<div style="font-size:11px; color:#b45309;">{lagna_deg:.2f}° Ascendant</div>
+</div>
+</div>
 
-        <div style="margin-top:10px; background:#fff7ed; border-radius:10px; padding:12px 14px; border:1px solid #ffedd5;">
-            <div style="font-weight:700; font-size:13.5px; color:#c2410c; margin-bottom:6px;">
-                {t('nak_remedies_title', current_lang)}:
-            </div>
-    """, unsafe_allow_html=True)
-    for nr in nak_remedies:
-        st.markdown(f"<div style='font-size:12.8px; color:#7c2d12; margin-bottom:3px;'>• {nr}</div>", unsafe_allow_html=True)
-    st.markdown("</div></div>", unsafe_allow_html=True)
+<div style="margin-top:12px; background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #fed7aa;">
+<div style="font-weight:700; font-size:13.5px; color:#9a3412; margin-bottom:4px;">
+{t('nak_personality_title', current_lang)} ({janma_name}):
+</div>
+<div style="font-size:13px; line-height:1.6; color:#431407;">
+{nak_personality_desc}
+</div>
+</div>
 
-    # -------------------------------------------------------------------------
-    # SUBSECTION 2: CORE NUMEROLOGY BLUEPRINT & FIXED LIFE ATTRIBUTES
-    # -------------------------------------------------------------------------
-    st.markdown(f"""
-    <div class="light-card-num">
-        <div style="font-weight:800; font-size:16px; color:#064e3b; margin-bottom:12px; border-bottom:1.5px solid #a7f3d0; padding-bottom:6px;">
-            {t('sec2_title', current_lang)}
-        </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; text-align:center; margin-bottom:12px;">
-            <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
-                <div style="font-size:12px; color:#047857; font-weight:700;">{t('mulank_label', current_lang)}</div>
-                <div style="font-size:26px; font-weight:900; color:#065f46;">{mulank}</div>
-                <div style="font-size:11px; color:#059669;">Rahu / Driver</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
-                <div style="font-size:12px; color:#047857; font-weight:700;">{t('bhagyank_label', current_lang)}</div>
-                <div style="font-size:26px; font-weight:900; color:#065f46;">{bhagyank}</div>
-                <div style="font-size:11px; color:#059669;">Mars / Conductor</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
-                <div style="font-size:12px; color:#047857; font-weight:700;">{t('namank_label', current_lang)}</div>
-                <div style="font-size:26px; font-weight:900; color:#065f46;">{namank}</div>
-                <div style="font-size:11px; color:#059669;">Chaldean Vibration</div>
-            </div>
-        </div>
-        <div style="font-size:13.5px; line-height:1.6; color:#064e3b; background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #bbf7d0;">
-            {get_fixed_numerology_prediction(mulank, bhagyank, current_lang)}
-        </div>
-        <div style="margin-top:10px; background:#f0fdf4; border-radius:10px; padding:12px 14px; border:1px solid #dcfce7;">
-            <div style="font-weight:700; font-size:13.5px; color:#047857; margin-bottom:6px;">
-                {t('num_remedies_title', current_lang)}:
-            </div>
-    """, unsafe_allow_html=True)
-    for rem_num in num_remedies_list:
-        st.markdown(f"<div style='font-size:12.8px; color:#065f46; margin-bottom:3px;'>• {rem_num}</div>", unsafe_allow_html=True)
-    st.markdown("</div></div>", unsafe_allow_html=True)
+<div style="margin-top:10px; background:#fff7ed; border-radius:10px; padding:12px 14px; border:1px solid #ffedd5;">
+<div style="font-weight:700; font-size:13.5px; color:#c2410c; margin-bottom:6px;">
+{t('nak_remedies_title', current_lang)}:
+</div>
+{nak_remedies_rendered}
+</div>
+</div>"""
+    st.markdown(sec1_html, unsafe_allow_html=True)
 
-    # -------------------------------------------------------------------------
-    # SUBSECTION 3: SHANI PAYA & SHANI GOCHAR (SADE SATI / DHAIYA)
-    # -------------------------------------------------------------------------
+    num_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#065f46; margin-bottom:4px;'>• {r}</div>" for r in num_remedies_list])
+    sec2_html = f"""<div class="light-card-num">
+<div style="font-weight:800; font-size:16px; color:#064e3b; margin-bottom:12px; border-bottom:1.5px solid #a7f3d0; padding-bottom:6px;">
+{t('sec2_title', current_lang)}
+</div>
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; text-align:center; margin-bottom:12px;">
+<div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
+<div style="font-size:12px; color:#047857; font-weight:700;">{t('mulank_label', current_lang)}</div>
+<div style="font-size:26px; font-weight:900; color:#065f46;">{mulank}</div>
+<div style="font-size:11px; color:#059669;">Rahu / Driver</div>
+</div>
+<div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
+<div style="font-size:12px; color:#047857; font-weight:700;">{t('bhagyank_label', current_lang)}</div>
+<div style="font-size:26px; font-weight:900; color:#065f46;">{bhagyank}</div>
+<div style="font-size:11px; color:#059669;">Mars / Conductor</div>
+</div>
+<div style="background:#ffffff; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
+<div style="font-size:12px; color:#047857; font-weight:700;">{t('namank_label', current_lang)}</div>
+<div style="font-size:26px; font-weight:900; color:#065f46;">{namank}</div>
+<div style="font-size:11px; color:#059669;">Chaldean Vibration</div>
+</div>
+</div>
+<div style="font-size:13.5px; line-height:1.6; color:#064e3b; background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #bbf7d0;">
+{get_fixed_numerology_prediction(mulank, bhagyank, current_lang)}
+</div>
+<div style="margin-top:10px; background:#f0fdf4; border-radius:10px; padding:12px 14px; border:1px solid #dcfce7;">
+<div style="font-weight:700; font-size:13.5px; color:#047857; margin-bottom:6px;">
+{t('num_remedies_title', current_lang)}:
+</div>
+{num_remedies_rendered}
+</div>
+</div>"""
+    st.markdown(sec2_html, unsafe_allow_html=True)
+
     sadesati_badge = "<span class='badge-danger' style='font-size:12px;'>⚠️ " + ss_status + "</span>" if is_ss_active else "<span class='badge-favorable' style='font-size:12px;'>✅ Favorable Shani Transit</span>"
-
-    st.markdown(f"""
-    <div class="light-card-paya">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #ddd6fe; padding-bottom:6px;">
-            <span style="font-weight:800; font-size:16px; color:#3b0764;">
-                {t('sec3_title', current_lang)}
-            </span>
-            {sadesati_badge}
-        </div>
-
-        <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #e9d5ff; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-weight:800; font-size:15px; color:#3b0764;">
-                    {paya_name}
-                </div>
-                <div style="font-size:12px; font-weight:700; color:#6b21a8;">
-                    ✦ {paya_status}
-                </div>
-            </div>
-            <div style="font-size:12.5px; font-weight:600; color:#581c87; margin-top:4px;">
-                ⏳ <b>{t('transit_timeline_lbl', current_lang)}:</b> {paya_timeline}
-            </div>
-            <div style="font-size:13px; line-height:1.55; color:#3b0764; margin-top:6px;">
-                <b>{t('paya_impact_lbl', current_lang)}:</b><br>{paya_desc}
-            </div>
-        </div>
-
-        <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #e9d5ff; margin-bottom:10px;">
-            <div style="font-weight:800; font-size:14.5px; color:#4c1d95; margin-bottom:4px;">
-                🪐 {t('sadesati_card_title', current_lang)}:
-            </div>
-            <div style="font-size:12.5px; font-weight:600; color:#6b21a8; margin-bottom:6px;">
-                ⏳ <b>{t('sadesati_timeline_lbl', current_lang)}:</b> {ss_status} ({ss_timeline})
-            </div>
-            <div style="font-size:13px; line-height:1.55; color:#2e1065;">
-                <b>{t('sadesati_impact_lbl', current_lang)}:</b><br>{ss_impact}
-            </div>
-        </div>
-
-        <div style="background:#f5f3ff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe;">
-            <div style="font-weight:700; font-size:13.5px; color:#581c87; margin-bottom:6px;">
-                {t('shani_integrated_remedies', current_lang)}:
-            </div>
-    """, unsafe_allow_html=True)
     all_shani_remedies = paya_remedies + [r for r in ss_remedies if r not in paya_remedies]
-    for sr in all_shani_remedies:
-        st.markdown(f"<div style='font-size:12.8px; color:#4c1d95; margin-bottom:3px;'>• {sr}</div>", unsafe_allow_html=True)
-    st.markdown("</div></div>", unsafe_allow_html=True)
+    shani_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#4c1d95; margin-bottom:4px;'>• {sr}</div>" for sr in all_shani_remedies])
+
+    sec3_html = f"""<div class="light-card-paya">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #ddd6fe; padding-bottom:6px;">
+<span style="font-weight:800; font-size:16px; color:#3b0764;">
+{t('sec3_title', current_lang)}
+</span>
+{sadesati_badge}
+</div>
+
+<div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #e9d5ff; margin-bottom:10px;">
+<div style="display:flex; justify-content:space-between; align-items:center;">
+<div style="font-weight:800; font-size:15px; color:#3b0764;">
+{paya_name}
+</div>
+<div style="font-size:12px; font-weight:700; color:#6b21a8;">
+✦ {paya_status}
+</div>
+</div>
+<div style="font-size:12.5px; font-weight:600; color:#581c87; margin-top:4px;">
+⏳ <b>{t('transit_timeline_lbl', current_lang)}:</b> {paya_timeline}
+</div>
+<div style="font-size:13px; line-height:1.55; color:#3b0764; margin-top:6px;">
+<b>{t('paya_impact_lbl', current_lang)}:</b><br>{paya_desc}
+</div>
+</div>
+
+<div style="background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #e9d5ff; margin-bottom:10px;">
+<div style="font-weight:800; font-size:14.5px; color:#4c1d95; margin-bottom:4px;">
+🪐 {t('sadesati_card_title', current_lang)}:
+</div>
+<div style="font-size:12.5px; font-weight:600; color:#6b21a8; margin-bottom:6px;">
+⏳ <b>{t('sadesati_timeline_lbl', current_lang)}:</b> {ss_status} ({ss_timeline})
+</div>
+<div style="font-size:13px; line-height:1.55; color:#2e1065;">
+<b>{t('sadesati_impact_lbl', current_lang)}:</b><br>{ss_impact}
+</div>
+</div>
+
+<div style="background:#f5f3ff; border-radius:10px; padding:12px 14px; border:1px solid #ddd6fe;">
+<div style="font-weight:700; font-size:13.5px; color:#581c87; margin-bottom:6px;">
+{t('shani_integrated_remedies', current_lang)}:
+</div>
+{shani_remedies_rendered}
+</div>
+</div>"""
+    st.markdown(sec3_html, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
     if st.button(t("btn_view_forecast", current_lang), use_container_width=True, type="primary"):
@@ -943,59 +930,52 @@ elif st.session_state.current_page == "forecast":
 
     tab_today, tab_7day = st.tabs([t("tab_today", current_lang), t("tab_7days", current_lang)])
 
-    # TAB 1: TODAY'S LIVE SYNTHESIS
     with tab_today:
-        st.markdown(f"""
-        <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px;">
-            <div style="font-weight:800; font-size:15px; color:#1e293b; margin-bottom:10px;">
-                ⚡ {t('active_navtara_title', current_lang)}
-            </div>
-            <div style="font-size:20px; font-weight:900; color:#0f172a;">
-                {cur_nav_cat} (Series {cur_nav_series})
-            </div>
-            <div style="font-size:13.5px; color:#475569; margin-top:4px;">
-                Moon transiting in <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Natal: <b>{janma_name}</b>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        pulse_html = f"""<div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px;">
+<div style="font-weight:800; font-size:15px; color:#1e293b; margin-bottom:10px;">
+⚡ {t('active_navtara_title', current_lang)}
+</div>
+<div style="font-size:20px; font-weight:900; color:#0f172a;">
+{cur_nav_cat} (Series {cur_nav_series})
+</div>
+<div style="font-size:13.5px; color:#475569; margin-top:4px;">
+Moon transiting in <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Natal: <b>{janma_name}</b>
+</div>
+</div>"""
+        st.markdown(pulse_html, unsafe_allow_html=True)
 
         c_vahan, c_pday = st.columns(2)
         with c_vahan:
-            st.markdown(f"""
-            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
-                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
-                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{today_vahan.split('—')[0]}</div>
-                <div style="font-size:11.5px; color:#475569;">{today_vahan.split('—')[1] if '—' in today_vahan else ''}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            vahan_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+<div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
+<div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{today_vahan.split('—')[0]}</div>
+<div style="font-size:11.5px; color:#475569;">{today_vahan.split('—')[1] if '—' in today_vahan else ''}</div>
+</div>"""
+            st.markdown(vahan_card_html, unsafe_allow_html=True)
 
         with c_pday:
-            st.markdown(f"""
-            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
-                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
-                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {p_day} Vibration</div>
-                <div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {u_day}</div>
-            </div>
-            """, unsafe_allow_html=True)
+            pday_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+<div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
+<div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {p_day} Vibration</div>
+<div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {u_day}</div>
+</div>"""
+            st.markdown(pday_card_html, unsafe_allow_html=True)
 
-        st.markdown(f"""
-        <div style="margin-top:14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px;">
-            <div style="font-weight:800; font-size:14px; color:#1e40af; margin-bottom:8px;">
-                {t('three_directives_title', current_lang)}:
-            </div>
-            <div style="font-size:13px; color:#1e3a8a; line-height:1.6;">
-                1. <b>Navtara Strategy ({cur_nav_cat}):</b> Align high-stakes actions to favorable windows and observe diplomatic restraint during friction zones.<br>
-                2. <b>Saturn Vahan Pace ({today_vahan.split('—')[0]}):</b> Follow methodical discipline, avoiding hasty short-cuts or impulsive escalations.<br>
-                3. <b>Personal Day Alignment ({p_day}):</b> Channel focused energy into personal productivity and core long-term priorities.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        directives_html = f"""<div style="margin-top:14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px;">
+<div style="font-weight:800; font-size:14px; color:#1e40af; margin-bottom:8px;">
+{t('three_directives_title', current_lang)}:
+</div>
+<div style="font-size:13px; color:#1e3a8a; line-height:1.6;">
+1. <b>Navtara Strategy ({cur_nav_cat}):</b> Align high-stakes actions to favorable windows and observe diplomatic restraint during friction zones.<br>
+2. <b>Saturn Vahan Pace ({today_vahan.split('—')[0]}):</b> Follow methodical discipline, avoiding hasty short-cuts or impulsive escalations.<br>
+3. <b>Personal Day Alignment ({p_day}):</b> Channel focused energy into personal productivity and core long-term priorities.
+</div>
+</div>"""
+        st.markdown(directives_html, unsafe_allow_html=True)
 
-    # TAB 2: 7-DAY TRANSITION MATRIX WITH INTERACTIVE EXPANDERS
     with tab_7day:
         st.subheader(t("matrix_table_title", current_lang))
         
-        # Calculate continuous 7-day Moon transit transitions
         nak_span = 360.0 / 27.0
         start_time = now_utc
         end_time = now_utc + datetime.timedelta(days=7)
@@ -1051,7 +1031,7 @@ elif st.session_state.current_page == "forecast":
         st.table(matrix_rows)
 
         st.markdown("---")
-        st.markdown(f"#### 🔍 Daily Actionable Predictions & Targeted Remedies")
+        st.markdown("#### 🔍 Daily Actionable Predictions & Targeted Remedies")
 
         for idx, tr in enumerate(transitions):
             nak_name = NAKSHATRAS[tr["nak_idx"]]
@@ -1069,7 +1049,6 @@ elif st.session_state.current_page == "forecast":
                 st.markdown(f"**Action Strategy:** {'Exercise protective restraint and delay high-stakes contracts.' if cat in ['Vipat', 'Pratyari', 'Vadha'] else 'Excellent window for key executions, purchases, and negotiations.'}")
                 st.markdown(f"**Remedy for Window:** {d_remedy}")
 
-    # OPTIONAL BOTTOM EXPANDER: PLANETARY POSITIONS
     st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
     with st.expander(t("view_planets_btn", current_lang), expanded=False):
         planets_list = [
