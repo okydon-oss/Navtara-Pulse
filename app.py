@@ -125,7 +125,12 @@ TRANSLATIONS = {
         "profile_card_title": "{name}'s Birth Profile",
         "btn_edit_details": "✏️ Edit Details",
         "btn_cancel_edit": "✕ Cancel",
-        "new_user_title": "📝 User Profile & Birth Details"
+        "new_user_title": "📝 User Profile & Birth Details",
+        "today_transit_window": "Active Moon Transit Window",
+        "today_detailed_pred_title": "🔮 In-Depth Cosmic Prediction for Today",
+        "today_remedies_title": "🪔 Targeted Daily Vedic & Numerology Remedies",
+        "timing_from": "Starts",
+        "timing_to": "Ends"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स",
@@ -179,7 +184,12 @@ TRANSLATIONS = {
         "profile_card_title": "{name} का जन्म प्रोफाइल",
         "btn_edit_details": "✏️ विवरण बदलें",
         "btn_cancel_edit": "✕ निरस्त",
-        "new_user_title": "📝 जन्म विवरण एवं प्रोफाइल"
+        "new_user_title": "📝 जन्म विवरण एवं प्रोफाइल",
+        "today_transit_window": "वर्तमान चन्द्र नक्षत्र गोचर समयावधि",
+        "today_detailed_pred_title": "🔮 आज का विस्तृत ज्योतिषीय फलादेश",
+        "today_remedies_title": "🪔 आज के अचूक वैदिक एवं अंक ज्योतिषीय उपाय",
+        "timing_from": "आरंभ",
+        "timing_to": "समाप्ति"
     },
     "mr": {
         "app_title": "✨ नवतारा पल्स",
@@ -233,7 +243,12 @@ TRANSLATIONS = {
         "profile_card_title": "{name} चे जन्म प्रोफाइल",
         "btn_edit_details": "✏️ तपशील बदला",
         "btn_cancel_edit": "✕ रद्द",
-        "new_user_title": "📝 जन्म तपशील व प्रोफाइल"
+        "new_user_title": "📝 जन्म तपशील व प्रोफाइल",
+        "today_transit_window": "सद्य चंद्र नक्षत्र गोचर कालावधी",
+        "today_detailed_pred_title": "🔮 आजचे सविस्तर ज्योतिषीय फलादेश",
+        "today_remedies_title": "🪔 आजचे अचूक वैदिक व अंकशास्त्र उपाय",
+        "timing_from": "सुरुवात",
+        "timing_to": "समाप्ती"
     },
     "gu": {
         "app_title": "✨ નવતારા પલ્સ",
@@ -287,7 +302,12 @@ TRANSLATIONS = {
         "profile_card_title": "{name} ની જન્મ પ્રોફાઇલ",
         "btn_edit_details": "✏️ વિગત બદલો",
         "btn_cancel_edit": "✕ રદ કરો",
-        "new_user_title": "📝 જન્મ વિગત અને પ્રોફાઇલ"
+        "new_user_title": "📝 જન્મ વિગત અને પ્રોફાઇલ",
+        "today_transit_window": "વર્તમાન ચંદ્ર નક્ષત્ર ગોચર સમયગાળો",
+        "today_detailed_pred_title": "🔮 આજનું વિસ્તૃત જ્યોતિષીય ફળકથન",
+        "today_remedies_title": "આજના સચોટ વૈદિક અને અંકશાસ્ત્ર ઉપાયો",
+        "timing_from": "શરૂઆત",
+        "timing_to": "સમાપ્તિ"
     }
 }
 
@@ -709,6 +729,173 @@ def get_personal_day_vibe(mulank: int, target_date: datetime.date, lang: str = "
     remedy = "Offer water to the rising Sun and take deep conscious breaths."
     return u_reduced, p_day, title, desc, remedy
 
+def get_current_nakshatra_window(current_utc: datetime.datetime):
+    """Computes exact start and end timeline of the current active Moon Nakshatra using bisection search."""
+    nak_span = 360.0 / 27.0
+    cur_lon = get_sidereal_lon(dt_to_jd(current_utc), swe.MOON)
+    active_nak = int(cur_lon / nak_span) % 27
+    step = datetime.timedelta(minutes=30)
+    
+    # Backtrack to find exact entry time
+    t_back = current_utc
+    start_boundary = current_utc - datetime.timedelta(hours=12)
+    for _ in range(65):
+        prev_t = t_back - step
+        if int(get_sidereal_lon(dt_to_jd(prev_t), swe.MOON) / nak_span) % 27 != active_nak:
+            low, high = prev_t, t_back
+            for _ in range(8):
+                mid = low + (high - low) / 2
+                if int(get_sidereal_lon(dt_to_jd(mid), swe.MOON) / nak_span) % 27 == active_nak:
+                    high = mid
+                else:
+                    low = mid
+            start_boundary = high
+            break
+        t_back = prev_t
+
+    # Step forward to find exact exit time
+    t_fwd = current_utc
+    end_boundary = current_utc + datetime.timedelta(hours=12)
+    for _ in range(65):
+        next_t = t_fwd + step
+        if int(get_sidereal_lon(dt_to_jd(next_t), swe.MOON) / nak_span) % 27 != active_nak:
+            low, high = t_fwd, next_t
+            for _ in range(8):
+                mid = low + (high - low) / 2
+                if int(get_sidereal_lon(dt_to_jd(mid), swe.MOON) / nak_span) % 27 == active_nak:
+                    low = mid
+                else:
+                    high = mid
+            end_boundary = high
+            break
+        t_fwd = next_t
+
+    return active_nak, start_boundary, end_boundary
+
+def get_detailed_today_forecast(cat: str, series: int, transit_nak: str, janma_nak: str, vahan_name: str, p_day: int, lang: str = "en"):
+    """Synthesizes an in-depth, structured tactical forecast for the day."""
+    if lang == "hi":
+        nature_dict = {
+            "Janma": "शारीरिक ऊर्जा, नवीन विचार व आत्म-निरीक्षण का दिन। किसी भी नए कार्य की सुदृढ़ योजना बनाएं।",
+            "Sampat": "धनार्जन, वित्तीय सौदों, निवेश और मूल्यवान चर्चाओं के लिए अत्यधिक अनुकूल एवं शुभ समय।",
+            "Vipat": "अचानक विघ्न, अप्रत्याशित विलंब और मानसिक तनाव की संभावना। जोखिम भरे निर्णयों और विवाद से बचें।",
+            "Kshema": "कल्याण, आरोग्य, पारिवारिक सुख एवं पूर्व-नियोजित कार्यों की सुगम सिद्धि का शुभ काल।",
+            "Pratyari": "वैचारिक मतभेद, प्रतिस्पर्धा अथवा विरोध की स्थिति बन सकती है। कूटनीतिक संयम बनाए रखें।",
+            "Sadhana": "लक्ष्य-प्राप्ति, कठिन परिश्रम और रणनीतिक प्रयासों में सफलता का स्वर्णिम अवसर।",
+            "Vadha": "अति-सतर्कता का काल। संवेदनशील बातचीत, नया अनुबंध अथवा भारी आर्थिक जोखिम पूर्णतः टालें।",
+            "Mitra": "सहयोग, सौहार्द, मित्रता और अनुबंधों में पारस्परिक विश्वास व लाभ प्राप्त होगा।",
+            "Ati-Mitra": "सर्वोत्तम भाग्यशाली समय! अटके हुए कार्यों को गति दें; उच्चाधिकारियों का पूर्ण सहयोग मिलेगा।"
+        }
+        summary = nature_dict.get(cat, "संतुलित एवं सामान्य दिन।")
+        return {
+            "mind": f"चन्द्रमा का <b>{transit_nak}</b> में गोचर आपकी जन्म राशि के अनुसार <b>{cat} (चक्र {series})</b> ऊर्जा सक्रिय कर रहा है। मन में {summary}",
+            "career": f"<b>व्यापार व कर्मक्षेत्र:</b> शनि के {vahan_name} के प्रभाव से जल्दबाजी के स्थान पर धैर्यपूर्ण योजना बनाएं। वित्तीय मामलों में व्यवस्थित कदम उठाएं।",
+            "advice": f"<b>आज का व्यक्तिगत अंक {p_day}:</b> दिन के अंक की ऊर्जा एकाग्रता और संकल्पशक्ति को बढ़ाती है। किसी भी विवाद में न उलझें।"
+        }
+    elif lang == "mr":
+        nature_dict = {
+            "Janma": "नवीन ऊर्जा आणि आत्मपरीक्षणाचा काळ. महत्त्वाची पूर्वतयारी करण्यासाठी अनुकूल दिवस.",
+            "Sampat": "धनलाभ, आर्थिक निर्णय, खरेदी आणि व्यावसायिक प्रगतीसाठी अत्यंत फलदायी काळ.",
+            "Vipat": "अडचणी व कामात अनपेक्षित विलंब संभवतो. वादविवाद व आर्थिक जोखीम टाळणे श्रेयस्कर.",
+            "Kshema": "आरोग्य, सुख-समाधान आणि शांततेचा दिवस. कामात सुलभता जाणवेल.",
+            "Pratyari": "विरोध किंवा मतभेदांची शक्यता. बोलण्यावर संयम ठेवा आणि सबुरीने घ्या.",
+            "Sadhana": "ध्येयपूर्ती, अभ्यास आणि नियोजनबद्ध कामात मोठे यश मिळवणारा दिवस.",
+            "Vadha": "अत्यंत सावधगिरीचा काळ. महत्त्वाचे निर्णय आणि आर्थिक सौदे पुढे ढकलावेत.",
+            "Mitra": "मित्र आणि सहकाऱ्यांचे सहकार्य लाभेल. संवाद आणि भागीदारीसाठी उत्तम.",
+            "Ati-Mitra": "सर्वोच्च यशाचा अनुकूल काळ! महत्त्वाच्या कामांना गती द्या."
+        }
+        summary = nature_dict.get(cat, "संतुलित दिवस.")
+        return {
+            "mind": f"चंद्राचे <b>{transit_nak}</b> नक्षत्रातील भ्रमण <b>{cat} (चक्र {series})</b> प्रभाव दर्शवत आहे. {summary}",
+            "career": f"<b>व्यवसाय व नोकरी:</b> शनीच्या {vahan_name} प्रभावाने शिस्तबद्ध रीतीने काम पूर्ण करा.",
+            "advice": f"<b>वैयक्तिक अंक {p_day}:</b> धोरणात्मक दृष्टिकोन ठेवा आणि उद्दिष्ट निश्चित करा."
+        }
+    elif lang == "gu":
+        nature_dict = {
+            "Janma": "સ્વ-ચિંતન અને નવી યોજનાઓ ઘડવાનો સમય. સ્વાસ્થ્યનું ધ્યાન રાખવું.",
+            "Sampat": "ધનલાભ, આર્થિક રોકાણ અને શુભ કાર્યો માટે ઉત્તમ અનુકૂળ સમયગાળો.",
+            "Vipat": "અણધારી મુશ્કેલીઓ કે વિલંબ થઈ શકે છે. જોખમી નિર્ણયો ટાળવા.",
+            "Kshema": "શાંતિ, આરોગ્ય અને પારિવારિક સુખ માટે અત્યંત શુભ સમય.",
+            "Pratyari": "મતભેદ કે અવરોધ આવી શકે છે. વાણી અને વર્તનમાં નમ્રતા રાખવી.",
+            "Sadhana": "મહેનતનું ફળ મળશે અને લક્ષ્ય તરફ આગળ વધવાનો શ્રેષ્ઠ અવસર.",
+            "Vadha": "સાવચેતી રાખવી જરૂરી છે. કાનૂની કે આર્થિક વિવાદોથી દૂર રહેવું.",
+            "Mitra": "મિત્રો અને સ્નેહીઓનો સાથ મળશે. પરસ્પર લાભદાયી વાટાઘાટો થશે.",
+            "Ati-Mitra": "સર્વોચ્ચ શુભ ફળદાયી સમય! મહત્વના કામો હાથ ધરવા માટે શ્રેષ્ઠ."
+        }
+        summary = nature_dict.get(cat, "સામાન્ય દિવસ.")
+        return {
+            "mind": f"ચંદ્રનું <b>{transit_nak}</b> માં ગોચર <b>{cat} (શ્રેણી {series})</b> ઊર્જા લાવી રહ્યું છે. {summary}",
+            "career": f"<b>કાર્યક્ષેત્ર:</b> શનિના {vahan_name} પ્રભાવ હેઠળ ધૈર્યથી આયોજન કરવું.",
+            "advice": f"<b>વ્યક્તિગત અંક {p_day}:</b> સંતુલિત અને વિચારપૂર્વકના પગલાં સફળતા અપાવશે."
+        }
+    else:
+        nature_dict = {
+            "Janma": "Focus on personal vitality, introspection, and physical grounding. Plan and refine rather than rush.",
+            "Sampat": "Highly auspicious for wealth accumulation, deal signings, high-value purchases, and financial growth.",
+            "Vipat": "High-friction zone. Delays and sudden hurdles possible. Postpone aggressive moves and avoid speculation.",
+            "Kshema": "Harmonious and protective. Favors health recovery, domestic peace, and smooth execution of routine affairs.",
+            "Pratyari": "Potential resistance, opposing views, or competitive friction. Maintain diplomatic neutrality.",
+            "Sadhana": "Peak accomplishment window. Dedicated effort yields tangible breakthroughs and strategic success.",
+            "Vadha": "Vulnerable window requiring peak restraint. Avoid signing binding agreements, confrontations, or financial risk.",
+            "Mitra": "Favorable camaraderie, networking, and helpful collaborations. Builds goodwill and fruitful alliances.",
+            "Ati-Mitra": "Supreme golden window! Optimal support from superiors, mentors, and the universe for critical milestones."
+        }
+        summary = nature_dict.get(cat, "Balanced and steady progress.")
+        return {
+            "mind": f"The Moon transiting in <b>{transit_nak}</b> activates your <b>{cat} (Series {series})</b> star relative to your natal {janma_nak}. {summary}",
+            "career": f"<b>Professional & Financial Focus:</b> Under Saturn's {vahan_name}, prioritize methodological persistence over hasty gambles. Lock down loose ends before committing capital.",
+            "advice": f"<b>Personal Day {p_day} Vibration:</b> Channels focused mental clarity into your top priorities. Avoid scatter and preserve your energy."
+        }
+
+def get_today_actionable_remedies(cat: str, vahan_num: int, p_day: int, lang: str = "en") -> list:
+    """Generates targeted Vedic and Numerology remedies tailored to today's cosmic pulse."""
+    remedies = []
+    if lang == "hi":
+        if cat in ["Vipat", "Pratyari", "Vadha"]:
+            remedies.append("🛡️ <b>नवतारा कवच उपाय:</b> संकट नाशक 'हनुमान चालीसा' का दो बार पाठ करें अथवा <code>ॐ नमः शिवाय</code> का 108 बार मानसिक जप करें।")
+            remedies.append("🕊️ <b>शान्ति दान:</b> आज काले तिल अथवा जल में थोड़ा कच्चा दूध मिलाकर शिवलिंग पर अर्पित करें।")
+        else:
+            remedies.append("🌟 <b>नवतारा संवर्धन उपाय:</b> अनुकूल समय का लाभ लेने हेतु प्रातः सूर्य देव को तांबे के लोटे से अर्घ्य दें एवं 'गायत्री मंत्र' का जप करें।")
+            remedies.append("🌿 <b>शुभ संकल्प:</b> किसी नए कार्य के आरंभ से पूर्व इष्टदेव का स्मरण कर मिश्री या गुड़ ग्रहण करें।")
+        
+        if vahan_num in [2, 3, 7]:  # Donkey, Jackal, Crow
+            remedies.append("🐦‍⬛ <b>शनि वाहन शान्ति:</b> पक्षियों को जल व दाना दें अथवा काले श्वान को रोटी खिलाएं; कटु वाणी से बचें।")
+        else:
+            remedies.append("🪐 <b>शनि कृपा उपाय:</b> शाम के समय पीपल के समीप अथवा घर के मंदिर में सरसों या तिल के तेल का दीपक लगाएं।")
+        remedies.append(f"🔢 <b>अंक ज्योतिष उपाय (Day {p_day}):</b> आज हल्का श्वेत अथवा हल्का पीला/नीला वस्त्र धारण करें और अनावश्यक तर्क-वितर्क से दूर रहें।")
+    elif lang == "mr":
+        if cat in ["Vipat", "Pratyari", "Vadha"]:
+            remedies.append("🛡️ <b>नवतारा सुरक्षा उपाय:</b> मारुती स्तोत्र किंवा हनुमान चालीसा म्हणा; <code>ॐ नमः शिवाय</code> चा १०८ वेळा जप करा.")
+            remedies.append("🕊️ <b>सात्विक दान:</b> मुक्या प्राण्यांना अन्न द्या किंवा शिवलिंगावर जलाभिषेक करा.")
+        else:
+            remedies.append("🌟 <b>शुभ नवतारा वृद्धी:</b> सकाळी सूर्याला तांब्याच्या पात्रातून जल अर्पण करा आणि गायत्री मंत्राचा जप करा.")
+            remedies.append("🌿 <b>यशस्वी सुरुवात:</b> कामास सुरुवात करताना गूळ खाऊन व देवाचे स्मरण करून पुढे जा.")
+        remedies.append("🪐 <b>शनी वाहन शांती:</b> संध्याकाळी तिळाच्या किंवा मोहरीच्या तेलाचा दिवा लावा; गरजू व्यक्तीला मदत करा.")
+        remedies.append(f"🔢 <b>अंकशास्त्र उपाय (दिवस {p_day}):</b> आकाशी निळा किंवा पांढरा रंग वापरा आणि मानसिक शांतता ठेवा.")
+    elif lang == "gu":
+        if cat in ["Vipat", "Pratyari", "Vadha"]:
+            remedies.append("🛡️ <b>નવતારા રક્ષા ઉપાય:</b> હનુમાન ચાલીસાનો પાઠ કરવો અને શાંત મનથી <code>ૐ નમઃ શિવાય</code> જાપ કરવો.")
+            remedies.append("🕊️ <b>પુણ્ય દાન:</b> પક્ષીઓને ચણ નાખવું અને શિવલિંગ પર જળાભિષેક કરવો.")
+        else:
+            remedies.append("🌟 <b>શુભ ફળ વૃદ્ધિ:</b> સવારે સૂર્ય નારાયણને જળ અર્પણ કરી ગાયત્રી મંત્ર કરવો.")
+            remedies.append("🌿 <b>મંગલ શરૂઆત:</b> શુભ કાર્ય પહેલાં ગોળ-પાણી ગ્રહણ કરી ઈષ્ટદેવનું સ્મરણ કરવું.")
+        remedies.append("🪐 <b>શનિ વાહન ઉપાય:</b> સાંજે દીવો પ્રગટાવવો અને વડીલોના આશીર્વાદ લેવા.")
+        remedies.append(f"🔢 <b>અંકશાસ્ત્ર ઉપાય (અંક {p_day}):</b> સફેદ અથવા આછો વાદળી રંગ અનુકૂળ રહેશે; શાંતિ જાળવવી.")
+    else:
+        if cat in ["Vipat", "Pratyari", "Vadha"]:
+            remedies.append("🛡️ <b>Navtara Shield Remedy:</b> Recite the <i>Hanuman Chalisa</i> or chant <code>Om Namah Shivaya</code> 108 times to dissolve friction.")
+            remedies.append("🕊️ <b>Karmic Neutralizer:</b> Offer fresh water or milk on a Shiva Lingam; avoid lending money or signing unvetted deals today.")
+        else:
+            remedies.append("🌟 <b>Navtara Expansion Remedy:</b> Offer water to the rising Sun and chant the Gayatri Mantra 11 times to magnify favorable opportunities.")
+            remedies.append("🌿 <b>Golden Hour Karma:</b> Share a portion of food or sweets with someone in need before starting your primary task.")
+        
+        if vahan_num in [2, 3, 7]:  # Donkey, Jackal, Crow
+            remedies.append("🐦‍⬛ <b>Saturn Mount Pacifier:</b> Feed grains or bread to crows/birds this morning; practice conscious silence (Mouna) during tense debates.")
+        else:
+            remedies.append("🪐 <b>Saturn Benevolence:</b> Light a mustard or sesame oil lamp in the evening and express gratitude to service workers.")
+        remedies.append(f"🔢 <b>Personal Day {p_day} Harmonizer:</b> Wear white, light blue, or cream tones; stay hydrated from a copper or glass vessel.")
+    return remedies
+
 def load_user_profile():
     if os.path.exists(PROFILE_FILE):
         try:
@@ -1056,15 +1243,43 @@ elif st.session_state.current_page == "forecast":
     tab_today, tab_7day = st.tabs([t("tab_today", current_lang), t("tab_7days", current_lang)])
 
     with tab_today:
-        pulse_html = f"""<div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px;">
-<div style="font-weight:800; font-size:15px; color:#1e293b; margin-bottom:10px;">
-⚡ {t('active_navtara_title', current_lang)}
+        active_nak_idx, t_start_utc, t_end_utc = get_current_nakshatra_window(now_utc)
+        start_ist_str = t_start_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+        end_ist_str = t_end_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+
+        status_badge = (
+            "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
+            if cur_nav_cat in ["Vipat", "Pratyari", "Vadha"] else
+            "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
+        )
+
+        pulse_html = f"""<div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:1.5px solid #cbd5e1; border-radius:16px; padding:18px 20px; margin-bottom:14px; box-shadow:0 4px 14px rgba(15, 23, 42, 0.05);">
+<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+    <div>
+        <div style="font-weight:800; font-size:16px; color:#0f172a;">
+            ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{cur_nav_cat}</span>
+        </div>
+        <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+            Navtara Cycle: <b>Series {cur_nav_series}</b> | Transiting: <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Janma: <b>{janma_name}</b>
+        </div>
+    </div>
+    {status_badge}
 </div>
-<div style="font-size:20px; font-weight:900; color:#0f172a;">
-{cur_nav_cat} (Series {cur_nav_series})
-</div>
-<div style="font-size:13.5px; color:#475569; margin-top:4px;">
-Moon transiting in <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Natal: <b>{janma_name}</b>
+
+<div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px 14px; margin-top:8px;">
+    <div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
+        ⏱️ {t('today_transit_window', current_lang)}
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
+        <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+            <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
+            <span style="color:#0f172a; font-weight:800;">{start_ist_str}</span>
+        </div>
+        <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+            <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
+            <span style="color:#0f172a; font-weight:800;">{end_ist_str}</span>
+        </div>
+    </div>
 </div>
 </div>"""
         st.markdown(pulse_html, unsafe_allow_html=True)
@@ -1086,17 +1301,39 @@ Moon transiting in <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Natal: <b>{janma_name
 </div>"""
             st.markdown(pday_card_html, unsafe_allow_html=True)
 
-        directives_html = f"""<div style="margin-top:14px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:14px;">
-<div style="font-weight:800; font-size:14px; color:#1e40af; margin-bottom:8px;">
-{t('three_directives_title', current_lang)}:
+        today_pred = get_detailed_today_forecast(
+            cur_nav_cat, cur_nav_series, NAKSHATRAS[cur_moon_nak_idx], janma_name,
+            today_vahan.split('—')[0], p_day, current_lang
+        )
+        
+        pred_card_html = f"""<div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
+<div style="font-weight:800; font-size:15px; color:#9a3412; margin-bottom:10px; border-bottom:1.5px solid #ffedd5; padding-bottom:6px;">
+    {t('today_detailed_pred_title', current_lang)}
 </div>
-<div style="font-size:13px; color:#1e3a8a; line-height:1.6;">
-1. <b>Navtara Strategy ({cur_nav_cat}):</b> Align high-stakes actions to favorable windows and observe diplomatic restraint during friction zones.<br>
-2. <b>Saturn Vahan Pace ({today_vahan.split('—')[0]}):</b> Follow methodical discipline, avoiding hasty short-cuts or impulsive escalations.<br>
-3. <b>Personal Day Alignment ({p_day}):</b> Channel focused energy into personal productivity and core long-term priorities.
+<div style="font-size:13.2px; line-height:1.65; color:#431407; margin-bottom:8px;">
+    {today_pred['mind']}
+</div>
+<div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13px; color:#7c2d12; line-height:1.6; margin-bottom:8px; border:1px solid #ffedd5;">
+    {today_pred['career']}
+</div>
+<div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:13px; color:#78350f; line-height:1.6; border:1px solid #fef3c7;">
+    {today_pred['advice']}
 </div>
 </div>"""
-        st.markdown(directives_html, unsafe_allow_html=True)
+        st.markdown(pred_card_html, unsafe_allow_html=True)
+
+        today_remedies = get_today_actionable_remedies(cur_nav_cat, today_vahan_num, p_day, current_lang)
+        remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in today_remedies])
+        
+        remedies_card_html = f"""<div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
+<div style="font-weight:800; font-size:15px; color:#065f46; margin-bottom:10px; border-bottom:1.5px solid #dcfce7; padding-bottom:6px;">
+    {t('today_remedies_title', current_lang)}
+</div>
+<div>
+    {remedies_items_html}
+</div>
+</div>"""
+        st.markdown(remedies_card_html, unsafe_allow_html=True)
 
     with tab_7day:
         st.subheader(t("matrix_table_title", current_lang))
