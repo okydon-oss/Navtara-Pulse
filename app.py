@@ -235,6 +235,98 @@ st.markdown("""
         font-weight: 700;
     }
 
+    /* Google Brand Button */
+    button[aria-label*="Google"] {
+        background: #ffffff !important;
+        color: #1f2937 !important;
+        border: 1.8px solid #cbd5e1 !important;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06) !important;
+        font-weight: 700 !important;
+    }
+    button[aria-label*="Google"]::before {
+        content: "";
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/%3E%3Cpath fill='%234285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/%3E%3Cpath fill='%23FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/%3E%3Cpath fill='%2334A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: middle;
+    }
+
+    /* WhatsApp Brand Button */
+    button[aria-label*="WhatsApp"] {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+        color: #ffffff !important;
+        border: 1.8px solid #075E54 !important;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.28) !important;
+        font-weight: 700 !important;
+    }
+    button[aria-label*="WhatsApp"]::before {
+        content: "";
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23ffffff' d='M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: middle;
+    }
+
+    /* Facebook Brand Button */
+    button[aria-label*="Facebook"] {
+        background: linear-gradient(135deg, #1877F2 0%, #0d65d9 100%) !important;
+        color: #ffffff !important;
+        border: 1.8px solid #0b4eb1 !important;
+        box-shadow: 0 4px 12px rgba(24, 119, 242, 0.28) !important;
+        font-weight: 700 !important;
+    }
+    button[aria-label*="Facebook"]::before {
+        content: "";
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23ffffff' d='M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.74V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: middle;
+    }
+
+    /* Email Brand Button */
+    button[aria-label*="Email (OTP)"] {
+        background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
+        color: #ffffff !important;
+        border: 1.8px solid #312e81 !important;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28) !important;
+        font-weight: 700 !important;
+    }
+    button[aria-label*="Email (OTP)"]::before {
+        content: "";
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23ffffff' d='M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-size: contain;
+        vertical-align: middle;
+    }
+
+    /* Active selection pill */
+    .active-provider-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: 9999px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
     /* Provider notification banner */
     .provider-banner {
         border-radius: 14px;
@@ -450,6 +542,11 @@ if "pending_signin_otp" not in st.session_state:
 if "pending_signin_id" not in st.session_state:
     st.session_state.pending_signin_id = None
 
+if "signin_provider" not in st.session_state:
+    st.session_state.signin_provider = "Google"
+if "signup_provider" not in st.session_state:
+    st.session_state.signup_provider = "Google"
+
 # ---------------------------------------------------------
 # AUTHENTICATION SCREEN (SIGN IN VS SIGN UP AS NEW USER)
 # ---------------------------------------------------------
@@ -541,15 +638,80 @@ if not st.session_state.user_info:
     # =========================================================
     if "Sign In" in auth_mode:
         st.subheader("🔑 Sign In to Your Account")
-        st.caption("Access your saved Janma Nakshatra and birth parameters.")
+        st.caption("Choose your account provider to access your saved birth parameters.")
 
-        method = st.selectbox(
-            "Select Sign-In Method",
-            ["Email (with OTP)", "Google", "WhatsApp", "Facebook"],
-            index=0
-        )
+        # 2x2 Brand Buttons Grid for Sign In
+        btn_col1, btn_col2 = st.columns(2)
+        with btn_col1:
+            if st.button("Google", key="btn_signin_google", use_container_width=True):
+                st.session_state.signin_provider = "Google"
+                st.rerun()
+            if st.button("WhatsApp", key="btn_signin_wa", use_container_width=True):
+                st.session_state.signin_provider = "WhatsApp"
+                st.rerun()
 
-        if method == "Email (with OTP)":
+        with btn_col2:
+            if st.button("Facebook", key="btn_signin_fb", use_container_width=True):
+                st.session_state.signin_provider = "Facebook"
+                st.rerun()
+            if st.button("Email (OTP)", key="btn_signin_email", use_container_width=True):
+                st.session_state.signin_provider = "Email"
+                st.rerun()
+
+        method = st.session_state.signin_provider
+
+        if method == "Google":
+            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign In with your Google / Gmail Account</div>', unsafe_allow_html=True)
+            google_email = st.text_input("Google Email Address", placeholder="e.g. username@gmail.com", key="signin_google_email")
+            if st.button("🚀 Continue with Google", use_container_width=True, type="primary"):
+                cleaned_id = google_email.strip().lower() if google_email else ""
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please enter a valid Google email address.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this Google account. Please use the 'Sign Up as New User' option to create an account.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", cleaned_id.split("@")[0]),
+                        "provider": "Google"
+                    }
+                    st.rerun()
+
+        elif method == "WhatsApp":
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign In with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signin_wa_num")
+            if st.button("💬 Continue with WhatsApp", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid registered mobile number.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this WhatsApp number. Please use the 'Sign Up as New User' option to register.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", "User"),
+                        "provider": "WhatsApp"
+                    }
+                    st.rerun()
+
+        elif method == "Facebook":
+            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign In with your Facebook Account</div>', unsafe_allow_html=True)
+            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signin_fb_id")
+            if st.button("📘 Continue with Facebook", use_container_width=True, type="primary"):
+                cleaned_id = fb_id.strip().lower() if fb_id else ""
+                if not cleaned_id:
+                    st.warning("⚠️ Please enter a valid Facebook email or ID.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this Facebook account. Please use the 'Sign Up as New User' option.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", "User"),
+                        "provider": "Facebook"
+                    }
+                    st.rerun()
+
+        else:  # Email (with OTP)
             st.markdown('<div class="provider-banner provider-banner-email">✉️ Sign In using your Registered Email & OTP</div>', unsafe_allow_html=True)
             login_email = st.text_input("Registered Email Address", placeholder="e.g. yourname@gmail.com", key="signin_email")
 
@@ -588,71 +750,136 @@ if not st.session_state.user_info:
                     else:
                         st.error("❌ Invalid OTP code entered. Please verify and try again.")
 
-        elif method == "Google":
-            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign In with your Google / Gmail Account</div>', unsafe_allow_html=True)
-            google_email = st.text_input("Google Email Address", placeholder="e.g. username@gmail.com", key="signin_google_email")
-            if st.button("🚀 Continue with Google", use_container_width=True, type="primary"):
-                cleaned_id = google_email.strip().lower() if google_email else ""
-                if not cleaned_id or "@" not in cleaned_id:
-                    st.warning("⚠️ Please enter a valid Google email address.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this Google account. Please use the 'Sign Up as New User' option to create an account.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", cleaned_id.split("@")[0]),
-                        "provider": "Google"
-                    }
-                    st.rerun()
-
-        elif method == "WhatsApp":
-            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign In with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
-            wa_num = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signin_wa_num")
-            if st.button("💬 Continue with WhatsApp", use_container_width=True, type="primary"):
-                cleaned_id = wa_num.strip() if wa_num else ""
-                if not cleaned_id or len(cleaned_id) < 8:
-                    st.warning("⚠️ Please enter a valid registered mobile number.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this WhatsApp number. Please use the 'Sign Up as New User' option to register.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", "User"),
-                        "provider": "WhatsApp"
-                    }
-                    st.rerun()
-
-        else:  # Facebook
-            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign In with your Facebook Account</div>', unsafe_allow_html=True)
-            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signin_fb_id")
-            if st.button("📘 Continue with Facebook", use_container_width=True, type="primary"):
-                cleaned_id = fb_id.strip().lower() if fb_id else ""
-                if not cleaned_id:
-                    st.warning("⚠️ Please enter a valid Facebook email or ID.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this Facebook account. Please use the 'Sign Up as New User' option.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", "User"),
-                        "provider": "Facebook"
-                    }
-                    st.rerun()
-
     # =========================================================
     # OPTION 2: NEW USER SIGN UP
     # =========================================================
     else:
         st.subheader("✨ Sign Up as New User")
-        st.caption("Create a new profile to sync your Janma Nakshatra calculations.")
+        st.caption("Select your preferred registration method to create your profile.")
 
-        signup_method = st.selectbox(
-            "Select Registration Method",
-            ["Email (with OTP Verification)", "Sign Up via Google", "Sign Up via WhatsApp", "Sign Up via Facebook"],
-            index=0
-        )
+        # 2x2 Brand Buttons Grid for Sign Up
+        signup_col1, signup_col2 = st.columns(2)
+        with signup_col1:
+            if st.button("Google", key="btn_signup_google", use_container_width=True):
+                st.session_state.signup_provider = "Google"
+                st.rerun()
+            if st.button("WhatsApp", key="btn_signup_wa", use_container_width=True):
+                st.session_state.signup_provider = "WhatsApp"
+                st.rerun()
 
-        if signup_method == "Email (with OTP Verification)":
+        with signup_col2:
+            if st.button("Facebook", key="btn_signup_fb", use_container_width=True):
+                st.session_state.signup_provider = "Facebook"
+                st.rerun()
+            if st.button("Email (OTP)", key="btn_signup_email", use_container_width=True):
+                st.session_state.signup_provider = "Email"
+                st.rerun()
+
+        signup_method = st.session_state.signup_provider
+
+        if signup_method == "Google":
+            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign Up with Google / Gmail</div>', unsafe_allow_html=True)
+            google_email = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com", key="signup_g_email")
+            google_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_g_name")
+
+            if st.button("🚀 Complete Google Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = google_email.strip().lower() if google_email else ""
+                cleaned_name = google_name.strip() if google_name else (cleaned_id.split("@")[0] if cleaned_id else "User")
+                
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please provide a valid Gmail address.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "Google",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "Google"
+                    }
+                    st.rerun()
+
+        elif signup_method == "WhatsApp":
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign Up with WhatsApp Mobile</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("WhatsApp Number", placeholder="e.g. +91 98765 43210", key="signup_wa_num")
+            wa_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_wa_name")
+
+            if st.button("💬 Complete WhatsApp Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                cleaned_name = wa_name.strip() if wa_name else "User"
+
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid mobile number.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with mobile '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "WhatsApp",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "WhatsApp"
+                    }
+                    st.rerun()
+
+        elif signup_method == "Facebook":
+            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign Up with Facebook Account</div>', unsafe_allow_html=True)
+            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signup_fb_id")
+            fb_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_fb_name")
+
+            if st.button("📘 Complete Facebook Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = fb_id.strip().lower() if fb_id else ""
+                cleaned_name = fb_name.strip() if fb_name else "User"
+
+                if not cleaned_id:
+                    st.warning("⚠️ Please enter your Facebook email or ID.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "Facebook",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "Facebook"
+                    }
+                    st.rerun()
+
+        else:  # Email (with OTP Verification)
             st.markdown('<div class="provider-banner provider-banner-email">✉️ Verify your Email with OTP</div>', unsafe_allow_html=True)
             signup_email = st.text_input("Email Address", placeholder="e.g. yourname@gmail.com", key="signup_email")
             signup_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_name")
@@ -707,108 +934,6 @@ if not st.session_state.user_info:
                         st.rerun()
                     else:
                         st.error("❌ Invalid OTP entered. Please recheck the code.")
-
-        elif signup_method == "Sign Up via Google":
-            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign Up with Google / Gmail</div>', unsafe_allow_html=True)
-            google_email = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com", key="signup_g_email")
-            google_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_g_name")
-
-            if st.button("🚀 Complete Google Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = google_email.strip().lower() if google_email else ""
-                cleaned_name = google_name.strip() if google_name else (cleaned_id.split("@")[0] if cleaned_id else "User")
-                
-                if not cleaned_id or "@" not in cleaned_id:
-                    st.warning("⚠️ Please provide a valid Gmail address.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "Google",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "Google"
-                    }
-                    st.rerun()
-
-        elif signup_method == "Sign Up via WhatsApp":
-            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign Up with WhatsApp Mobile</div>', unsafe_allow_html=True)
-            wa_num = st.text_input("WhatsApp Number", placeholder="e.g. +91 98765 43210", key="signup_wa_num")
-            wa_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_wa_name")
-
-            if st.button("💬 Complete WhatsApp Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = wa_num.strip() if wa_num else ""
-                cleaned_name = wa_name.strip() if wa_name else "User"
-
-                if not cleaned_id or len(cleaned_id) < 8:
-                    st.warning("⚠️ Please enter a valid mobile number.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with mobile '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "WhatsApp",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "WhatsApp"
-                    }
-                    st.rerun()
-
-        else:  # Facebook
-            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign Up with Facebook Account</div>', unsafe_allow_html=True)
-            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signup_fb_id")
-            fb_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_fb_name")
-
-            if st.button("📘 Complete Facebook Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = fb_id.strip().lower() if fb_id else ""
-                cleaned_name = fb_name.strip() if fb_name else "User"
-
-                if not cleaned_id:
-                    st.warning("⚠️ Please enter your Facebook email or ID.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "Facebook",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "Facebook"
-                    }
-                    st.rerun()
 
     st.stop()
 
