@@ -1,5 +1,6 @@
 import os
 import json
+import random
 import datetime
 import streamlit as st
 
@@ -23,7 +24,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Mobile-Optimized & Light Catchy CSS Styling
+# Enhanced Responsive Styling with Larger, Clear Mobile Fonts
 st.markdown("""
     <style>
     /* Hide Streamlit default headers & footers for native app feel */
@@ -33,133 +34,128 @@ st.markdown("""
     
     /* Make block container adapt gracefully to mobile screens */
     .block-container {
-        padding-top: 1.25rem !important;
-        padding-bottom: 2.5rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-        max-width: 650px !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 2.8rem !important;
+        padding-left: 1.1rem !important;
+        padding-right: 1.1rem !important;
+        max-width: 680px !important;
         margin: 0 auto !important;
     }
     
-    /* Prevent auto-zooming on mobile inputs & ensure touch-friendly size */
-    input[type="text"], input[type="email"], select {
-        font-size: 16px !important;
-        min-height: 46px !important;
-        border-radius: 10px !important;
+    /* Increased font size for labels and inputs for high legibility */
+    label {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
     }
     
-    /* Primary buttons touch-friendly */
-    .stButton > button {
-        font-size: 16px !important;
-        font-weight: 600 !important;
-        min-height: 48px !important;
+    input[type="text"], input[type="email"], select {
+        font-size: 17px !important;
+        min-height: 50px !important;
         border-radius: 12px !important;
+        padding: 10px 14px !important;
+    }
+    
+    /* Primary touch-friendly buttons with larger text */
+    .stButton > button {
+        font-size: 17px !important;
+        font-weight: 700 !important;
+        min-height: 52px !important;
+        border-radius: 14px !important;
         width: 100% !important;
+        transition: all 0.2s ease-in-out !important;
     }
 
-    /* Headings scaling */
+    /* Headings with boosted readability */
     h1 {
-        font-size: 1.75rem !important;
+        font-size: 1.95rem !important;
         font-weight: 800 !important;
         text-align: center !important;
-        margin-bottom: 0.25rem !important;
+        margin-bottom: 0.35rem !important;
+        letter-spacing: -0.5px !important;
     }
     
     h2 {
-        font-size: 1.35rem !important;
+        font-size: 1.45rem !important;
+        font-weight: 700 !important;
+        margin-top: 0.5rem !important;
+    }
+
+    h3 {
+        font-size: 1.25rem !important;
         font-weight: 700 !important;
     }
 
-    /* Light, Catchy & Fresh Mobile Login Card */
+    p, span, div {
+        font-size: 15.5px;
+    }
+
+    /* Light, Catchy & Fresh Auth Container */
     .mobile-login-card-light {
-        background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 45%, #eff6ff 100%);
-        padding: 22px 18px 18px 18px;
-        border-radius: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eff6ff 100%);
+        padding: 24px 20px 20px 20px;
+        border-radius: 22px;
         border: 1.5px solid #cbd5e1;
-        box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.16), 0 6px 12px -4px rgba(16, 185, 129, 0.1);
-        margin-bottom: 1.25rem;
+        box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.14), 0 6px 14px -4px rgba(16, 185, 129, 0.08);
+        margin-bottom: 1.3rem;
         text-align: center;
     }
 
     .mobile-login-card-light h3 {
         color: #0f172a !important;
         margin-top: 0 !important;
-        margin-bottom: 6px !important;
-        font-size: 1.28rem !important;
+        margin-bottom: 8px !important;
+        font-size: 1.35rem !important;
         font-weight: 800 !important;
     }
 
     .mobile-login-card-light p {
         color: #475569 !important;
-        font-size: 0.90rem !important;
-        line-height: 1.45 !important;
-        margin-bottom: 12px !important;
+        font-size: 1.02rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 4px !important;
     }
 
-    /* Social Badge Chips */
-    .social-pills-wrap {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 6px;
-    }
-
-    .social-badge-google {
-        background: #ffffff;
-        color: #dc2626;
-        border: 1px solid #fca5a5;
-        padding: 4px 10px;
-        border-radius: 9999px;
-        font-size: 0.76rem;
+    /* OTP Display Box */
+    .otp-simulated-box {
+        background: #f0fdf4;
+        border: 2px dashed #22c55e;
+        border-radius: 14px;
+        padding: 14px;
+        margin: 12px 0;
+        text-align: center;
+        color: #15803d;
+        font-size: 1rem;
         font-weight: 700;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .social-badge-whatsapp {
-        background: #ecfdf5;
-        color: #059669;
-        border: 1px solid #6ee7b7;
-        padding: 4px 10px;
-        border-radius: 9999px;
-        font-size: 0.76rem;
-        font-weight: 700;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .social-badge-facebook {
-        background: #eff6ff;
-        color: #2563eb;
-        border: 1px solid #93c5fd;
-        padding: 4px 10px;
-        border-radius: 9999px;
-        font-size: 0.76rem;
-        font-weight: 700;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     /* Provider notification banner */
     .provider-banner {
-        border-radius: 12px;
-        padding: 10px 14px;
-        font-size: 0.88rem;
-        margin-bottom: 12px;
-        font-weight: 600;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-size: 0.98rem;
+        margin-bottom: 14px;
+        font-weight: 700;
+    }
+    .provider-banner-email {
+        background-color: #f8fafc;
+        color: #334155;
+        border: 1.5px solid #cbd5e1;
     }
     .provider-banner-google {
         background-color: #fef2f2;
         color: #991b1b;
-        border: 1px solid #fecaca;
+        border: 1.5px solid #fca5a5;
     }
     .provider-banner-whatsapp {
         background-color: #f0fdf4;
         color: #166534;
-        border: 1px solid #bbf7d0;
+        border: 1.5px solid #86efac;
     }
     .provider-banner-facebook {
         background-color: #eff6ff;
         color: #1e40af;
-        border: 1px solid #bfdbfe;
+        border: 1.5px solid #93c5fd;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -198,8 +194,8 @@ NAVTARA_DESCRIPTIONS = {
 
 DB_FILE = "users_database.json"
 
-def load_all_users():
-    """Reads the JSON database containing user profiles keyed by identifier."""
+def load_all_users() -> dict:
+    """Reads the JSON database containing registered user accounts."""
     if os.path.exists(DB_FILE):
         try:
             with open(DB_FILE, "r") as f:
@@ -208,8 +204,8 @@ def load_all_users():
             return {}
     return {}
 
-def get_user_profile(user_id: str, default_name: str = "User", auth_provider: str = "Google"):
-    """Fetches user record from disk or creates default template."""
+def get_user_profile(user_id: str, default_name: str = "User", auth_provider: str = "Email") -> dict:
+    """Fetches user record from storage or instantiates default profile."""
     db = load_all_users()
     if user_id in db:
         record = db[user_id]
@@ -239,7 +235,7 @@ def get_user_profile(user_id: str, default_name: str = "User", auth_provider: st
     }
 
 def save_user_profile(user_id: str, profile_data: dict) -> bool:
-    """Serializes and saves the user record to JSON storage."""
+    """Serializes user record to disk to persist Janma Nakshatra and birth details."""
     try:
         db = load_all_users()
         to_store = profile_data.copy()
@@ -334,75 +330,322 @@ def find_7day_transitions(start_utc_dt: datetime.datetime):
     })
     return transitions
 
-# Session State Auth Setup
 if "user_info" not in st.session_state:
     st.session_state.user_info = None
 
+# Active OTP verification tracking
+if "pending_signup_otp" not in st.session_state:
+    st.session_state.pending_signup_otp = None
+if "pending_signup_data" not in st.session_state:
+    st.session_state.pending_signup_data = None
+
+if "pending_signin_otp" not in st.session_state:
+    st.session_state.pending_signin_otp = None
+if "pending_signin_id" not in st.session_state:
+    st.session_state.pending_signin_id = None
+
 # ---------------------------------------------------------
-# AUTHENTICATION SCREEN (LIGHT & CATCHY + GOOGLE / WHATSAPP / FACEBOOK)
+# AUTHENTICATION SCREEN (SIGN IN VS SIGN UP AS NEW USER)
 # ---------------------------------------------------------
 if not st.session_state.user_info:
     st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #64748b; margin-top: -6px; font-size: 0.92rem;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #64748b; margin-top: -6px; font-size: 1.05rem; font-weight: 500;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
     st.write("")
 
-    # Light, catchy and welcoming card
+    # Light, catchy welcoming card
     st.markdown("""
     <div class="mobile-login-card-light">
         <h3>🌟 Welcome to Navtara Pulse</h3>
         <p>
-            Choose your preferred sign-in method to sync and permanently save your Janma Nakshatra and birth parameters.
+            Track your 27-Nakshatra Navtara cycles and protect key financial and personal decisions.
         </p>
-        <div class="social-pills-wrap">
-            <span class="social-badge-google">🔴 Google</span>
-            <span class="social-badge-whatsapp">🟢 WhatsApp</span>
-            <span class="social-badge-facebook">🔵 Facebook</span>
-        </div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Multi-Provider Selector
-    auth_choice = st.radio(
-        "Select Sign-in Method",
-        ["Google", "WhatsApp", "Facebook"],
+    # Clean Primary Mode Switch: Sign In vs Sign Up
+    auth_mode = st.radio(
+        "Authentication Mode",
+        ["🔑 Existing User: Sign In", "✨ New User: Sign Up"],
         horizontal=True,
         label_visibility="collapsed"
     )
 
-    if auth_choice == "Google":
-        st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign in with your Google / Gmail Account</div>', unsafe_allow_html=True)
-        login_input = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com")
-        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
-        btn_label = "🚀 Continue with Google"
-        btn_color = "primary"
+    db = load_all_users()
 
-    elif auth_choice == "WhatsApp":
-        st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign in with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
-        login_input = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210")
-        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
-        btn_label = "💬 Continue with WhatsApp"
-        btn_color = "primary"
+    # =========================================================
+    # OPTION 1: EXISTING USER SIGN IN
+    # =========================================================
+    if "Sign In" in auth_mode:
+        st.subheader("🔑 Sign In to Your Account")
+        st.caption("Access your saved Janma Nakshatra and birth parameters.")
 
-    else:  # Facebook
-        st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign in with your Facebook Account</div>', unsafe_allow_html=True)
-        login_input = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com")
-        display_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma")
-        btn_label = "📘 Continue with Facebook"
-        btn_color = "primary"
+        method = st.selectbox(
+            "Select Sign-In Method",
+            ["Email (with OTP)", "Google", "WhatsApp", "Facebook"],
+            index=0
+        )
 
-    st.write("")
-    if st.button(btn_label, use_container_width=True, type=btn_color):
-        cleaned_id = login_input.strip().lower() if login_input else ""
-        if cleaned_id:
-            cleaned_name = display_name.strip() if display_name else cleaned_id.split("@")[0]
-            st.session_state.user_info = {
-                "user_id": cleaned_id,
-                "name": cleaned_name,
-                "provider": auth_choice
-            }
-            st.rerun()
-        else:
-            st.warning(f"⚠️ Please enter a valid {auth_choice} credential to continue.")
+        if method == "Email (with OTP)":
+            st.markdown('<div class="provider-banner provider-banner-email">✉️ Sign In using your Registered Email & OTP</div>', unsafe_allow_html=True)
+            login_email = st.text_input("Registered Email Address", placeholder="e.g. yourname@gmail.com", key="signin_email")
+
+            if st.button("📨 Request Sign-In OTP", use_container_width=True, type="primary"):
+                cleaned_id = login_email.strip().lower() if login_email else ""
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please enter a valid registered email address.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this email. Please use the 'Sign Up as New User' option to create your profile.")
+                else:
+                    otp_code = str(random.randint(100000, 999999))
+                    st.session_state.pending_signin_otp = otp_code
+                    st.session_state.pending_signin_id = cleaned_id
+                    st.session_state.pending_signin_name = db[cleaned_id].get("name", "User")
+                    st.rerun()
+
+            if st.session_state.pending_signin_otp:
+                st.markdown(f"""
+                <div class="otp-simulated-box">
+                    📩 Verification OTP sent to <b>{st.session_state.pending_signin_id}</b>:<br>
+                    <span style="font-size: 1.4rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signin_otp}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                entered_otp = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signin_entered_otp")
+                if st.button("✅ Verify OTP & Sign In", use_container_width=True, type="primary"):
+                    if entered_otp.strip() == st.session_state.pending_signin_otp:
+                        st.session_state.user_info = {
+                            "user_id": st.session_state.pending_signin_id,
+                            "name": st.session_state.pending_signin_name,
+                            "provider": "Email"
+                        }
+                        st.session_state.pending_signin_otp = None
+                        st.session_state.pending_signin_id = None
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid OTP code entered. Please verify and try again.")
+
+        elif method == "Google":
+            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign In with your Google / Gmail Account</div>', unsafe_allow_html=True)
+            google_email = st.text_input("Google Email Address", placeholder="e.g. username@gmail.com", key="signin_google_email")
+            if st.button("🚀 Continue with Google", use_container_width=True, type="primary"):
+                cleaned_id = google_email.strip().lower() if google_email else ""
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please enter a valid Google email address.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this Google account. Please use the 'Sign Up as New User' option to create an account.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", cleaned_id.split("@")[0]),
+                        "provider": "Google"
+                    }
+                    st.rerun()
+
+        elif method == "WhatsApp":
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign In with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signin_wa_num")
+            if st.button("💬 Continue with WhatsApp", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid registered mobile number.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this WhatsApp number. Please use the 'Sign Up as New User' option to register.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", "User"),
+                        "provider": "WhatsApp"
+                    }
+                    st.rerun()
+
+        else:  # Facebook
+            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign In with your Facebook Account</div>', unsafe_allow_html=True)
+            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signin_fb_id")
+            if st.button("📘 Continue with Facebook", use_container_width=True, type="primary"):
+                cleaned_id = fb_id.strip().lower() if fb_id else ""
+                if not cleaned_id:
+                    st.warning("⚠️ Please enter a valid Facebook email or ID.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this Facebook account. Please use the 'Sign Up as New User' option.")
+                else:
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": db[cleaned_id].get("name", "User"),
+                        "provider": "Facebook"
+                    }
+                    st.rerun()
+
+    # =========================================================
+    # OPTION 2: NEW USER SIGN UP
+    # =========================================================
+    else:
+        st.subheader("✨ Sign Up as New User")
+        st.caption("Create a new profile to sync your Janma Nakshatra calculations.")
+
+        signup_method = st.selectbox(
+            "Select Registration Method",
+            ["Email (with OTP Verification)", "Sign Up via Google", "Sign Up via WhatsApp", "Sign Up via Facebook"],
+            index=0
+        )
+
+        if signup_method == "Email (with OTP Verification)":
+            st.markdown('<div class="provider-banner provider-banner-email">✉️ Verify your Email with OTP</div>', unsafe_allow_html=True)
+            signup_email = st.text_input("Email Address", placeholder="e.g. yourname@gmail.com", key="signup_email")
+            signup_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_name")
+
+            if st.button("📨 Send Verification OTP", use_container_width=True, type="primary"):
+                cleaned_id = signup_email.strip().lower() if signup_email else ""
+                cleaned_name = signup_name.strip() if signup_name else "User"
+                
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please provide a valid email address.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with email '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    otp_code = str(random.randint(100000, 999999))
+                    st.session_state.pending_signup_otp = otp_code
+                    st.session_state.pending_signup_data = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "Email"
+                    }
+                    st.rerun()
+
+            if st.session_state.pending_signup_otp:
+                st.markdown(f"""
+                <div class="otp-simulated-box">
+                    📩 Verification OTP sent to <b>{st.session_state.pending_signup_data['user_id']}</b>:<br>
+                    <span style="font-size: 1.4rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signup_otp}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                entered_code = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signup_entered_code")
+                if st.button("✅ Verify OTP & Complete Sign Up", use_container_width=True, type="primary"):
+                    if entered_code.strip() == st.session_state.pending_signup_otp:
+                        new_user = st.session_state.pending_signup_data
+                        # Initialize and save template profile
+                        initial_profile = {
+                            "user_id": new_user["user_id"],
+                            "name": new_user["name"],
+                            "auth_provider": "Email",
+                            "dob": datetime.date(1990, 1, 1),
+                            "tob": datetime.time(12, 0),
+                            "place": "Chhatrapati Sambhajinagar, India",
+                            "lat": 19.8762,
+                            "lon": 75.3433,
+                            "tz_offset": 5.5,
+                            "nakshatra_idx": 1
+                        }
+                        save_user_profile(new_user["user_id"], initial_profile)
+                        st.session_state.user_info = new_user
+                        st.session_state.pending_signup_otp = None
+                        st.session_state.pending_signup_data = None
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid OTP entered. Please recheck the code.")
+
+        elif signup_method == "Sign Up via Google":
+            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign Up with Google / Gmail</div>', unsafe_allow_html=True)
+            google_email = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com", key="signup_g_email")
+            google_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_g_name")
+
+            if st.button("🚀 Complete Google Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = google_email.strip().lower() if google_email else ""
+                cleaned_name = google_name.strip() if google_name else (cleaned_id.split("@")[0] if cleaned_id else "User")
+                
+                if not cleaned_id or "@" not in cleaned_id:
+                    st.warning("⚠️ Please provide a valid Gmail address.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "Google",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "Google"
+                    }
+                    st.rerun()
+
+        elif signup_method == "Sign Up via WhatsApp":
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign Up with WhatsApp Mobile</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("WhatsApp Number", placeholder="e.g. +91 98765 43210", key="signup_wa_num")
+            wa_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_wa_name")
+
+            if st.button("💬 Complete WhatsApp Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                cleaned_name = wa_name.strip() if wa_name else "User"
+
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid mobile number.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with mobile '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "WhatsApp",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "WhatsApp"
+                    }
+                    st.rerun()
+
+        else:  # Facebook
+            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign Up with Facebook Account</div>', unsafe_allow_html=True)
+            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signup_fb_id")
+            fb_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_fb_name")
+
+            if st.button("📘 Complete Facebook Sign Up", use_container_width=True, type="primary"):
+                cleaned_id = fb_id.strip().lower() if fb_id else ""
+                cleaned_name = fb_name.strip() if fb_name else "User"
+
+                if not cleaned_id:
+                    st.warning("⚠️ Please enter your Facebook email or ID.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    initial_profile = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "auth_provider": "Facebook",
+                        "dob": datetime.date(1990, 1, 1),
+                        "tob": datetime.time(12, 0),
+                        "place": "Chhatrapati Sambhajinagar, India",
+                        "lat": 19.8762,
+                        "lon": 75.3433,
+                        "tz_offset": 5.5,
+                        "nakshatra_idx": 1
+                    }
+                    save_user_profile(cleaned_id, initial_profile)
+                    st.session_state.user_info = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "Facebook"
+                    }
+                    st.rerun()
+
     st.stop()
 
 # ---------------------------------------------------------
@@ -410,7 +653,7 @@ if not st.session_state.user_info:
 # ---------------------------------------------------------
 user_id = st.session_state.user_info["user_id"]
 user_display = st.session_state.user_info["name"]
-auth_provider = st.session_state.user_info.get("provider", "Google")
+auth_provider = st.session_state.user_info.get("provider", "Email")
 
 if (
     "current_profile" not in st.session_state
@@ -422,7 +665,7 @@ prof = st.session_state.current_profile
 
 # Sidebar Configuration for Profiles
 with st.sidebar:
-    provider_icon = "🔴" if auth_provider == "Google" else ("🟢" if auth_provider == "WhatsApp" else "🔵")
+    provider_icon = "✉️" if auth_provider == "Email" else ("🔴" if auth_provider == "Google" else ("🟢" if auth_provider == "WhatsApp" else "🔵"))
     st.markdown(f"**Signed in via {auth_provider} {provider_icon}**")
     st.code(user_id, language=None)
     
@@ -472,7 +715,7 @@ janma_name = NAKSHATRAS[janma_idx]
 
 st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
 st.markdown(
-    f"<p style='text-align: center; font-size: 0.95rem; margin-top: -6px;'>"
+    f"<p style='text-align: center; font-size: 1.05rem; margin-top: -6px;'>"
     f"Welcome, <b>{prof.get('name')}</b> ({auth_provider} {provider_icon})<br>"
     f"Janma Nakshatra: <b>{janma_name}</b> (<code>#{janma_idx + 1}/27</code>)"
     f"</p>",
