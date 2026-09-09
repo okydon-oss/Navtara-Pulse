@@ -101,19 +101,125 @@ st.markdown("""
         text-align: center;
     }
 
-    .mobile-login-card-light h3 {
-        color: #0f172a !important;
-        margin-top: 0 !important;
-        margin-bottom: 8px !important;
-        font-size: 1.35rem !important;
-        font-weight: 800 !important;
+    .hero-brand-container {
+        text-align: center;
+        padding-top: 0.2rem;
+        margin-bottom: 1rem;
     }
 
-    .mobile-login-card-light p {
-        color: #475569 !important;
+    .brand-logo-emblem {
+        width: 82px;
+        height: 82px;
+        margin: 0 auto 10px auto;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px -4px rgba(79, 70, 229, 0.4), 0 0 0 3px rgba(224, 231, 255, 0.8);
+        animation: pulseGlow 3.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+        0% { box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.35), 0 0 0 3px rgba(224, 231, 255, 0.8); }
+        100% { box-shadow: 0 14px 30px -2px rgba(236, 72, 153, 0.45), 0 0 0 4px rgba(254, 240, 138, 0.9); }
+    }
+
+    .hero-brand-container h1 {
+        color: #0f172a !important;
+        font-size: 2.15rem !important;
+        font-weight: 900 !important;
+        letter-spacing: -0.8px !important;
+        margin-bottom: 2px !important;
+        background: linear-gradient(120deg, #1e1b4b 0%, #4338ca 60%, #9333ea 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-tagline {
         font-size: 1.02rem !important;
-        line-height: 1.5 !important;
-        margin-bottom: 4px !important;
+        font-weight: 700 !important;
+        color: #4338ca !important;
+        margin-bottom: 12px !important;
+        letter-spacing: 0.2px;
+    }
+
+    /* Relatable Common-Man Value Card */
+    .common-man-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 60%, #eef2ff 100%);
+        border: 1.5px solid #c7d2fe;
+        border-radius: 20px;
+        padding: 20px 18px;
+        margin-bottom: 1.2rem;
+        box-shadow: 0 10px 24px -6px rgba(99, 102, 241, 0.12);
+        text-align: left;
+    }
+
+    .common-man-card h4 {
+        margin: 0 0 10px 0;
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: #1e1b4b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .story-paragraph {
+        font-size: 0.96rem;
+        color: #334155;
+        line-height: 1.55;
+        margin-bottom: 14px;
+    }
+
+    .story-paragraph b {
+        color: #0f172a;
+    }
+
+    .common-benefits-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 9px;
+        margin-top: 10px;
+    }
+
+    .benefit-item {
+        background: #ffffff;
+        border: 1.2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .benefit-icon {
+        font-size: 1.25rem;
+        line-height: 1;
+        margin-top: 2px;
+    }
+
+    .benefit-text {
+        font-size: 0.92rem;
+        color: #334155;
+        line-height: 1.4;
+    }
+
+    .benefit-text b {
+        color: #1e293b;
+        font-weight: 700;
+    }
+
+    .cosmic-pill-quote {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        border-radius: 0 10px 10px 0;
+        padding: 9px 12px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: #166534;
+        margin-top: 12px;
     }
 
     /* OTP Display Box */
@@ -348,17 +454,75 @@ if "pending_signin_id" not in st.session_state:
 # AUTHENTICATION SCREEN (SIGN IN VS SIGN UP AS NEW USER)
 # ---------------------------------------------------------
 if not st.session_state.user_info:
-    st.markdown("<h1>✨ Navtara Pulse</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #64748b; margin-top: -6px; font-size: 1.05rem; font-weight: 500;'>Precision Vedic Moon Transit & Navtara Timing Engine</p>", unsafe_allow_html=True)
-    st.write("")
-
-    # Light, catchy welcoming card
     st.markdown("""
-    <div class="mobile-login-card-light">
-        <h3>🌟 Welcome to Navtara Pulse</h3>
-        <p>
-            Track your 27-Nakshatra Navtara cycles and protect key financial and personal decisions.
-        </p>
+    <div class="hero-brand-container">
+        <div class="brand-logo-emblem">
+            <svg width="52" height="52" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Radiant Halo -->
+                <circle cx="50" cy="50" r="44" stroke="url(#cosmicGrad)" stroke-width="2" stroke-dasharray="4 3" opacity="0.65"/>
+                <!-- Crescent Moon Symbolizing Lunar Transit -->
+                <path d="M56 22C41 22 29 34 29 49C29 64 41 76 56 76C46 76 38 67 38 53C38 39 47 25 56 22Z" fill="url(#goldGrad)" filter="drop-shadow(0 2px 6px rgba(245,158,11,0.5))"/>
+                <!-- 9-Point Star Centerpiece Symbolizing 9 Navtara Pulses -->
+                <path d="M56 36L58.5 45.5L68 47L59.5 51L61 60.5L53.5 54L45.5 59.5L48.5 50.5L41 45.5L50.5 45L56 36Z" fill="#ffffff"/>
+                <!-- Center Core Pulse Indicator -->
+                <circle cx="54" cy="49" r="3.5" fill="#f43f5e"/>
+                <!-- Gradient Definitions -->
+                <defs>
+                    <linearGradient id="cosmicGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#818cf8"/>
+                        <stop offset="0.5" stop-color="#ec4899"/>
+                        <stop offset="1" stop-color="#fbbf24"/>
+                    </linearGradient>
+                    <linearGradient id="goldGrad" x1="25" y1="20" x2="60" y2="80" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fef08a"/>
+                        <stop offset="0.4" stop-color="#fbbf24"/>
+                        <stop offset="1" stop-color="#d97706"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <h1>Navtara Pulse</h1>
+        <div class="hero-tagline">🧭 Your Personal Cosmic GPS & Daily Decision Timing Engine</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="common-man-card">
+        <h4>✨ Why Every Decision Has a "Right Time"</h4>
+        <div class="story-paragraph">
+            Just as the <b>Moon's gravitational pull</b> commands the ocean tides, ancient Vedic astronomy discovered 
+            that as the Moon glides across the <b>27 Nakshatras</b> every month, it creates invisible shifts in human energy, 
+            mental clarity, and behavioral friction.
+        </div>
+        <div class="story-paragraph" style="margin-bottom: 8px;">
+            <b>Navtara Pulse translates this 5,000-year-old cosmic rhythm into 3 simple daily advantages:</b>
+        </div>
+        <div class="common-benefits-list">
+            <div class="benefit-item">
+                <div class="benefit-icon">🛡️</div>
+                <div class="benefit-text">
+                    <b>Shield Your Wealth & Peace:</b> Know in advance which 24-hour windows are prone to unexpected delays, 
+                    bad arguments, or financial traps (<i>Vipat, Pratyari, Vadha</i>) so you can hit pause and stay calm.
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">🚀</div>
+                <div class="benefit-text">
+                    <b>Catch Golden Windows:</b> Strike boldly when the Moon touches your peak auspicious cycles 
+                    (<i>Sampat & Ati-Mitra</i>) for major purchases, interviews, financial deals, or ambitious launches.
+                </div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon">💡</div>
+                <div class="benefit-text">
+                    <b>Zero Superstition, 100% Timing:</b> No complex rituals. Just pure astronomical planetary math 
+                    tailored specifically to the exact star you were born under.
+                </div>
+            </div>
+        </div>
+        <div class="cosmic-pill-quote">
+            🌱 <i>"Carry an umbrella before it rains, and set your sails when the golden wind blows."</i>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
