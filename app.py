@@ -989,6 +989,38 @@ def render_page_about():
         </div>
     </div>
 
+    <!-- Installation Guide Card -->
+    <div class="light-card-num" style="margin-bottom:1.15rem;">
+        <div style="font-weight:900; font-size:1.2rem; color:#065f46; margin-bottom:0.8rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem; display:flex; align-items:center; gap:8px;">
+            <span>📲</span> <span>How to Install & Use Like a Native Mobile App</span>
+        </div>
+        <div style="font-size:0.95rem; line-height:1.65; color:#1e293b; margin-bottom:0.9rem;">
+            You can install <b>Navtara Pulse</b> directly onto your smartphone's home screen without downloading from any app store. It runs full-screen, fast, and accessible with a single tap:
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px;">
+            <div style="background:#f0fdf4; border-radius:12px; padding:12px 14px; border:1.5px solid #dcfce7;">
+                <b style="color:#047857; font-size:1rem;">🤖 For Android (Google Chrome):</b>
+                <ol style="margin:6px 0 0 0; padding-left:1.2rem; font-size:0.92rem; color:#1e293b; line-height:1.6;">
+                    <li>Open this link in <b>Google Chrome</b>.</li>
+                    <li>Tap the <b>three dots menu (⋮)</b> in the top-right corner.</li>
+                    <li>Select <b>"Add to Home screen"</b> or <b>"Install app"</b>.</li>
+                    <li>Tap <b>Install / Add</b>. The app icon will appear right on your home screen.</li>
+                </ol>
+            </div>
+            
+            <div style="background:#f0fdf4; border-radius:12px; padding:12px 14px; border:1.5px solid #dcfce7;">
+                <b style="color:#047857; font-size:1rem;">🍎 For Apple iPhone / iPad (Safari):</b>
+                <ol style="margin:6px 0 0 0; padding-left:1.2rem; font-size:0.92rem; color:#1e293b; line-height:1.6;">
+                    <li>Open this link in <b>Safari</b> browser.</li>
+                    <li>Tap the <b>Share button</b> (the square icon with an upward arrow <b>⎋</b>) at the bottom.</li>
+                    <li>Scroll down and select <b>"Add to Home Screen"</b> (<b>+</b>).</li>
+                    <li>Tap <b>Add</b> in the top right corner. Navtara Pulse is now installed!</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
     <div class="light-card-live">
         <div style="font-weight:900; font-size:1.2rem; color:#0369a1; margin-bottom:0.8rem; border-bottom:2px solid #bae6fd; padding-bottom:0.4rem;">
             📲 Share Navtara Pulse With Friends & Family
