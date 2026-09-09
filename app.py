@@ -115,7 +115,17 @@ TRANSLATIONS = {
         "col_timing": "Day, Date & Time to Day, Date & Time",
         "col_star": "Nakshatra Name",
         "col_series": "Navtara Series",
-        "view_planets_btn": "🔭 Toggle Real-Time Sidereal Planetary Coordinates"
+        "view_planets_btn": "🔭 Toggle Real-Time Sidereal Planetary Coordinates",
+        "auth_badge": "🔬 100% Precision Astronomical Engine",
+        "auth_headline": "Why Navtara Pulse? Real Cosmic Timing, Zero Guesswork",
+        "auth_body": "You don't need to know astrology to use this app. Just like ocean tides respond to the Moon, human mood, mental clarity, and decision outcomes flow in predictable 27-star rhythms. Navtara Pulse calculates NASA-grade Swiss Ephemeris coordinates to reveal your golden opportunity windows and high-friction blindspots in plain English.",
+        "auth_benefit1": "🚀 <b>Strike at Peak Luck:</b> Know exact hours when the Moon enters your <i>Sampat</i> (Wealth) and <i>Ati-Mitra</i> (Best Support) stars for crucial deals, interviews, and purchases.",
+        "auth_benefit2": "🛡️ <b>Shield from Friction:</b> Get early warnings before <i>Vipat</i> (Obstacles) or <i>Vadha</i> (Caution) periods start so you can sidestep arguments and risky gambles.",
+        "auth_benefit3": "🎯 <b>Personalized Daily Blueprint:</b> Combines ancient 5,000-year-old Vedic Navtara, Saturn Transit speed, and Numerology into 3 actionable rules for your day.",
+        "profile_card_title": "{name}'s Birth Profile",
+        "btn_edit_details": "✏️ Edit Details",
+        "btn_cancel_edit": "✕ Cancel",
+        "new_user_title": "📝 User Profile & Birth Details"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स",
@@ -159,7 +169,17 @@ TRANSLATIONS = {
         "col_timing": "वार, दिनांक व समय से वार, दिनांक व समय तक",
         "col_star": "नक्षत्र नाम",
         "col_series": "नवतारा चक्र (Series)",
-        "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्पष्ट स्थिति देखें"
+        "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्पष्ट स्थिति देखें",
+        "auth_badge": "🔬 100% प्रामाणिक स्विस एफिमेरिस खगोलीय गणना",
+        "auth_headline": "नवतारा पल्स क्यों? शुद्ध खगोलीय गणित, अंधविश्वास नहीं",
+        "auth_body": "इस ऐप का लाभ लेने के लिए ज्योतिष का ज्ञान होना आवश्यक नहीं है। जैसे समुद्र की लहरें चन्द्रमा के गुरुत्वाकर्षण से संचालित होती हैं, वैसे ही मानव मन और ऊर्जा 27 नक्षत्रों के निश्चित चक्र से प्रभावित होती है। नवतारा पल्स नासा-मानक स्विस एफिमेरिस से आपकी व्यक्तिगत ऊर्जा का सटीक समय बताता है।",
+        "auth_benefit1": "🚀 <b>शुभ समय का लाभ:</b> जानें कि कब चन्द्रमा आपके <i>सम्पत</i> (धन-लाभ) एवं <i>अति-मित्र</i> (सर्वोत्तम सफलता) नक्षत्र में है ताकि आप बड़े निर्णय और सौदे सही समय पर कर सकें।",
+        "auth_benefit2": "🛡️ <b>कठिन समय से बचाव:</b> <i>विपत</i> (अड़चनें) अथवा <i>वध</i> (सावधानी) काल की अग्रिम जानकारी पाकर विवादों और जोखिम से स्वयं को सुरक्षित रखें।",
+        "auth_benefit3": "🎯 <b>व्यक्तिगत दैनिक मार्गदर्शन:</b> 5,000 वर्ष प्राचीन वैदिक नवतारा, शनि गति और अंक ज्योतिष का संगम — आपके आज के दिन के 3 व्यावहारिक नियम।",
+        "profile_card_title": "{name} का जन्म प्रोफाइल",
+        "btn_edit_details": "✏️ विवरण बदलें",
+        "btn_cancel_edit": "✕ निरस्त",
+        "new_user_title": "📝 जन्म विवरण एवं प्रोफाइल"
     },
     "mr": {
         "app_title": "✨ नवतारा पल्स",
@@ -203,7 +223,17 @@ TRANSLATIONS = {
         "col_timing": "वार, दिनांक व वेळ ते वार, दिनांक व वेळ",
         "col_star": "नक्षत्र नाव",
         "col_series": "नवतारा चक्र",
-        "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्थिती तपासा"
+        "view_planets_btn": "🔭 प्रत्यक्ष ग्रह स्थिती तपासा",
+        "auth_badge": "🔬 १००% वैज्ञानिक स्विस एफिमेरिस खगोलीय शुद्धता",
+        "auth_headline": "नवतारा पल्स का? अचूक खगोलीय गणित, अंधश्रद्धा नाही",
+        "auth_body": "या ॲपचा लाभ घेण्यासाठी ज्योतिषाचे ज्ञान असण्याची गरज नाही. ज्याप्रमाणे समुद्राच्या भरती-ओहोटी चंद्रावर अवलंबून असतात, त्याचप्रमाणे मानवी मन आणि निर्णय क्षमता २७ नक्षत्रांच्या भ्रमणावर आधारित असते. नवतारा पल्स नासा-मानक खगोलीय गणिताने तुमचा अनुकूल काळ दर्शवते.",
+        "auth_benefit1": "🚀 <b>सुवर्ण संधीचा लाभ:</b> चंद्र तुमच्या <i>संपत</i> (धनलाभ) व <i>अति-मित्र</i> (सर्वोच्च यश) नक्षत्रात असताना महत्त्वाचे व्यवहार करा.",
+        "auth_benefit2": "🛡️ <b>अडचणींपासून सावधगिरी:</b> <i>विपत</i> किंवा <i>वध</i> नक्षत्राची वेळ आधीच ओळखून वादविवाद आणि मोठे आर्थिक धोके टाळा.",
+        "auth_benefit3": "🎯 <b>दैनिक कृती आराखडा:</b> ५,००० वर्षे प्राचीन वैदिक नवतारा, शनी गती आणि अंकशास्त्राचा संगम — तुमच्या दिवसासाठी ३ सुस्पष्ट नियम.",
+        "profile_card_title": "{name} चे जन्म प्रोफाइल",
+        "btn_edit_details": "✏️ तपशील बदला",
+        "btn_cancel_edit": "✕ रद्द",
+        "new_user_title": "📝 जन्म तपशील व प्रोफाइल"
     },
     "gu": {
         "app_title": "✨ નવતારા પલ્સ",
@@ -247,7 +277,17 @@ TRANSLATIONS = {
         "col_timing": "વાર, તારીખ અને સમય થી વાર, તારીખ અને સમય સુધી",
         "col_star": "નક્ષત્ર નામ",
         "col_series": "નવતારા શ્રેણી",
-        "view_planets_btn": "🔭 વર્તમાન ગ્રહ સ્પષ્ટ સ્થિતિ જુઓ"
+        "view_planets_btn": "🔭 વર્તમાન ગ્રહ સ્પષ્ટ સ્થિતિ જુઓ",
+        "auth_badge": "🔬 ૧૦૦% શુદ્ધ સ્વિસ એફિમેરિસ ખગોળીય ગણતરી",
+        "auth_headline": "નવતારા પલ્સ કેમ? શુદ્ધ ખગોળીય ગણિત, અંધશ્રદ્ધા મુક્ત",
+        "auth_body": "આ એપ વાપરવા માટે જ્યોતિષ શીખવાની જરૂર નથી. જેમ સમુદ્રની ભરતી-ઓટ ચંદ્રથી પ્રભાવિત થાય છે, તેમ માનવ મન અને કાર્યક્ષમતા ૨૭ નક્ષત્રોના આધારે વહે છે. સ્વિસ એફિમેરિસ દ્વારા તમારી અંગત કુંડળી આધારિત શ્રેષ્ઠ અને સાવચેતીભર્યા કલાકો સરળ ભાષામાં જાણો.",
+        "auth_benefit1": "🚀 <b>સુવર્ણ તક ઝડપો:</b> જાણો ક્યારે ચંદ્ર તમારા <i>સંપત</i> (ધનાગમન) અને <i>અતિ-મિત્ર</i> (સર્વોચ્ચ સાથ) નક્ષત્રમાં છે, જેથી મહત્વના કાર્યો સિદ્ધ થઈ શકે.",
+        "auth_benefit2": "🛡️ <b>વિઘ્નોથી રક્ષણ:</b> <i>વિપત</i> કે <i>વધ</i> નક્ષત્રના સમયની અગાઉથી જાણ મેળવી વિવાદો અને મોટા આર્થિક જોખમો ટાળો.",
+        "auth_benefit3": "🎯 <b>દૈનિક સરળ સૂત્રો:</b> ૫,૦૦૦ વર્ષ પ્રાચીન નવતારા, શનિ ગોચર અને અંકશાસ્ત્રનું અદભુત મિશ્રણ — તમારા દિવસ માટે ૩ નિર્ણાયક નિયમો.",
+        "profile_card_title": "{name} ની જન્મ પ્રોફાઇલ",
+        "btn_edit_details": "✏️ વિગત બદલો",
+        "btn_cancel_edit": "✕ રદ કરો",
+        "new_user_title": "📝 જન્મ વિગત અને પ્રોફાઇલ"
     }
 }
 
@@ -257,6 +297,23 @@ def t(key: str, lang: str = "en") -> str:
 
 st.markdown("""
 <style>
+    .auth-card {
+        background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef3c7 100%);
+        border: 1.5px solid #bae6fd;
+        border-radius: 16px;
+        padding: 18px 20px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 16px rgba(14, 165, 233, 0.08);
+    }
+    .user-profile-bar {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1.5px solid #cbd5e1;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
     .light-card-profile {
         background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
         border: 1.5px solid #fde68a;
@@ -655,6 +712,7 @@ def load_user_profile():
                     data["dob"] = datetime.date.fromisoformat(data["dob"])
                 if "tob" in data and isinstance(data["tob"], str):
                     data["tob"] = datetime.time.fromisoformat(data["tob"])
+                data["is_existing_user"] = True
                 return data
         except Exception:
             pass
@@ -663,12 +721,14 @@ def load_user_profile():
         "dob": datetime.date(1984, 1, 13),
         "tob": datetime.time(14, 0),
         "place": "Chhatrapati Sambhajinagar, India",
-        "language": "en"
+        "language": "en",
+        "is_existing_user": False
     }
 
 def save_user_profile(data: dict):
     try:
         to_store = data.copy()
+        to_store["is_existing_user"] = True
         if isinstance(to_store.get("dob"), (datetime.date, datetime.datetime)):
             to_store["dob"] = to_store["dob"].isoformat()
         if isinstance(to_store.get("tob"), datetime.time):
@@ -685,6 +745,9 @@ if "profile" not in st.session_state:
 
 if "current_page" not in st.session_state:
     st.session_state.current_page = "profile"
+
+if "editing_profile" not in st.session_state:
+    st.session_state.editing_profile = False
 
 prof = st.session_state.profile
 saved_lang = prof.get("language", "en")
@@ -714,10 +777,37 @@ if selected_lang != saved_lang:
 
 current_lang = selected_lang
 
+auth_card_html = f"""<div class="auth-card">
+<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+    <span style="font-weight:900; font-size:16px; color:#0f172a;">
+        {t('auth_headline', current_lang)}
+    </span>
+    <span style="background:#0284c7; color:#ffffff; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700;">
+        {t('auth_badge', current_lang)}
+    </span>
+</div>
+<div style="font-size:13.5px; line-height:1.6; color:#334155; margin-top:8px;">
+    {t('auth_body', current_lang)}
+</div>
+<div style="display:grid; grid-template-columns:1fr; gap:8px; margin-top:12px;">
+    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bae6fd; font-size:13px; color:#0f172a;">
+        {t('auth_benefit1', current_lang)}
+    </div>
+    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #fecaca; font-size:13px; color:#0f172a;">
+        {t('auth_benefit2', current_lang)}
+    </div>
+    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bbf7d0; font-size:13px; color:#0f172a;">
+        {t('auth_benefit3', current_lang)}
+    </div>
+</div>
+</div>"""
+st.markdown(auth_card_html, unsafe_allow_html=True)
+
 user_name = prof.get("name", "Okesh")
 user_dob = prof.get("dob", datetime.date(1984, 1, 13))
 user_tob = prof.get("tob", datetime.time(14, 0))
 user_place = prof.get("place", "Chhatrapati Sambhajinagar, India")
+is_existing = prof.get("is_existing_user", True)
 
 janma_idx, janma_pada, natal_moon_rashi_idx, natal_rashi_deg, lagna_rashi_idx, lagna_deg = calculate_birth_chart(
     user_dob, user_tob, user_place
@@ -754,7 +844,14 @@ cur_nav_cat, cur_nav_series = calculate_navtara(janma_idx, cur_moon_nak_idx)
 u_day, p_day, p_title, p_desc, num_remedy = get_personal_day_vibe(mulank, now_ist.date(), current_lang)
 
 if st.session_state.current_page == "profile":
-    with st.expander(t("edit_profile_expander", current_lang), expanded=False):
+    # Check if user is actively editing OR is a new user without saved profile
+    if st.session_state.editing_profile or not is_existing:
+        box_header = t("new_user_title", current_lang) if not is_existing else t("edit_profile_expander", current_lang)
+        st.markdown(f"""
+        <div style="background:#ffffff; border:1.5px solid #0284c7; border-radius:14px; padding:16px; margin-bottom:18px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.08);">
+            <div style="font-weight:800; font-size:15px; color:#0369a1; margin-bottom:12px;">{box_header}</div>
+        """, unsafe_allow_html=True)
+        
         c1, c2 = st.columns(2)
         with c1:
             in_name = st.text_input(t("input_name", current_lang), value=user_name)
@@ -765,40 +862,64 @@ if st.session_state.current_page == "profile":
 
         st.caption("ℹ️ *Janma Nakshatra, Pada, Moon Sign, and Lagna are calculated automatically from birth date, time, and place using Swiss Ephemeris.*")
 
-        if st.button(t("save_profile_btn", current_lang), use_container_width=True, type="primary"):
-            updated_data = {
-                "name": in_name,
-                "dob": in_dob,
-                "tob": in_tob,
-                "place": in_place,
-                "language": current_lang
-            }
-            st.session_state.profile = updated_data
-            if save_user_profile(updated_data):
-                st.success(t("profile_saved_msg", current_lang))
+        c_save, c_cancel = st.columns([2, 1])
+        with c_save:
+            if st.button(t("save_profile_btn", current_lang), use_container_width=True, type="primary"):
+                updated_data = {
+                    "name": in_name,
+                    "dob": in_dob,
+                    "tob": in_tob,
+                    "place": in_place,
+                    "language": current_lang,
+                    "is_existing_user": True
+                }
+                st.session_state.profile = updated_data
+                st.session_state.editing_profile = False
+                if save_user_profile(updated_data):
+                    st.success(t("profile_saved_msg", current_lang))
+                    st.rerun()
+        with c_cancel:
+            if is_existing and st.button(t("btn_cancel_edit", current_lang), use_container_width=True):
+                st.session_state.editing_profile = False
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    else:
+        # Existing User Card: Profile info on left/middle, Edit button on right
+        col_prof_info, col_prof_btn = st.columns([3, 1])
+        with col_prof_info:
+            profile_title = t("profile_card_title", current_lang).format(name=user_name)
+            existing_card_html = f"""<div class="user-profile-bar" style="margin-bottom:0px;">
+<div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:6px;">
+👤 {profile_title}
+</div>
+<div style="font-size:13.5px; color:#475569; display:flex; flex-wrap:wrap; gap:12px;">
+<span>🎂 <b>{user_dob.strftime('%d %B %Y')}</b></span>
+<span>⏰ <b>{user_tob.strftime('%H:%M')}</b></span>
+<span>📍 <b>{user_place}</b></span>
+</div>
+</div>"""
+            st.markdown(existing_card_html, unsafe_allow_html=True)
+        with col_prof_btn:
+            st.markdown("<div style='height:14px;'></div>", unsafe_allow_html=True)
+            if st.button(t("btn_edit_details", current_lang), use_container_width=True):
+                st.session_state.editing_profile = True
                 st.rerun()
 
-    # SECTION 1: NAVTARA & VEDIC ASTROLOGICAL PROFILE
+        st.markdown("<div style='margin-bottom:14px;'></div>", unsafe_allow_html=True)
+
     nak_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#7c2d12; margin-bottom:4px;'>• {nr}</div>" for nr in nak_remedies])
     sec1_html = f"""<div class="light-card-profile">
-<div style="font-weight:800; font-size:16px; color:#78350f; margin-bottom:12px; border-bottom:1.5px solid #fed7aa; padding-bottom:6px;">
-{t('sec1_title', current_lang)}
-</div>
-<div style="display:flex; justify-content:space-between; align-items:center;">
-<div>
-<h3 style="margin:0; font-size:1.35rem; font-weight:800; color:#431407;">👤 {user_name}</h3>
-<div style="font-size:13.5px; color:#78350f; margin-top:3px;">
-🎂 {user_dob.strftime('%d %B %Y')} • ⏰ {user_tob.strftime('%H:%M')} • 📍 {user_place}
-</div>
-</div>
-<div>
-<span class="badge-favorable" style="font-size:13px; padding:6px 12px;">
-🌙 {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
-</span>
-</div>
+<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #fed7aa; padding-bottom:8px; margin-bottom:12px;">
+    <span style="font-weight:800; font-size:16px; color:#78350f;">
+        {t('sec1_title', current_lang)}
+    </span>
+    <span class="badge-favorable" style="font-size:13px; padding:5px 12px;">
+        🌙 {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
+    </span>
 </div>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:14px; text-align:center;">
+<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; margin-top:6px; text-align:center;">
 <div style="background:#ffffff; border-radius:10px; padding:10px 8px; border:1px solid #fed7aa;">
 <div style="font-size:11.5px; color:#9a3412; font-weight:700;">{t('janma_star_label', current_lang)}</div>
 <div style="font-size:14.5px; font-weight:800; color:#431407; margin-top:2px;">{janma_name}</div>
