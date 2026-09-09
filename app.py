@@ -132,7 +132,20 @@ TRANSLATIONS = {
         "timing_from": "Starts",
         "timing_to": "Ends",
         "btn_view_prediction": "🔮 Prediction",
-        "selected_day_pred_header": "🔮 Detailed Prediction & Remedies for Selected Window"
+        "selected_day_pred_header": "🔮 Detailed Prediction & Remedies for Selected Window",
+        "nav_profile": "Profile",
+        "nav_numerology": "Numerology",
+        "nav_shani": "Shani",
+        "nav_live": "Live Prediction",
+        "nav_7days": "7 Days Prediction",
+        "nav_planets": "Planet position",
+        "nav_remedies": "Remedies",
+        "nav_share": "Share App",
+        "share_title": "📲 Share Navtara Pulse with Friends & Family",
+        "share_subtitle": "Help your loved ones align their decisions with real cosmic rhythms, Sade Sati protection, and fortunate stars.",
+        "share_msg_preview": "Invite Message Preview",
+        "copy_link_btn": "📋 Copy App Share Link",
+        "link_copied_msg": "✅ App link copied to clipboard!"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स",
@@ -193,7 +206,20 @@ TRANSLATIONS = {
         "timing_from": "आरंभ",
         "timing_to": "समाप्ति",
         "btn_view_prediction": "🔮 फलादेश",
-        "selected_day_pred_header": "🔮 चयनित समयावधि का विस्तृत फलादेश एवं उपाय"
+        "selected_day_pred_header": "🔮 चयनित समयावधि का विस्तृत फलादेश एवं उपाय",
+        "nav_profile": "प्रोफाइल",
+        "nav_numerology": "अंक ज्योतिष",
+        "nav_shani": "शनि गोचर",
+        "nav_live": "लाइव फलादेश",
+        "nav_7days": "7 दिवसीय फलादेश",
+        "nav_planets": "ग्रह स्थिति",
+        "nav_remedies": "वैदिक उपाय",
+        "nav_share": "ऐप शेयर करें",
+        "share_title": "📲 नवतारा पल्स ऐप परिजनों व मित्रों से साझा करें",
+        "share_subtitle": "अपने प्रियजनों को सही समय पर सही निर्णय लेने एवं साढ़े साती व नवतारा सुरक्षा का लाभ उठाने में सहयोग करें।",
+        "share_msg_preview": "शेयर संदेश प्रारूप",
+        "copy_link_btn": "📋 ऐप लिंक कॉपी करें",
+        "link_copied_msg": "✅ लिंक सफलतापूर्वक कॉपी हो गया!"
     },
     "mr": {
         "app_title": "✨ नवतारा पल्स",
@@ -254,7 +280,20 @@ TRANSLATIONS = {
         "timing_from": "सुरुवात",
         "timing_to": "समाप्ती",
         "btn_view_prediction": "🔮 भविष्य",
-        "selected_day_pred_header": "🔮 निवडलेल्या कालावधीचे सविस्तर फलादेश व उपाय"
+        "selected_day_pred_header": "🔮 निवडलेल्या कालावधीचे सविस्तर फलादेश व उपाय",
+        "nav_profile": "प्रोफाइल",
+        "nav_numerology": "अंकशास्त्र",
+        "nav_shani": "शनी गोचर",
+        "nav_live": "आजचे भविष्य",
+        "nav_7days": "७ दिवस भविष्य",
+        "nav_planets": "ग्रह स्थिती",
+        "nav_remedies": "वैदिक उपाय",
+        "nav_share": "ॲप शेअर करा",
+        "share_title": "📲 नवतारा पल्स ॲप मित्र व नातेवाईकांसोबत शेअर करा",
+        "share_subtitle": "आपल्या आप्तेष्टांना अनुकूल संधीची वेळ आणि साडेसाती प्रतिबंधक उपायांचे मार्गदर्शन मिळवून द्या.",
+        "share_msg_preview": "शेअर संदेश मजकूर",
+        "copy_link_btn": "📋 ॲप लिंक कॉपी करा",
+        "link_copied_msg": "✅ लिंक यशस्वीरित्या कॉपी झाली!"
     },
     "gu": {
         "app_title": "✨ નવતારા પલ્સ",
@@ -315,7 +354,20 @@ TRANSLATIONS = {
         "timing_from": "શરૂઆત",
         "timing_to": "સમાપ્તિ",
         "btn_view_prediction": "🔮 ફળકથન",
-        "selected_day_pred_header": "🔮 પસંદ કરેલ સમયગાળાનું વિસ્તૃત ફળકથન અને ઉપાયો"
+        "selected_day_pred_header": "🔮 પસંદ કરેલ સમયગાળાનું વિસ્તૃત ફળકથન અને ઉપાયો",
+        "nav_profile": "પ્રોફાઇલ",
+        "nav_numerology": "અંકશાસ્ત્ર",
+        "nav_shani": "શનિ ગોચર",
+        "nav_live": "આજનું ફળકથન",
+        "nav_7days": "૭ દિવસ ફળકથન",
+        "nav_planets": "ગ્રહ સ્થિતિ",
+        "nav_remedies": "વૈદિક ઉપાયો",
+        "nav_share": "ઍપ શૅર કરો",
+        "share_title": "📲 નવતારા પલ્સ ઍપ પરિવાર અને મિત્રો સાથે શૅર કરો",
+        "share_subtitle": "તમારા સ્નેહીજનોને શુભ તકોનો લાભ લેવા અને સાડાસાતી સુરક્ષા મેળવવામાં માર્ગદર્શન આપો.",
+        "share_msg_preview": "શૅર સંદેશ નમૂનો",
+        "copy_link_btn": "📋 ઍપ લિંક કૉપી કરો",
+        "link_copied_msg": "✅ લિંક સફળતાપૂર્વક કૉપી થઈ ગઈ!"
     }
 }
 
@@ -978,32 +1030,6 @@ if selected_lang != saved_lang:
 
 current_lang = selected_lang
 
-auth_card_html = f"""<div class="auth-card">
-<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-    <span style="font-weight:900; font-size:16px; color:#0f172a;">
-        {t('auth_headline', current_lang)}
-    </span>
-    <span style="background:#0284c7; color:#ffffff; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700;">
-        {t('auth_badge', current_lang)}
-    </span>
-</div>
-<div style="font-size:13.5px; line-height:1.6; color:#334155; margin-top:8px;">
-    {t('auth_body', current_lang)}
-</div>
-<div style="display:grid; grid-template-columns:1fr; gap:8px; margin-top:12px;">
-    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bae6fd; font-size:13px; color:#0f172a;">
-        {t('auth_benefit1', current_lang)}
-    </div>
-    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #fecaca; font-size:13px; color:#0f172a;">
-        {t('auth_benefit2', current_lang)}
-    </div>
-    <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bbf7d0; font-size:13px; color:#0f172a;">
-        {t('auth_benefit3', current_lang)}
-    </div>
-</div>
-</div>"""
-st.markdown(auth_card_html, unsafe_allow_html=True)
-
 user_name = prof.get("name", "Okesh")
 user_dob = prof.get("dob", datetime.date(1984, 1, 13))
 user_tob = prof.get("tob", datetime.time(14, 0))
@@ -1045,6 +1071,32 @@ cur_nav_cat, cur_nav_series = calculate_navtara(janma_idx, cur_moon_nak_idx)
 u_day, p_day, p_title, p_desc, num_remedy = get_personal_day_vibe(mulank, now_ist.date(), current_lang)
 
 if st.session_state.current_page == "profile":
+    auth_card_html = f"""<div class="auth-card">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+        <span style="font-weight:900; font-size:16px; color:#0f172a;">
+            {t('auth_headline', current_lang)}
+        </span>
+        <span style="background:#0284c7; color:#ffffff; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700;">
+            {t('auth_badge', current_lang)}
+        </span>
+    </div>
+    <div style="font-size:13.5px; line-height:1.6; color:#334155; margin-top:8px;">
+        {t('auth_body', current_lang)}
+    </div>
+    <div style="display:grid; grid-template-columns:1fr; gap:8px; margin-top:12px;">
+        <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bae6fd; font-size:13px; color:#0f172a;">
+            {t('auth_benefit1', current_lang)}
+        </div>
+        <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #fecaca; font-size:13px; color:#0f172a;">
+            {t('auth_benefit2', current_lang)}
+        </div>
+        <div style="background:#ffffff; border-radius:10px; padding:9px 12px; border:1px solid #bbf7d0; font-size:13px; color:#0f172a;">
+            {t('auth_benefit3', current_lang)}
+        </div>
+    </div>
+    </div>"""
+    st.markdown(auth_card_html, unsafe_allow_html=True)
+
     # Check if user is actively editing OR is a new user without saved profile
     if st.session_state.editing_profile or not is_existing:
         box_header = t("new_user_title", current_lang) if not is_existing else t("edit_profile_expander", current_lang)
@@ -1085,7 +1137,7 @@ if st.session_state.current_page == "profile":
                     st.rerun()
 
     else:
-        # Existing User Card: Profile info on left/middle, Edit button inside the profile box on the very right side
+        # Existing User Card
         profile_title = t("profile_card_title", current_lang).format(name=user_name)
         with st.container(border=True):
             col_prof_info, col_prof_btn = st.columns([3.2, 1.2])
@@ -1154,6 +1206,7 @@ if st.session_state.current_page == "profile":
 </div>"""
     st.markdown(sec1_html, unsafe_allow_html=True)
 
+elif st.session_state.current_page == "numerology":
     num_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#065f46; margin-bottom:4px;'>• {r}</div>" for r in num_remedies_list])
     sec2_html = f"""<div class="light-card-num">
 <div style="font-weight:800; font-size:16px; color:#064e3b; margin-bottom:12px; border-bottom:1.5px solid #a7f3d0; padding-bottom:6px;">
@@ -1188,6 +1241,7 @@ if st.session_state.current_page == "profile":
 </div>"""
     st.markdown(sec2_html, unsafe_allow_html=True)
 
+elif st.session_state.current_page == "shani":
     sadesati_badge = "<span class='badge-danger' style='font-size:12px;'>⚠️ " + ss_status + "</span>" if is_ss_active else "<span class='badge-favorable' style='font-size:12px;'>✅ Favorable Shani Transit</span>"
     all_shani_remedies = paya_remedies + [r for r in ss_remedies if r not in paya_remedies]
     shani_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#4c1d95; margin-bottom:4px;'>• {sr}</div>" for sr in all_shani_remedies])
@@ -1238,339 +1292,470 @@ if st.session_state.current_page == "profile":
 </div>"""
     st.markdown(sec3_html, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
-    if st.button(t("btn_view_forecast", current_lang), use_container_width=True, type="primary"):
-        st.session_state.current_page = "forecast"
-        st.rerun()
+elif st.session_state.current_page == "live":
+    active_nak_idx, t_start_utc, t_end_utc = get_current_nakshatra_window(now_utc)
+    start_ist_str = t_start_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+    end_ist_str = t_end_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
 
-elif st.session_state.current_page == "forecast":
-    if st.button(t("btn_back_profile", current_lang), use_container_width=True):
-        st.session_state.current_page = "profile"
-        st.rerun()
+    status_badge = (
+        "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
+        if cur_nav_cat in ["Vipat", "Pratyari", "Vadha"] else
+        "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
+    )
 
-    tab_today, tab_7day = st.tabs([t("tab_today", current_lang), t("tab_7days", current_lang)])
-
-    with tab_today:
-        active_nak_idx, t_start_utc, t_end_utc = get_current_nakshatra_window(now_utc)
-        start_ist_str = t_start_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
-        end_ist_str = t_end_utc.astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
-
-        status_badge = (
-            "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
-            if cur_nav_cat in ["Vipat", "Pratyari", "Vadha"] else
-            "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
-        )
-
-        pulse_html = f"""<div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:1.5px solid #cbd5e1; border-radius:16px; padding:18px 20px; margin-bottom:14px; box-shadow:0 4px 14px rgba(15, 23, 42, 0.05);">
+    pulse_html = f"""<div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:1.5px solid #cbd5e1; border-radius:16px; padding:18px 20px; margin-bottom:14px; box-shadow:0 4px 14px rgba(15, 23, 42, 0.05);">
 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
-    <div>
-        <div style="font-weight:800; font-size:16px; color:#0f172a;">
-            ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{cur_nav_cat}</span>
-        </div>
-        <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
-            Navtara Cycle: <b>Series {cur_nav_series}</b> | Transiting: <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Janma: <b>{janma_name}</b>
-        </div>
+<div>
+    <div style="font-weight:800; font-size:16px; color:#0f172a;">
+        ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{cur_nav_cat}</span>
     </div>
-    {status_badge}
+    <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+        Navtara Cycle: <b>Series {cur_nav_series}</b> | Transiting: <b>{NAKSHATRAS[cur_moon_nak_idx]}</b> | Janma: <b>{janma_name}</b>
+    </div>
+</div>
+{status_badge}
 </div>
 
 <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px 14px; margin-top:8px;">
-    <div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
-        ⏱️ {t('today_transit_window', current_lang)}
+<div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
+    ⏱️ {t('today_transit_window', current_lang)}
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
+    <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+        <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
+        <span style="color:#0f172a; font-weight:800;">{start_ist_str}</span>
     </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
-        <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
-            <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
-            <span style="color:#0f172a; font-weight:800;">{start_ist_str}</span>
-        </div>
-        <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
-            <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
-            <span style="color:#0f172a; font-weight:800;">{end_ist_str}</span>
-        </div>
+    <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+        <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
+        <span style="color:#0f172a; font-weight:800;">{end_ist_str}</span>
     </div>
 </div>
+</div>
 </div>"""
-        st.markdown(pulse_html, unsafe_allow_html=True)
+    st.markdown(pulse_html, unsafe_allow_html=True)
 
-        c_vahan, c_pday = st.columns(2)
-        with c_vahan:
-            vahan_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+    c_vahan, c_pday = st.columns(2)
+    with c_vahan:
+        vahan_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
 <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
 <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{today_vahan.split('—')[0]}</div>
 <div style="font-size:11.5px; color:#475569;">{today_vahan.split('—')[1] if '—' in today_vahan else ''}</div>
 </div>"""
-            st.markdown(vahan_card_html, unsafe_allow_html=True)
+        st.markdown(vahan_card_html, unsafe_allow_html=True)
 
-        with c_pday:
-            pday_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+    with c_pday:
+        pday_card_html = f"""<div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
 <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
 <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {p_day} Vibration</div>
 <div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {u_day}</div>
 </div>"""
-            st.markdown(pday_card_html, unsafe_allow_html=True)
+        st.markdown(pday_card_html, unsafe_allow_html=True)
 
-        today_pred = get_detailed_today_forecast(
-            cur_nav_cat, cur_nav_series, NAKSHATRAS[cur_moon_nak_idx], janma_name,
-            today_vahan.split('—')[0], p_day, current_lang
-        )
-        
-        pred_card_html = f"""<div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
+    today_pred = get_detailed_today_forecast(
+        cur_nav_cat, cur_nav_series, NAKSHATRAS[cur_moon_nak_idx], janma_name,
+        today_vahan.split('—')[0], p_day, current_lang
+    )
+    
+    pred_card_html = f"""<div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
 <div style="font-weight:800; font-size:15px; color:#9a3412; margin-bottom:10px; border-bottom:1.5px solid #ffedd5; padding-bottom:6px;">
-    {t('today_detailed_pred_title', current_lang)}
+{t('today_detailed_pred_title', current_lang)}
 </div>
 <div style="font-size:13.2px; line-height:1.65; color:#431407; margin-bottom:8px;">
-    {today_pred['mind']}
+{today_pred['mind']}
 </div>
 <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13px; color:#7c2d12; line-height:1.6; margin-bottom:8px; border:1px solid #ffedd5;">
-    {today_pred['career']}
+{today_pred['career']}
 </div>
 <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:13px; color:#78350f; line-height:1.6; border:1px solid #fef3c7;">
-    {today_pred['advice']}
+{today_pred['advice']}
 </div>
 </div>"""
-        st.markdown(pred_card_html, unsafe_allow_html=True)
+    st.markdown(pred_card_html, unsafe_allow_html=True)
 
-        today_remedies = get_today_actionable_remedies(cur_nav_cat, today_vahan_num, p_day, current_lang)
-        remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in today_remedies])
-        
-        remedies_card_html = f"""<div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
+    today_remedies = get_today_actionable_remedies(cur_nav_cat, today_vahan_num, p_day, current_lang)
+    remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in today_remedies])
+    
+    remedies_card_html = f"""<div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
 <div style="font-weight:800; font-size:15px; color:#065f46; margin-bottom:10px; border-bottom:1.5px solid #dcfce7; padding-bottom:6px;">
-    {t('today_remedies_title', current_lang)}
+{t('today_remedies_title', current_lang)}
 </div>
 <div>
-    {remedies_items_html}
+{remedies_items_html}
 </div>
 </div>"""
-        st.markdown(remedies_card_html, unsafe_allow_html=True)
+    st.markdown(remedies_card_html, unsafe_allow_html=True)
 
-    with tab_7day:
-        st.subheader(t("tab_7days", current_lang))
-        
-        nak_span = 360.0 / 27.0
-        start_time = now_utc
-        end_time = now_utc + datetime.timedelta(days=7)
-        cur_lon = get_sidereal_lon(dt_to_jd(start_time), swe.MOON)
-        active_nak = int(cur_lon / nak_span) % 27
-        interval_start = start_time
-        step = datetime.timedelta(minutes=30)
-        eval_time = start_time
-        transitions = []
+elif st.session_state.current_page == "7days":
+    st.subheader(t("tab_7days", current_lang))
+    
+    nak_span = 360.0 / 27.0
+    start_time = now_utc
+    end_time = now_utc + datetime.timedelta(days=7)
+    cur_lon = get_sidereal_lon(dt_to_jd(start_time), swe.MOON)
+    active_nak = int(cur_lon / nak_span) % 27
+    interval_start = start_time
+    step = datetime.timedelta(minutes=30)
+    eval_time = start_time
+    transitions = []
 
-        while eval_time <= end_time:
-            eval_time += step
-            lon = get_sidereal_lon(dt_to_jd(eval_time), swe.MOON)
-            nak = int(lon / nak_span) % 27
-            if nak != active_nak:
-                low, high = eval_time - step, eval_time
-                for _ in range(7):
-                    mid = low + (high - low) / 2
-                    if int(get_sidereal_lon(dt_to_jd(mid), swe.MOON) / nak_span) % 27 == active_nak:
-                        low = mid
-                    else:
-                        high = mid
-                boundary = high
-                transitions.append({"nak_idx": active_nak, "start": interval_start, "end": boundary})
-                interval_start = boundary
-                active_nak = nak
-        transitions.append({"nak_idx": active_nak, "start": interval_start, "end": end_time})
+    while eval_time <= end_time:
+        eval_time += step
+        lon = get_sidereal_lon(dt_to_jd(eval_time), swe.MOON)
+        nak = int(lon / nak_span) % 27
+        if nak != active_nak:
+            low, high = eval_time - step, eval_time
+            for _ in range(7):
+                mid = low + (high - low) / 2
+                if int(get_sidereal_lon(dt_to_jd(mid), swe.MOON) / nak_span) % 27 == active_nak:
+                    low = mid
+                else:
+                    high = mid
+            boundary = high
+            transitions.append({"nak_idx": active_nak, "start": interval_start, "end": boundary})
+            interval_start = boundary
+            active_nak = nak
+    transitions.append({"nak_idx": active_nak, "start": interval_start, "end": end_time})
 
-        if "selected_7day_idx" not in st.session_state:
-            st.session_state.selected_7day_idx = 0
-        if st.session_state.selected_7day_idx >= len(transitions):
-            st.session_state.selected_7day_idx = 0
+    if "selected_7day_idx" not in st.session_state:
+        st.session_state.selected_7day_idx = 0
+    if st.session_state.selected_7day_idx >= len(transitions):
+        st.session_state.selected_7day_idx = 0
 
-        # Table Header
-        header_cols = st.columns([1.1, 2.3, 1.8, 1.2])
-        with header_cols[0]:
-            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_status', current_lang)}</div>", unsafe_allow_html=True)
-        with header_cols[1]:
-            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_timing', current_lang)}</div>", unsafe_allow_html=True)
-        with header_cols[2]:
-            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_star', current_lang)}</div>", unsafe_allow_html=True)
-        with header_cols[3]:
-            st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569; text-align:center;'>{t('col_action', current_lang)}</div>", unsafe_allow_html=True)
+    header_cols = st.columns([1.1, 2.3, 1.8, 1.2])
+    with header_cols[0]:
+        st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_status', current_lang)}</div>", unsafe_allow_html=True)
+    with header_cols[1]:
+        st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_timing', current_lang)}</div>", unsafe_allow_html=True)
+    with header_cols[2]:
+        st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569;'>{t('col_star', current_lang)}</div>", unsafe_allow_html=True)
+    with header_cols[3]:
+        st.markdown(f"<div style='font-size:12px; font-weight:800; color:#475569; text-align:center;'>{t('col_action', current_lang)}</div>", unsafe_allow_html=True)
 
-        st.markdown("<div style='height:2px; background:#e2e8f0; margin-bottom:8px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height:2px; background:#e2e8f0; margin-bottom:8px;'></div>", unsafe_allow_html=True)
 
-        for idx, tr in enumerate(transitions):
-            nak_name = NAKSHATRAS[tr["nak_idx"]]
-            cat, series = calculate_navtara(janma_idx, tr["nak_idx"])
-            s_ist = tr["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M)")
-            e_ist = tr["end"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
+    for idx, tr in enumerate(transitions):
+        nak_name = NAKSHATRAS[tr["nak_idx"]]
+        cat, series = calculate_navtara(janma_idx, tr["nak_idx"])
+        s_ist = tr["start"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M)")
+        e_ist = tr["end"].astimezone(ist_tz).strftime("%a, %d %b (%H:%M IST)")
 
-            if cat in ["Vipat", "Pratyari", "Vadha"]:
-                badge_style = "background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"
-                status_icon = "🔴"
-            elif cat == "Ati-Mitra":
-                badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
-                status_icon = "🟢🟢"
-            elif cat in ["Mitra", "Sampat"]:
-                badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
-                status_icon = "🟢"
-            else:
-                badge_style = "background:#f1f5f9; color:#334155; border:1px solid #cbd5e1;"
-                status_icon = "⚪"
+        if cat in ["Vipat", "Pratyari", "Vadha"]:
+            badge_style = "background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;"
+            status_icon = "🔴"
+        elif cat == "Ati-Mitra":
+            badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
+            status_icon = "🟢🟢"
+        elif cat in ["Mitra", "Sampat"]:
+            badge_style = "background:#dcfce7; color:#15803d; border:1px solid #86efac;"
+            status_icon = "🟢"
+        else:
+            badge_style = "background:#f1f5f9; color:#334155; border:1px solid #cbd5e1;"
+            status_icon = "⚪"
 
-            is_selected = (st.session_state.selected_7day_idx == idx)
-            row_bg = "background:#eff6ff; border:1.5px solid #60a5fa;" if is_selected else "background:#ffffff; border:1px solid #e2e8f0;"
+        is_selected = (st.session_state.selected_7day_idx == idx)
+        row_bg = "background:#eff6ff; border:1.5px solid #60a5fa;" if is_selected else "background:#ffffff; border:1px solid #e2e8f0;"
 
-            with st.container():
+        with st.container():
+            st.markdown(f"""
+            <div style="{row_bg} border-radius:10px; padding:8px 10px; margin-bottom:6px;">
+            """, unsafe_allow_html=True)
+            
+            c_stat, c_time, c_star, c_btn = st.columns([1.1, 2.3, 1.8, 1.2])
+            with c_stat:
                 st.markdown(f"""
-                <div style="{row_bg} border-radius:10px; padding:8px 10px; margin-bottom:6px;">
+                <div style="{badge_style} border-radius:6px; padding:3px 6px; font-size:11.5px; font-weight:800; display:inline-block; margin-top:4px;">
+                    {status_icon} {cat}
+                </div>
                 """, unsafe_allow_html=True)
-                
-                c_stat, c_time, c_star, c_btn = st.columns([1.1, 2.3, 1.8, 1.2])
-                with c_stat:
-                    st.markdown(f"""
-                    <div style="{badge_style} border-radius:6px; padding:3px 6px; font-size:11.5px; font-weight:800; display:inline-block; margin-top:4px;">
-                        {status_icon} {cat}
-                    </div>
-                    """, unsafe_allow_html=True)
-                with c_time:
-                    st.markdown(f"""
-                    <div style="font-size:12.5px; font-weight:700; color:#0f172a; margin-top:4px;">
-                        {s_ist} – {e_ist}
-                    </div>
-                    """, unsafe_allow_html=True)
-                with c_star:
-                    st.markdown(f"""
-                    <div style="font-size:12.5px; color:#1e293b; margin-top:4px;">
-                        <b>{nak_name}</b> <span style="font-size:11px; color:#64748b;">(Series {series})</span>
-                    </div>
-                    """, unsafe_allow_html=True)
-                with c_btn:
-                    btn_label = f"✅ {t('btn_view_prediction', current_lang)}" if is_selected else t('btn_view_prediction', current_lang)
-                    if st.button(btn_label, key=f"btn_sel_{idx}", use_container_width=True, type="primary" if is_selected else "secondary"):
-                        st.session_state.selected_7day_idx = idx
-                        st.rerun()
+            with c_time:
+                st.markdown(f"""
+                <div style="font-size:12.5px; font-weight:700; color:#0f172a; margin-top:4px;">
+                    {s_ist} – {e_ist}
+                </div>
+                """, unsafe_allow_html=True)
+            with c_star:
+                st.markdown(f"""
+                <div style="font-size:12.5px; color:#1e293b; margin-top:4px;">
+                    <b>{nak_name}</b> <span style="font-size:11px; color:#64748b;">(Series {series})</span>
+                </div>
+                """, unsafe_allow_html=True)
+            with c_btn:
+                btn_label = f"✅ {t('btn_view_prediction', current_lang)}" if is_selected else t('btn_view_prediction', current_lang)
+                if st.button(btn_label, key=f"btn_sel_{idx}", use_container_width=True, type="primary" if is_selected else "secondary"):
+                    st.session_state.selected_7day_idx = idx
+                    st.rerun()
 
-                st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("<div style='margin-top:18px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top:18px;'></div>", unsafe_allow_html=True)
 
-        sel_idx = st.session_state.selected_7day_idx
-        sel_tr = transitions[sel_idx]
-        sel_nak_idx = sel_tr["nak_idx"]
-        sel_nak_name = NAKSHATRAS[sel_nak_idx]
-        sel_cat, sel_series = calculate_navtara(janma_idx, sel_nak_idx)
-        
-        sel_start_ist = sel_tr["start"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
-        sel_end_ist = sel_tr["end"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
-        sel_date = sel_tr["start"].astimezone(ist_tz).date()
+    sel_idx = st.session_state.selected_7day_idx
+    sel_tr = transitions[sel_idx]
+    sel_nak_idx = sel_tr["nak_idx"]
+    sel_nak_name = NAKSHATRAS[sel_nak_idx]
+    sel_cat, sel_series = calculate_navtara(janma_idx, sel_nak_idx)
+    
+    sel_start_ist = sel_tr["start"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+    sel_end_ist = sel_tr["end"].astimezone(ist_tz).strftime("%A, %d %b %Y (%I:%M %p IST)")
+    sel_date = sel_tr["start"].astimezone(ist_tz).date()
 
-        sel_u_day, sel_p_day, _, _, _ = get_personal_day_vibe(mulank, sel_date, current_lang)
-        sel_vahan_num, sel_vahan = calculate_shani_vahan(janma_idx + 1, sel_nak_idx + 1, current_lang)
+    sel_u_day, sel_p_day, _, _, _ = get_personal_day_vibe(mulank, sel_date, current_lang)
+    sel_vahan_num, sel_vahan = calculate_shani_vahan(janma_idx + 1, sel_nak_idx + 1, current_lang)
 
-        sel_status_badge = (
-            "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
-            if sel_cat in ["Vipat", "Pratyari", "Vadha"] else
-            "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
-        )
+    sel_status_badge = (
+        "<span style='background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🔴 Caution / High Friction</span>"
+        if sel_cat in ["Vipat", "Pratyari", "Vadha"] else
+        "<span style='background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px;'>🟢 Peak Favorable Cosmic Flow</span>"
+    )
 
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:2px solid #3b82f6; border-radius:16px; padding:18px 20px; margin-top:10px; margin-bottom:14px; box-shadow:0 4px 14px rgba(59, 130, 246, 0.08);">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
+        <div>
+            <div style="font-weight:800; font-size:16px; color:#0f172a;">
+                ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{sel_cat}</span>
+            </div>
+            <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
+                Navtara Cycle: <b>Series {sel_series}</b> | Transiting: <b>{sel_nak_name}</b> | Janma: <b>{janma_name}</b>
+            </div>
+        </div>
+        {sel_status_badge}
+    </div>
+
+    <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px 14px; margin-top:8px;">
+        <div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
+            ⏱️ {t('today_transit_window', current_lang)}
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
+            <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+                <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
+                <span style="color:#0f172a; font-weight:800;">{sel_start_ist}</span>
+            </div>
+            <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
+                <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
+                <span style="color:#0f172a; font-weight:800;">{sel_end_ist}</span>
+            </div>
+        </div>
+    </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_svahan, col_spday = st.columns(2)
+    with col_svahan:
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border:2px solid #3b82f6; border-radius:16px; padding:18px 20px; margin-top:10px; margin-bottom:14px; box-shadow:0 4px 14px rgba(59, 130, 246, 0.08);">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; border-bottom:1.5px solid #e2e8f0; padding-bottom:10px; margin-bottom:12px;">
-            <div>
-                <div style="font-weight:800; font-size:16px; color:#0f172a;">
-                    ⚡ {t('active_navtara_title', current_lang)}: <span style="color:#0284c7;">{sel_cat}</span>
-                </div>
-                <div style="font-size:12px; color:#64748b; font-weight:600; margin-top:2px;">
-                    Navtara Cycle: <b>Series {sel_series}</b> | Transiting: <b>{sel_nak_name}</b> | Janma: <b>{janma_name}</b>
-                </div>
-            </div>
-            {sel_status_badge}
-        </div>
-
-        <div style="background:#f0f9ff; border:1.5px solid #bae6fd; border-radius:12px; padding:12px 14px; margin-top:8px;">
-            <div style="font-weight:800; font-size:13px; color:#0369a1; display:flex; align-items:center; gap:6px;">
-                ⏱️ {t('today_transit_window', current_lang)}
-            </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; font-size:12.8px;">
-                <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
-                    <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">▶️ {t('timing_from', current_lang)}:</span>
-                    <span style="color:#0f172a; font-weight:800;">{sel_start_ist}</span>
-                </div>
-                <div style="background:#ffffff; border:1px solid #e0f2fe; border-radius:8px; padding:8px 10px;">
-                    <span style="color:#0284c7; font-weight:700; font-size:11px; display:block;">⏹️ {t('timing_to', current_lang)}:</span>
-                    <span style="color:#0f172a; font-weight:800;">{sel_end_ist}</span>
-                </div>
-            </div>
-        </div>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+            <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
+            <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{sel_vahan.split('—')[0]}</div>
+            <div style="font-size:11.5px; color:#475569;">{sel_vahan.split('—')[1] if '—' in sel_vahan else ''}</div>
         </div>
         """, unsafe_allow_html=True)
 
-        col_svahan, col_spday = st.columns(2)
-        with col_svahan:
-            st.markdown(f"""
-            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
-                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('shani_vahan_title', current_lang)}</div>
-                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">{sel_vahan.split('—')[0]}</div>
-                <div style="font-size:11.5px; color:#475569;">{sel_vahan.split('—')[1] if '—' in sel_vahan else ''}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with col_spday:
-            st.markdown(f"""
-            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
-                <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
-                <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {sel_p_day} Vibration</div>
-                <div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {sel_u_day}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        sel_pred = get_detailed_today_forecast(
-            sel_cat, sel_series, sel_nak_name, janma_name,
-            sel_vahan.split('—')[0], sel_p_day, current_lang
-        )
-
+    with col_spday:
         st.markdown(f"""
-        <div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
-            <div style="font-weight:800; font-size:15px; color:#9a3412; margin-bottom:10px; border-bottom:1.5px solid #ffedd5; padding-bottom:6px;">
-                {t('today_detailed_pred_title', current_lang)} ({sel_start_ist.split('(')[0]} – {sel_nak_name})
-            </div>
-            <div style="font-size:13.2px; line-height:1.65; color:#431407; margin-bottom:8px;">
-                {sel_pred['mind']}
-            </div>
-            <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13px; color:#7c2d12; line-height:1.6; margin-bottom:8px; border:1px solid #ffedd5;">
-                {sel_pred['career']}
-            </div>
-            <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:13px; color:#78350f; line-height:1.6; border:1px solid #fef3c7;">
-                {sel_pred['advice']}
-            </div>
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:10px; padding:12px;">
+            <div style="font-size:11.5px; color:#64748b; font-weight:700;">{t('personal_day_title', current_lang)}</div>
+            <div style="font-size:15px; font-weight:800; color:#1e293b; margin-top:2px;">Day {sel_p_day} Vibration</div>
+            <div style="font-size:11.5px; color:#475569;">Driver {mulank} + Universal {sel_u_day}</div>
         </div>
         """, unsafe_allow_html=True)
 
-        sel_remedies = get_today_actionable_remedies(sel_cat, sel_vahan_num, sel_p_day, current_lang)
-        sel_remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in sel_remedies])
+    sel_pred = get_detailed_today_forecast(
+        sel_cat, sel_series, sel_nak_name, janma_name,
+        sel_vahan.split('—')[0], sel_p_day, current_lang
+    )
 
-        st.markdown(f"""
-        <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
-            <div style="font-weight:800; font-size:15px; color:#065f46; margin-bottom:10px; border-bottom:1.5px solid #dcfce7; padding-bottom:6px;">
-                {t('today_remedies_title', current_lang)}
-            </div>
-            <div>
-                {sel_remedies_items_html}
-            </div>
+    st.markdown(f"""
+    <div style="background:#ffffff; border:1.5px solid #fed7aa; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(249, 115, 22, 0.05);">
+        <div style="font-weight:800; font-size:15px; color:#9a3412; margin-bottom:10px; border-bottom:1.5px solid #ffedd5; padding-bottom:6px;">
+            {t('today_detailed_pred_title', current_lang)} ({sel_start_ist.split('(')[0]} – {sel_nak_name})
         </div>
+        <div style="font-size:13.2px; line-height:1.65; color:#431407; margin-bottom:8px;">
+            {sel_pred['mind']}
+        </div>
+        <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:13px; color:#7c2d12; line-height:1.6; margin-bottom:8px; border:1px solid #ffedd5;">
+            {sel_pred['career']}
+        </div>
+        <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:13px; color:#78350f; line-height:1.6; border:1px solid #fef3c7;">
+            {sel_pred['advice']}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    sel_remedies = get_today_actionable_remedies(sel_cat, sel_vahan_num, sel_p_day, current_lang)
+    sel_remedies_items_html = "".join([f"<div style='font-size:13px; color:#064e3b; margin-bottom:6px; line-height:1.5;'>{rm}</div>" for rm in sel_remedies])
+
+    st.markdown(f"""
+    <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 18px; margin-top:14px; box-shadow:0 2px 10px rgba(22, 163, 74, 0.05);">
+        <div style="font-weight:800; font-size:15px; color:#065f46; margin-bottom:10px; border-bottom:1.5px solid #dcfce7; padding-bottom:6px;">
+            {t('today_remedies_title', current_lang)}
+        </div>
+        <div>
+            {sel_remedies_items_html}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+elif st.session_state.current_page == "planets":
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border:1.5px solid #bae6fd; border-radius:14px; padding:14px 16px; margin-bottom:14px;">
+        <span style="font-weight:800; font-size:16px; color:#0369a1;">🔭 Real-Time Sidereal Planetary Coordinates (Lahiri Ayanamsa)</span>
+        <div style="font-size:12.5px; color:#0c4a6e; margin-top:4px;">NASA-grade sub-arcsecond Swiss Ephemeris calculations for current moment.</div>
+    </div>
+    """, unsafe_allow_html=True)
+    planets_list = [
+        ("Sun (Surya)", swe.SUN), ("Moon (Chandra)", swe.MOON),
+        ("Mars (Mangal)", swe.MARS), ("Mercury (Budha)", swe.MERCURY),
+        ("Jupiter (Guru)", swe.JUPITER), ("Venus (Shukra)", swe.VENUS),
+        ("Saturn (Shani)", swe.SATURN), ("Rahu (North Node)", swe.MEAN_NODE)
+    ]
+    coords_data = []
+    for p_name, p_id in planets_list:
+        lon_p = get_sidereal_lon(jd_now, p_id)
+        r_idx, r_deg = lon_to_rashi(lon_p)
+        n_idx, n_pada = lon_to_nakshatra(lon_p)
+        coords_data.append({
+            "Graha": p_name,
+            "Longitude": f"{lon_p:.2f}°",
+            "Rashi": RASHIS[r_idx],
+            "Nakshatra": f"{NAKSHATRAS[n_idx]} (Pada {n_pada})"
+        })
+    st.dataframe(coords_data, use_container_width=True)
+
+elif st.session_state.current_page == "remedies":
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%); border:1.5px solid #fde68a; border-radius:14px; padding:16px 18px; margin-bottom:14px;">
+        <span style="font-weight:800; font-size:17px; color:#854d0e;">🪔 Comprehensive Vedic Astro-Remedies Sanctuary</span>
+        <div style="font-size:13px; color:#713f12; margin-top:4px;">Harmonize planetary currents, dissolve Nakshatra friction, and activate your highest karmic potential.</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown(f"### 🌟 1. Janma Nakshatra ({janma_name}) Protection")
+        for nr in nak_remedies:
+            st.markdown(f"- {nr}", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown(f"### 🔢 2. Numerology Harmonization (Driver {mulank} + Conductor {bhagyank})")
+        for num_r in num_remedies_list:
+            st.markdown(f"- {num_r}", unsafe_allow_html=True)
+
+    with st.container(border=True):
+        st.markdown(f"### 🪐 3. Shani Protection ({paya_name} & Sade Sati)")
+        for sr in (paya_remedies + ss_remedies):
+            st.markdown(f"- {sr}", unsafe_allow_html=True)
+
+elif st.session_state.current_page == "share":
+    import urllib.parse
+    app_url = "https://navtara-pulse.streamlit.app"
+    share_text = f"✨ Check out Navtara Pulse! Accurate Vedic Nakshatra Timing, Shani Gochar & Numerology Intelligence. Plan high-impact decisions at peak lucky hours: {app_url}"
+    encoded_text = urllib.parse.quote(share_text)
+    encoded_url = urllib.parse.quote(app_url)
+
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef3c7 100%); border:1.5px solid #bae6fd; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 4px 16px rgba(14, 165, 233, 0.08);">
+        <div style="font-weight:900; font-size:18px; color:#0f172a;">{t('share_title', current_lang)}</div>
+        <div style="font-size:13.5px; color:#334155; margin-top:6px; line-height:1.6;">{t('share_subtitle', current_lang)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"""
+    <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:14px; margin-bottom:16px;">
+        <div style="font-size:12px; font-weight:800; color:#64748b; margin-bottom:6px;">{t('share_msg_preview', current_lang)}</div>
+        <div style="font-size:13.5px; color:#1e293b; background:#f8fafc; padding:10px 12px; border-radius:8px; border:1px dashed #cbd5e1;">
+            {share_text}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Social sharing interactive links
+    sc1, sc2 = st.columns(2)
+    with sc1:
+        st.markdown(f"""
+        <a href="https://api.whatsapp.com/send?text={encoded_text}" target="_blank" style="text-decoration:none;">
+            <div style="background:#25d366; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                💬 Share on WhatsApp
+            </div>
+        </a>
+        <a href="https://t.me/share/url?url={encoded_url}&text={encoded_text}" target="_blank" style="text-decoration:none;">
+            <div style="background:#0088cc; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                ✈️ Share on Telegram
+            </div>
+        </a>
+        <a href="mailto:?subject=Navtara%20Pulse%20Vedic%20App&body={encoded_text}" target="_blank" style="text-decoration:none;">
+            <div style="background:#ea4335; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                ✉️ Share via Email
+            </div>
+        </a>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin-top:20px;'></div>", unsafe_allow_html=True)
-    with st.expander(t("view_planets_btn", current_lang), expanded=False):
-        planets_list = [
-            ("Sun (Surya)", swe.SUN), ("Moon (Chandra)", swe.MOON),
-            ("Mars (Mangal)", swe.MARS), ("Mercury (Budha)", swe.MERCURY),
-            ("Jupiter (Guru)", swe.JUPITER), ("Venus (Shukra)", swe.VENUS),
-            ("Saturn (Shani)", swe.SATURN), ("Rahu (North Node)", swe.MEAN_NODE)
-        ]
-        coords_data = []
-        for p_name, p_id in planets_list:
-            lon_p = get_sidereal_lon(jd_now, p_id)
-            r_idx, r_deg = lon_to_rashi(lon_p)
-            n_idx, n_pada = lon_to_nakshatra(lon_p)
-            coords_data.append({
-                "Graha": p_name,
-                "Longitude": f"{lon_p:.2f}°",
-                "Rashi": RASHIS[r_idx],
-                "Nakshatra": f"{NAKSHATRAS[n_idx]} (Pada {n_pada})"
-            })
-        st.dataframe(coords_data, use_container_width=True)
+    with sc2:
+        st.markdown(f"""
+        <a href="https://twitter.com/intent/tweet?text={encoded_text}" target="_blank" style="text-decoration:none;">
+            <div style="background:#0f1419; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                𝕏 Share on X (Twitter)
+            </div>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={encoded_url}" target="_blank" style="text-decoration:none;">
+            <div style="background:#1877f2; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                📘 Share on Facebook
+            </div>
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={encoded_url}" target="_blank" style="text-decoration:none;">
+            <div style="background:#0a66c2; color:#ffffff; font-weight:800; font-size:14px; padding:12px; border-radius:10px; text-align:center; margin-bottom:10px;">
+                💼 Share on LinkedIn
+            </div>
+        </a>
+        """, unsafe_allow_html=True)
+
+    st.text_input("App Link", value=app_url, label_visibility="collapsed")
+
+st.markdown("<div style='margin-top:35px;'></div>", unsafe_allow_html=True)
+st.markdown("""
+<div style="height:2px; background:linear-gradient(90deg, #e2e8f0 0%, #0284c7 50%, #e2e8f0 100%); margin-bottom:14px;"></div>
+""", unsafe_allow_html=True)
+
+cur_p = st.session_state.current_page
+
+# Row 1 of Navigation Buttons (4 in 1 row)
+nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
+with nav_r1_c1:
+    if st.button(f"👤 {t('nav_profile', current_lang)}", key="nav_btn_prof", use_container_width=True, type="primary" if cur_p == "profile" else "secondary"):
+        st.session_state.current_page = "profile"
+        st.rerun()
+
+with nav_r1_c2:
+    if st.button(f"🔢 {t('nav_numerology', current_lang)}", key="nav_btn_num", use_container_width=True, type="primary" if cur_p == "numerology" else "secondary"):
+        st.session_state.current_page = "numerology"
+        st.rerun()
+
+with nav_r1_c3:
+    if st.button(f"🪐 {t('nav_shani', current_lang)}", key="nav_btn_shani", use_container_width=True, type="primary" if cur_p == "shani" else "secondary"):
+        st.session_state.current_page = "shani"
+        st.rerun()
+
+with nav_r1_c4:
+    if st.button(f"⚡ {t('nav_live', current_lang)}", key="nav_btn_live", use_container_width=True, type="primary" if cur_p == "live" else "secondary"):
+        st.session_state.current_page = "live"
+        st.rerun()
+
+# Row 2 of Navigation Buttons (4 in 1 row)
+nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
+with nav_r2_c1:
+    if st.button(f"🗓️ {t('nav_7days', current_lang)}", key="nav_btn_7d", use_container_width=True, type="primary" if cur_p == "7days" else "secondary"):
+        st.session_state.current_page = "7days"
+        st.rerun()
+
+with nav_r2_c2:
+    if st.button(f"🔭 {t('nav_planets', current_lang)}", key="nav_btn_planets", use_container_width=True, type="primary" if cur_p == "planets" else "secondary"):
+        st.session_state.current_page = "planets"
+        st.rerun()
+
+with nav_r2_c3:
+    if st.button(f"🪔 {t('nav_remedies', current_lang)}", key="nav_btn_remedies", use_container_width=True, type="primary" if cur_p == "remedies" else "secondary"):
+        st.session_state.current_page = "remedies"
+        st.rerun()
+
+with nav_r2_c4:
+    if st.button(f"📲 {t('nav_share', current_lang)}", key="nav_btn_share", use_container_width=True, type="primary" if cur_p == "share" else "secondary"):
+        st.session_state.current_page = "share"
+        st.rerun()
