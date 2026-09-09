@@ -306,6 +306,12 @@ st.markdown("""
         margin-bottom: 20px;
         box-shadow: 0 4px 16px rgba(14, 165, 233, 0.08);
     }
+    [data-testid="stVerticalBlockBorderWrapper"]:has(.profile-card-content) {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: 1.5px solid #cbd5e1 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
     .user-profile-bar {
         background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
         border: 1.5px solid #cbd5e1;
@@ -847,64 +853,65 @@ if st.session_state.current_page == "profile":
     # Check if user is actively editing OR is a new user without saved profile
     if st.session_state.editing_profile or not is_existing:
         box_header = t("new_user_title", current_lang) if not is_existing else t("edit_profile_expander", current_lang)
-        st.markdown(f"""
-        <div style="background:#ffffff; border:1.5px solid #0284c7; border-radius:14px; padding:16px; margin-bottom:18px; box-shadow:0 4px 12px rgba(2, 132, 199, 0.08);">
+        with st.container(border=True):
+            st.markdown(f"""
             <div style="font-weight:800; font-size:15px; color:#0369a1; margin-bottom:12px;">{box_header}</div>
-        """, unsafe_allow_html=True)
-        
-        c1, c2 = st.columns(2)
-        with c1:
-            in_name = st.text_input(t("input_name", current_lang), value=user_name)
-            in_dob = st.date_input(t("input_dob", current_lang), value=user_dob)
-        with c2:
-            in_tob = st.time_input(t("input_tob", current_lang), value=user_tob)
-            in_place = st.text_input(t("input_place", current_lang), value=user_place)
+            """, unsafe_allow_html=True)
+            
+            c1, c2 = st.columns(2)
+            with c1:
+                in_name = st.text_input(t("input_name", current_lang), value=user_name)
+                in_dob = st.date_input(t("input_dob", current_lang), value=user_dob)
+            with c2:
+                in_tob = st.time_input(t("input_tob", current_lang), value=user_tob)
+                in_place = st.text_input(t("input_place", current_lang), value=user_place)
 
-        st.caption("ℹ️ *Janma Nakshatra, Pada, Moon Sign, and Lagna are calculated automatically from birth date, time, and place using Swiss Ephemeris.*")
+            st.caption("ℹ️ *Janma Nakshatra, Pada, Moon Sign, and Lagna are calculated automatically from birth date, time, and place using Swiss Ephemeris.*")
 
-        c_save, c_cancel = st.columns([2, 1])
-        with c_save:
-            if st.button(t("save_profile_btn", current_lang), use_container_width=True, type="primary"):
-                updated_data = {
-                    "name": in_name,
-                    "dob": in_dob,
-                    "tob": in_tob,
-                    "place": in_place,
-                    "language": current_lang,
-                    "is_existing_user": True
-                }
-                st.session_state.profile = updated_data
-                st.session_state.editing_profile = False
-                if save_user_profile(updated_data):
-                    st.success(t("profile_saved_msg", current_lang))
+            c_save, c_cancel = st.columns([2, 1])
+            with c_save:
+                if st.button(t("save_profile_btn", current_lang), use_container_width=True, type="primary"):
+                    updated_data = {
+                        "name": in_name,
+                        "dob": in_dob,
+                        "tob": in_tob,
+                        "place": in_place,
+                        "language": current_lang,
+                        "is_existing_user": True
+                    }
+                    st.session_state.profile = updated_data
+                    st.session_state.editing_profile = False
+                    if save_user_profile(updated_data):
+                        st.success(t("profile_saved_msg", current_lang))
+                        st.rerun()
+            with c_cancel:
+                if is_existing and st.button(t("btn_cancel_edit", current_lang), use_container_width=True):
+                    st.session_state.editing_profile = False
                     st.rerun()
-        with c_cancel:
-            if is_existing and st.button(t("btn_cancel_edit", current_lang), use_container_width=True):
-                st.session_state.editing_profile = False
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
 
     else:
-        # Existing User Card: Profile info on left/middle, Edit button on right
-        col_prof_info, col_prof_btn = st.columns([3, 1])
-        with col_prof_info:
-            profile_title = t("profile_card_title", current_lang).format(name=user_name)
-            existing_card_html = f"""<div class="user-profile-bar" style="margin-bottom:0px;">
-<div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:6px;">
-👤 {profile_title}
-</div>
-<div style="font-size:13.5px; color:#475569; display:flex; flex-wrap:wrap; gap:12px;">
-<span>🎂 <b>{user_dob.strftime('%d %B %Y')}</b></span>
-<span>⏰ <b>{user_tob.strftime('%H:%M')}</b></span>
-<span>📍 <b>{user_place}</b></span>
-</div>
-</div>"""
-            st.markdown(existing_card_html, unsafe_allow_html=True)
-        with col_prof_btn:
-            st.markdown("<div style='height:14px;'></div>", unsafe_allow_html=True)
-            if st.button(t("btn_edit_details", current_lang), use_container_width=True):
-                st.session_state.editing_profile = True
-                st.rerun()
+        # Existing User Card: Profile info on left/middle, Edit button inside the profile box on the very right side
+        profile_title = t("profile_card_title", current_lang).format(name=user_name)
+        with st.container(border=True):
+            col_prof_info, col_prof_btn = st.columns([3.2, 1.2])
+            with col_prof_info:
+                st.markdown(f"""
+                <div class="profile-card-content">
+                    <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:6px;">
+                    👤 {profile_title}
+                    </div>
+                    <div style="font-size:13.5px; color:#475569; display:flex; flex-wrap:wrap; gap:12px;">
+                    <span>🎂 <b>{user_dob.strftime('%d %B %Y')}</b></span>
+                    <span>⏰ <b>{user_tob.strftime('%H:%M')}</b></span>
+                    <span>📍 <b>{user_place}</b></span>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+            with col_prof_btn:
+                st.markdown("<div style='height:8px;'></div>", unsafe_allow_html=True)
+                if st.button(t("btn_edit_details", current_lang), use_container_width=True):
+                    st.session_state.editing_profile = True
+                    st.rerun()
 
         st.markdown("<div style='margin-bottom:14px;'></div>", unsafe_allow_html=True)
 
