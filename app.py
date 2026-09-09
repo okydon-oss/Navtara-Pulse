@@ -122,6 +122,8 @@ TRANSLATIONS = {
     "en": {
         "app_title": "✨ Navtara Pulse",
         "app_subtitle": "Vedic Nakshatra Rhythm & Cosmic Precision",
+        "btn_about": "✨ About App",
+        "btn_navtara": "🌟 Navtara",
         "btn_profile": "👤 Profile",
         "btn_numerology": "🔢 Numerology",
         "btn_shani": "🪐 Shani",
@@ -154,6 +156,8 @@ TRANSLATIONS = {
     "hi": {
         "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
         "app_subtitle": "वैदिक नक्षत्र गोचर एवं खगोलीय ऊर्जा चक्र",
+        "btn_about": "✨ ऐप परिचय",
+        "btn_navtara": "🌟 नवतारा",
         "btn_profile": "👤 प्रोफाइल",
         "btn_numerology": "🔢 अंकशास्त्र",
         "btn_shani": "🪐 शनि पाया",
@@ -186,6 +190,8 @@ TRANSLATIONS = {
     "mr": {
         "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
         "app_subtitle": "वैदिक नक्षत्र गोचर आणि वैश्विक ऊर्जा चक्र",
+        "btn_about": "✨ ॲप विषयी",
+        "btn_navtara": "🌟 नवतारा",
         "btn_profile": "👤 प्रोफाईल",
         "btn_numerology": "🔢 अंकशास्त्र",
         "btn_shani": "🪐 शनी पाया",
@@ -218,6 +224,8 @@ TRANSLATIONS = {
     "gu": {
         "app_title": "✨ નવતારા પલ્સ (Navtara Pulse)",
         "app_subtitle": "વૈદિક નક્ષત્ર ગોચર અને બ્રહ્માંડીય ઊર્જા ચક્ર",
+        "btn_about": "✨ એપ વિશે",
+        "btn_navtara": "🌟 નવતારા",
         "btn_profile": "👤 પ્રોફાઇલ",
         "btn_numerology": "🔢 અંકશાસ્ત્ર",
         "btn_shani": "🪐 શનિ પાયા",
@@ -783,7 +791,7 @@ if "user_profile" not in st.session_state:
     st.session_state.user_profile = load_user_profile()
 
 if "current_page" not in st.session_state:
-    st.session_state.current_page = "profile"
+    st.session_state.current_page = "about"
 
 if "edit_mode" not in st.session_state:
     st.session_state.edit_mode = False
@@ -836,27 +844,139 @@ shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx
 
 
 # ==============================================================================
-# PAGE 1: USER PROFILE & VEDIC ASTROLOGICAL PROFILE
+# PAGE 1: ABOUT APP, SCIENTIFIC ASTRO-FOUNDATION & SHARING PORTAL
 # ==============================================================================
-def render_page_profile():
-    # Authenticity & Purpose Hero Box
-    render_html("""
+def render_page_about():
+    app_url = "https://navtara-pulse.streamlit.app"
+    share_msg = "Discover your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
+    encoded_url = urllib.parse.quote(app_url)
+    encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your cosmic alignment here: {app_url}")
+
+    render_html(f"""
     <div class="auth-hero-box">
-        <div style="font-weight:900; font-size:1.08rem; color:#92400e; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px;">
-            <span>🛡️</span> <span>Authentic Vedic Timing Engine & Mathematical Precision</span>
+        <div style="font-weight:900; font-size:1.3rem; color:#92400e; margin-bottom:0.5rem; display:flex; align-items:center; gap:8px;">
+            <span>🌌</span> <span>Navtara Pulse: Where Ancient Vedic Wisdom Meets Sub-Arcsecond Science</span>
         </div>
-        <div style="font-size:0.95rem; line-height:1.65; color:#78350f;">
-            Powered by the sub-arcsecond Moshier-Swiss Ephemeris algorithm (Chitrapaksha Lahiri Ayanamsa), Navtara Pulse calculates the Moon's real-time velocity to reveal your personal daily <b>Golden Timing Windows</b> and <b>Friction Caution Hours</b>.
+        <div style="font-size:0.96rem; line-height:1.7; color:#78350f;">
+            Most horoscopes offer generalized sun-sign forecasts that fail to reflect your daily lived reality. 
+            <b>Navtara Pulse</b> is engineered on a fundamentally different paradigm: the direct, real-time angular relationship between your 
+            <b>Janma Nakshatra (Natal Moon Star)</b> and the actual astronomical position of the Moon as it sweeps through the 27 lunar mansions.
+        </div>
+    </div>
+
+    <div class="light-card-profile" style="margin-bottom:1.15rem;">
+        <div style="font-weight:900; font-size:1.2rem; color:#9a3412; margin-bottom:0.8rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            🔬 The Scientific Connection: Chronobiology, Lunar Pull & Human Bio-Rhythms
+        </div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#334155; margin-bottom:1rem;">
+            Astrology at its highest level is applied celestial mechanics and circadian chronobiology. Consider the established scientific realities:
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:0.5rem;">
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border-left:4px solid #f97316;">
+                <b style="color:#9a3412; font-size:1rem;">🌊 Gravitational Hydrodynamics & Human Fluids:</b><br>
+                <span style="font-size:0.92rem; color:#431407; line-height:1.6;">
+                    The Moon exerts colossal gravitational pull capable of lifting billions of tons of ocean water in tidal swells. The adult human body consists of approximately <b>65% to 70% water</b>, with the human brain being over 73% water. Just as lunar phases govern marine tides, the Moon's orbital ingress creates measurable micro-fluctuations in neurotransmitter balance, sleep architecture, and psychological equilibrium (recognized in clinical chronobiology as <i>infradian rhythms</i>).
+                </span>
+            </div>
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border-left:4px solid #ea580c;">
+                <b style="color:#9a3412; font-size:1rem;">🛰️ NASA JPL & Swiss Ephemeris Precision:</b><br>
+                <span style="font-size:0.92rem; color:#431407; line-height:1.6;">
+                    This application utilizes the <b>Moshier-Swiss Ephemeris algorithm</b> calibrated to the Chitrapaksha Lahiri Ayanamsa. Rather than using approximations, the planetary longitudes are solved with sub-arcsecond astronomical precision, matching the exact spatial coordinates calculated by space observatories.
+                </span>
+            </div>
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border-left:4px solid #c2410c;">
+                <b style="color:#9a3412; font-size:1rem;">🧠 Vedic Psychological Priming & Navtara Harmonic Resonance:</b><br>
+                <span style="font-size:0.92rem; color:#431407; line-height:1.6;">
+                    In Vedic neuroscience, the Moon rules the <i>Manas</i> (sensory processing, emotional temperament, and instantaneous decision-making). The 9-tier Navtara matrix mathematically maps the angular distance of the transit Moon from your natal Moon into 9 archetypal energetic frequencies—ranging from frictionless creative flow (<b>Sampat</b>, <b>Sadhana</b>, <b>Ati-Mitra</b>) to high-friction karmic resistance (<b>Vipat</b>, <b>Pratyari</b>, <b>Vadha</b>).
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="light-card-num" style="margin-bottom:1.15rem;">
+        <div style="font-weight:900; font-size:1.2rem; color:#065f46; margin-bottom:0.8rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem;">
+            🎯 How to Use Navtara Pulse to Master Your Daily Decisions
+        </div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#1e293b;">
+            Timing is everything. Even the strongest strategy fails when launched in a stormy cosmic current, while ordinary actions produce extraordinary breakthroughs when launched with the cosmic wind at your back:
+        </div>
+        <ul style="font-size:0.94rem; line-height:1.7; color:#1e293b; margin-top:8px; padding-left:1.2rem;">
+            <li><b>Seize Golden Windows (🟢 Sampat, Sadhana, Mitra, Ati-Mitra):</b> Perfect hours for signing major contracts, launching products, scheduling critical job interviews, purchasing real estate, and having high-stakes relationship conversations.</li>
+            <li><b>Safeguard During Caution Zones (🔴 Vipat, Pratyari, Vadha):</b> Avoid speculative trading, unnecessary confrontations, signing impulsive agreements, or starting litigation. Maintain a calm, defensive, observant posture.</li>
+            <li><b>Harmonize with Saturn's Speed (Shani Vahan):</b> Understand whether your day demands the patient stamina of the Donkey, the strategic vigilance of the Jackal, the royal majesty of the Elephant, or the joyful ease of the Peacock.</li>
+        </ul>
+    </div>
+
+    <div class="light-card-shani" style="margin-bottom:1.15rem;">
+        <div style="font-weight:900; font-size:1.2rem; color:#5b21b6; margin-bottom:0.8rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.4rem;">
+            🪔 The Science Behind Vedic Remedies: Why They Work
+        </div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#3b0764;">
+            Vedic remedies are not superstitious rituals—they are sophisticated <b>neuro-linguistic, physiological, and behavioral recalibrations</b>:
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr; gap:8px; margin-top:10px;">
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe;">
+                <b>🔊 Mantras & Sound Frequency:</b> Sanskrit mantras produce specific phonetic acoustic resonances that stimulate the vagus nerve, lower sympathetic nervous arousal, and silence cortisol-driven anxiety.
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe;">
+                <b>🕊️ Dana (Charity & Animal Feeding):</b> Feeding crows, stray dogs, or supporting laborers directly neutralizes psychological Saturnine guilt and recalibrates ego-driven stress into universal empathy.
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe;">
+                <b>💧 Elemental Grounding:</b> Offering clean water or raw milk to a Shiva Lingam harmonizes the lunar water element, bringing stillness to an overstimulated nervous system.
+            </div>
+        </div>
+    </div>
+
+    <div class="light-card-live">
+        <div style="font-weight:900; font-size:1.2rem; color:#0369a1; margin-bottom:0.8rem; border-bottom:2px solid #bae6fd; padding-bottom:0.4rem;">
+            📲 Share Navtara Pulse With Friends & Family
+        </div>
+        <div style="font-size:0.95rem; color:#334155; margin-bottom:1rem; line-height:1.6;">
+            Empower your loved ones with authentic astronomical timing and Vedic clarity. Share the app via your favorite platform:
+        </div>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-bottom:1rem;">
+            <a href="https://api.whatsapp.com/send?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#25D366; color:#ffffff; padding:10px 12px; border-radius:12px; text-align:center; font-weight:900; font-size:0.95rem;">
+                    🟢 WhatsApp
+                </div>
+            </a>
+            <a href="https://t.me/share/url?url={encoded_url}&text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0088cc; color:#ffffff; padding:10px 12px; border-radius:12px; text-align:center; font-weight:900; font-size:0.95rem;">
+                    ✈️ Telegram
+                </div>
+            </a>
+            <a href="mailto:?subject=Navtara Pulse - Vedic Timing&body={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#ea4335; color:#ffffff; padding:10px 12px; border-radius:12px; text-align:center; font-weight:900; font-size:0.95rem;">
+                    ✉️ Email
+                </div>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0f172a; color:#ffffff; padding:10px 12px; border-radius:12px; text-align:center; font-weight:900; font-size:0.95rem;">
+                    🐦 X (Twitter)
+                </div>
+            </a>
+        </div>
+
+        <div style="background:#f0f9ff; border-radius:12px; padding:10px 14px; border:1px solid #bae6fd; text-align:center;">
+            <div style="font-size:0.86rem; color:#0284c7; font-weight:800;">Direct Link:</div>
+            <div style="font-size:0.98rem; font-weight:900; color:#0369a1; margin-top:2px;"><b>{app_url}</b></div>
         </div>
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 2: USER BIRTH PROFILE & NAVTARA ASTROLOGICAL PROFILE
+# ==============================================================================
+def render_page_navtara():
     # Smart User Profile Box with Inline Edit
     with st.container(border=True):
         col_p1, col_p2 = st.columns([3, 1])
         with col_p1:
             render_html(f"""
-            <div style="font-weight:900; font-size:1.2rem; color:#0f172a;">👤 {prof['name']}'s Profile</div>
+            <div style="font-weight:900; font-size:1.2rem; color:#0f172a;">👤 {prof['name']}'s Birth Profile</div>
             <div style="font-size:0.95rem; color:#334155; margin-top:5px; line-height:1.6;">
                 📅 <b>DOB:</b> {dob_parsed.strftime('%d %B %Y')} &nbsp;|&nbsp; ⏰ <b>Time:</b> {tob_parsed.strftime('%I:%M %p')}<br>
                 📍 <b>Place:</b> {prof['city']}
@@ -898,7 +1018,7 @@ def render_page_profile():
     render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:1rem; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem;">
-            🌌 1. Navtara & Vedic Astrological Profile
+            🌌 Navtara & Vedic Astrological Profile
         </div>
         
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center; margin-bottom:1.1rem;">
@@ -1266,17 +1386,17 @@ def render_page_share():
 # ROUTER DISPATCHER: RENDER THE SELECTED PAGE
 # ==============================================================================
 PAGES = {
-    "profile": render_page_profile,
+    "about": render_page_about,
+    "navtara": render_page_navtara,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
     "planets": render_page_planets,
     "remedies": render_page_remedies,
-    "share": render_page_share,
 }
 
-active_page_func = PAGES.get(st.session_state.current_page, render_page_profile)
+active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
 active_page_func()
 
 
@@ -1285,54 +1405,54 @@ active_page_func()
 # ==============================================================================
 render_html("<hr style='margin:20px 0 14px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
-# Row 1: Profile, Numerology, Shani, Live Prediction
+# Row 1: About App, Navtara, Numerology, Shani
 nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
 with nav_r1_c1:
-    p_type = "primary" if st.session_state.current_page == "profile" else "secondary"
-    if st.button(t("btn_profile", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "profile"
+    p_type = "primary" if st.session_state.current_page == "about" else "secondary"
+    if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "about"
         st.rerun()
 
 with nav_r1_c2:
+    p_type = "primary" if st.session_state.current_page == "navtara" else "secondary"
+    if st.button(t("btn_navtara", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "navtara"
+        st.rerun()
+
+with nav_r1_c3:
     p_type = "primary" if st.session_state.current_page == "numerology" else "secondary"
     if st.button(t("btn_numerology", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "numerology"
         st.rerun()
 
-with nav_r1_c3:
+with nav_r1_c4:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
     if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "shani"
         st.rerun()
 
-with nav_r1_c4:
+# Row 2: Live Prediction, 7 Days Prediction, Planet Position, Remedies
+nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
+with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
     if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
 
-# Row 2: 7 Days Prediction, Planet Position, Remedies, Share App
-nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
-with nav_r2_c1:
+with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
     if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
         st.rerun()
 
-with nav_r2_c2:
+with nav_r2_c3:
     p_type = "primary" if st.session_state.current_page == "planets" else "secondary"
     if st.button(t("btn_planets", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "planets"
         st.rerun()
 
-with nav_r2_c3:
+with nav_r2_c4:
     p_type = "primary" if st.session_state.current_page == "remedies" else "secondary"
     if st.button(t("btn_remedies", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "remedies"
-        st.rerun()
-
-with nav_r2_c4:
-    p_type = "primary" if st.session_state.current_page == "share" else "secondary"
-    if st.button(t("btn_share", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "share"
         st.rerun()
