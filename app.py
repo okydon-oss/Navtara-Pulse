@@ -802,12 +802,18 @@ if "selected_transit_idx" not in st.session_state:
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
-# Top Header with App Title and Language Selector
-col_top_l, col_top_r = st.columns([2.6, 1.4])
+col_top_l, col_top_r = st.columns([2.8, 1.2])
 with col_top_l:
     render_html(f"""
-        <h2 style='margin:0; font-size:1.55rem; color:#1e293b; font-weight:900;'>{t('app_title', current_lang)}</h2>
-        <div style='font-size:0.92rem; color:#64748b; margin-bottom:8px; font-weight:600;'>{t('app_subtitle', current_lang)}</div>
+        <div style='display:flex; align-items:center; gap:12px; margin-bottom:4px;'>
+            <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:46px; height:46px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.65rem; box-shadow:0 4px 12px rgba(245,158,11,0.28); flex-shrink:0;'>
+                ✨
+            </div>
+            <div>
+                <h1 style='margin:0; font-size:1.52rem; color:#0f172a; font-weight:900; line-height:1.2;'>{t('app_title', current_lang)}</h1>
+                <div style='font-size:0.86rem; color:#64748b; font-weight:600; margin-top:2px;'>{t('app_subtitle', current_lang)}</div>
+            </div>
+        </div>
     """)
 
 with col_top_r:
@@ -823,6 +829,60 @@ with col_top_r:
         st.session_state.user_profile["lang"] = selected_lang_code
         save_user_profile(st.session_state.user_profile)
         st.rerun()
+
+# Row 1: About App, Navtara, Numerology, Shani
+nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
+with nav_r1_c1:
+    p_type = "primary" if st.session_state.current_page == "about" else "secondary"
+    if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "about"
+        st.rerun()
+
+with nav_r1_c2:
+    p_type = "primary" if st.session_state.current_page == "navtara" else "secondary"
+    if st.button(t("btn_navtara", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "navtara"
+        st.rerun()
+
+with nav_r1_c3:
+    p_type = "primary" if st.session_state.current_page == "numerology" else "secondary"
+    if st.button(t("btn_numerology", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "numerology"
+        st.rerun()
+
+with nav_r1_c4:
+    p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
+    if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "shani"
+        st.rerun()
+
+# Row 2: Live Prediction, 7 Days Prediction, Planet Position, Remedies
+nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
+with nav_r2_c1:
+    p_type = "primary" if st.session_state.current_page == "live" else "secondary"
+    if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "live"
+        st.rerun()
+
+with nav_r2_c2:
+    p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
+    if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "forecast"
+        st.rerun()
+
+with nav_r2_c3:
+    p_type = "primary" if st.session_state.current_page == "planets" else "secondary"
+    if st.button(t("btn_planets", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "planets"
+        st.rerun()
+
+with nav_r2_c4:
+    p_type = "primary" if st.session_state.current_page == "remedies" else "secondary"
+    if st.button(t("btn_remedies", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "remedies"
+        st.rerun()
+
+render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
 try:
     dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
@@ -1398,61 +1458,3 @@ PAGES = {
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
 active_page_func()
-
-
-# ==============================================================================
-# BOTTOM FIXED NAVIGATION DOCK (2 ROWS OF 4 BUTTONS)
-# ==============================================================================
-render_html("<hr style='margin:20px 0 14px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
-
-# Row 1: About App, Navtara, Numerology, Shani
-nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
-with nav_r1_c1:
-    p_type = "primary" if st.session_state.current_page == "about" else "secondary"
-    if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "about"
-        st.rerun()
-
-with nav_r1_c2:
-    p_type = "primary" if st.session_state.current_page == "navtara" else "secondary"
-    if st.button(t("btn_navtara", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "navtara"
-        st.rerun()
-
-with nav_r1_c3:
-    p_type = "primary" if st.session_state.current_page == "numerology" else "secondary"
-    if st.button(t("btn_numerology", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "numerology"
-        st.rerun()
-
-with nav_r1_c4:
-    p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
-    if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "shani"
-        st.rerun()
-
-# Row 2: Live Prediction, 7 Days Prediction, Planet Position, Remedies
-nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
-with nav_r2_c1:
-    p_type = "primary" if st.session_state.current_page == "live" else "secondary"
-    if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "live"
-        st.rerun()
-
-with nav_r2_c2:
-    p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
-    if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "forecast"
-        st.rerun()
-
-with nav_r2_c3:
-    p_type = "primary" if st.session_state.current_page == "planets" else "secondary"
-    if st.button(t("btn_planets", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "planets"
-        st.rerun()
-
-with nav_r2_c4:
-    p_type = "primary" if st.session_state.current_page == "remedies" else "secondary"
-    if st.button(t("btn_remedies", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "remedies"
-        st.rerun()
