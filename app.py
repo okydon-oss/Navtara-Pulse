@@ -315,6 +315,168 @@ TRANSLATIONS = {
         "nak_personality_title": "🌟 જન્મ નક્ષત્ર વ્યક્તિત્વ અને મૂળ સ્વભાવ",
         "num_title": "🔢 અંકશાસ્ત્ર રૂપરેખા અને મૂળ સ્વભાવ ફળ",
         "mulank_label": "મૂળાંક (સ્વભાવ)",
+        "bhagyank_label": "ભાગ્યાંક (ભાગ્ય પથ)",
+        "namank_label": "નામાંક (નામ સ્પંદન)",
+        "fixed_prediction_title": "✨ આજીવન અંકશાસ્ત્ર ફલાદેશ અને સ્વભાવ",
+        "paya_card_title": "🪐 વર્તમાન શનિ પાયા (ચરણ ફળ અને પ્રભાવ)",
+        "transit_timeline_lbl": "વર્તમાન ગોચર સમયગાળો (Timeline)",
+        "paya_impact_lbl": "શનિ પાયા પ્રભાવ અને જીવન ફળ",
+        "paya_remedies_lbl": "🪔 શનિ પાયા શાંતિ અને સુરક્ષાત્મક વૈદિક ઉપાયો",
+        "btn_view_forecast": "🔮 આજનું અને આગામી ૭ દિવસનું ફલાદેશ જુઓ ➔",
+        "btn_back_profile": "⬅️ જાતક પ્રોફાઇલ પર પાછા જાઓ",
+        "forecast_page_title": "🔮 બ્રહ્માંડીય નવતારા ગોચર અને દૈનિક ફલાદેશ",
+        "today_card_title": "🌟 આજનો સક્રિય ત્રિ-સ્તરીય બ્રહ્માંડીય સમન્વય",
+        "current_active_nak": "સક્રિય ચંદ્ર નક્ષત્ર",
+        "current_tara": "વર્તમાન નવતારા સ્થિતિ",
+        "saturn_vahan_lbl": "આજનું શનિ વાહન",
+        "personal_day_lbl": "વ્યક્તિગત દિવસ અંક સ્પંદન",
+        "today_directives": "🎯 આજના કાર્ય માટે મુખ્ય માર્ગદર્શન",
+        "today_remedies_lbl": "🪔 આજના ત્રિ-સ્તરીય સૂચવેલા ઉપાયો",
+        "navtara_matrix_title": "🗓️ ૭-દિવસીય ચંદ્ર ગોચર અને દૈનિક કોષ્ટક",
+        "matrix_instruction": "વિગતવાર ફલાદેશ અને ઉપાયો જોવા માટે નીચે આપેલા કોઈપણ દિવસ પર ક્લિક કરો.",
+        "col_status": "સ્થિતિ",
+        "col_window": "સમયગાળો (IST)",
+        "col_nak": "ચંદ્ર નક્ષત્ર",
+        "col_series": "નવતારા ચક્ર",
+        "col_vahan": "શનિ વાહન",
+        "planets_btn": "🌌 સ્પષ્ટ નિરયણ ગ્રહ સ્થિતિ જુઓ (લાહિરી)",
+        "planets_hide_btn": "🔼 ગ્રહ સ્થિતિ છુપાવો",
+        "window_lbl": "સક્રિય સમય",
+        "series_lbl": "શ્રેણી",
+        "predictions_lbl": "વિગતવાર ફલાદેશ",
+        "remedies_lbl": "આ દિવસ માટેના વિશેષ ઉપાયો"
+    }
+}
+
+def t(key: str, lang: str = "en") -> str:
+    lang_dict = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    return lang_dict.get(key, TRANSLATIONS["en"].get(key, key))
+
+NAKSHATRAS = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni",
+    "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha",
+    "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha",
+    "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada",
+    "Uttara Bhadrapada", "Revati"
+]
+
+RASHIS = [
+    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
+    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
+    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
+]
+
+NAVTARA_NAMES = [
+    "Janma", "Sampat", "Vipat", "Kshema", "Pratyari",
+    "Sadhana", "Vadha", "Mitra", "Ati-Mitra"
+]
+
+NAVTARA_DESCRIPTIONS = {
+    "en": {
+        "Janma": "Self, physical energy, vital forces, beginning of a cycle.",
+        "Sampat": "Wealth, assets, material prosperity, financial gains.",
+        "Vipat": "Obstacles, danger, financial setbacks, accidents. High caution.",
+        "Kshema": "Well-being, safety, prosperity, comfort, recovery.",
+        "Pratyari": "Obstacles, enmity, disputes, opposition, disagreements.",
+        "Sadhana": "Success through effort, achievements, spiritual fulfillment.",
+        "Vadha": "Severe distress, destruction, extreme loss, heavy friction.",
+        "Mitra": "Friendship, harmony, helpful alliances, cordial contacts.",
+        "Ati-Mitra": "Great friend, peak auspiciousness, extreme gains, mutual joy."
+    },
+    "hi": {
+        "Janma": "जन्म तारा: शारीरिक ऊर्जा, आत्म-विकास, नए संकल्प।",
+        "Sampat": "सम्पत तारा: धन, समृद्धि, व्यापार लाभ और भौतिक संपन्नता।",
+        "Vipat": "विपत तारा: संकट, अचानक बाधा, जोखिम से बचाव आवश्यक।",
+        "Kshema": "क्षेम तारा: कल्याण, पारिवारिक शांति, सुरक्षा व आरोग्य।",
+        "Pratyari": "प्रत्यरि तारा: वाद-विवाद, प्रतिद्वंद्विता, शत्रुता से सावधान रहें।",
+        "Sadhana": "साधना तारा: संकल्प सिद्धि, परिश्रम का फल, लक्ष्य प्राप्ति।",
+        "Vadha": "वध तारा: उच्च जोखिम, कष्ट, महत्वपूर्ण कार्यों का त्याग आवश्यक।",
+        "Mitra": "मित्र तारा: सौहार्द, सहयोग, लाभ व सुखद संबंध।",
+        "Ati-Mitra": "अति-मित्र तारा: परम कल्याणकारी, सर्वोच्च सफलता, अति शुभ समय।"
+    },
+    "mr": {
+        "Janma": "जन्म तारा: शारीरिक ऊर्जा, आत्म-विकास, नवी सुरुवात.",
+        "Sampat": "संपत तारा: संपत्ती, भरभराट, आर्थिक लाभ व समृद्धी.",
+        "Vipat": "विपत तारा: संकट, अचानक विघ्ने, सावधगिरी बाळगावी.",
+        "Kshema": "क्षेम तारा: कल्याण, सुरक्षितता, आरोग्य व शांतता.",
+        "Pratyari": "प्रत्यरी तारा: वादविवाद, विरोध, मतभेद यांपासून दूर राहा.",
+        "Sadhana": "साधना तारा: कामात यश, ध्येयपूर्ती व सिद्धिदायक काळ.",
+        "Vadha": "वध तारा: अत्यंत अडचणींचा काळ, मोठे निर्णय पुढे ढकलावेत.",
+        "Mitra": "मित्र तारा: सलोखा, सहकार्य, यश व हितकारक संबंध.",
+        "Ati-Mitra": "अति-मित्र तारा: सर्वोच्च शुभ, कार्यसिद्धी व प्रचंड लाभ."
+    },
+    "gu": {
+        "Janma": "જન્મ તારા: શારીરિક ઊર્જા, આત્મ-વિકાસ, નવી શરૂઆત.",
+        "Sampat": "સંપત તારા: સંપત્તિ, આર્થિક પ્રગતિ અને સ્થિરતા.",
+        "Vipat": "વિપત તારા: મુશ્કેલીઓ, અણધાર્યા વિલંબ, ભારે સાવચેતી જરૂરી.",
+        "Kshema": "ક્ષેમ તારા: કલ્યાણ, રક્ષણ, સુખ-શાંતિ અને સ્વાસ્થ્ય લાભ.",
+        "Pratyari": "પ્રત્યરિ તારા: વિરોધ, વાદ-વિવાદ અને અવરોધોથી સાવધાન.",
+        "Sadhana": "સાધના તારા: સિદ્ધિ, સખત મહેનતનું શુભ ફળ અને સફળતા.",
+        "Vadha": "વધ તારા: જોખમ, નુકસાન, અતિ સંયમ અને શાંતિ રાખવી.",
+        "Mitra": "મિત્ર તારા: મિત્રતા, મદદ, સહયોગ અને સાનુકૂળ પરિસ્થિતિ.",
+        "Ati-Mitra": "અતિ-મિત્ર તારા: શ્રેષ્ઠ સહયોગ, પરમ શુભ અને ઉત્તમ પરિણામો."
+    }
+}
+
+SHANI_VAHANS = {
+    "en": {
+        1: {"name": "🐴 Ghoda (Horse)", "desc": "Speed, rapid progress, physical energy, and swift victory over hurdles."},
+        2: {"name": "🫏 Gadha (Donkey)", "desc": "Heavy effort, hard labor, perseverance required, delayed appreciation."},
+        3: {"name": "🦊 Siyar (Jackal)", "desc": "Deceit, caution advised, watch out for misdirection and hidden adversaries."},
+        4: {"name": "🐘 Hathi (Elephant)", "desc": "Royalty, prestige, elevation in status, wealth, and authority."},
+        5: {"name": "🐂 Bail (Bull)", "desc": "Steady, continuous progress through discipline and consistent routine."},
+        6: {"name": "🦁 Sher (Lion)", "desc": "Courage, supreme confidence, victory in competitions, fearless leadership."},
+        7: {"name": "🐦‍⬛ Kowwa (Crow)", "desc": "Restlessness, minor disagreements, travel, scattered focus; keep calm."},
+        8: {"name": "🦚 Mayur (Peacock)", "desc": "Joy, artistic harmony, heartwarming news, domestic celebration."},
+        9: {"name": "🦢 Hans (Swan)", "desc": "Wisdom, tranquility, mental peace, spiritual and financial stability."}
+    },
+    "hi": {
+        1: {"name": "🐴 घोड़ा (Horse)", "desc": "तीव्र प्रगति, ऊर्जा, त्वरित विजय और साहसिक निर्णय लेने का समय।"},
+        2: {"name": "🫏 गधा (Donkey)", "desc": "कठिन परिश्रम, अत्यधिक भागदौड़; धैर्य और निष्ठा से कार्य करते रहें।"},
+        3: {"name": "🦊 सियार (Jackal)", "desc": "सतर्कता आवश्यक; छल-कपट या भ्रामक सलाह से सावधान रहें।"},
+        4: {"name": "🐘 हाथी (Elephant)", "desc": "राजसी सम्मान, धन लाभ, पद-प्रतिष्ठा और वरिष्ठों का सहयोग।"},
+        5: {"name": "🐂 बैल (Bull)", "desc": "स्थिर व निरंतर प्रगति; नियमित अनुशासन से सफलता प्राप्त होगी।"},
+        6: {"name": "🦁 सिंह (Lion)", "desc": "अदम्य साहस, प्रतियोगिता में विजय और नेतृत्व क्षमता का विस्तार।"},
+        7: {"name": "🐦‍⬛ कौआ (Crow)", "desc": "मानसिक चंचलता, अनावश्यक वाद-विवाद या यात्रा; वाणी पर संयम रखें।"},
+        8: {"name": "🦚 मयूर (Peacock)", "desc": "प्रसन्नता, रचनात्मक सफलता, शुभ समाचार और संबंधों में मधुरता।"},
+        9: {"name": "🦢 हंस (Swan)", "desc": "मानसिक शांति, विवेक, आध्यात्मिक उन्नति और स्थायी सुख-समृद्धि।"}
+    },
+    "mr": {
+        1: {"name": "🐴 घोडा (Horse)", "desc": "जलद प्रगती, उत्साह, त्वरेने यश आणि धाडसी पावले उचलण्याचा काळ."},
+        2: {"name": "🫏 गाढव (Donkey)", "desc": "कठोर परिश्रम, जास्तीची धावपळ; संयम बाळगून काम करत राहा."},
+        3: {"name": "🦊 कोल्हा (Jackal)", "desc": "सावधगिरी आवश्यक; फसवणूक किंवा चुकीच्या सल्ल्यापासून सावध राहा."},
+        4: {"name": "🐘 हत्ती (Elephant)", "desc": "राजमान्यता, सन्मान, आर्थिक वृद्धी आणि वरिष्ठांचे मोलाचे सहकार्य."},
+        5: {"name": "🐂 बैल (Bull)", "desc": "स्थिर व संथ प्रगती; नियमित शिस्तीने दीर्घकालीन यश मिळेल."},
+        6: {"name": "🦁 सिंह (Lion)", "desc": "प्रचंड आत्मविश्वास, संकटांवर मात आणि नेतृत्व गुणांचा विकास."},
+        7: {"name": "🐦‍⬛ कावळा (Crow)", "desc": "मानसिक अस्वस्थता, किरकोळ वाद किंवा प्रवास; संवादात शांतता राखा."},
+        8: {"name": "🦚 मोर (Peacock)", "desc": "आनंद, कौटुंबिक सौख्य, शुभ वार्ता आणि मनसोक्त समाधान."},
+        9: {"name": "🦢 हंस (Swan)", "desc": "मानसिक शांतता, विवेक, आध्यात्मिक उन्नती आणि समाधानकारक स्थैर्य."}
+    },
+    "gu": {
+        1: {"name": "🐴 ઘોડો (Horse)", "desc": "ઝડપી પ્રગતિ, ઉત્સાહ, વિજય અને સાહસિક નિર્ણયો માટે ઉત્તમ સમય."},
+        2: {"name": "🫏 ગધેડો (Donkey)", "desc": "સખત મહેનત અને દોડધામ; ધીરજ રાખીને કામ પૂર્ણ કરવા પર ધ્યાન આપો."},
+        3: {"name": "🦊 શિયાળ (Jackal)", "desc": "સાવધાની જરૂરી; છેતરપિંડી કે ગેરમાર્ગે દોરતી સલાહથી બચવું."},
+        4: {"name": "🐘 હાથી (Elephant)", "desc": "રાજસી માન-સન્માન, ધનલાભ, પદ-પ્રતિષ્ઠા અને સમૃદ્ધિની પ્રાપ્તિ."},
+        5: {"name": "🐂 બળદ (Bull)", "desc": "સ્થિર અને ધીમી પણ મક્કમ પ્રગતિ; નિયમિતતા લાભ કરાવશે."},
+        6: {"name": "🦁 સિંહ (Lion)", "desc": "અડગ હિંમત, હરીફો પર વિજય અને પ્રભાવશાળી નેતૃત્વ."},
+        7: {"name": "🐦‍⬛ કાગડો (Crow)", "desc": "મનની ચંચળતા, નાની બાબતોમાં વિવાદ કે મુસાફરી; વાણીમાં સંયમ રાખવો."},
+        8: {"name": "🦚 મોર (Peacock)", "desc": "આનંદ, સર્જનાત્મક સફળતા, પારિવારિક સુખ અને શુભ સમાચાર."},
+        9: {"name": "🦢 હંસ (Swan)", "desc": "માનસિક શાંતિ, ઊંડો વિવેક, આધ્યાત્મિક જ્ઞાન અને સ્થિર સુખ."}
+    }
+}
+
+CHALDEAN_MAP = {
+    'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
+    'B': 2, 'K': 2, 'R': 2,
+    'C': 3, 'G': 3, 'L': 3, 'S': 3,
+    'D': 4, 'M': 4, 'T': 4,
+    'E': 5, 'H': 5, 'N': 5, 'X': 5,
+    'U': 6, 'V': 6, 'W': 6,
+    'O': 7, 'Z': 7,
+    'F': 8, 'P': 8
+}
+
 NAKSHATRA_TRAITS = {
     0: {  # Ashwini
         "en": "Pioneering, swift, energetic, and naturally inclined towards healing and adventure. Possesses a strong desire for independence and quick execution.",
