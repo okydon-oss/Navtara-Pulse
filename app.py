@@ -1,7 +1,7 @@
 import streamlit as st
 import datetime
 import urllib.parse
-import math
+import textwrap
 import json
 import os
 
@@ -12,6 +12,7 @@ try:
 except Exception:
     HAS_SWISSEPH = False
 
+# Configure Streamlit page settings
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -19,9 +20,14 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-st.markdown("""
+# Helper function to inject clean HTML without triggering Markdown code block formatting
+def render_html(html_string: str):
+    """Renders dedented HTML safely, eliminating 4-space markdown code block parsing."""
+    st.markdown(textwrap.dedent(html_string).strip(), unsafe_allow_html=True)
+
+render_html("""
 <style>
-    /* Responsive container formatting */
+    /* Responsive mobile container */
     .block-container {
         padding-top: 1.2rem;
         padding-bottom: 5.5rem;
@@ -30,13 +36,12 @@ st.markdown("""
         max-width: 780px;
     }
     
-    /* Top Language Dropdown Styling */
     div[data-baseweb="select"] {
         border-radius: 10px !important;
         font-weight: 600 !important;
     }
     
-    /* Mobile-first card components */
+    /* Clean, high-contrast light card aesthetics */
     .auth-hero-box {
         background: linear-gradient(135deg, #fdfbf7 0%, #fffbeb 100%);
         border: 1.5px solid #fde68a;
@@ -82,7 +87,7 @@ st.markdown("""
         box-shadow: 0 2px 10px rgba(14, 165, 233, 0.05);
     }
 
-    /* Fixed bottom navigation styling */
+    /* Fixed bottom navigation buttons */
     .stButton button {
         border-radius: 10px !important;
         font-weight: 700 !important;
@@ -90,7 +95,7 @@ st.markdown("""
         padding: 6px 4px !important;
     }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 TRANSLATIONS = {
     "en": {
@@ -338,30 +343,25 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
     """Generates an exhaustive analysis across Career, Wealth, Relationship, Health, Luck and Remedies."""
     p_m = NUM_PLANET_NAMES.get(mulank, {}).get(lang, f"Planet {mulank}")
     p_b = NUM_PLANET_NAMES.get(bhagyank, {}).get(lang, f"Planet {bhagyank}")
-    p_n = NUM_PLANET_NAMES.get(namank, {}).get(lang, f"Planet {namank}")
 
     if lang == "hi":
         return {
             "career_title": "💼 आजीविका एवं कर्मक्षेत्र (Career & Profession)",
             "career_desc": (
                 f"मूलांक {mulank} ({p_m}) और भाग्यांक {bhagyank} ({p_b}) का संयोग आपको असाधारण रणनीतिक नेतृत्व और समस्या-निवारण क्षमता देता है। "
-                "आप किसी के अधीन काम करने की अपेक्षा स्वतंत्र निर्णय और बड़े स्तर के तकनीकी, संरचनात्मक या प्रबंधकीय कार्यों में शीर्ष सफलता प्राप्त करते हैं। "
-                "<b>सर्वोत्तम कार्यक्षेत्र:</b> सूचना प्रौद्योगिकी, इंजीनियरिंग, रियल एस्टेट, कॉर्पोरेट प्रशासन, कानूनी सलाहकार, अनुसंधान एवं स्वतंत्र उद्यमिता।"
+                "आप किसी के अधीन काम करने की अपेक्षा स्वतंत्र निर्णय और बड़े स्तर के तकनीकी, संरचनात्मक या प्रबंधकीय कार्यों में शीर्ष सफलता प्राप्त करते हैं।"
             ),
             "wealth_title": "💰 धन-सम्पदा एवं वित्तीय स्थिरता (Wealth & Finances)",
             "wealth_desc": (
-                f"राहु और मंगल के प्रभाव से आपके जीवन में अचानक बड़े वित्तीय लाभ और द्रुतगामी पूंजी के योग बनते हैं। "
-                "<b>धन संचय नियम:</b> भूमि, अचल संपत्ति और स्वर्ण में निवेश आपके लिए सर्वाधिक सुरक्षित और लाभकारी रहेगा। अनियोजित सट्टे से बचें।"
+                "राहु और मंगल के प्रभाव से जीवन में अचानक वित्तीय लाभ के योग बनते हैं। भूमि, अचल संपत्ति और स्वर्ण में निवेश आपके लिए सर्वाधिक सुरक्षित रहेगा।"
             ),
-            "rel_title": "❤️ संबंध, वैवाहिक जीवन एवं सामंजस्य (Love & Relationships)",
+            "rel_title": "❤️ संबंध एवं वैवाहिक जीवन (Love & Relationships)",
             "rel_desc": (
-                "आप संबंधों में अत्यंत निष्ठावान, स्पष्टवादी और सुरक्षात्मक हैं। आपको दिखावा बिल्कुल पसंद नहीं है। "
-                "<b>दांपत्य मंत्र:</b> संवाद के समय वाणी में कोमलता और धैर्य बनाए रखें। मूलांक 1, 3, 5 और 6 वाले जातक आपके लिए सहयोगी सिद्ध होते हैं।"
+                "आप संबंधों में अत्यंत निष्ठावान और स्पष्टवादी हैं। संवाद के समय वाणी में कोमलता और धैर्य बनाए रखें।"
             ),
             "health_title": "🌿 स्वास्थ्य एवं ऊर्जा स्तर (Health & Vitality)",
             "health_desc": (
-                "आपके पास नैसर्गिक रूप से उच्च शारीरिक सहनशक्ति है, परंतु पित्त विकार, रक्तचाप और मानसिक अति-सक्रियता पर ध्यान देना आवश्यक है। "
-                "<b>आरोग्य सलाह:</b> भरपूर जल पिएं, अत्यधिक तीखा भोजन सीमित करें, तथा रात्रि को 10 मिनट ध्यान द्वारा मन को शांत करें।"
+                "आपके पास नैसर्गिक रूप से उच्च शारीरिक सहनशक्ति है। भरपूर जल पिएं और रात्रि को 10 मिनट ध्यान द्वारा मन को शांत करें।"
             ),
             "luck_title": "🍀 भाग्य सूचक तत्व (Harmonic Luck Matrix)",
             "lucky_num": "1, 3, 5, 9 (शुभ)",
@@ -374,21 +374,14 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
         return {
             "career_title": "💼 व्यवसाय व नोकरी (Career & Professional Growth)",
             "career_desc": (
-                f"मूलांक {mulank} ({p_m}) व भाग्यांक {bhagyank} ({p_b}) यांचा संयोग तुम्हाला धाडसी आणि स्वतंत्र निर्णय घेण्याची क्षमता देतो. "
-                "<b>अनुकूल क्षेत्रे:</b> माहिती तंत्रज्ञान, अभियांत्रिकी, स्थावर मालमत्ता, प्रशासन, व्यवस्थापन सल्लागार व तांत्रिक उद्योग."
+                f"मूलांक {mulank} ({p_m}) व भाग्यांक {bhagyank} ({p_b}) यांचा संयोग तुम्हाला धाडसी आणि स्वतंत्र निर्णय घेण्याची ताकद देतो."
             ),
             "wealth_title": "💰 आर्थिक संपदा व धनयोग (Wealth & Money)",
-            "wealth_desc": (
-                "तुमच्या पत्रिकेत अचानक धनलाभ आणि मोठ्या संधींचे योग आहेत. दीर्घकालीन गुंतवणुकीत जमीन व स्थिर मालमत्ता फायदेशीर ठरतात."
-            ),
+            "wealth_desc": "पत्रिकेत अचानक धनलाभ आणि मोठ्या संधींचे योग आहेत. दीर्घकालीन गुंतवणुकीत जमीन व स्थिर मालमत्ता फायदेशीर ठरतात.",
             "rel_title": "❤️ नातेसंबंध व कौटुंबिक जीवन (Love & Relationships)",
-            "rel_desc": (
-                "तुम्ही नात्यांमध्ये अत्यंत निष्ठावान आणि सरळ आहात. कुटुंबात संवाद साधताना शांतता व ऐकून घेण्याची वृत्ती ठेवा."
-            ),
+            "rel_desc": "तुम्ही नात्यांमध्ये अत्यंत निष्ठावान आणि सरळ आहात. कुटुंबात संवाद साधताना शांतता व ऐकून घेण्याची वृत्ती ठेवा.",
             "health_title": "🌿 आरोग्य व जीवनशैली (Health & Vitality)",
-            "health_desc": (
-                "भरपूर शारीरिक ऊर्जा असली तरी अतिविचार आणि कामाच्या तणावामुळे डोकेदुखी व पित्ताचा त्रास होऊ शकतो. रोज सकाळी ध्यानधारणा करा."
-            ),
+            "health_desc": "भरपूर शारीरिक ऊर्जा असली तरी अतिविचार टाळा. रोज सकाळी नियमित प्राणायाम व ध्यानधारणा करा.",
             "luck_title": "🍀 भाग्यवान घटक (Lucky Attributes Chart)",
             "lucky_num": "१, ३, ५, ९ (अत्यंत शुभ)",
             "avoid_num": "२, ८ (सावधगिरी बाळगा)",
@@ -400,21 +393,14 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
         return {
             "career_title": "💼 વ્યવસાય અને કારકિર્દી (Career & Ambition)",
             "career_desc": (
-                f"મૂળાંક {mulank} ({p_m}) અને ભાગ્યાંક {bhagyank} ({p_b}) નો સુભગ સમન્વય અદભુત આત્મવિશ્વાસ, ઊર્જા અને નવીન વિચારો આપે છે. "
-                "<b>શ્રેષ્ઠ ક્ષેત્રો:</b> આઈટી, એન્જિનિયરિંગ, રિયલ એસ્ટેટ, વહીવટી સેવાઓ અને સ્વતંત્ર વ્યવસાય."
+                f"મૂળાંક {mulank} ({p_m}) અને ભાગ્યાંક {bhagyank} ({p_b}) નો સુભગ સમન્વય અદભુત આત્મવિશ્વાસ અને નવીન વિચારો આપે છે."
             ),
             "wealth_title": "💰 ધન-સંપત્તિ અને રોકાણ (Wealth & Finances)",
-            "wealth_desc": (
-                "આકસ્મિક આર્થિક વૃદ્ધિ અને મોટી તકોના યોગ બને છે. જમીન-મકાન અને લાંબા ગાળાના રોકાણમાં વિશેષ ફાયદો થાય છે."
-            ),
+            "wealth_desc": "આકસ્મિક આર્થિક વૃદ્ધિ અને મોટી તકોના યોગ બને છે. જમીન-મકાન અને લાંબા ગાળાના રોકાણમાં ફાયદો થાય છે.",
             "rel_title": "❤️ સંબંધો અને પારિવારિક સુખ (Love & Social Bonding)",
-            "rel_desc": (
-                "તમે સંબંધોમાં સત્યનિષ્ઠ અને વફાદાર છો. વાણીમાં નમ્રતા અને સાંભળવાની ધીરજ રાખવાથી દાંપત્યજીવન મધુર બને છે."
-            ),
+            "rel_desc": "તમે સંબંધોમાં સત્યનિષ્ઠ અને વફાદાર છો. વાણીમાં નમ્રતા અને સાંભળવાની ધીરજ રાખવાથી દાંપત્યજીવન મધુર બને છે.",
             "health_title": "🌿 સ્વાસ્થ્ય અને ઊર્જા (Health & Wellness)",
-            "health_desc": (
-                "ઉચ્ચ શારીરિક ઊર્જા હોવા છતાં એસિડિટી કે અનિદ્રા જેવી તકલીફોથી બચવું જરૂરી છે. નિયમિત પ્રાણાયામ ઉત્તમ રહેશે."
-            ),
+            "health_desc": "ઉચ્ચ શારીરિક ઊર્જા હોવા છતાં નિયમિત પ્રાણાયામ અને પૂરતો આરામ લેવો હિતાવહ રહેશે.",
             "luck_title": "🍀 ભાગ્યશાળી તત્વો (Lucky Attributes Matrix)",
             "lucky_num": "૧, ૩, ૫, ૯ (શુભ)",
             "avoid_num": "૨, ૮ (સાવચેતી જરૂરી)",
@@ -427,25 +413,19 @@ def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: s
             "career_title": "💼 Career Trajectory & Executive Ambition",
             "career_desc": (
                 f"The dynamic synthesis of Driver {mulank} ({p_m}) and Conductor {bhagyank} ({p_b}) creates a powerhouse combination of strategic unconventional thinking and warrior-like execution. "
-                "You thrive in leadership roles that require structural problem-solving, architectural vision, and calculated risk-taking. "
-                "<b>Optimal Avenues:</b> Technology Architecture, Systems Engineering, Real Estate Infrastructure, Corporate Governance, and Independent Entrepreneurship."
+                "You thrive in leadership roles requiring architectural vision, structural problem solving, and calculated risk-taking."
             ),
             "wealth_title": "💰 Wealth Dynamics & Long-Term Financial Mastery",
             "wealth_desc": (
-                f"Rahu and Mars inherently catalyze sudden expansions, non-linear wealth opportunities, and high-velocity capital turnover. "
-                "<b>Wealth Accumulation Strategy:</b> Long-term real estate holdings, land, and tangible hard assets provide your safest financial anchor. "
-                "Strictly avoid speculative unhedged market gambles."
+                "Rahu and Mars catalyze non-linear wealth opportunities and sudden capital liquidity. Long-term real estate holdings and tangible hard assets provide your safest financial anchor."
             ),
             "rel_title": "❤️ Relationships, Marriage & Interpersonal Dynamics",
             "rel_desc": (
-                "You are fiercely loyal, protective, and authentic in relationships, with zero tolerance for pretense or superficial flatteries. "
-                "<b>Marital Harmony:</b> Practice mindful active listening and verbal gentleness during high-intensity discussions. "
-                "Natives with Driver/Conductor numbers 1, 3, 5, and 6 bring stabilizing warmth and romantic balance."
+                "You are fiercely loyal, protective, and authentic in relationships, with zero tolerance for pretense. Practice mindful active listening and verbal gentleness during high-intensity discussions."
             ),
             "health_title": "🌿 Health, Vitality & Holistic Bio-Rhythms",
             "health_desc": (
-                "You possess tremendous organic stamina and regenerative capacity, but your fiery metabolic constitution (Mars) combined with Rahu's nervous intensity demands conscious pacing. "
-                "<b>Vitality Protocol:</b> Stay heavily hydrated, reduce excessive refined pungent stimulants, and practice 15 minutes of grounding Pranayama before sleep."
+                "You possess tremendous organic stamina, but your fiery metabolic constitution demands conscious pacing. Stay heavily hydrated and practice 15 minutes of grounding Pranayama before sleep."
             ),
             "luck_title": "🍀 Harmonic Lucky Attributes & Vibration Chart",
             "lucky_num": "1, 3, 5, 9 (Harmonic Synergy)",
@@ -545,7 +525,6 @@ def calculate_shani_vahan(birth_star_idx: int, transit_moon_star_idx: int) -> di
 
 def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
     """Calculates accurate sidereal Moon longitude via Moshier Swiss Ephemeris or analytical engine."""
-    # Ensure utc_dt is naive for clean mathematical operations
     if utc_dt.tzinfo is not None:
         utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
 
@@ -556,7 +535,6 @@ def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
                 utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
             )
             swe.set_sid_mode(swe.SIDM_LAHIRI)
-            # Use Moshier analytical ephemeris which requires NO external .se1 files
             res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
             return float(res[0] % 360.0)
         except Exception:
@@ -566,7 +544,6 @@ def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
             except Exception:
                 pass
 
-    # High-precision Lahiri-aligned analytical fallback
     ref = datetime.datetime(2000, 1, 1, 12, 0)
     delta_days = (utc_dt - ref).total_seconds() / 86400.0
     moon_mean_lon = (218.316 + 13.176396 * delta_days - 23.85) % 360.0
@@ -584,14 +561,12 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 1
     pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
     rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
 
-    # Calculate approximate Lagna
     lagna_idx = (rashi_idx + 1) % 12
     if HAS_SWISSEPH:
         try:
             t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
                               utc_dt.hour + utc_dt.minute / 60.0)
             swe.set_sid_mode(swe.SIDM_LAHIRI)
-            # Universal swe.houses call compatible across all pyswisseph builds
             cusps, ascmc = swe.houses(t_jd, lat, lon, b'P')
             ayanamsa = swe.get_ayanamsa_ut(t_jd)
             lagna_lon = (ascmc[0] - ayanamsa) % 360.0
@@ -620,7 +595,6 @@ def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
     deg_from_start = (current_lon - start_lon) % span
     deg_to_end = span - deg_from_start
 
-    # Sidereal Moon average speed approx 0.55 deg per hour
     hours_since_start = max(0.1, deg_from_start / 0.55)
     hours_to_end = max(0.1, deg_to_end / 0.55)
 
@@ -637,7 +611,6 @@ def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int
         target_t = curr_t + datetime.timedelta(days=i)
         star_idx, s_time, e_time = get_current_nakshatra_window(target_t)
         
-        # Calculate Navtara
         offset = (star_idx - birth_star_idx) % 9
         nav_name, icon, quality = NAVTARA_NAMES[offset]
         vahan_info = calculate_shani_vahan(birth_star_idx, star_idx)
@@ -691,7 +664,6 @@ def get_sidereal_planet_positions(target_ist_dt: datetime.datetime):
                     "rashi": RASHIS[r_idx],
                     "deg": f"{int(deg_in_rashi)}° {int((deg_in_rashi % 1) * 60)}'"
                 })
-            # Ketu is exactly opposite Rahu
             rahu_items = [p for p in res_list if "Rahu" in p["planet"]]
             if rahu_items:
                 res_list.append({
@@ -764,8 +736,10 @@ current_lang = prof.get("lang", "en")
 
 col_top_l, col_top_r = st.columns([2.8, 1.2])
 with col_top_l:
-    st.markdown(f"<h2 style='margin:0; font-size:24px; color:#1e293b;'>{t('app_title', current_lang)}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<div style='font-size:12.5px; color:#64748b; margin-bottom:8px;'>{t('app_subtitle', current_lang)}</div>", unsafe_allow_html=True)
+    render_html(f"""
+        <h2 style='margin:0; font-size:24px; color:#1e293b;'>{t('app_title', current_lang)}</h2>
+        <div style='font-size:12.5px; color:#64748b; margin-bottom:8px;'>{t('app_subtitle', current_lang)}</div>
+    """)
 
 with col_top_r:
     lang_opts = {"en": "English", "hi": "हिन्दी", "mr": "मराठी", "gu": "ગુજરાતી"}
@@ -799,9 +773,13 @@ SATURN_TRANSIT_RASHI_IDX = 11
 shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
 shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
 
-if st.session_state.current_page == "profile":
+
+# ==============================================================================
+# PAGE 1: USER PROFILE & VEDIC ASTROLOGICAL PROFILE
+# ==============================================================================
+def render_page_profile():
     # Authenticity & Purpose Hero Box
-    st.markdown(f"""
+    render_html("""
     <div class="auth-hero-box">
         <div style="font-weight:800; font-size:14.5px; color:#92400e; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
             <span>🛡️</span> <span>Authentic Vedic Timing Engine & Mathematical Precision</span>
@@ -810,19 +788,19 @@ if st.session_state.current_page == "profile":
             Powered by the sub-arcsecond Moshier-Swiss Ephemeris algorithm (Chitrapaksha Lahiri Ayanamsa), Navtara Pulse calculates the Moon's real-time velocity to reveal your personal daily <b>Golden Timing Windows</b> and <b>Friction Caution Hours</b>.
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
     # Smart User Profile Box with Inline Edit
     with st.container(border=True):
         col_p1, col_p2 = st.columns([3, 1])
         with col_p1:
-            st.markdown(f"""
+            render_html(f"""
             <div style="font-weight:800; font-size:16px; color:#0f172a;">👤 {prof['name']}'s Profile</div>
             <div style="font-size:12.5px; color:#475569; margin-top:3px;">
                 📅 <b>DOB:</b> {dob_parsed.strftime('%d %B %Y')} &nbsp;|&nbsp; ⏰ <b>Time:</b> {tob_parsed.strftime('%I:%M %p')}<br>
                 📍 <b>Place:</b> {prof['city']}
             </div>
-            """, unsafe_allow_html=True)
+            """)
         with col_p2:
             if st.button(t("edit_details", current_lang), use_container_width=True):
                 st.session_state.edit_mode = not st.session_state.edit_mode
@@ -856,7 +834,7 @@ if st.session_state.current_page == "profile":
     # Navtara & Vedic Astrological Profile Box
     n_traits = get_nakshatra_traits(chart_info["star_idx"], current_lang)
     
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:17px; color:#9a3412; margin-bottom:12px; border-bottom:2px solid #fed7aa; padding-bottom:6px;">
             🌌 1. Navtara & Vedic Astrological Profile
@@ -894,15 +872,19 @@ if st.session_state.current_page == "profile":
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "numerology":
+
+# ==============================================================================
+# PAGE 2: CORE NUMEROLOGY BLUEPRINT & LIFE DOMAINS
+# ==============================================================================
+def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
     p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
     p_b_label = NUM_PLANET_NAMES.get(bhagyank, {}).get(current_lang, f"Planet {bhagyank}")
     p_n_label = NUM_PLANET_NAMES.get(namank, {}).get(current_lang, f"Planet {namank}")
 
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-num">
         <div style="font-weight:900; font-size:17px; color:#065f46; margin-bottom:12px; border-bottom:2px solid #bbf7d0; padding-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
             <span>🔢 2. Core Numerology Blueprint</span>
@@ -957,10 +939,14 @@ elif st.session_state.current_page == "numerology":
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "shani":
-    st.markdown(f"""
+
+# ==============================================================================
+# PAGE 3: SHANI PAYA, TRANSIT & SADE SATI
+# ==============================================================================
+def render_page_shani():
+    render_html(f"""
     <div class="light-card-shani">
         <div style="font-weight:900; font-size:17px; color:#5b21b6; margin-bottom:12px; border-bottom:2px solid #ddd6fe; padding-bottom:6px;">
             {t('shani_paya_title', current_lang)}
@@ -990,9 +976,13 @@ elif st.session_state.current_page == "shani":
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "live":
+
+# ==============================================================================
+# PAGE 4: LIVE DAILY PREDICTION & TODAY'S COSMIC PULSE
+# ==============================================================================
+def render_page_live():
     now_ist = datetime.datetime.now()
     cur_star_idx, s_dt, e_dt = get_current_nakshatra_window(now_ist)
     offset = (cur_star_idx - chart_info["star_idx"]) % 9
@@ -1000,7 +990,7 @@ elif st.session_state.current_page == "live":
     vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-live">
         <div style="font-weight:900; font-size:17px; color:#0369a1; margin-bottom:12px; border-bottom:2px solid #bae6fd; padding-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
             <span>{t('live_pulse_title', current_lang)}</span>
@@ -1046,36 +1036,38 @@ elif st.session_state.current_page == "live":
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "forecast":
+
+# ==============================================================================
+# PAGE 5: 7-DAY NAKSHATRA TRANSIT FORECAST
+# ==============================================================================
+def render_page_forecast():
     now_ist = datetime.datetime.now()
     transits = get_7_day_moon_transits(now_ist, chart_info["star_idx"])
 
-    st.markdown(f"""
+    render_html(f"""
     <div style="font-weight:900; font-size:17px; color:#1e293b; margin-bottom:10px;">
         {t('forecast_title', current_lang)}
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-    # Render table rows with buttons
     for idx, tr in enumerate(transits):
         with st.container(border=True):
             col_t1, col_t2, col_t3 = st.columns([1.5, 3, 1.5])
             with col_t1:
-                st.markdown(f"<b>{tr['date_str']}</b><br><span style='font-size:12px; color:#64748b;'>{tr['star_name']}</span>", unsafe_allow_html=True)
+                render_html(f"<b>{tr['date_str']}</b><br><span style='font-size:12px; color:#64748b;'>{tr['star_name']}</span>")
             with col_t2:
                 vahan_name = tr['vahan'].split()[1] if len(tr['vahan'].split()) > 1 else tr['vahan']
-                st.markdown(f"<span style='font-size:15px;'>{tr['icon']}</span> <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:11.5px; color:#475569;'>Mount: {vahan_name}</span>", unsafe_allow_html=True)
+                render_html(f"<span style='font-size:15px;'>{tr['icon']}</span> <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:11.5px; color:#475569;'>Mount: {vahan_name}</span>")
             with col_t3:
                 if st.button("🔮 View", key=f"btn_tr_{idx}", use_container_width=True):
                     st.session_state.selected_transit_idx = idx
                     st.rerun()
 
-    # Detailed view for selected day with safe indexing
     safe_idx = min(len(transits) - 1, max(0, st.session_state.selected_transit_idx))
     sel_tr = transits[safe_idx]
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-live" style="margin-top:14px;">
         <div style="font-weight:800; font-size:15px; color:#0369a1; margin-bottom:8px;">
             🔮 Detailed Forecast for {sel_tr['date_str']} ({sel_tr['star_name']})
@@ -1089,13 +1081,17 @@ elif st.session_state.current_page == "forecast":
             • <b>Remedy for this day:</b> {"Wear green or light clothes, schedule key meetings, and execute major deals." if "🟢" in sel_tr['icon'] else "Avoid hasty arguments, keep investments on hold, and recite Hanuman Chalisa."}
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "planets":
+
+# ==============================================================================
+# PAGE 6: PLANETARY POSITIONS (SIDEREAL LAHIRI)
+# ==============================================================================
+def render_page_planets():
     now_ist = datetime.datetime.now()
     planets_data = get_sidereal_planet_positions(now_ist)
 
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:17px; color:#9a3412; margin-bottom:12px; border-bottom:2px solid #fed7aa; padding-bottom:6px;">
             {t('planet_title', current_lang)}
@@ -1103,28 +1099,30 @@ elif st.session_state.current_page == "planets":
         <div style="font-size:12px; color:#64748b; margin-bottom:10px;">
             Sidereal Lahiri Ayanamsa | Computed for {now_ist.strftime('%d %B %Y, %I:%M %p IST')}
         </div>
-        <div style="display:grid; grid-template-columns: 1fr; gap:8px;">
-    """, unsafe_allow_html=True)
+    </div>
+    """)
 
     for p in planets_data:
-        st.markdown(f"""
-        <div style="background:#fff7ed; border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #fed7aa;">
+        render_html(f"""
+        <div style="background:#fff7ed; border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #fed7aa; margin-bottom:6px;">
             <span style="font-weight:700; color:#9a3412; font-size:13px;">{p['planet']}</span>
             <span style="font-weight:800; color:#431407; font-size:13px;">{p['rashi']} ({p['deg']})</span>
         </div>
-        """, unsafe_allow_html=True)
+        """)
 
-    st.markdown("</div></div>", unsafe_allow_html=True)
 
-elif st.session_state.current_page == "remedies":
-    st.markdown(f"""
+# ==============================================================================
+# PAGE 7: CONSOLIDATED VEDIC REMEDIES SANCTUARY
+# ==============================================================================
+def render_page_remedies():
+    render_html(f"""
     <div class="light-card-num">
         <div style="font-weight:900; font-size:17px; color:#065f46; margin-bottom:12px; border-bottom:2px solid #bbf7d0; padding-bottom:6px;">
             🪔 Consolidated Vedic Astro-Remedies Sanctuary
         </div>
         
         <div style="background:#ffffff; border-radius:10px; padding:12px 14px; border-left:4px solid #059669; border:1px solid #d1fae5; border-left-width:4px; margin-bottom:12px;">
-            <div style="font-weight:800; font-size:14px; color:#065f46; margin-bottom:4px;">1. Janma Nakshatra Protection (Bharani)</div>
+            <div style="font-weight:800; font-size:14px; color:#065f46; margin-bottom:4px;">1. Janma Nakshatra Protection ({chart_info['star_name']})</div>
             <div style="font-size:12.8px; line-height:1.55; color:#1e293b;">
                 • Worship Lord Shiva or Lord Yama to clear heavy ancestral and life burdens.<br>
                 • Chant <code>Om Hreem Bharanyai Namah</code> or <code>Maha Mrityunjaya Mantra</code> 11 times every morning.
@@ -1147,15 +1145,19 @@ elif st.session_state.current_page == "remedies":
             </div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-elif st.session_state.current_page == "share":
+
+# ==============================================================================
+# PAGE 8: SHARE APP PORTAL
+# ==============================================================================
+def render_page_share():
     app_url = "https://navtara-pulse.streamlit.app"
     share_msg = "Discover your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
     encoded_url = urllib.parse.quote(app_url)
     encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your alignment here: {app_url}")
 
-    st.markdown(f"""
+    render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:17px; color:#9a3412; margin-bottom:12px; border-bottom:2px solid #fed7aa; padding-bottom:6px;">
             {t('share_title', current_lang)}
@@ -1192,9 +1194,31 @@ elif st.session_state.current_page == "share":
             <div style="font-size:13px; font-weight:800; color:#431407; margin-top:2px;"><code>{app_url}</code></div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    """)
 
-st.markdown("<hr style='margin:18px 0 12px 0; border:none; border-top:1px solid #e2e8f0;'>", unsafe_allow_html=True)
+
+# ==============================================================================
+# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ==============================================================================
+PAGES = {
+    "profile": render_page_profile,
+    "numerology": render_page_numerology,
+    "shani": render_page_shani,
+    "live": render_page_live,
+    "forecast": render_page_forecast,
+    "planets": render_page_planets,
+    "remedies": render_page_remedies,
+    "share": render_page_share,
+}
+
+active_page_func = PAGES.get(st.session_state.current_page, render_page_profile)
+active_page_func()
+
+
+# ==============================================================================
+# BOTTOM FIXED NAVIGATION DOCK (2 ROWS OF 4 BUTTONS)
+# ==============================================================================
+render_html("<hr style='margin:18px 0 12px 0; border:none; border-top:1px solid #e2e8f0;'>")
 
 # Row 1: Profile, Numerology, Shani, Live Prediction
 nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
