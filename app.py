@@ -252,13 +252,15 @@ def t(key: str, lang: str = "en") -> str:
     """Translates key to target language with fallback to English."""
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
-NAKHATRAS = [
+NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
     "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
     "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
+# Dual alias guaranteeing backward compatibility and eliminating NameError
+NAKHATRAS = NAKSHATRAS
 
 RASHIS = [
     "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
@@ -370,7 +372,7 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
         }
     }
     
-    star_name = NAKHATRAS[star_idx - 1] if 1 <= star_idx <= 27 else "Nakshatra"
+    star_name = NAKSHATRAS[star_idx - 1] if 1 <= star_idx <= 27 else "Nakshatra"
     selected_star = star_details.get(star_idx, {
         "personality": {
             "en": f"Born under the celestial star {star_name}, you inherit dynamic intuition, deep focus, and natural authority. Your actions are driven by genuine intent and structured vision.",
@@ -404,8 +406,8 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
         "animal": bio["animal"],
         "lord": bio["lord"],
         "personality": personality_text,
-        "desc": personality_text,  # Safe alias preventing KeyError: 'desc'
-        "traits": personality_text, # Safe alias preventing KeyError: 'traits'
+        "desc": personality_text,
+        "traits": personality_text,
         "prediction": prediction_text,
         "remedies": remedies_text
     }
@@ -469,6 +471,8 @@ def get_moon_rashi_details(rashi_idx: int, lang: str = "en") -> dict:
         "ruler": selected["ruler"],
         "profile": prof_text,
         "desc": prof_text,
+        "traits": prof_text,
+        "personality": prof_text,
         "prediction": selected["prediction"].get(lang, selected["prediction"]["en"]),
         "remedies": selected["remedies"].get(lang, selected["remedies"]["en"])
     }
@@ -515,7 +519,7 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
             "en": "Lagna lord harmony guides health, executive ambition, and societal standing across life cycles.",
             "hi": "लग्नेश की शुभता से जीवन में आरोग्य, दीर्घायु और सामाजिक प्रभाव का विस्तार होता है।",
             "mr": "लग्नेश अनुकूल असल्यास उत्तम आरोग्य आणि सामाजिक प्रतिष्ठा लाभते.",
-            "gu": "લગ્નેશના શુભ પ્રભાવથી ઉત્તમ આરોગ્ય અને પ્રતિષ્ઠા વધે છે."
+            "gu": "લગ્નેશના શુભ प्रભાવથી ઉત્તમ આરોગ્ય અને પ્રતિષ્ઠા વધે છે."
         },
         "remedies": {
             "en": "• Practice daily morning Pranayama to align physical breath with mental vitality.\n• Strengthen Lagna lord through mindful daily discipline and charity.",
@@ -532,6 +536,8 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
         "lord": selected["lord"],
         "profile": prof_text,
         "desc": prof_text,
+        "traits": prof_text,
+        "personality": prof_text,
         "prediction": selected["prediction"].get(lang, selected["prediction"]["en"]),
         "remedies": selected["remedies"].get(lang, selected["remedies"]["en"])
     }
@@ -556,7 +562,7 @@ def get_personal_day_vibe(dob: datetime.date, target_date: datetime.date, lang: 
     """Calculates Personal Year and Personal Day vibration."""
     personal_year = reduce_to_single_digit(dob.day + dob.month + target_date.year)
     personal_day = reduce_to_single_digit(personal_year + target_date.month + target_date.day)
-    planet_info = NUM_PLANET_NAMES.get(personal_day, {}).get(lang, f"Number {personal_day}")
+    planet_info = NUM_PLANET_NAMES.get(personal_day, {}).get(lang, NUM_PLANET_NAMES[personal_day]["en"])
     return {
         "number": personal_day,
         "planet": planet_info,
@@ -779,19 +785,21 @@ def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
                 utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
             )
             swe.set_sid_mode(swe.SIDM_LAHIRI)
-            res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-            return float(res[0] % 360.0)
+            calc_res = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            raw_lon = calc_res[0][0] if isinstance(calc_res[0], (list, tuple)) else calc_res[0]
+            return float(raw_lon % 360.0)
         except Exception:
             try:
-                res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SIDEREAL)
-                return float(res[0] % 360.0)
+                calc_res = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SIDEREAL)
+                raw_lon = calc_res[0][0] if isinstance(calc_res[0], (list, tuple)) else calc_res[0]
+                return float(raw_lon % 360.0)
             except Exception:
                 pass
 
     ref = datetime.datetime(2000, 1, 1, 12, 0)
     delta_days = (utc_dt - ref).total_seconds() / 86400.0
     moon_mean_lon = (218.316 + 13.176396 * delta_days - 23.85) % 360.0
-    return float(moon_mean_lon)
+    return float(moon_mean_lon % 360.0)
 
 def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 19.8762, lon: float = 75.3433):
     """Calculates sidereal Moon Nakshatra, Pada, Moon Rashi, and Lagna."""
@@ -897,11 +905,11 @@ def get_sidereal_planet_positions(target_ist_dt: datetime.datetime):
             swe.set_sid_mode(swe.SIDM_LAHIRI)
             for name, pid in planets:
                 try:
-                    calc, _ = swe.calc_ut(t_jd, pid, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-                    lon = float(calc[0] % 360.0)
+                    calc = swe.calc_ut(t_jd, pid, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+                    lon = float(calc[0][0] if isinstance(calc[0], (list, tuple)) else calc[0])
                 except Exception:
-                    calc, _ = swe.calc_ut(t_jd, pid, swe.FLG_SIDEREAL)
-                    lon = float(calc[0] % 360.0)
+                    calc = swe.calc_ut(t_jd, pid, swe.FLG_SIDEREAL)
+                    lon = float(calc[0][0] if isinstance(calc[0], (list, tuple)) else calc[0])
                 r_idx = max(0, min(11, int(lon / 30.0)))
                 deg_in_rashi = lon % 30.0
                 res_list.append({
@@ -1213,6 +1221,15 @@ def render_page_profile():
     m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
     l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
     
+    # Defensive text preparation for Moon Sign and Lagna
+    m_rashi_parts = chart_info['moon_rashi_name'].split()
+    m_rashi_main = m_rashi_parts[0] if m_rashi_parts else chart_info['moon_rashi_name']
+    m_rashi_sub = m_rashi_parts[-1] if len(m_rashi_parts) > 1 else ""
+
+    l_rashi_parts = chart_info['lagna_name'].split()
+    l_rashi_main = l_rashi_parts[0] if l_rashi_parts else chart_info['lagna_name']
+    l_rashi_sub = l_rashi_parts[-1] if len(l_rashi_parts) > 1 else ""
+
     render_html(f"""
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.35rem; color:#9a3412; margin-bottom:1rem; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -1228,13 +1245,13 @@ def render_page_profile():
             </div>
             <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
                 <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('moon_rashi_label', current_lang)}</div>
-                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{chart_info['moon_rashi_name'].split()[0]}</div>
-                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{chart_info['moon_rashi_name'].split()[-1]}</div>
+                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{m_rashi_main}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{m_rashi_sub}</div>
             </div>
             <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
                 <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('lagna_label', current_lang)}</div>
-                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{chart_info['lagna_name'].split()[0]}</div>
-                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{chart_info['lagna_name'].split()[-1]}</div>
+                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{l_rashi_main}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{l_rashi_sub}</div>
             </div>
         </div>
 
@@ -1429,6 +1446,10 @@ def render_page_live():
     vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
+    # Safe evaluation of planet name and decision protocol
+    p_planet_clean = p_day['planet'].split()[0] if p_day.get('planet') else f"Day {p_day['number']}"
+    current_star_name = NAKSHATRAS[cur_star_idx - 1] if 1 <= cur_star_idx <= 27 else "Nakshatra"
+
     if "🟢" in icon:
         decision_protocol = "🟢 High green light for critical ventures, agreements, property, and financial investments."
     else:
@@ -1445,7 +1466,7 @@ def render_page_live():
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
                     <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">CURRENT MOON NAKSHATRA</div>
-                    <div style="font-size:1.4rem; font-weight:900; color:#0369a1;">{NAKSHATRAS[cur_star_idx - 1]}</div>
+                    <div style="font-size:1.4rem; font-weight:900; color:#0369a1;">{current_star_name}</div>
                 </div>
                 <div style="text-align:right;">
                     <div style="font-size:1.8rem;">{icon}</div>
@@ -1467,7 +1488,7 @@ def render_page_live():
             </div>
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
                 <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">PERSONAL DAY VIBE</div>
-                <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">Day {p_day['number']} ({p_day['planet'].split()[0]})</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">Day {p_day['number']} ({p_planet_clean})</div>
                 <div style="font-size:0.92rem; color:#64748b;">Alignment Energy</div>
             </div>
         </div>
@@ -1492,6 +1513,10 @@ def render_page_forecast():
         {t('forecast_title', current_lang)}
     </div>
     """)
+
+    if not transits:
+        st.info("Computing active 7-day ephemeris matrix...")
+        return
 
     for idx, tr in enumerate(transits):
         with st.container(border=True):
