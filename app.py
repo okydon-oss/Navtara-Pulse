@@ -4,7 +4,6 @@ import random
 import datetime
 import streamlit as st
 
-# Dependency checking for Swiss Ephemeris
 try:
     import swisseph as swe
     HAS_SWISSEPH = True
@@ -16,7 +15,6 @@ except ImportError:
     st.code("pip install pyswisseph requests streamlit", language="bash")
     st.stop()
 
-# Streamlit Page Config - 'centered' provides a natural mobile layout
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -24,7 +22,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Enhanced Responsive Styling with Larger, Clear Mobile Fonts
 st.markdown("""
     <style>
     /* Hide Streamlit default headers & footers for native app feel */
@@ -42,7 +39,7 @@ st.markdown("""
         margin: 0 auto !important;
     }
     
-    /* Increased font size for labels and inputs for high legibility */
+    /* Legible inputs and labels for mobile touch screens */
     label {
         font-size: 15px !important;
         font-weight: 600 !important;
@@ -56,7 +53,7 @@ st.markdown("""
         padding: 10px 14px !important;
     }
     
-    /* Primary touch-friendly buttons with larger text */
+    /* Touch-friendly full-width action buttons */
     .stButton > button {
         font-size: 17px !important;
         font-weight: 700 !important;
@@ -66,9 +63,8 @@ st.markdown("""
         transition: all 0.2s ease-in-out !important;
     }
 
-    /* Headings with boosted readability */
     h1 {
-        font-size: 1.95rem !important;
+        font-size: 2.05rem !important;
         font-weight: 800 !important;
         text-align: center !important;
         margin-bottom: 0.35rem !important;
@@ -90,17 +86,7 @@ st.markdown("""
         font-size: 15.5px;
     }
 
-    /* Light, Catchy & Fresh Auth Container */
-    .mobile-login-card-light {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eff6ff 100%);
-        padding: 24px 20px 20px 20px;
-        border-radius: 22px;
-        border: 1.5px solid #cbd5e1;
-        box-shadow: 0 12px 28px -6px rgba(99, 102, 241, 0.14), 0 6px 14px -4px rgba(16, 185, 129, 0.08);
-        margin-bottom: 1.3rem;
-        text-align: center;
-    }
-
+    /* Hero Brand & Emblem Styles */
     .hero-brand-container {
         text-align: center;
         padding-top: 0.2rem;
@@ -222,7 +208,7 @@ st.markdown("""
         margin-top: 12px;
     }
 
-    /* OTP Display Box */
+    /* Verification OTP Notification Container */
     .otp-simulated-box {
         background: #f0fdf4;
         border: 2px dashed #22c55e;
@@ -235,27 +221,7 @@ st.markdown("""
         font-weight: 700;
     }
 
-    /* Google Brand Button */
-    button[aria-label*="Google"] {
-        background: #ffffff !important;
-        color: #1f2937 !important;
-        border: 1.8px solid #cbd5e1 !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06) !important;
-        font-weight: 700 !important;
-    }
-    button[aria-label*="Google"]::before {
-        content: "";
-        display: inline-block;
-        width: 22px;
-        height: 22px;
-        margin-right: 10px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23EA4335' d='M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z'/%3E%3Cpath fill='%234285F4' d='M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z'/%3E%3Cpath fill='%23FBBC05' d='M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z'/%3E%3Cpath fill='%2334A853' d='M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-size: contain;
-        vertical-align: middle;
-    }
-
-    /* WhatsApp Brand Button */
+    /* WhatsApp Button Styling */
     button[aria-label*="WhatsApp"] {
         background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
         color: #ffffff !important;
@@ -275,35 +241,15 @@ st.markdown("""
         vertical-align: middle;
     }
 
-    /* Facebook Brand Button */
-    button[aria-label*="Facebook"] {
-        background: linear-gradient(135deg, #1877F2 0%, #0d65d9 100%) !important;
-        color: #ffffff !important;
-        border: 1.8px solid #0b4eb1 !important;
-        box-shadow: 0 4px 12px rgba(24, 119, 242, 0.28) !important;
-        font-weight: 700 !important;
-    }
-    button[aria-label*="Facebook"]::before {
-        content: "";
-        display: inline-block;
-        width: 22px;
-        height: 22px;
-        margin-right: 10px;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23ffffff' d='M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.74V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-size: contain;
-        vertical-align: middle;
-    }
-
-    /* Email Brand Button */
-    button[aria-label*="Email (OTP)"] {
+    /* Email Brand Button Styling */
+    button[aria-label*="Email"] {
         background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%) !important;
         color: #ffffff !important;
         border: 1.8px solid #312e81 !important;
         box-shadow: 0 4px 12px rgba(79, 70, 229, 0.28) !important;
         font-weight: 700 !important;
     }
-    button[aria-label*="Email (OTP)"]::before {
+    button[aria-label*="Email"]::before {
         content: "";
         display: inline-block;
         width: 22px;
@@ -315,19 +261,6 @@ st.markdown("""
         vertical-align: middle;
     }
 
-    /* Active selection pill */
-    .active-provider-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 5px 14px;
-        border-radius: 9999px;
-        font-size: 0.88rem;
-        font-weight: 700;
-        margin-bottom: 12px;
-    }
-
-    /* Provider notification banner */
     .provider-banner {
         border-radius: 14px;
         padding: 12px 16px;
@@ -336,24 +269,14 @@ st.markdown("""
         font-weight: 700;
     }
     .provider-banner-email {
-        background-color: #f8fafc;
-        color: #334155;
-        border: 1.5px solid #cbd5e1;
-    }
-    .provider-banner-google {
-        background-color: #fef2f2;
-        color: #991b1b;
-        border: 1.5px solid #fca5a5;
+        background-color: #eff6ff;
+        color: #1e40af;
+        border: 1.5px solid #bfdbfe;
     }
     .provider-banner-whatsapp {
         background-color: #f0fdf4;
         color: #166534;
         border: 1.5px solid #86efac;
-    }
-    .provider-banner-facebook {
-        background-color: #eff6ff;
-        color: #1e40af;
-        border: 1.5px solid #93c5fd;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -531,7 +454,6 @@ def find_7day_transitions(start_utc_dt: datetime.datetime):
 if "user_info" not in st.session_state:
     st.session_state.user_info = None
 
-# Active OTP verification tracking
 if "pending_signup_otp" not in st.session_state:
     st.session_state.pending_signup_otp = None
 if "pending_signup_data" not in st.session_state:
@@ -541,15 +463,14 @@ if "pending_signin_otp" not in st.session_state:
     st.session_state.pending_signin_otp = None
 if "pending_signin_id" not in st.session_state:
     st.session_state.pending_signin_id = None
+if "pending_signin_name" not in st.session_state:
+    st.session_state.pending_signin_name = None
 
 if "signin_provider" not in st.session_state:
-    st.session_state.signin_provider = "Google"
+    st.session_state.signin_provider = "Email"
 if "signup_provider" not in st.session_state:
-    st.session_state.signup_provider = "Google"
+    st.session_state.signup_provider = "Email"
 
-# ---------------------------------------------------------
-# AUTHENTICATION SCREEN (SIGN IN VS SIGN UP AS NEW USER)
-# ---------------------------------------------------------
 if not st.session_state.user_info:
     st.markdown("""
     <div class="hero-brand-container">
@@ -623,7 +544,7 @@ if not st.session_state.user_info:
     </div>
     """, unsafe_allow_html=True)
 
-    # Clean Primary Mode Switch: Sign In vs Sign Up
+    # Primary Mode Switch: Sign In vs Sign Up
     auth_mode = st.radio(
         "Authentication Mode",
         ["🔑 Existing User: Sign In", "✨ New User: Sign Up"],
@@ -633,87 +554,28 @@ if not st.session_state.user_info:
 
     db = load_all_users()
 
-    # =========================================================
-    # OPTION 1: EXISTING USER SIGN IN
-    # =========================================================
     if "Sign In" in auth_mode:
         st.subheader("🔑 Sign In to Your Account")
-        st.caption("Choose your account provider to access your saved birth parameters.")
+        st.caption("Select your verification method to access your saved birth parameters.")
 
-        # 2x2 Brand Buttons Grid for Sign In
         btn_col1, btn_col2 = st.columns(2)
         with btn_col1:
-            if st.button("Google", key="btn_signin_google", use_container_width=True):
-                st.session_state.signin_provider = "Google"
-                st.rerun()
-            if st.button("WhatsApp", key="btn_signin_wa", use_container_width=True):
-                st.session_state.signin_provider = "WhatsApp"
+            if st.button("Email / Gmail", key="btn_signin_email", use_container_width=True):
+                st.session_state.signin_provider = "Email"
+                st.session_state.pending_signin_otp = None
                 st.rerun()
 
         with btn_col2:
-            if st.button("Facebook", key="btn_signin_fb", use_container_width=True):
-                st.session_state.signin_provider = "Facebook"
-                st.rerun()
-            if st.button("Email (OTP)", key="btn_signin_email", use_container_width=True):
-                st.session_state.signin_provider = "Email"
+            if st.button("WhatsApp", key="btn_signin_wa", use_container_width=True):
+                st.session_state.signin_provider = "WhatsApp"
+                st.session_state.pending_signin_otp = None
                 st.rerun()
 
         method = st.session_state.signin_provider
 
-        if method == "Google":
-            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign In with your Google / Gmail Account</div>', unsafe_allow_html=True)
-            google_email = st.text_input("Google Email Address", placeholder="e.g. username@gmail.com", key="signin_google_email")
-            if st.button("🚀 Continue with Google", use_container_width=True, type="primary"):
-                cleaned_id = google_email.strip().lower() if google_email else ""
-                if not cleaned_id or "@" not in cleaned_id:
-                    st.warning("⚠️ Please enter a valid Google email address.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this Google account. Please use the 'Sign Up as New User' option to create an account.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", cleaned_id.split("@")[0]),
-                        "provider": "Google"
-                    }
-                    st.rerun()
-
-        elif method == "WhatsApp":
-            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign In with your WhatsApp Mobile Number</div>', unsafe_allow_html=True)
-            wa_num = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signin_wa_num")
-            if st.button("💬 Continue with WhatsApp", use_container_width=True, type="primary"):
-                cleaned_id = wa_num.strip() if wa_num else ""
-                if not cleaned_id or len(cleaned_id) < 8:
-                    st.warning("⚠️ Please enter a valid registered mobile number.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this WhatsApp number. Please use the 'Sign Up as New User' option to register.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", "User"),
-                        "provider": "WhatsApp"
-                    }
-                    st.rerun()
-
-        elif method == "Facebook":
-            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign In with your Facebook Account</div>', unsafe_allow_html=True)
-            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signin_fb_id")
-            if st.button("📘 Continue with Facebook", use_container_width=True, type="primary"):
-                cleaned_id = fb_id.strip().lower() if fb_id else ""
-                if not cleaned_id:
-                    st.warning("⚠️ Please enter a valid Facebook email or ID.")
-                elif cleaned_id not in db:
-                    st.error("❌ No user details found for this Facebook account. Please use the 'Sign Up as New User' option.")
-                else:
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": db[cleaned_id].get("name", "User"),
-                        "provider": "Facebook"
-                    }
-                    st.rerun()
-
-        else:  # Email (with OTP)
-            st.markdown('<div class="provider-banner provider-banner-email">✉️ Sign In using your Registered Email & OTP</div>', unsafe_allow_html=True)
-            login_email = st.text_input("Registered Email Address", placeholder="e.g. yourname@gmail.com", key="signin_email")
+        if method == "Email":
+            st.markdown('<div class="provider-banner provider-banner-email">✉️ Sign In using your Registered Email / Gmail & OTP</div>', unsafe_allow_html=True)
+            login_email = st.text_input("Registered Email Address", placeholder="e.g. yourname@gmail.com", key="signin_email_input")
 
             if st.button("📨 Request Sign-In OTP", use_container_width=True, type="primary"):
                 cleaned_id = login_email.strip().lower() if login_email else ""
@@ -728,15 +590,15 @@ if not st.session_state.user_info:
                     st.session_state.pending_signin_name = db[cleaned_id].get("name", "User")
                     st.rerun()
 
-            if st.session_state.pending_signin_otp:
+            if st.session_state.pending_signin_otp and st.session_state.signin_provider == "Email":
                 st.markdown(f"""
                 <div class="otp-simulated-box">
                     📩 Verification OTP sent to <b>{st.session_state.pending_signin_id}</b>:<br>
-                    <span style="font-size: 1.4rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signin_otp}</span>
+                    <span style="font-size: 1.5rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signin_otp}</span>
                 </div>
                 """, unsafe_allow_html=True)
 
-                entered_otp = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signin_entered_otp")
+                entered_otp = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signin_entered_otp_email")
                 if st.button("✅ Verify OTP & Sign In", use_container_width=True, type="primary"):
                     if entered_otp.strip() == st.session_state.pending_signin_otp:
                         st.session_state.user_info = {
@@ -750,144 +612,73 @@ if not st.session_state.user_info:
                     else:
                         st.error("❌ Invalid OTP code entered. Please verify and try again.")
 
-    # =========================================================
-    # OPTION 2: NEW USER SIGN UP
-    # =========================================================
+        else:  # WhatsApp OTP Sign-In
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign In with your Registered WhatsApp Mobile & OTP</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("Registered WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signin_wa_input")
+
+            if st.button("💬 Request WhatsApp OTP", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid registered mobile number with country code.")
+                elif cleaned_id not in db:
+                    st.error("❌ No user details found for this WhatsApp number. Please use the 'Sign Up as New User' option to register.")
+                else:
+                    otp_code = str(random.randint(100000, 999999))
+                    st.session_state.pending_signin_otp = otp_code
+                    st.session_state.pending_signin_id = cleaned_id
+                    st.session_state.pending_signin_name = db[cleaned_id].get("name", "User")
+                    st.rerun()
+
+            if st.session_state.pending_signin_otp and st.session_state.signin_provider == "WhatsApp":
+                st.markdown(f"""
+                <div class="otp-simulated-box">
+                    💬 WhatsApp OTP sent to <b>{st.session_state.pending_signin_id}</b>:<br>
+                    <span style="font-size: 1.5rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signin_otp}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                entered_otp = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signin_entered_otp_wa")
+                if st.button("✅ Verify WhatsApp OTP & Sign In", use_container_width=True, type="primary"):
+                    if entered_otp.strip() == st.session_state.pending_signin_otp:
+                        st.session_state.user_info = {
+                            "user_id": st.session_state.pending_signin_id,
+                            "name": st.session_state.pending_signin_name,
+                            "provider": "WhatsApp"
+                        }
+                        st.session_state.pending_signin_otp = None
+                        st.session_state.pending_signin_id = None
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid OTP code entered. Please verify and try again.")
+
     else:
         st.subheader("✨ Sign Up as New User")
-        st.caption("Select your preferred registration method to create your profile.")
+        st.caption("Select your verification method to create your birth transit profile.")
 
-        # 2x2 Brand Buttons Grid for Sign Up
         signup_col1, signup_col2 = st.columns(2)
         with signup_col1:
-            if st.button("Google", key="btn_signup_google", use_container_width=True):
-                st.session_state.signup_provider = "Google"
-                st.rerun()
-            if st.button("WhatsApp", key="btn_signup_wa", use_container_width=True):
-                st.session_state.signup_provider = "WhatsApp"
+            if st.button("Email / Gmail", key="btn_signup_email", use_container_width=True):
+                st.session_state.signup_provider = "Email"
+                st.session_state.pending_signup_otp = None
                 st.rerun()
 
         with signup_col2:
-            if st.button("Facebook", key="btn_signup_fb", use_container_width=True):
-                st.session_state.signup_provider = "Facebook"
-                st.rerun()
-            if st.button("Email (OTP)", key="btn_signup_email", use_container_width=True):
-                st.session_state.signup_provider = "Email"
+            if st.button("WhatsApp", key="btn_signup_wa", use_container_width=True):
+                st.session_state.signup_provider = "WhatsApp"
+                st.session_state.pending_signup_otp = None
                 st.rerun()
 
         signup_method = st.session_state.signup_provider
 
-        if signup_method == "Google":
-            st.markdown('<div class="provider-banner provider-banner-google">🔴 Sign Up with Google / Gmail</div>', unsafe_allow_html=True)
-            google_email = st.text_input("Gmail Address", placeholder="e.g. yourname@gmail.com", key="signup_g_email")
-            google_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_g_name")
+        if signup_method == "Email":
+            st.markdown('<div class="provider-banner provider-banner-email">✉️ Register with your Email / Gmail & OTP Verification</div>', unsafe_allow_html=True)
+            signup_email = st.text_input("Email Address", placeholder="e.g. yourname@gmail.com", key="signup_email_input")
+            signup_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_name_input_email")
 
-            if st.button("🚀 Complete Google Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = google_email.strip().lower() if google_email else ""
-                cleaned_name = google_name.strip() if google_name else (cleaned_id.split("@")[0] if cleaned_id else "User")
-                
-                if not cleaned_id or "@" not in cleaned_id:
-                    st.warning("⚠️ Please provide a valid Gmail address.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "Google",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "Google"
-                    }
-                    st.rerun()
-
-        elif signup_method == "WhatsApp":
-            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Sign Up with WhatsApp Mobile</div>', unsafe_allow_html=True)
-            wa_num = st.text_input("WhatsApp Number", placeholder="e.g. +91 98765 43210", key="signup_wa_num")
-            wa_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_wa_name")
-
-            if st.button("💬 Complete WhatsApp Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = wa_num.strip() if wa_num else ""
-                cleaned_name = wa_name.strip() if wa_name else "User"
-
-                if not cleaned_id or len(cleaned_id) < 8:
-                    st.warning("⚠️ Please enter a valid mobile number.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with mobile '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "WhatsApp",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "WhatsApp"
-                    }
-                    st.rerun()
-
-        elif signup_method == "Facebook":
-            st.markdown('<div class="provider-banner provider-banner-facebook">🔵 Sign Up with Facebook Account</div>', unsafe_allow_html=True)
-            fb_id = st.text_input("Facebook Email or Mobile", placeholder="e.g. facebook.id@domain.com", key="signup_fb_id")
-            fb_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_fb_name")
-
-            if st.button("📘 Complete Facebook Sign Up", use_container_width=True, type="primary"):
-                cleaned_id = fb_id.strip().lower() if fb_id else ""
-                cleaned_name = fb_name.strip() if fb_name else "User"
-
-                if not cleaned_id:
-                    st.warning("⚠️ Please enter your Facebook email or ID.")
-                elif cleaned_id in db:
-                    st.error(f"⚠️ An account with '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
-                else:
-                    initial_profile = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "auth_provider": "Facebook",
-                        "dob": datetime.date(1990, 1, 1),
-                        "tob": datetime.time(12, 0),
-                        "place": "Chhatrapati Sambhajinagar, India",
-                        "lat": 19.8762,
-                        "lon": 75.3433,
-                        "tz_offset": 5.5,
-                        "nakshatra_idx": 1
-                    }
-                    save_user_profile(cleaned_id, initial_profile)
-                    st.session_state.user_info = {
-                        "user_id": cleaned_id,
-                        "name": cleaned_name,
-                        "provider": "Facebook"
-                    }
-                    st.rerun()
-
-        else:  # Email (with OTP Verification)
-            st.markdown('<div class="provider-banner provider-banner-email">✉️ Verify your Email with OTP</div>', unsafe_allow_html=True)
-            signup_email = st.text_input("Email Address", placeholder="e.g. yourname@gmail.com", key="signup_email")
-            signup_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_name")
-
-            if st.button("📨 Send Verification OTP", use_container_width=True, type="primary"):
+            if st.button("📨 Send Email Verification OTP", use_container_width=True, type="primary"):
                 cleaned_id = signup_email.strip().lower() if signup_email else ""
                 cleaned_name = signup_name.strip() if signup_name else "User"
-                
+
                 if not cleaned_id or "@" not in cleaned_id:
                     st.warning("⚠️ Please provide a valid email address.")
                 elif cleaned_id in db:
@@ -902,19 +693,18 @@ if not st.session_state.user_info:
                     }
                     st.rerun()
 
-            if st.session_state.pending_signup_otp:
+            if st.session_state.pending_signup_otp and st.session_state.signup_provider == "Email":
                 st.markdown(f"""
                 <div class="otp-simulated-box">
                     📩 Verification OTP sent to <b>{st.session_state.pending_signup_data['user_id']}</b>:<br>
-                    <span style="font-size: 1.4rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signup_otp}</span>
+                    <span style="font-size: 1.5rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signup_otp}</span>
                 </div>
                 """, unsafe_allow_html=True)
 
-                entered_code = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signup_entered_code")
+                entered_code = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signup_entered_code_email")
                 if st.button("✅ Verify OTP & Complete Sign Up", use_container_width=True, type="primary"):
                     if entered_code.strip() == st.session_state.pending_signup_otp:
                         new_user = st.session_state.pending_signup_data
-                        # Initialize and save template profile
                         initial_profile = {
                             "user_id": new_user["user_id"],
                             "name": new_user["name"],
@@ -935,11 +725,63 @@ if not st.session_state.user_info:
                     else:
                         st.error("❌ Invalid OTP entered. Please recheck the code.")
 
+        else:  # WhatsApp OTP Sign-Up
+            st.markdown('<div class="provider-banner provider-banner-whatsapp">🟢 Register with WhatsApp Number & OTP Verification</div>', unsafe_allow_html=True)
+            wa_num = st.text_input("WhatsApp Mobile Number", placeholder="e.g. +91 98765 43210", key="signup_wa_input")
+            wa_name = st.text_input("Your Full Name", placeholder="e.g. Okesh Sharma", key="signup_name_input_wa")
+
+            if st.button("💬 Send WhatsApp Verification OTP", use_container_width=True, type="primary"):
+                cleaned_id = wa_num.strip() if wa_num else ""
+                cleaned_name = wa_name.strip() if wa_name else "User"
+
+                if not cleaned_id or len(cleaned_id) < 8:
+                    st.warning("⚠️ Please enter a valid mobile number with country code.")
+                elif cleaned_id in db:
+                    st.error(f"⚠️ An account with mobile '{cleaned_id}' already exists! Please switch to 'Existing User: Sign In'.")
+                else:
+                    otp_code = str(random.randint(100000, 999999))
+                    st.session_state.pending_signup_otp = otp_code
+                    st.session_state.pending_signup_data = {
+                        "user_id": cleaned_id,
+                        "name": cleaned_name,
+                        "provider": "WhatsApp"
+                    }
+                    st.rerun()
+
+            if st.session_state.pending_signup_otp and st.session_state.signup_provider == "WhatsApp":
+                st.markdown(f"""
+                <div class="otp-simulated-box">
+                    💬 WhatsApp OTP sent to <b>{st.session_state.pending_signup_data['user_id']}</b>:<br>
+                    <span style="font-size: 1.5rem; letter-spacing: 4px; color: #166534;">{st.session_state.pending_signup_otp}</span>
+                </div>
+                """, unsafe_allow_html=True)
+
+                entered_code = st.text_input("Enter 6-digit OTP", placeholder="Enter OTP received", max_chars=6, key="signup_entered_code_wa")
+                if st.button("✅ Verify WhatsApp OTP & Complete Sign Up", use_container_width=True, type="primary"):
+                    if entered_code.strip() == st.session_state.pending_signup_otp:
+                        new_user = st.session_state.pending_signup_data
+                        initial_profile = {
+                            "user_id": new_user["user_id"],
+                            "name": new_user["name"],
+                            "auth_provider": "WhatsApp",
+                            "dob": datetime.date(1990, 1, 1),
+                            "tob": datetime.time(12, 0),
+                            "place": "Chhatrapati Sambhajinagar, India",
+                            "lat": 19.8762,
+                            "lon": 75.3433,
+                            "tz_offset": 5.5,
+                            "nakshatra_idx": 1
+                        }
+                        save_user_profile(new_user["user_id"], initial_profile)
+                        st.session_state.user_info = new_user
+                        st.session_state.pending_signup_otp = None
+                        st.session_state.pending_signup_data = None
+                        st.rerun()
+                    else:
+                        st.error("❌ Invalid OTP entered. Please recheck the code.")
+
     st.stop()
 
-# ---------------------------------------------------------
-# LOGGED-IN MOBILE DASHBOARD
-# ---------------------------------------------------------
 user_id = st.session_state.user_info["user_id"]
 user_display = st.session_state.user_info["name"]
 auth_provider = st.session_state.user_info.get("provider", "Email")
@@ -952,9 +794,8 @@ if (
 
 prof = st.session_state.current_profile
 
-# Sidebar Configuration for Profiles
 with st.sidebar:
-    provider_icon = "✉️" if auth_provider == "Email" else ("🔴" if auth_provider == "Google" else ("🟢" if auth_provider == "WhatsApp" else "🔵"))
+    provider_icon = "✉️" if auth_provider == "Email" else "🟢"
     st.markdown(f"**Signed in via {auth_provider} {provider_icon}**")
     st.code(user_id, language=None)
     
@@ -1030,7 +871,6 @@ with tab1:
         nak_name = NAKSHATRAS[t["nak_idx"]]
         cat, series = calculate_navtara(janma_idx, t["nak_idx"])
 
-        # Operational status symbols
         if cat in ["Vipat", "Pratyari", "Vadha"]:
             status_str = f"🔴 {cat}"
         elif cat == "Ati-Mitra":
