@@ -917,12 +917,9 @@ if st.session_state.current_page == "profile":
 
     nak_remedies_rendered = "".join([f"<div style='font-size:12.8px; color:#7c2d12; margin-bottom:4px;'>• {nr}</div>" for nr in nak_remedies])
     sec1_html = f"""<div class="light-card-profile">
-<div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #fed7aa; padding-bottom:8px; margin-bottom:12px;">
+<div style="border-bottom:1.5px solid #fed7aa; padding-bottom:8px; margin-bottom:12px;">
     <span style="font-weight:800; font-size:16px; color:#78350f;">
         {t('sec1_title', current_lang)}
-    </span>
-    <span class="badge-favorable" style="font-size:13px; padding:5px 12px;">
-        🌙 {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
     </span>
 </div>
 
