@@ -162,6 +162,7 @@ TRANSLATIONS = {
         "birth_details_sub": "Birth Information",
         "janma_star_label": "Janma Nakshatra",
         "moon_rashi_label": "Moon Sign (Janma Rashi)",
+        "nak_personality_title": "🌟 Janma Nakshatra Personality & Core Traits",
         "num_title": "🔢 Core Numerology Blueprint & Fixed Life Attributes",
         "mulank_label": "Mulank (Driver)",
         "bhagyank_label": "Bhagyank (Conductor)",
@@ -211,6 +212,7 @@ TRANSLATIONS = {
         "birth_details_sub": "जन्म विवरण",
         "janma_star_label": "जन्म नक्षत्र",
         "moon_rashi_label": "चन्द्र राशि",
+        "nak_personality_title": "🌟 जन्म नक्षत्र व्यक्तित्व एवं मूल स्वभाव",
         "num_title": "🔢 अंक ज्योतिष चक्र एवं मूल स्वभाव विश्लेषण",
         "mulank_label": "मूलांक (स्वभाव)",
         "bhagyank_label": "भाग्यांक (भाग्य पथ)",
@@ -260,6 +262,7 @@ TRANSLATIONS = {
         "birth_details_sub": "जन्म माहिती",
         "janma_star_label": "जन्म नक्षत्र",
         "moon_rashi_label": "चंद्र रास",
+        "nak_personality_title": "🌟 जन्म नक्षत्र व्यक्तिमत्त्व व स्वभाव वैशिष्ट्ये",
         "num_title": "🔢 अंकशास्त्र रूपरेषा व स्थायी स्वभाव फळ",
         "mulank_label": "मूलांक (स्वभाव)",
         "bhagyank_label": "भाग्यांक (भाग्य मार्ग)",
@@ -309,169 +312,187 @@ TRANSLATIONS = {
         "birth_details_sub": "જન્મ વિગતો",
         "janma_star_label": "જન્મ નક્ષત્ર",
         "moon_rashi_label": "ચંદ્ર રાશિ",
+        "nak_personality_title": "🌟 જન્મ નક્ષત્ર વ્યક્તિત્વ અને મૂળ સ્વભાવ",
         "num_title": "🔢 અંકશાસ્ત્ર રૂપરેખા અને મૂળ સ્વભાવ ફળ",
         "mulank_label": "મૂળાંક (સ્વભાવ)",
-        "bhagyank_label": "ભાગ્યાંક (ભાગ્ય પથ)",
-        "namank_label": "નામાંક (નામ પ્રભાવ)",
-        "fixed_prediction_title": "✨ આજીવન અંકશાસ્ત્ર ભવિષ્ય વિશ્લેષણ",
-        "paya_card_title": "🪐 વર્તમાન શનિ પાયા (ચરણ ફળ અને આધાર)",
-        "transit_timeline_lbl": "વર્તમાન ગોચર સમયગાળો (Timeline)",
-        "paya_impact_lbl": "શનિ પાયા પ્રભાવ અને જીવન ફળ",
-        "paya_remedies_lbl": "🪔 શનિ પાયા શાંતિ અને સુરક્ષાત્મક વૈદિક ઉપાયો",
-        "btn_view_forecast": "🔮 આજનું અને આગામી ૭ દિવસનું ભવિષ્ય જુઓ ➔",
-        "btn_back_profile": "⬅️ જાતક પ્રોફાઇલ પર પાછા જાઓ",
-        "forecast_page_title": "🔮 વૈશ્વિક નવતારા ગોચર અને દૈનિક ફળાદેશ",
-        "today_card_title": "🌟 આજનું સક્રિય ત્રિકોણીય વૈશ્વિક માર્ગદર્શન",
-        "current_active_nak": "સક્રિય ચંદ્ર નક્ષત્ર",
-        "current_tara": "વર્તમાન નવતારા સ્થિતિ",
-        "saturn_vahan_lbl": "આજનું શનિ વાહન",
-        "personal_day_lbl": "વ્યક્તિગત દિવસ અંક સ્પંદન",
-        "today_directives": "🎯 આજના મહત્વપૂર્ણ જ્યોતિષીય નિર્દેશ",
-        "today_remedies_lbl": "🪔 આજના ત્રિ-સ્તરીય વૈદિક ઉપાયો",
-        "navtara_matrix_title": "🗓️ ૭-દિવસીય ચંદ્ર ગોચર અને દૈનિક પત્રક",
-        "matrix_instruction": "વિગતવાર ભવિષ્ય અને ઉપાયો જોવા માટે નીચે આપેલા કોઈપણ દિવસ પર ક્લિક કરો.",
-        "col_status": "સ્થિતિ",
-        "col_window": "સમયગાળો (IST)",
-        "col_nak": "ચંદ્ર નક્ષત્ર",
-        "col_series": "નવતારા ચક્ર",
-        "col_vahan": "શનિ વાહન",
-        "planets_btn": "🌌 ગ્રહ સ્થિતિ જુઓ (લાહિરી)",
-        "planets_hide_btn": "🔼 ગ્રહ સ્થિતિ છુપાવો",
-        "window_lbl": "સક્રિય સમય",
-        "series_lbl": "શ્રેણી",
-        "predictions_lbl": "વિગતવાર ભવિષ્ય",
-        "remedies_lbl": "આ દિવસ માટે ખાસ ઉપાયો"
+NAKSHATRA_TRAITS = {
+    0: {  # Ashwini
+        "en": "Pioneering, swift, energetic, and naturally inclined towards healing and adventure. Possesses a strong desire for independence and quick execution.",
+        "hi": "स्फूर्तिवान, साहसी, त्वरित निर्णय लेने वाले एवं प्राकृतिक आरोग्य प्रदाता। स्वतंत्रता प्रिय और किसी भी कार्य को तत्परता से आरंभ करने में कुशल।",
+        "mr": "उत्साही, धाडसी, तत्पर आणि स्वतंत्र विचारांचे. नवीन संकल्पनांना त्वरित मूर्त रूप देण्याची जन्मजात क्षमता.",
+        "gu": "ઉત્સાહી, સાહસિક, ઝડપી નિર્ણયો લેનાર અને કુદરતી ઉપચારક. નવીન કાર્યોની ઝડપી શરૂઆત કરવામાં માહિર."
+    },
+    1: {  # Bharani
+        "en": "Governed by Venus and Yama. High personal magnetism, courageous, uncompromising truth-seeker, capable of handling immense responsibility and radical transformations.",
+        "hi": "शुक्र एवं यम के प्रभाव से युक्त। चुंबकीय व्यक्तित्व, सत्यप्रिय, साहसी एवं गंभीर उत्तरदायित्व निभाने में दक्ष। जीवन में बड़े रूपांतरणों से गुजरकर दृढ़ता प्राप्त करते हैं।",
+        "mr": "शुक्र व यम यांच्या प्रभावाखाली. आकर्षक व्यक्तिमत्त्व, स्पष्टवक्ते, निष्ठावान आणि कठीण प्रसंगांना आत्मविश्वासाने सामोरे जाणारे.",
+        "gu": "શુક્ર અને યમનું આધિપત્ય. આકર્ષક, સત્યવાદી, સાહસી અને અતિ મહત્વની જવાબદારીઓ સુપેરે નિભાવનાર દ્રઢ વ્યક્તિત્વ."
+    },
+    2: {  # Krittika
+        "en": "Sharp intellect, heroic willpower, direct and purifying presence. Natural leader with a fiery determination to cut through deception.",
+        "hi": "तीक्ष्ण बुद्धि, प्रखर इच्छाशक्ति एवं तेजवान व्यक्तित्व। सत्य के प्रति निष्ठावान, नेतृत्व क्षमता से परिपूर्ण और अन्याय का दृढ़ विरोध करने वाले।",
+        "mr": "तीक्ष्ण बुद्धिमत्ता, प्रखर नेतृत्व आणि निडर स्वभाव. सत्याची बाजू ठामपणे मांडणारे आणि शिस्तप्रिय.",
+        "gu": "તેજસ્વી બુદ્ધિ, અડગ મનોબળ અને નેતૃત્વ ગુણ. સત્ય માટે અડગ રહેનાર અને શિસ્તબદ્ધ વ્યક્તિત્વ."
+    },
+    3: {  # Rohini
+        "en": "Charming, artistic, grounded, and emotionally nurturing. Possesses exceptional aesthetic vision, persuasive speech, and high creative elegance.",
+        "hi": "आकर्षक, कलाप्रेमी, स्नेही और पोषणकर्ता। उच्च सौंदर्य दृष्टि, मधुर वाणी एवं पारिवारिक व भौतिक समृद्धि को आकर्षित करने वाले।",
+        "mr": "कलाप्रेमी, आकर्षक, भावनिक समतोल आणि समृद्धी आकर्षित करणारे. मधुर संभाषण आणि सर्जनशीलता हे मूळ गुण.",
+        "gu": "કળાપ્રેમી, આકર્ષક, સૌમ્ય અને સર્જનાત્મક. મધુર વાણી અને સૌંદર્ય પ્રત્યે ઊંડો પ્રેમ ધરાવતું વ્યક્તિત્વ."
+    },
+    4: {  # Mrigashira
+        "en": "Inquisitive, perceptive, gentle, and a perpetual seeker of knowledge and truth. Highly adaptable, communicative, and socially charming.",
+        "hi": "जिज्ञासु, शोधक प्रवृत्ति, सौम्य और निरंतर ज्ञान पिपासु। अनुकूलनशील, स्पष्ट वक्ता और संवेदनशील व्यक्तित्व।",
+        "mr": "जिज्ञासू, संशोधक वृत्ती, मनमिळाऊ आणि सदैव ज्ञानप्राप्तीची आवड बाळगणारे. उत्तम संवादकौशल्य.",
+        "gu": "જિજ્ઞાસુ, સંશોધક સ્વભાવ, નમ્ર અને ઉત્તમ સંવાદક. સતત નવી બાબતો શીખવાની ધગશ ધરાવનાર."
+    },
+    5: {  # Ardra
+        "en": "Sharp analytical power, intense emotional depth, resilient in crises. Excels in cutting-edge research, technology, and transformative problem-solving.",
+        "hi": "तीक्ष्ण विश्लेषणात्मक क्षमता, आंतरिक गहराई एवं संकटों से उबरने में सक्षम। तकनीक, अनुसंधान एवं जटिल समस्याओं के समाधान में कुशल।",
+        "mr": "सखोल विश्लेषक, आव्हानांवर मात करणारे आणि संकटसमयी संयम राखणारे. तंत्रज्ञान व संशोधनात आघाडीवर.",
+        "gu": "ઊંડા વિશ્લેષક, પડકારો સામે મક્કમ રહેનાર અને સંશોધનમાં અગ્રેસર. મુશ્કેલ પરિસ્થિતિઓમાં પણ અડગ."
+    },
+    6: {  # Punarvasu
+        "en": "Benevolent, optimistic, resilient, and spiritually grounded. Possesses the unique ability to renew oneself and bounce back from any setback.",
+        "hi": "उदार, आशावादी, सात्विक एवं आध्यात्मिक दृष्टि। जीवन के उतार-चढ़ावों से पुनः उठ खड़े होने और सबको साथ लेकर चलने की अद्भुत क्षमता।",
+        "mr": "सकारात्मक, परोपकारी, शांत आणि पुनरुत्थानाची विलक्षण ताकद बाळगणारे. अध्यात्म आणि नीतिमूल्यांची आवड.",
+        "gu": "ઉદાર, આશાવાદી, પુનરાગમનની અદભુત ક્ષમતા અને આધ્યાત્મિક વિચારો ધરાવનાર વ્યક્તિત્વ."
+    },
+    7: {  # Pushya
+        "en": "Nurturing, ethically steadfast, disciplined, and deeply wise. Known as the king of Nakshatras; grants dependable guidance, patience, and lasting prosperity.",
+        "hi": "पोषणकर्ता, धर्मपरायण, अनुशासित एवं परम विवेकशील। नक्षत्रों का राजा; विश्वसनीय मित्र, धैर्यवान मार्गदर्शक एवं स्थायी प्रगति प्रदाता।",
+        "mr": "सर्वश्रेष्ठ नक्षत्र, मार्गदर्शक, संयमी आणि अत्यंत प्रामाणिक. कुटुंब व समाजासाठी आधारस्तंभ.",
+        "gu": "પોષક, ધાર્મિક, અનુશાસિત અને જ્ઞાની. નક્ષત્રોનો રાજા; ધીરજવાન સલાહકાર અને સ્થિર પ્રગતિ કરનાર."
+    },
+    8: {  # Ashlesha
+        "en": "Deeply intuitive, strategic, protective, and mentally formidable. Possesses penetrating psychological insight and formidable defensive resilience.",
+        "hi": "गहन अंतर्दृष्टि, कूटनीतिक दक्षता, सतर्क और रणनीतिक विचारक। मानवीय मनोविज्ञान को समझने और अपनी सीमाओं की रक्षा करने में अद्वितीय।",
+        "mr": "तीव्र अंतर्ज्ञान, मुत्सद्दी, सावध आणि धोरणी. मानवी स्वभाव चटकन ओळखण्याची क्षमता.",
+        "gu": "ઊંડી આંતરસૂઝ, વ્યૂહાત્મક વિચારક અને રક્ષણાત્મક સ્વભાવ. લોકોના મનની વાત તુરંત પારખી લેનાર."
+    },
+    9: {  # Magha
+        "en": "Dignified, regal, commanding, and connected to ancestral roots. Naturally authoritative with high self-respect and strong moral duty.",
+        "hi": "राजसी स्वभाव, स्वाभिमानी, गौरवशाली एवं पैतृक संस्कारों से युक्त। स्वाभाविक नेतृत्व, मर्यादा का पालन और सामाजिक सम्मान के धनी।",
+        "mr": "राजेशाही रुबाब, स्वाभिमानी, पूर्वजांच्या परंपरेचा अभिमान बाळगणारे आणि प्रभावी नेतृत्व करणारे.",
+        "gu": "રાજસી પ્રભાવ, સ્વાભિમાની, નેતૃત્વ ગુણોથી ભરપૂર અને કુળપરંપરાને જાળવનાર આદરણીય વ્યક્તિત્વ."
+    },
+    10: {  # Purva Phalguni
+        "en": "Warm, charismatic, artistic, and generous. Enjoys refined pleasures, social gatherings, harmonious partnerships, and creative endeavors.",
+        "hi": "उदार, आकर्षक, कलाप्रिय एवं स्नेहमयी। जीवन का आनंद लेने, संबंधों को संजोने और रचनात्मक कार्यों में विशेष रुचि रखने वाले।",
+        "mr": "आनंदी, कलाप्रेमी, उदार आणि मैत्रीपूर्ण संबंध जपणारे. सामाजिक प्रतिष्ठा आणि सौंदर्यदृष्टीचे धनी.",
+        "gu": "આનંદી, આકર્ષક, કળાપ્રેમી અને ઉદાર. સંબંધોમાં મધુરતા અને જીવનનો ઉત્સાહ જાળવનાર."
+    },
+    11: {  # Uttara Phalguni
+        "en": "Steadfast, trustworthy, philanthropic, and honorable. Excels in establishing enduring agreements, structured leadership, and service to society.",
+        "hi": "सदाचारी, सत्यनिष्ठ, परोपकारी एवं सम्मानित। दीर्घकालिक मित्रताओं, वचनबद्धता और न्यायपूर्ण नेतृत्व के लिए जाने जाते हैं।",
+        "mr": "विश्वासू, कर्तव्यदक्ष, परोपकारी आणि न्यायाची चाड असणारे. दिलेल्या शब्दाला जागणारे व्यक्तिमत्त्व.",
+        "gu": "વિશ્વાસુ, કર્તવ્યનિષ્ઠ, પરોપકારી અને વચનપાલક. સ્થિર અને ન્યાયપૂર્ણ નેતૃત્વ કરનાર."
+    },
+    12: {  # Hasta
+        "en": "Skillful, resourceful, dexterous, and intellectually witty. Possesses the golden touch for detailed craft, negotiations, and systematic work.",
+        "hi": "दक्ष, कार्यकुशल, बुद्धिमान एवं व्यावहारिक। हस्तकला, योजना निर्माण, व्यापार एवं समाधानपरक कार्यों में अद्वितीय निपुणता।",
+        "mr": "कलाकुशल, व्यवहारी, चतुर आणि अचूक नियोजन करणारे. कोणत्याही समस्येवर त्वरित तोडगा काढणारे.",
+        "gu": "કુશળ, વ્યવહારુ, બુદ્ધિશાળી અને આયોજનબદ્ધ. કાર્યોમાં ચોકસાઈ અને રચનાત્મકતા લાવનાર."
+    },
+    13: {  # Chitra
+        "en": "Brilliant architect, aesthetic visionary, magnetic, and perfectionist. Driven by a desire to structure, build, and adorn the world with beauty.",
+        "hi": "सौंदर्यदृष्टा, सृजनशील, आकर्षक एवं वास्तुकार बुद्धि। हर कार्य में पूर्णता और सुंदरता लाने वाले; स्वतंत्र और आत्मविश्वासी।",
+        "mr": "सर्जनशील, आकर्षक, परिपूर्णतेची आवड आणि उत्तम सौंदर्यदृष्टी बाळगणारे स्वतंत्र व्यक्तिमत्त्व.",
+        "gu": "સર્જનાત્મક, કળાપારખુ, આકર્ષક અને પરફેક્શનિસ્ટ. કાર્યોને સુંદર અને વ્યવસ્થિત રૂપ આપનાર."
+    },
+    14: {  # Swati
+        "en": "Independent, diplomatic, flexible, and visionary. Values freedom, excels in business networking, fair trade, and graceful communication.",
+        "hi": "स्वतंत्र, कूटनीतिज्ञ, लचीले और दूरदर्शी। स्वतंत्रता प्रिय, निष्पक्ष व्यापार, संवाद और सामाजिक संबंधों में कुशल।",
+        "mr": "स्वतंत्र विचारांचे, मुत्सद्दी, लवचिक आणि दूरगामी विचार करणारे. उत्तम व्यावसायिक कौशल्य.",
+        "gu": "સ્વતંત્ર, મુત્સદ્દી, દૂરંદેશી અને અનુકૂલનશીલ. વ્યવસાયિક સંબંધો અને સંવાદમાં નિપુણ."
+    },
+    15: {  # Vishakha
+        "en": "Ambitious, single-minded, goal-oriented, and intensely determined. Focuses relentless energy until objectives are fully conquered.",
+        "hi": "महत्वाकांक्षी, एकाग्रचित्त, लक्ष्य-उन्मुख एवं अथक परिश्रमी। जिस कार्य का संकल्प लेते हैं, उसे पूर्ण करके ही दम लेते हैं।",
+        "mr": "ध्येयवेडे, चिकाटी असलेले, महत्त्वाकांक्षी आणि एकाग्र. ठरवलेले उद्दिष्ट साध्य करणारे खंबीर व्यक्तिमत्त्व.",
+        "gu": "મહત્વાકાંક્ષી, અડગ, લક્ષ્ય-કેન્દ્રી અને પરિશ્રમી. ધારેલું કામ પૂરું કરીને જ જંપનાર."
+    },
+    16: {  # Anuradha
+        "en": "Devoted, collaborative, friendly, and spiritually sensitive. Capable of uniting diverse groups and thriving even in distant lands.",
+        "hi": "मैत्रीपूर्ण, निष्ठावान, आध्यात्मिक एवं सहयोगशील। विपरीत परिस्थितियों में भी सामंजस्य बनाने और विदेशी संपर्कों से लाभ पाने में दक्ष।",
+        "mr": "मित्रता जपणारे, प्रामाणिक, आध्यात्मिक आणि सहकार्याची भावना असणारे. सर्वांना एकत्र आणण्याची हातोटी.",
+        "gu": "મૈત્રીપૂર્ણ, વફાદાર, સંવેદનશીલ અને આધ્યાત્મિક. પ્રતિકૂળતામાં પણ સંતુલન જાળવી રાખનાર."
+    },
+    17: {  # Jyeshtha
+        "en": "Protective, elder-like authority, formidable courage, and perceptive. Natural defender of family and high-stakes interests.",
+        "hi": "रक्षक, वरिष्ठता का भाव, अदम्य साहसी और सतर्क। परिवार और सहयोगियों के सुरक्षा कवच, अधिकारपूर्ण नेतृत्व के धनी।",
+        "mr": "ज्येष्ठता, धीरोदात्त, कुटुंबवत्सल आणि संकटात आधार देणारे प्रभावी व्यक्तिमत्त्व.",
+        "gu": "રક્ષક, વડીલ જેવી પરિપક્વતા, સાહસી અને પરિસ્થિતિ પર કાબૂ મેળવવાની ઉત્તમ ક્ષમતા ધરાવનાર."
+    },
+    18: {  # Mula
+        "en": "Profound, truth-seeking, radical investigator, penetrating the very root of matters. Capable of fearless transformation and philosophical depth.",
+        "hi": "गहन अन्वेषक, सत्यनिष्ठ, मूल कारणों तक पहुँचने वाले। निर्भीक, पारंपरिक सीमाओं से परे सोचने वाले और दार्शनिक दृष्टि संपन्न।",
+        "mr": "सखोल विचारवंत, मूळापर्यंत जाणारे आणि निर्भय. तत्त्वज्ञान आणि संशोधनात विशेष गती.",
+        "gu": "ઊંડા અભ્યાસુ, સત્યશોધક, નિર્ભીક અને મૂળ સુધી જઈને સમસ્યાઓનો ઉકેલ લાવનાર દ્રષ્ટા."
+    },
+    19: {  # Purva Ashadha
+        "en": "Invincible spirit, charismatic orator, optimistic, and proud. Inspires loyalty, wins debates, and thrives in challenging journeys.",
+        "hi": "अपराजेय संकल्प, प्रभावशाली वक्ता, आशावादी और स्वाभिमानी। दूसरों को प्रेरित करने और जनसमर्थन प्राप्त करने में निपुण।",
+        "mr": "अजिंक्य इच्छाशक्ती, प्रभावी वक्ते, आशावादी आणि स्वाभिमानी. संकटातही आत्मविश्वास न गमावणारे.",
+        "gu": "અપરાજય મનોબળ, પ્રભાવશાળી વક્તા, આશાવાદી અને સ્વાભિમાની. લોકોને પ્રેરણા આપનાર."
+    },
+    20: {  # Uttara Ashadha
+        "en": "Virtuous, patient, enduring, and victorious through righteousness. Known for unwavering integrity, modesty, and universal respect.",
+        "hi": "धैर्यवान, सत्यप्रिय, नीतिवान एवं दीर्घकालिक विजयी। उच्च चारित्रिक निष्ठा, विनम्रता और समाज में स्थायी सम्मान प्राप्त करने वाले।",
+        "mr": "संयमी, चारित्र्यसंपन्न, न्यायप्रिय आणि खात्रीशीर यश मिळवणारे. समाजात आदराचे स्थान असणारे व्यक्तिमत्त्व.",
+        "gu": "સંયમી, નીતિવાન, ધૈર્યવાન અને સત્યના માર્ગે વિજય મેળવનાર. સમાજમાં આદરણીય સ્થાન પ્રાપ્ત કરનાર."
+    },
+    21: {  # Shravana
+        "en": "Attentive listener, scholarly, wise, and devoted to oral tradition and learning. Possesses remarkable memory and organizational acumen.",
+        "hi": "उत्तम श्रोता, विद्वान, विद्यानुरागी एवं विवेकशील। गहन स्मरणशक्ति, संगठनात्मक कौशल और सुसंस्कृत आचरण के प्रतीक।",
+        "mr": "उत्कृष्ट श्रोता, अभ्यासू, सुसंस्कृत आणि उत्तम स्मरणशक्ती असलेले. ज्ञान संपादन आणि प्रसारात आघाडीवर.",
+        "gu": "સારો શ્રોતા, વિદ્વાન, સ્મરણશક્તિમાં તેજ અને જ્ઞાનપ્રિય. વ્યવસ્થિત અને સન્માનનીય જીવનશૈલી ધરાવનાર."
+    },
+    22: {  # Dhanishta
+        "en": "Rhythmic, prosperous, courageous, and philanthropic. Naturally inclined towards music, real estate, community leadership, and wealth creation.",
+        "hi": "समृद्धिदायक, साहसी, संगीत व कला प्रेमी एवं उदार। सामाजिक नेतृत्व, अचल संपत्ति निर्माण और मान-सम्मान के धनी।",
+        "mr": "उदार, संगीत व कलाप्रेमी, संपत्ती व कीर्ती संपादन करणारे आणि समाजात सन्मान मिळवणारे.",
+        "gu": "ધનવાન, સાહસિક, સંગીતપ્રેમી અને ઉદાર. રિયલ એસ્ટેટ, વ્યવસાય અને નેતૃત્વમાં આગળ વધનાર."
+    },
+    23: {  # Shatabhisha
+        "en": "Visionary, secretive, independent healer, and philosophical thinker. Unravels deep scientific, occult, or astronomical enigmas.",
+        "hi": "दूरदर्शी, रहस्यमयी, स्वतंत्र विचारक एवं शोधक। गूढ़ विज्ञान, आरोग्य विद्या और जीवन की सूक्ष्म गुत्थियों को सुलझाने में कुशल।",
+        "mr": "दूरदृष्टी असलेले, गूढ ज्ञान व विज्ञानाची आवड असणारे आणि स्वतंत्र वृत्तीचे संशोधक.",
+        "gu": "દૂરંદેશી, રહસ્યમયી, સ્વતંત્ર વિચારક અને ગૂઢ વિદ્યા તેમજ વિજ્ઞાનમાં ઊંડો રસ ધરાવનાર."
+    },
+    24: {  # Purva Bhadrapada
+        "en": "Passionate, philosophically intense, transformative, and sincere. Dedicated to lofty ideals and unyielding in times of profound change.",
+        "hi": "गंभीर, दार्शनिक, तपस्वी स्वभाव और आदर्शवादी। उच्च सिद्धांतों के प्रति समर्पित, निष्कपट और आंतरिक रूपांतरण के संवाहक।",
+        "mr": "तत्त्वनिष्ठ, तीव्र वैचारिक क्षमता आणि अंतर्मुख. आदर्श मूल्यांसाठी सर्वस्व पणाला लावणारे.",
+        "gu": "તત્વચિંતક, ગંભીર, આદર્શવાદી અને પરિવર્તનશીલ. પોતાના સિદ્ધાંતો માટે અડગ રહેનાર."
+    },
+    25: {  # Uttara Bhadrapada
+        "en": "Serene, wise, compassionate, and self-controlled. Possesses deep psychic stability, generosity, and mastery over human passions.",
+        "hi": "शांत, विवेकी, करुणामयी और आत्म-नियंत्रित। गहन मानसिक स्थिरता, परोपकार और आध्यात्मिक ज्ञान से संपन्न संतुलित व्यक्तित्व।",
+        "mr": "शांत, संयमी, दयाळू आणि आध्यात्मिक परिपक्वता असलेले. समाधानाचा आणि स्थिरतेचा मार्ग निवडणारे.",
+        "gu": "શાંત, દયાળુ, સંયમી અને આધ્યાત્મિક જ્ઞાનથી સમૃદ્ધ. બીજાનું ભલું કરવાની સતત ભાવના રાખનાર."
+    },
+    26: {  # Revati
+        "en": "Gentle, compassionate, highly intuitive, and artistic. Safe protector of wayfarers, deeply empathetic, and spiritually liberated.",
+        "hi": "सौम्य, दयालु, कलात्मक और परम अंतर्ज्ञानी। दूसरों के प्रति असीम संवेदना, सुरक्षित मार्गदर्शक और आध्यात्मिक मोक्ष के अभिलाषी।",
+        "mr": "अत्यंत दयाळू, संवेदनशील, कल्पक आणि आध्यात्मिक प्रवृत्तीचे. सर्वांना प्रेम व मार्गदर्शन देणारे.",
+        "gu": "સૌમ્ય, પરોપકારી, કળાપ્રેમી અને ઊંડી આંતરસૂઝ ધરાવનાર. સૌનું કલ્યાણ ઈચ્છનાર પવિત્ર હૃદય."
     }
 }
 
-def t(key: str, lang: str = "en") -> str:
-    lang_dict = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
-    return lang_dict.get(key, TRANSLATIONS["en"].get(key, key))
+def calculate_birth_chart(dob: datetime.date, tob: datetime.time, tz_offset_hours: float = 5.5):
+    """Calculates Moon Nakshatra, Pada, and Moon Rashi from DOB and TOB using Swiss Ephemeris Lahiri."""
+    birth_dt_local = datetime.datetime.combine(dob, tob)
+    birth_dt_utc = birth_dt_local - datetime.timedelta(hours=tz_offset_hours)
+    jd_birth = dt_to_jd(birth_dt_utc)
+    moon_lon = get_sidereal_lon(jd_birth, swe.MOON)
+    nak_idx, pada = lon_to_nakshatra(moon_lon)
+    rashi_idx, rashi_deg = lon_to_rashi(moon_lon)
+    return nak_idx, pada, rashi_idx, rashi_deg
 
-NAKSHATRAS = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni",
-    "Uttara Phalguni", "Hasta", "Chitra", "Swati", "Vishakha",
-    "Anuradha", "Jyeshtha", "Mula", "Purva Ashadha", "Uttara Ashadha",
-    "Shravana", "Dhanishta", "Shatabhisha", "Purva Bhadrapada",
-    "Uttara Bhadrapada", "Revati"
-]
-
-RASHIS = [
-    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
-    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
-    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
-]
-
-NAVTARA_NAMES = [
-    "Janma", "Sampat", "Vipat", "Kshema", "Pratyari",
-    "Sadhana", "Vadha", "Mitra", "Ati-Mitra"
-]
-
-NAVTARA_DESCRIPTIONS = {
-    "en": {
-        "Janma": "Self / Physical Vitality / Grounding & New Beginnings",
-        "Sampat": "Wealth / Material Expansion / Positive Financial Inflows",
-        "Vipat": "Obstacles / High Friction / Caution & Restraint Required",
-        "Kshema": "Well-being / Comfort / Protection & Easy Progress",
-        "Pratyari": "Resistance / Confrontations / Diplomatic Restraint Needed",
-        "Sadhana": "Achievement / Focused Productivity / Milestone Success",
-        "Vadha": "Destruction / High Vulnerability / Complete Postponement",
-        "Mitra": "Friendship / Collaborative Harmony / Beneficial Help",
-        "Ati-Mitra": "Supreme Support / Peak Auspicious Opportunity"
-    },
-    "hi": {
-        "Janma": "स्व / शारीरिक स्वास्थ्य / नई शुरुआत एवं संतुलन",
-        "Sampat": "धन / आर्थिक विस्तार / भौतिक लाभ एवं समृद्धि",
-        "Vipat": "बाधाएं / अप्रत्याशित जोखिम / अत्यधिक सावधानी का समय",
-        "Kshema": "कल्याण / सुख-शांति / सुरक्षा एवं स्वास्थ्य लाभ",
-        "Pratyari": "विरोध / मतभेद / वाद-विवाद से दूर रहने का समय",
-        "Sadhana": "सिद्धि / लक्ष्य प्राप्ति / कार्य में पूर्ण सफलता",
-        "Vadha": "हानि / संवेदनशीलता / पूर्ण संयम एवं शांति आवश्यक",
-        "Mitra": "मित्रता / सौहार्दपूर्ण सहयोग / शुभ संपर्क",
-        "Ati-Mitra": "अति शुभ / परम सहयोग / महत्वपूर्ण निर्णयों के लिए श्रेष्ठ"
-    },
-    "mr": {
-        "Janma": "स्व / शारीरिक स्वास्थ्य / नवीन सुरुवात व समतोल",
-        "Sampat": "संपत्ती / आर्थिक प्रगती / लाभ व ऐश्वर्य",
-        "Vipat": "अडचणी / संकट / अनपेक्षित चढ-उतार (सावध राहा)",
-        "Kshema": "कल्याण / सुख-समाधान / सुरक्षा व आरोग्य लाभ",
-        "Pratyari": "विरोध / मतभेद / वादापासून दूर राहण्याची गरज",
-        "Sadhana": "साधना / उद्दिष्ट पूर्ती / कामात मोठे यश",
-        "Vadha": "नुकसान / संवेदनशीलता / पूर्ण संयम बाळगा",
-        "Mitra": "मित्रत्व / अनुकूल सहकार्य / शुभ संबंध",
-        "Ati-Mitra": "अति शुभ / सर्वोच्च सहकार्य / महत्त्वाच्या निर्णयांसाठी उत्तम"
-    },
-    "gu": {
-        "Janma": "સ્વ / શારીરિક સ્વાસ્થ્ય / નવી શરૂઆત અને સંતુલન",
-        "Sampat": "ધન / આર્થિક પ્રગતિ / લાભ અને સમૃદ્ધિ",
-        "Vipat": "અડચણો / જોખમ / સાવધાની રાખવાનો સમય",
-        "Kshema": "કલ્યાણ / સુખ-શાંતિ / સુરક્ષા અને સ્વાસ્થ્ય લાભ",
-        "Pratyari": "વિરોધ / મતભેદ / વિવાદોથી દૂર રહેવાની જરૂર",
-        "Sadhana": "સાધના / સિદ્ધિ / કાર્યમાં ઉત્કૃષ્ટ સફળતા",
-        "Vadha": "હાનિ / સંવેદનશીલતા / શાંતિ અને સંયમ જરૂરી",
-        "Mitra": "મિત્રતા / સાનુકૂળ સહયોગ / શુભ સંબંધો",
-        "Ati-Mitra": "અતિ શુભ / ઉત્તમ સહયોગ / મહત્વના કાર્યો માટે શ્રેષ્ઠ"
-    }
-}
-
-SHANI_VAHANS = {
-    "en": {
-        1: {"name": "Ghoda (Horse) 🐴", "nature": "Speed & Quick Victory", "desc": "Swift movement, high stamina, triumph over rivals, and fast closure of pending tasks."},
-        2: {"name": "Gadha (Donkey) 🫏", "nature": "Heavy Labor & Fatigue", "desc": "High workload with delayed applause. Requires continuous patience and steady pacing."},
-        3: {"name": "Siyar (Jackal) 🦊", "nature": "Vigilance & Risk Alert", "desc": "Alertness required against deceptive terms, speculation, or office politics."},
-        4: {"name": "Hathi (Elephant) 🐘", "nature": "Royalty & Prosperity", "desc": "Prestige, unexpected recognition, material comfort, luxury gains, and supportive superiors."},
-        5: {"name": "Bail (Bull) 🐂", "nature": "Steady Persistence", "desc": "Gradual, rock-solid gains achieved through methodical discipline and structured effort."},
-        6: {"name": "Sher (Lion) 🦁", "nature": "Power & Decisive Courage", "desc": "Commanding presence, success in competitive debates, legal or contractual triumphs."},
-        7: {"name": "Kowwa (Crow) 🐦‍⬛", "nature": "Restlessness & Wander", "desc": "Scattered focus, restlessness, domestic irritation, or frequent travel. Cultivate silence."},
-        8: {"name": "Mayur (Peacock) 🦚", "nature": "Joy & Aesthetic Warmth", "desc": "Delightful meetings, artistic breakthroughs, heartwarming social interactions, and warmth."},
-        9: {"name": "Hans (Swan) 🦢", "nature": "Wisdom & Deep Peace", "desc": "Serene intuition, high mental clarity, spiritual discernment, and sound financial strategy."}
-    },
-    "hi": {
-        1: {"name": "घोड़ा (Horse) 🐴", "nature": "गति एवं त्वरित विजय", "desc": "तेजी से काम बनना, उच्च ऊर्जा, प्रतिद्वंद्वियों पर विजय और अटके कार्यों का शीघ्र समाधान।"},
-        2: {"name": "गधा (Donkey) 🫏", "nature": "कड़ा परिश्रम एवं श्रम", "desc": "अत्यधिक कार्यभार परंतु परिणाम में देरी। धैर्य, निरंतरता और शांति बनाए रखना आवश्यक है।"},
-        3: {"name": "सियार (Jackal) 🦊", "nature": "सावधानी एवं सतर्कता", "desc": "धोखेबाजी, सट्टेबाजी या गुप्त विरोधियों से सतर्क रहने का समय। सोच-समझकर निर्णय लें।"},
-        4: {"name": "हाथी (Elephant) 🐘", "nature": "राजसी वैभव एवं समृद्धि", "desc": "अचानक मान-सम्मान, पद-प्रतिष्ठा, वरिष्ठों का सहयोग एवं आर्थिक समृद्धि के शुभ संकेत।"},
-        5: {"name": "बैल (Bull) 🐂", "nature": "स्थिर एवं दीर्घकालिक प्रगति", "desc": "अनुशासन और निरंतर प्रयास से ठोस व स्थायी लाभ। दीर्घकालिक निवेश के लिए अनुकूल।"},
-        6: {"name": "सिंह (Lion) 🦁", "nature": "साहस, नेतृत्व व पराक्रम", "desc": "प्रभावी नेतृत्व, कानूनी या प्रतिस्पर्धी मामलों में सफलता और सामाजिक प्रभाव में वृद्धि।"},
-        7: {"name": "कौआ (Crow) 🐦‍⬛", "nature": "मानसिक चंचलता व अशांति", "desc": "मन में भटकाव, अशांति, व्यर्थ की यात्राएं या वाद-विवाद। मौन एवं ध्यान का अभ्यास करें।"},
-        8: {"name": "मयूर (Peacock) 🦚", "nature": "आनंद, सौहार्द व उत्सव", "desc": "शुभ समाचार, कलात्मक सफलता, पारिवारिक सौहार्द और नए उत्साहवर्धक संपर्कों का योग।"},
-        9: {"name": "हंस (Swan) 🦢", "nature": "परम विवेक एवं आत्मिक शांति", "desc": "आंतरिक शांति, आध्यात्मिक स्पष्टता, बुद्धिमानीपूर्ण निर्णय और सुदृढ़ आर्थिक योजना।" }
-    },
-    "mr": {
-        1: {"name": "घोडा (Horse) 🐴", "nature": "गती व त्वरित यश", "desc": "कामांना वेग येणे, शारीरिक ऊर्जा, विरोधकांवर मात आणि प्रलंबित कामांचा त्वरित निपटारा."},
-        2: {"name": "गाढव (Donkey) 🫏", "nature": "कठोर मेहनत व संयम", "desc": "अधिक श्रम परंतु यशासाठी प्रतीक्षा. शांतता आणि सातत्य राखणे अत्यंत आवश्यक."},
-        3: {"name": "कोल्हा (Jackal) 🦊", "nature": "सावधगिरी व सावध राहा", "desc": "फसवणूक किंवा गैरसमजांपासून सावध राहा. आर्थिक व व्यावसायिक व्यवहारात सतर्कता बाळगा."},
-        4: {"name": "हत्ती (Elephant) 🐘", "nature": "वैभव व सन्मान", "desc": "प्रतिष्ठा, वरिष्ठांचे सहकार्य, अचानक आर्थिक लाभ आणि सुख-सुविधांमध्ये वृद्धी."},
-        5: {"name": "बैल (Bull) 🐂", "nature": "संथ व भक्कम प्रगती", "desc": "शिस्तबद्ध परिश्रमातून खात्रीशीर यश. दीर्घकालीन योजनांसाठी उत्तम काळ."},
-        6: {"name": "सिंह (Lion) 🦁", "nature": "सामर्थ्य व धैर्य", "desc": "उत्कृष्ट नेतृत्व, स्पर्धा व वादविवादात विजय, आणि आत्मविश्वासात मोठी वाढ."},
-        7: {"name": "कावळा (Crow) 🐦‍⬛", "nature": "अस्वस्थता व धावपळ", "desc": "विचारांमधील गोंधळ, व्यर्थ प्रवास किंवा मतभेद. संयम आणि मौन पाळणे हिताचे ठरते."},
-        8: {"name": "मोर (Peacock) 🦚", "nature": "आनंद व कौटुंबिक सौख्य", "desc": "गोड बातम्या, कला व सर्जनशीलता, नातेसंबंधात गोडवा आणि आनंदी भेटीगाठी."},
-        9: {"name": "हंस (Swan) 🦢", "nature": "विवेक व मनःशांती", "desc": "उत्तम निर्णयक्षमता, आध्यात्मिक प्रगती, मानसिक समाधान आणि आर्थिक स्थैर्य."}
-    },
-    "gu": {
-        1: {"name": "ઘોડો (Horse) 🐴", "nature": "ઝડપ અને વિજય", "desc": "કાર્યમાં ઝડપી પ્રગતિ, ઉત્સાહ, વિરોધીઓ પર વિજય અને અટકેલા કાર્યોનો નિકાલ."},
-        2: {"name": "ગધેડો (Donkey) 🫏", "nature": "સખત મહેનત અને ધીરજ", "desc": "વધુ શ્રમ અને ધીમા પરિણામો. ધીરજ અને શાંતિ જાળવવી ખૂબ જરૂરી છે."},
-        3: {"name": "શિયાળ (Jackal) 🦊", "nature": "સાવચેતી અને સતર્કતા", "desc": "છેતરપિંડી કે ઉતાવળા નિર્ણયોથી સાવચેત રહેવું. જોખમી રોકાણો ટાળવા."},
-        4: {"name": "હાથી (Elephant) 🐘", "nature": "વૈભવ અને સમૃદ્ધિ", "desc": "માન-સન્માન, હોદ્દો, વડીલોનો સહયોગ અને અચાનક નાણાકીય લાભના સંકેતો."},
-        5: {"name": "બળદ (Bull) 🐂", "nature": "સ્થિર પ્રગતિ", "desc": "શિસ્તબદ્ધ મહેનતથી લાંબા ગાળે પાકો લાભ. ધીમે પણ મક્કમ પગલે આગળ વધવું."},
-        6: {"name": "સિંહ (Lion) 🦁", "nature": "સાહસ અને નેતૃત્વ", "desc": "આત્મવિશ્વાસ, કાનૂની કે સ્પર્ધાત્મક બાબતોમાં વિજય અને પ્રભાવશાળી વ્યક્તિત્વ."},
-        7: {"name": "કાગડો (Crow) 🐦‍⬛", "nature": "અશાંતિ અને ભટકણ", "desc": "મનમાં ઉચાટ, દોડધામ કે મતભેદ. શાંતિ અને ધ્યાનની વિશેષ જરૂરિયાત."},
-        8: {"name": "મોર (Peacock) 🦚", "nature": "આનંદ અને ઉત્સાહ", "desc": "સારા સમાચાર, કલાત્મક પ્રગતિ, પારિવારિક સુખ અને સુખદ મુલાકાતો."},
-        9: {"name": "હંસ (Swan) 🦢", "nature": "વિવેક અને મનની શાંતિ", "desc": "ઉત્તમ નિર્ણયશક્તિ, આધ્યાત્મિક જ્ઞાન, માનસિક શાંતિ અને આર્થિક સમતોલપણું."}
-    }
-}
-
-CHALDEAN_MAP = {
-    'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
-    'B': 2, 'K': 2, 'R': 2,
-    'C': 3, 'G': 3, 'L': 3, 'S': 3,
-    'D': 4, 'M': 4, 'T': 4,
-    'E': 5, 'H': 5, 'N': 5, 'X': 5,
-    'U': 6, 'V': 6, 'W': 6,
-    'O': 7, 'Z': 7,
-    'F': 8, 'P': 8
-}
+def get_nakshatra_description(nak_idx: int, lang: str = "en") -> str:
+    traits_dict = NAKSHATRA_TRAITS.get(nak_idx, NAKSHATRA_TRAITS[1])
+    return traits_dict.get(lang, traits_dict.get("en", ""))
 
 PROFILE_FILE = "user_profile.json"
 
@@ -481,7 +502,6 @@ def load_user_profile() -> dict:
         "dob": datetime.date(1984, 1, 13),
         "tob": datetime.time(14, 0),
         "place": "Chhatrapati Sambhajinagar, India",
-        "nakshatra_idx": 1,  # Bharani (#2)
         "language": "en"
     }
     if os.path.exists(PROFILE_FILE):
@@ -770,11 +790,13 @@ user_name = prof.get("name", "Okesh")
 user_dob = prof.get("dob", datetime.date(1984, 1, 13))
 user_tob = prof.get("tob", datetime.time(14, 0))
 user_place = prof.get("place", "Chhatrapati Sambhajinagar, India")
-janma_idx = prof.get("nakshatra_idx", 1)  # Bharani (#2)
+
+# Calculate Janma Nakshatra and Pada automatically from Birth Date and Time
+janma_idx, janma_pada, natal_moon_rashi_idx, natal_rashi_deg = calculate_birth_chart(user_dob, user_tob)
 janma_name = NAKSHATRAS[janma_idx]
+nak_personality_desc = get_nakshatra_description(janma_idx, current_lang)
 
 mulank, bhagyank, namank = calculate_numerology(user_dob, user_name)
-natal_moon_rashi_idx = int((janma_idx * (360.0 / 27.0)) / 30.0) % 12
 
 now_utc = datetime.datetime.now(datetime.timezone.utc)
 ist_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
@@ -809,12 +831,7 @@ if st.session_state.current_page == "profile":
             in_tob = st.time_input(t("input_tob", current_lang), value=user_tob)
             in_place = st.text_input(t("input_place", current_lang), value=user_place)
 
-        in_nak = st.selectbox(
-            t("input_nakshatra", current_lang),
-            NAKSHATRAS,
-            index=janma_idx
-        )
-        in_nak_idx = NAKSHATRAS.index(in_nak)
+        st.caption("ℹ️ *Janma Nakshatra, Pada, and Moon Sign are automatically calculated from your birth date and time using the Swiss Ephemeris engine.*")
 
         if st.button(t("save_profile_btn", current_lang), use_container_width=True, type="primary"):
             updated_data = {
@@ -822,7 +839,6 @@ if st.session_state.current_page == "profile":
                 "dob": in_dob,
                 "tob": in_tob,
                 "place": in_place,
-                "nakshatra_idx": in_nak_idx,
                 "language": current_lang
             }
             st.session_state.profile = updated_data
@@ -847,11 +863,19 @@ if st.session_state.current_page == "profile":
         </div>
         <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
             <span style="background:#ffedd5; color:#9a3412; padding:5px 11px; border-radius:8px; font-size:13px; font-weight:700;">
-                🌟 {t('janma_star_label', current_lang)}: {janma_name} (#{janma_idx + 1})
+                🌟 {t('janma_star_label', current_lang)}: {janma_name} (#{janma_idx + 1}, Pada {janma_pada})
             </span>
             <span style="background:#ffedd5; color:#9a3412; padding:5px 11px; border-radius:8px; font-size:13px; font-weight:700;">
                 🪐 {t('moon_rashi_label', current_lang)}: {RASHIS[natal_moon_rashi_idx].split(' ')[0]}
             </span>
+        </div>
+        <div style="margin-top:14px; background:#ffffff; border-radius:10px; padding:12px 14px; border:1px solid #fed7aa;">
+            <div style="font-weight:700; font-size:13.5px; color:#9a3412; margin-bottom:4px;">
+                {t('nak_personality_title', current_lang)}:
+            </div>
+            <div style="font-size:13px; line-height:1.55; color:#431407;">
+                {nak_personality_desc}
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
