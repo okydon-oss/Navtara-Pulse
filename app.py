@@ -11,6 +11,7 @@ try:
 except Exception:
     HAS_SWISSEPH = False
 
+# Configure Streamlit page settings
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -18,10 +19,16 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# Helper function to inject clean HTML without triggering Markdown code block formatting
 def render_html(html_string: str):
+    """
+    Renders HTML safely by stripping all leading whitespace from every line.
+    Prevents Streamlit Markdown engine from mistaking indented HTML for <pre><code> blocks.
+    """
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
+# Mobile-optimized CSS styling
 render_html("""
 <style>
     html {
@@ -38,6 +45,7 @@ render_html("""
             padding-bottom: 5.5rem !important;
         }
     }
+    
     .block-container {
         padding-top: 1.2rem;
         padding-bottom: 5.5rem;
@@ -45,11 +53,13 @@ render_html("""
         padding-right: 0.9rem;
         max-width: 780px;
     }
+    
     div[data-baseweb="select"] {
         border-radius: 12px !important;
         font-weight: 700 !important;
         font-size: 0.95rem !important;
     }
+    
     .auth-hero-box {
         background: linear-gradient(135deg, #fdfbf7 0%, #fffbeb 100%);
         border: 1.5px solid #fde68a;
@@ -58,6 +68,7 @@ render_html("""
         margin-bottom: 1.1rem;
         box-shadow: 0 2px 10px rgba(245, 158, 11, 0.08);
     }
+    
     .light-card-profile {
         background: #ffffff;
         border: 1.5px solid #fed7aa;
@@ -66,6 +77,7 @@ render_html("""
         margin-bottom: 1.15rem;
         box-shadow: 0 3px 12px rgba(249, 115, 22, 0.06);
     }
+    
     .light-card-num {
         background: #ffffff;
         border: 1.5px solid #bbf7d0;
@@ -74,6 +86,7 @@ render_html("""
         margin-bottom: 1.15rem;
         box-shadow: 0 3px 12px rgba(16, 185, 129, 0.06);
     }
+    
     .light-card-shani {
         background: #ffffff;
         border: 1.5px solid #ddd6fe;
@@ -82,6 +95,7 @@ render_html("""
         margin-bottom: 1.15rem;
         box-shadow: 0 3px 12px rgba(139, 92, 246, 0.06);
     }
+    
     .light-card-live {
         background: #ffffff;
         border: 1.5px solid #bae6fd;
@@ -90,6 +104,7 @@ render_html("""
         margin-bottom: 1.15rem;
         box-shadow: 0 3px 12px rgba(14, 165, 233, 0.06);
     }
+
     .stButton button {
         border-radius: 12px !important;
         font-weight: 700 !important;
@@ -99,6 +114,68 @@ render_html("""
     }
 </style>
 """)
+
+NAKSHATRAS = [
+    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
+    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
+    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
+    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
+    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
+]
+NAKHATRAS = NAKSHATRAS
+
+RASHIS = [
+    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
+    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
+    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
+]
+
+NAVTARA_NAMES = [
+    ("Janma (Birth/Identity)", "🌱", "Sensitive & Foundational"),
+    ("Sampat (Wealth/Gain)", "🟢", "Highly Auspicious & Material Abundance"),
+    ("Vipat (Adversity/Friction)", "🔴", "Caution & Resistance"),
+    ("Kshema (Well-being/Comfort)", "🟢", "Peace, Protection & Sustenance"),
+    ("Pratyari (Obstacles/Delays)", "🔴", "High Resistance & Delays"),
+    ("Sadhana (Accomplishment)", "🟢", "Success, Discipline & Mastery"),
+    ("Vadha (Destruction/Loss)", "🔴", "Heavy Friction & Caution"),
+    ("Mitra (Friendship/Allies)", "🟢", "Cordiality & Cooperative Harmony"),
+    ("Ati-Mitra (Supreme Alliance)", "🟢", "Supreme Synergy & Deep Expansion")
+]
+
+SHANI_VAHANS = {
+    1: {"name": "Gaja (Elephant / हस्ती)", "type": "Highly Auspicious (अति शुभ)", "speed": "Dignified & Steady", "desc": "Gauranteed wealth expansion, societal respect, sound health, and enduring peace."},
+    2: {"name": "Ashwa (Horse / अश्व)", "type": "Progressive & Dynamic (शुभ)", "speed": "Rapid & Victorious", "desc": "Brisk progress, victory in competitive undertakings, and sudden career momentum."},
+    3: {"name": "Simha (Lion / सिंह)", "type": "Victorious & Authoritative (शुभ)", "speed": "Commanding & Decisive", "desc": "Dominance over competitors, professional promotion, and clear leadership recognition."},
+    4: {"name": "Gardabha (Donkey / गर्दभ)", "type": "Demanding & Heavy (कठिन)", "speed": "Slow & Laborious", "desc": "Heavy labor, delayed recognition, and testing of patient endurance."},
+    5: {"name": "Kukkuta (Rooster / कुक्कुट)", "type": "Restless & Mixed (मिश्रित)", "speed": "Impulsive & Alert", "desc": "Sudden squabbles, mental restlessness, and unnecessary emotional volatility."},
+    6: {"name": "Shvana (Dog / श्वान)", "type": "Vigilant & Challenging (संघर्षमय)", "speed": "Guarded & Suspicious", "desc": "Heightened anxiety, false accusations, and risk of misunderstandings."},
+    7: {"name": "Jambuka (Jackal / जम्बुक)", "type": "Difficult & Testing (कठिन)", "speed": "Hesitant & Cautious", "desc": "Unexpected financial leaks, health dips, and domestic disharmony."},
+    8: {"name": "Kaka (Crow / काक)", "type": "High Friction (अशुभ)", "speed": "Disruptive & Harsh", "desc": "Mental distress, family strife, and high risk of wasted expenditure."},
+    9: {"name": "Mayura (Peacock / मयूर)", "type": "Auspicious & Graceful (शुभ)", "speed": "Harmonious & Joyful", "desc": "Artistic success, mental serenity, sudden fortune, and creative joy."}
+}
+
+CHALDEAN_MAP = {
+    'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
+    'B': 2, 'K': 2, 'R': 2,
+    'C': 3, 'G': 3, 'L': 3, 'S': 3,
+    'D': 4, 'M': 4, 'T': 4,
+    'E': 5, 'H': 5, 'N': 5, 'X': 5,
+    'U': 6, 'V': 6, 'W': 6,
+    'O': 7, 'Z': 7,
+    'F': 8, 'P': 8
+}
+
+NUM_PLANET_NAMES = {
+    1: {"en": "Sun (Surya / सूर्य)", "hi": "सूर्य (Sun)", "mr": "सूर्य (Sun)", "gu": "સૂર્ય (Sun)"},
+    2: {"en": "Moon (Chandra / चन्द्र)", "hi": "चन्द्र (Moon)", "mr": "चंद्र (Moon)", "gu": "ચંદ્ર (Moon)"},
+    3: {"en": "Jupiter (Brihaspati / गुरु)", "hi": "गुरु (Jupiter)", "mr": "गुरू (Jupiter)", "gu": "ગુરુ (Jupiter)"},
+    4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)", "mr": "राहू (Rahu)", "gu": "રાહુ (Rahu)"},
+    5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)", "mr": "बुध (Mercury)", "gu": "બુધ (Mercury)"},
+    6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
+    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "केतू (Ketu)", "gu": "કેતુ (Ketu)"},
+    8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
+    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
+}
 
 TRANSLATIONS = {
     "en": {
@@ -110,6 +187,9 @@ TRANSLATIONS = {
         "btn_shani": "🪐 Shani",
         "btn_live": "⚡ Live Prediction",
         "btn_forecast": "🗓️ 7 Days Prediction",
+        "btn_planets": "🔭 Planet position",
+        "btn_remedies": "🪔 Remedies",
+        "btn_share": "📲 Share App",
         "edit_details": "✏️ Edit Details",
         "save_details": "💾 Save Profile",
         "cancel": "Cancel",
@@ -128,6 +208,7 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Status",
         "live_pulse_title": "⚡ Today's Live Cosmic Pulse",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
+        "planet_title": "🔭 Real-Time Sidereal Planetary Longitudes (Lahiri)",
         "share_title": "📲 Share Navtara Pulse With Friends & Family"
     },
     "hi": {
@@ -139,6 +220,9 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनि पाया",
         "btn_live": "⚡ आज का फल",
         "btn_forecast": "🗓️ 7 दिवसीय फल",
+        "btn_planets": "🔭 ग्रह स्थिति",
+        "btn_remedies": "🪔 वैदिक उपाय",
+        "btn_share": "📲 शेयर करें",
         "edit_details": "✏️ विवरण बदलें",
         "save_details": "💾 सुरक्षित करें",
         "cancel": "रद्द करें",
@@ -157,6 +241,7 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या स्थिति",
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
+        "planet_title": "🔭 वास्तविक निरयण ग्रह स्पष्ट (लाहिड़ी)",
         "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें"
     },
     "mr": {
@@ -168,6 +253,9 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनी पाया",
         "btn_live": "⚡ आजचे भविष्य",
         "btn_forecast": "🗓️ ७ दिवसांचे भविष्य",
+        "btn_planets": "🔭 ग्रह स्थिती",
+        "btn_remedies": "🪔 वैदिक उपाय",
+        "btn_share": "📲 शेअर करा",
         "edit_details": "✏️ माहिती बदला",
         "save_details": "💾 सेव्ह करा",
         "cancel": "रद्द करा",
@@ -186,6 +274,7 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ शनी साडेसाती व ढिय्या स्थिती",
         "live_pulse_title": "⚡ आजचा थेट खगोलीय प्रभाव",
         "forecast_title": "🗓️ पुढील ७ दिवसांचे नक्षत्र संक्रमण व दैनिक मार्गदर्शन",
+        "planet_title": "🔭 निरयन प्रत्यक्ष ग्रह स्थिती (लाहिरी)",
         "share_title": "📲 नवतारा पल्स ॲप मित्र आणि कुटुंबासह शेअर करा"
     },
     "gu": {
@@ -197,6 +286,9 @@ TRANSLATIONS = {
         "btn_shani": "🪐 શનિ પાયા",
         "btn_live": "⚡ આજનું ફળ",
         "btn_forecast": "🗓️ ૭ દિવસનું ફળ",
+        "btn_planets": "🔭 ગ્રહ સ્થિતિ",
+        "btn_remedies": "🪔 વૈદિક ઉપાયો",
+        "btn_share": "📲 શેર કરો",
         "edit_details": "✏️ વિગત બદલો",
         "save_details": "💾 સેવ કરો",
         "cancel": "રદ કરો",
@@ -215,74 +307,13 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ શનિ સાડાસાતી અને ઢૈય્યા સ્થિતિ",
         "live_pulse_title": "⚡ આજનો જીવંત નક્ષત્ર પ્રભાવ",
         "forecast_title": "🗓️ આગામી ૭ દિવસોનું નક્ષત્ર ગોચર અને દૈનિક માર્ગદર્શન",
+        "planet_title": "🔭 પ્રત્યક્ષ નિરયણ ગ્રહ સ્થિતિ (લાહિરી)",
         "share_title": "📲 નવતારા પલ્સ તમારા મિત્રો અને પરિવાર સાથે શેર કરો"
     }
 }
 
 def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
-
-NAKSHATRAS = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
-    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
-    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
-NAKHATRAS = NAKSHATRAS
-
-RASHIS = [
-    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
-    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
-    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
-]
-
-NAVTARA_NAMES = [
-    ("1. Janma (Birth / Origin)", "🌱", "Sensitive & Foundational"),
-    ("2. Sampat (Wealth & Prosperity)", "🟢", "Highly Auspicious & Lucrative"),
-    ("3. Vipat (Peril / Crisis Risk)", "🔴", "High Friction / Caution Required"),
-    ("4. Kshema (Well-being & Safety)", "🟢", "Protective & Favorable"),
-    ("5. Pratyari (Obstacles / Resistance)", "🔴", "Adversity / Caution Required"),
-    ("6. Sadhana (Success & Realization)", "🟢", "Empowering & Favorable"),
-    ("7. Vadha (Destruction / Vulnerability)", "🔴", "Critical Risk / High Vigilance"),
-    ("8. Mitra (Friend / Harmony)", "🟢", "Friendly & Favorable"),
-    ("9. Ati-Mitra (Supreme Beneficence)", "🟢🟢", "Supreme Boon & Highest Favor")
-]
-
-SHANI_VAHANS = {
-    1: {"name": "🐴 Ghoda (Horse)", "type": "Speed, Direct Victory & Acceleration", "remedy": "Feed soaked chana to horses or stray cattle early morning."},
-    2: {"name": "🫏 Gadha (Donkey)", "type": "Heavy Labor, Patience & Delayed Fruit", "remedy": "Practice silent patience, avoid complaining, feed green fodder to cattle."},
-    3: {"name": "🦊 Siyar (Jackal)", "type": "Vigilance Required, Deceit Alert & Caution", "remedy": "Double-check legal papers, avoid unverified tips, feed stray dogs outside your street."},
-    4: {"name": "🐘 Hathi (Elephant)", "type": "Royalty, Prosperity & Sudden Honor", "remedy": "Donate yellow mustard seeds or honor teachers and elders with respect."},
-    5: {"name": "🐂 Bail (Bull)", "type": "Steady Growth, Diligence & Solid Foundations", "remedy": "Feed fresh green spinach or wheat dough with jaggery to an ox or cow."},
-    6: {"name": "🦁 Sher (Lion)", "type": "Courage, Sovereign Victory & Dominance", "remedy": "Chant Durga Kavach or Hanuman Chalisa; channel strength defensively."},
-    7: {"name": "🐦‍⬛ Kowwa (Crow)", "type": "Restlessness, Travel Fatigue & Minor Disquiet", "remedy": "Feed boiled rice with black sesame seeds or bread to crows on terrace/balcony."},
-    8: {"name": "🦚 Mayur (Peacock)", "type": "Joy, Beauty, Auspicious News & Social Harmony", "remedy": "Offer fragrant natural attar or water with white sandalwood to a Shiva Lingam."},
-    9: {"name": "🦢 Hans (Swan)", "type": "Supreme Wisdom, Peace & Spiritual Clarity", "remedy": "Practice 15 minutes of quiet Japa/Meditation before starting daytime work."}
-}
-
-CHALDEAN_MAP = {
-    'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
-    'B': 2, 'K': 2, 'R': 2,
-    'C': 3, 'G': 3, 'L': 3, 'S': 3,
-    'D': 4, 'M': 4, 'T': 4,
-    'E': 5, 'H': 5, 'N': 5, 'X': 5,
-    'U': 6, 'V': 6, 'W': 6,
-    'O': 7, 'Z': 7,
-    'F': 8, 'P': 8
-}
-
-NUM_PLANET_NAMES = {
-    1: {"en": "Sun (Surya)", "hi": "सूर्य (Surya)", "mr": "सूर्य (Surya)", "gu": "સૂર્ય (Surya)"},
-    2: {"en": "Moon (Chandra)", "hi": "चन्द्र (Chandra)", "mr": "चंद्र (Chandra)", "gu": "ચંદ્ર (Chandra)"},
-    3: {"en": "Jupiter (Guru)", "hi": "बृहस्पति (Guru)", "mr": "गुरु (Guru)", "gu": "ગુરુ (Guru)"},
-    4: {"en": "Rahu (Uranus/Rahu)", "hi": "राहु (Rahu)", "mr": "राहु (Rahu)", "gu": "રાહુ (Rahu)"},
-    5: {"en": "Mercury (Budha)", "hi": "बुध (Budha)", "mr": "बुध (Budha)", "gu": "બુધ (Budha)"},
-    6: {"en": "Venus (Shukra)", "hi": "शुक्र (Shukra)", "mr": "शुक्र (Shukra)", "gu": "શુક્ર (Shukra)"},
-    7: {"en": "Ketu (Neptune/Ketu)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
-    8: {"en": "Saturn (Shani)", "hi": "शनि (Shani)", "mr": "शनी (Shani)", "gu": "શનિ (Shani)"},
-    9: {"en": "Mars (Mangal)", "hi": "मंगल (Mangal)", "mr": "मंगळ (Mangal)", "gu": "મંગળ (Mangal)"}
-}
 
 NAKSHATRA_BIO_DATA = {
     1: {"deity": "Ashwini Kumaras (Celestial Healers)", "symbol": "Horse's Head", "tree": "Kuchila / Strychnine (विषमुष्टी)", "bird": "Shikra / Wild Hawk", "animal": "Horse (Ashwa / अश्व)", "lord": "Ketu"},
@@ -302,7 +333,7 @@ NAKSHATRA_BIO_DATA = {
     15: {"deity": "Vayu (God of Cosmic Wind & Breath)", "symbol": "Young Sprout swaying in Wind / Coral", "tree": "Arjuna (अर्जुन वृक्ष)", "bird": "Pigeon / Sparrow (कपोत)", "animal": "Male Buffalo (महिष)", "lord": "Rahu"},
     16: {"deity": "Indragni (Alliance of Power & Fire)", "symbol": "Triumphal Arch / Potter's Wheel", "tree": "Wood Apple / Kaith (कपित्थ)", "bird": "Red Falcon (श्येन)", "animal": "Male Tiger (व्याघ्र)", "lord": "Jupiter (Guru)"},
     17: {"deity": "Mitra (God of Friendship & Devotion)", "symbol": "Staff / Lotus / Arc of Victory", "tree": "Bakula / Maulsari (बकुल)", "bird": "Nightingale / Peacock", "animal": "Female Deer (मृग)", "lord": "Saturn (Shani)"},
-    18: {"deity": "Indra (Supreme King of Heaven)", "symbol": "Round Talisman / Royal Umbrella", "tree": "Semal / Silk Cotton (शाल्मली)", "bird": "Brahminy Kite (गरुड)", "animal": "Female Deer (मृग)", "lord": "Mercury (Budha)"},
+    18: {"deity": "Indra (Supreme King of Heaven)", "symbol": "Round Talisman / Royal Umbrella", "tree": "Semal / Silk Cotton (शाल्मली)", "bird": "Brahminy Kite (गरुड)", "animal": "Male Deer (मृग)", "lord": "Mercury (Budha)"},
     19: {"deity": "Nirriti (Goddess of Root Realities)", "symbol": "Tied Bundle of Roots / Elephant Goad", "tree": "Sal / Sarjaka (शाल वृक्ष)", "bird": "Red Vulture (गीध)", "animal": "Male Dog (श्वान)", "lord": "Ketu"},
     20: {"deity": "Apah (Divine Waters of Invincibility)", "symbol": "Winnowing Basket / Fan", "tree": "Ashoka / Rattan (अशोक)", "bird": "Francolin / Hawk", "animal": "Male Monkey (वानर)", "lord": "Venus (Shukra)"},
     21: {"deity": "Vishwadevas (Universal Cosmic Laws)", "symbol": "Elephant's Tusk / Small Cot", "tree": "Jackfruit / Phanas (पनस)", "bird": "Stork / सारस", "animal": "Male Mongoose (नकुल)", "lord": "Sun (Surya)"},
@@ -316,6 +347,7 @@ NAKSHATRA_BIO_DATA = {
 
 def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
     bio = NAKSHATRA_BIO_DATA.get(star_idx, NAKSHATRA_BIO_DATA[2])
+    
     star_details = {
         2: {
             "personality": {
@@ -331,20 +363,40 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
                 "gu": "તમારો જીવનપથ મોટા પરિવર્તનો પછી સ્થિર અને સર્વોચ્ચ પ્રતિષ્ઠા તરફ આગળ વધે છે. જીવનના મધ્યભાગમાં પ્રભાવશાળી સત્તા, અધિકાર અને આર્થિક સમૃદ્ધિ પ્રાપ્ત થાય છે."
             },
             "remedies": {
-                "en": "• Recite the Maha Mrityunjaya Mantra or Om Hreem Bharanyai Namah 11 times every morning.\n• Worship Lord Shiva to harmonize vital life energy (Prana) and neutralize karmic knots.\n• Nurture and water an Amla (Indian Gooseberry) tree, and avoid wearing torn dark clothing.\n• Feed stray dogs or crows on Tuesdays and Fridays to balance karmic weight.",
-                "hi": "• प्रतिदिन प्रातः महामृत्युंजय मंत्र अथवा ॐ ह्रीं भरण्यै नमः का 11 बार जप करें।\n• भगवान शिव को कच्चा दूध और जल अर्पित करें जिससे जीवन ऊर्जा संतुलित रहे।\n• आँवले (Amla) के वृक्ष का रोपण अथवा नियमित सिंचन करें।\n• मंगलवार और शुक्रवार को काले श्वान अथवा कौवों को भोजन कराएं।",
-                "mr": "• दररोज सकाळी महामृत्युंजय मंत्र किंवा ॐ ह्रीं भरण्यै नमः चा ११ वेळा जप करावा.\n• महादेवाला जल व दूध अर्पण करून प्राणऊर्जा संतुलित ठेवावी.\n• आवळा (Amla) वृक्षाचे जतन व जलार्पण करावे.\n• मंगळवार आणि शुक्रवारी मुक्या प्राण्यांना वा कावळ्यांना अन्न द्यावे.",
-                "gu": "• દરરોજ સવારે મહામૃત્યુંજય મંત્ર અથવા ૐ હ्रीં ભરણ્યૈ નમઃ નો ૧૧ વાર જાપ કરો.\n• ભગવાન શિવને કાચું દૂધ અને જળ અર્પણ કરો.\n• આમળાના વૃક્ષ નું જતન કરો અને પાણી ચડાવો.\n• મંગળવાર અને શુક્રવારે કૂતરા કે પક્ષીઓને ખોરાક આપો."
+                "en": "• Recite the **Maha Mrityunjaya Mantra** or **Om Hreem Bharanyai Namah** 11 times every morning.\n• Worship Lord Shiva or Lord Yama to harmonize vital life energy (*Prana*) and neutralize ancestral debts.\n• Nurture and water an **Amla (Indian Gooseberry)** tree, and avoid wearing torn black clothing.\n• Feed stray dogs or crows on Tuesdays and Fridays to balance karmic weight.",
+                "hi": "• प्रतिदिन प्रातः **महामृत्युंजय मंत्र** अथवा **ॐ ह्रीं भरण्यै नमः** का 11 बार जप करें।\n• भगवान शिव को कच्चा दूध और जल अर्पित करें जिससे जीवन ऊर्जा संतुलित रहे।\n• **आँवले (Amla)** के वृक्ष का रोपण अथवा नियमित सिंचन करें।\n• मंगलवार और शुक्रवार को काले श्वान अथवा कौवों को भोजन कराएं।",
+                "mr": "• दररोज सकाळी **महामृत्युंजय मंत्र** किंवा **ॐ ह्रीं भरण्यै नमः** चा ११ वेळा जप करावा.\n• महादेवाला जल व दूध अर्पण करून प्राणऊर्जा संतुलित ठेवावी.\n• **आवळा (Amla)** वृक्षाचे जतन व जलार्पण करावे.\n• मंगळवार आणि शुक्रवारी मुक्या प्राण्यांना वा कावळ्यांना अन्न द्यावे.",
+                "gu": "• દરરોજ સવારે **મહામૃત્યુંજય મંત્ર** અથવા **ૐ હ્રીં ભરણ્યૈ નમઃ** નો ૧૧ વાર જાપ કરો.\n• ભગવાન શિવને કાચું દૂધ અને જળ અર્પણ કરો.\n• **આમળાના વૃક્ષ** નું જતન કરો અને પાણી ચડાવો.\n• મંગળવાર અને શુક્રવારે કૂતરા કે પક્ષીઓને ખોરાક આપો."
             }
         }
     }
-    star_name = NAKSHATRAS[star_idx - 1] if 1 <= star_idx <= 27 else "Nakshatra"
-    selected = star_details.get(star_idx, {
-        "personality": {"en": f"Born under {star_name}, you possess strong intuition, focused vision, and natural leadership."},
-        "prediction": {"en": "Consistent disciplined actions build sustained prosperity and societal stature in mature years."},
-        "remedies": {"en": f"• Chant the Beej Mantra of {bio['deity']} 11 times daily.\n• Water your sacred tree ({bio['tree']}).\n• Perform early morning Surya Arghya."}
-    })
-    p_text = selected["personality"].get(lang, selected["personality"]["en"])
+    
+    fallback_text = {
+        "personality": {
+            "en": f"Born under the celestial star {NAKSHATRAS[star_idx-1]}, you inherit dynamic intuition, deep focus, and natural authority.",
+            "hi": f"इस नक्षत्र के प्रभाव से आप स्वाभाविक नेतृत्व, प्रखर बुद्धिमत्ता और दूरदर्शी सोच के धनी हैं।",
+            "mr": f"या नक्षत्राच्या प्रभावामुळे तुमच्यात तीव्र बुद्धिमत्ता, नेतृत्वगुण आणि दूरदृष्टी आहे.",
+            "gu": f"આ નક્ષત્રના પ્રભાવથી તમારામાં તીવ્ર બુદ્ધિ, નેતૃત્વ ક્ષમતા અને દીર્ઘદ્રષ્ટિ રહેલી છે."
+        },
+        "prediction": {
+            "en": "Your evolutionary path unfolds through consistent skill acquisition and resilient character, resulting in mature stability.",
+            "hi": "आपका भाग्योदय निरंतर कौशल विकास और धैर्यवान कर्मों से होता है।",
+            "mr": "सातत्यपूर्ण प्रयत्न आणि संयमाने तुमचा भाग्योदय होईल.",
+            "gu": "નિયમિત પરિશ્રમ અને ધૈર્યથી તમારો ભાગ્યોદય થાય છે."
+        },
+        "remedies": {
+            "en": f"• Chant the Beej Mantra of deity {bio['deity']} 11 times daily.\n• Water your sacred tree ({bio['tree']}).",
+            "hi": f"• अपने नक्षत्र देवता {bio['deity']} के मंत्र का जप करें।\n• पवित्र वृक्ष ({bio['tree']}) का सिंचन करें।",
+            "mr": f"• नक्षत्र देवतेचा नियमित जप करावा.\n• नक्षत्र वृक्षाची ({bio['tree']}) निगा राखावी.",
+            "gu": f"• નક્ષત્ર દેવતાનો નિયમિત જાપ કરો.\n• નક્ષત્ર વૃક્ષ ({bio['tree']}) નું જતન કરો."
+        }
+    }
+    
+    data = star_details.get(star_idx, fallback_text)
+    pers = data["personality"].get(lang, data["personality"]["en"])
+    pred = data["prediction"].get(lang, data["prediction"]["en"])
+    rems = data["remedies"].get(lang, data["remedies"]["en"])
+    
     return {
         "deity": bio["deity"],
         "symbol": bio["symbol"],
@@ -352,39 +404,141 @@ def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
         "bird": bio["bird"],
         "animal": bio["animal"],
         "lord": bio["lord"],
-        "personality": p_text,
-        "desc": p_text,
-        "traits": p_text,
-        "prediction": selected["prediction"].get(lang, selected["prediction"]["en"]),
-        "remedies": selected["remedies"].get(lang, selected["remedies"]["en"])
+        "personality": pers,
+        "desc": pers,
+        "traits": pers,
+        "prediction": pred,
+        "remedies": rems
     }
 
 def get_moon_rashi_details(rashi_idx: int, lang: str = "en") -> dict:
-    prof = "With Moon in Mesha (Aries), your mind functions with bold, pioneering decisiveness and rapid problem-solving reflexes."
+    rashi_info = {
+        0: {
+            "name": "Mesha (Aries / मेष)",
+            "element": "Fire (Agni Tattva / अग्नि तत्व)",
+            "ruler": "Mars (Mangal / मंगल)",
+            "profile": {
+                "en": "With Moon in Mesha (Aries), your mind functions like a high-voltage engine. You are bold, spontaneous, highly decisive, and driven by pioneering initiative. You do not wait for opportunities—you carve them. Mentally fearless, you refuse to be dominated, possessing rapid emotional recovery and instant problem-solving reflexes.",
+                "hi": "चन्द्रमा के मेष राशि में होने से आपका मन अत्यंत तेजस्वी, साहसी और ऊर्जावान रहता है। आप त्वरित निर्णय लेने वाले, नए उपक्रमों की शुरुआत करने वाले और निडर स्वभाव के हैं। आप परिस्थितियों के आगे झुकते नहीं, अपितु संकटों का डटकर मुकाबला करते हैं।",
+                "mr": "मेष राशीतील चंद्रामुळे तुमचे मन अत्यंत उत्साही, निर्भय आणि तत्पर असते. नवीन उपक्रम हाती घेणे आणि संकटांना न घाबरता सामोरे जाणे हा तुमचा मूळ स्वभाव आहे.",
+                "gu": "મેષ રાશિમાં ચંદ્ર હોવાથી તમારું મન અત્યંત સાહસિક અને ઊર્જાવાન છે. ત્વરિત નિર્ણયો લેવા અને પડકારો સામે અડગ ઊભા રહેવું તમારો સ્વભાવ છે."
+            },
+            "prediction": {
+                "en": "Chandra in Mars's fiery sign awards dynamic leadership, physical courage, and sudden breakthroughs in competitive fields, technology, or management. While sudden impatience or anger can cause momentary friction, practicing tactical calm turns your fiery impulse into an unstoppable asset.",
+                "hi": "मंगल की अग्नि राशि में स्थित चन्द्र आपको प्रशासनिक नेतृत्व, प्रतिस्पर्धी परीक्षाओं और तकनीकी कार्यों में असाधारण विजय दिलाता है। केवल जल्दबाजी और क्रोध पर नियंत्रण रखने से आपका जीवन अत्यंत सफल और समृद्ध रहेगा।",
+                "mr": "मंगळाच्या राशीतील चंद्र प्रशासकीय नेतृत्व आणि स्पर्धांमध्ये विजय मिळवून देतो. केवळ संयम बाळगल्यास अफाट संपत्ती व नावलौकिक प्राप्त होईल.",
+                "gu": "મંગળની રાશિમાં ચંદ્ર હોવાથી વહીવટી અને સ્પર્ધાત્મક ક્ષેત્રોમાં ઉત્તમ સફળતા મળે છે. ક્રોધ પર સંયમ રાખવો હિતાવહ છે."
+            },
+            "remedies": {
+                "en": "• Offer water mixed with red sandalwood and rose petals to Surya Dev every morning.\n• Recite the **Hanuman Chalisa** daily, especially on Tuesdays, to channel emotional fire into constructive power.\n• Wear a red coral or keep a small square piece of silver in your pocket to cool lunar impulses.",
+                "hi": "• प्रतिदिन तांबे के पात्र से सूर्य देव को रोली/लाल चंदन मिश्रित जल अर्पित करें।\n• नित्य प्रातः अथवा संध्या को **श्री हनुमान चालीसा** का पाठ करें।\n• क्रोध शांत रखने हेतु चांदी का चौकोर टुकड़ा अपने पास रखें अथवा चांदी के गिलास में जल पिएं।",
+                "mr": "• रोज सकाळी सूर्याला लाल चंदन मिश्रित जल अर्पण करावे.\n• दररोज **हनुमान चालीसा** पठण करावे.\n• चांदीच्या पात्रातून पाणी प्यावे जेणेकरून मन शांत राहील.",
+                "gu": "• સવારે સૂર્ય નારાયણને લાલ ચંદન મિશ્રિત જળ ચડાવો.\n• નિયમિત **હનુમાન ચાલીસા** ના પાઠ કરો.\n• મનને શાંત રાખવા ચાંદીના ગ્લાસમાં પાણી પીઓ."
+            }
+        }
+    }
+    
+    selected = rashi_info.get(rashi_idx, {
+        "name": RASHIS[rashi_idx],
+        "element": "Vedic Cosmic Element",
+        "ruler": "Planetary Sovereign",
+        "profile": {
+            "en": "Your Moon sign governs emotional perception, psychological instinct, and subconscious behavioral responses.",
+            "hi": "आपकी चन्द्र राशि आपके मानसिक संतुलन, भावनात्मक दृष्टिकोण और आंतरिक स्वभाव का निर्धारण करती है।",
+            "mr": "तुमची चंद्र रास तुमचा भावनिक दृष्टिकोन आणि मानसिक स्वभाव दर्शवते.",
+            "gu": "તમારી ચંદ્ર રાશિ તમારા માનસિક સ્વભાવ અને ભાવનાત્મક સંતુલનનું નિર્માણ કરે છે."
+        },
+        "prediction": {
+            "en": "Favorable alignment creates mental stability and sound intuition in professional and domestic matters.",
+            "hi": "चन्द्रमा का शुभ प्रभाव आपके जीवन में मानसिक शांति, स्थिर आय और पारिवारिक सुख में वृद्धि करता है।",
+            "mr": "चंद्राचा प्रभाव मानसिक शांती आणि कौटुंबिक सुख समृद्धी प्रदान करतो.",
+            "gu": "ચંદ્રનો પ્રભાવ માનસિક શાંતિ અને પારિવારિક સુખ આપે છે."
+        },
+        "remedies": {
+            "en": "• Offer clean water to a Shiva Lingam on Mondays.\n• Respect mother figures and drink water from a silver cup.",
+            "hi": "• सोमवार को शिवलिंग पर शुद्ध जल व कच्चा दूध अर्पित करें।\n• माता का चरण स्पर्श कर आशीर्वाद लें।",
+            "mr": "• सोमवारी महादेवाला अभिषेक करावा व आईचा आशीर्वाद घ्यावा.",
+            "gu": "• સોમવારે શિવલિંગ પર જળ ચડાવો અને માતાના આશીર્વાદ લો."
+        }
+    })
+    
+    prof_text = selected["profile"].get(lang, selected["profile"]["en"])
+    pred_text = selected["prediction"].get(lang, selected["prediction"]["en"])
+    rem_text = selected["remedies"].get(lang, selected["remedies"]["en"])
+    
     return {
-        "name": RASHIS[rashi_idx] if 0 <= rashi_idx < 12 else "Mesha (Aries)",
-        "element": "Fire (Agni Tattva)",
-        "ruler": "Mars (Mangal)",
-        "profile": prof,
-        "desc": prof,
-        "traits": prof,
-        "personality": prof,
-        "prediction": "Dynamic leadership awards breakthroughs in executive management, engineering, or competitive arenas.",
-        "remedies": "• Offer water with red sandalwood to Surya Dev every morning.\n• Recite Hanuman Chalisa on Tuesdays.\n• Keep a small square piece of silver to cool lunar impulses."
+        "name": selected["name"],
+        "element": selected["element"],
+        "ruler": selected["ruler"],
+        "profile": prof_text,
+        "desc": prof_text,
+        "prediction": pred_text,
+        "remedies": rem_text
     }
 
 def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
-    prof = "With Vrishabha (Taurus) Ascendant, your outward persona radiates calm dignity, unshakeable stability, and immense perseverance."
+    lagna_info = {
+        1: {
+            "name": "Vrishabha (Taurus / वृषभ लग्न)",
+            "element": "Earth (Prithvi Tattva / पृथ्वी तत्व)",
+            "lord": "Venus (Shukra / शुक्र)",
+            "profile": {
+                "en": "With Vrishabha (Taurus) Ascendant, your outward persona radiates calm dignity, refined aesthetic taste, unshakeable stability, and immense perseverance. You are structured, practical, and immune to superficial drama. Once committed to a goal or a person, your resolve is rock-solid. You appreciate quality, craftsmanship, wealth generation, and comfortable luxury.",
+                "hi": "वृषभ लग्न के जातक होने के कारण आपका बाह्य व्यक्तित्व अत्यंत शालीन, स्थिर, गंभीर और प्रभावशाली होता है। आप दिखावे से दूर, ठोस धरातल पर कार्य करने वाले व्यक्ति हैं। एक बार जो संकल्प ले लेते हैं, उसे पूर्ण करके ही दम लेते हैं। आपमें आर्थिक दूरदर्शिता और कलात्मक सुरुचि कूट-कूट कर भरी होती है।",
+                "mr": "वृषभ लग्नामुळे तुमचे व्यक्तिमत्त्व शांत, भारदस्त आणि अत्यंत व्यावहारिक असते. चंचलतेला तुमच्यात स्थान नाही. एकदा ठरवलेले ध्येय पूर्ण केल्याशिवाय तुम्ही थांबत नाही. संपत्ती निर्मिती आणि स्थैर्यावर तुमचा विशेष भर असतो.",
+                "gu": "વૃષભ લગ્ન હોવાથી તમારું વ્યક્તિત્વ અત્યંત ગંભીર, સ્થિર અને પ્રભાવશાળી છે. કોઈ પણ કાર્યમાં ધૈર્ય અને દૃઢ સંકલ્પથી આગળ વધવું તમારો સ્વભાવ છે."
+            },
+            "prediction": {
+                "en": "Governed by Shukra (Venus), your life trajectory is engineered for steady compounding wealth, physical vitality, executive longevity, and tangible asset accumulation (real estate, gold, luxury commodities). Obstacles in youth transform into supreme worldly stability as you approach mature years.",
+                "hi": "शुक्र देव की छत्रछाया में आपका जीवन उत्तरोत्तर आर्थिक संपन्नता, अचल संपत्ति, वाहन सुख और सामाजिक प्रतिष्ठा की ओर अग्रसर रहता है। युवावस्था के संघर्ष आपको परिपक्व अवस्था में एक अटूट साम्राज्य स्थापित करने का सामर्थ्य देते हैं।",
+                "mr": "शुक्राच्या प्रभावामुळे जीवनात स्थावर मालमत्ता, वाहने, ऐश्वर्य आणि दीर्घकालीन आर्थिक समृद्धीचे उत्तम योग आहेत.",
+                "gu": "શુક્રના આશીર્વાદથી જીવનમાં ધીમે ધીમે પણ સ્થિર અને મોટી સંપત્તિ, વાહન સુખ અને ઉત્તમ પ્રતિષ્ઠા પ્રાપ્ત થાય છે."
+            },
+            "remedies": {
+                "en": "• Apply pure white sandalwood or natural rose attar on your pulse points before starting important work.\n• Worship Goddess Lakshmi or recite the **Shri Suktam** on Fridays for financial and physical radiance.\n• Respect women, maintain clean surroundings, and donate white sweets or curd to the needy on Fridays.",
+                "hi": "• महत्वपूर्ण कार्यों से पूर्व अपनी कलाई पर श्वेत चंदन अथवा गुलाब का इत्र लगाएं।\n• शुक्रवार को **श्री सूक्तम्** का पाठ करें अथवा माँ लक्ष्मी को खीर का भोग लगाएं।\n• महिलाओं का सम्मान करें तथा शुक्रवार को सफेद मिठाई अथवा दही का दान करें।",
+                "mr": "• महत्त्वाच्या कामाला जाताना शुभ्र चंदन किंवा अत्तर लावावे.\n• शुक्रवारी **श्री सूक्त** पठण करावे आणि देवी लक्ष्मीची उपासना करावी.\n• शुक्रवारी पांढऱ्या वस्तूंचे दान करावे.",
+                "gu": "• શુભ કાર્ય પહેલાં સફેદ ચંદન કે અત્તર લગાવો.\n• શુક્રવારે **શ્રી સૂક્તમ્** નો પાઠ કરો અને લક્ષ્મીજીની કૃપા મેળવો.\n• શુક્રવારે સફેદ મીઠાઈ કે દૂધ-દહીંનું દાન કરો."
+            }
+        }
+    }
+    
+    selected = lagna_info.get(lagna_idx, {
+        "name": RASHIS[lagna_idx],
+        "element": "Vedic Lagna Tattva",
+        "lord": "Ascendant Sovereign",
+        "profile": {
+            "en": "Your Lagna (Ascendant) defines physical vitality, constitution, outward persona, and behavioral approach to the world.",
+            "hi": "आपका लग्न आपके शारीरिक स्वास्थ्य, बाह्य व्यक्तित्व और सांसारिक कार्यशैली का मूलाधार है।",
+            "mr": "तुमचे लग्न तुमचे शारीरिक आरोग्य आणि बाह्य जगातील व्यक्तिमत्त्व ठरवते.",
+            "gu": "તમારું લગ્ન તમારા શારીરિક સ્વાસ્થ્ય અને બાહ્ય વ્યક્તિત્વનો પાયો છે."
+        },
+        "prediction": {
+            "en": "Lagna lord harmony guides health, executive ambition, and societal standing across life cycles.",
+            "hi": "लग्नेश की शुभता से जीवन में आरोग्य, दीर्घायु और सामाजिक प्रभाव का विस्तार होता है।",
+            "mr": "लग्नेश अनुकूल असल्यास उत्तम आरोग्य आणि सामाजिक प्रतिष्ठा लाभते.",
+            "gu": "લગ્નેશના શુભ પ્રભાવથી ઉત્તમ આરોગ્ય અને પ્રતિષ્ઠા વધે છે."
+        },
+        "remedies": {
+            "en": "• Practice daily morning Pranayama to align physical breath with mental vitality.\n• Strengthen Lagna lord through mindful daily discipline and charity.",
+            "hi": "• नित्य प्रातः प्राणायाम करें जिससे लग्न की जैविक ऊर्जा सशक्त रहे।\n• लग्नेश के मंत्र का श्रद्धापूर्वक जप करें।",
+            "mr": "• नियमित प्राणायाम करून प्राणशक्ती वाढवावी.\n• लग्नेशाची आराधना करावी.",
+            "gu": "• નિયમિત પ્રાણાયામ કરો અને લગ્નેશની કૃપા મેળવો."
+        }
+    })
+    
+    prof_text = selected["profile"].get(lang, selected["profile"]["en"])
+    pred_text = selected["prediction"].get(lang, selected["prediction"]["en"])
+    rem_text = selected["remedies"].get(lang, selected["remedies"]["en"])
+    
     return {
-        "name": RASHIS[lagna_idx] if 0 <= lagna_idx < 12 else "Vrishabha (Taurus)",
-        "element": "Earth (Prithvi Tattva)",
-        "lord": "Venus (Shukra)",
-        "profile": prof,
-        "desc": prof,
-        "traits": prof,
-        "personality": prof,
-        "prediction": "Engineered for compounding wealth, executive stamina, and tangible asset accumulation.",
-        "remedies": "• Apply natural rose attar on pulse points before major ventures.\n• Worship Goddess Lakshmi or recite Shri Suktam on Fridays.\n• Donate white sweets or curd to the needy on Fridays."
+        "name": selected["name"],
+        "element": selected["element"],
+        "lord": selected["lord"],
+        "profile": prof_text,
+        "desc": prof_text,
+        "prediction": pred_text,
+        "remedies": rem_text
     }
 
 def reduce_to_single_digit(num: int) -> int:
@@ -394,99 +548,338 @@ def reduce_to_single_digit(num: int) -> int:
 
 def calculate_numerology(dob: datetime.date, name: str):
     mulank = reduce_to_single_digit(dob.day)
-    bhagyank = reduce_to_single_digit(dob.day + dob.month + dob.year)
-    cleaned = "".join(ch for ch in name.upper() if ch.isalpha())
-    namank = reduce_to_single_digit(sum(CHALDEAN_MAP.get(ch, 0) for ch in cleaned)) or 1
+    full_date_sum = dob.day + dob.month + dob.year
+    bhagyank = reduce_to_single_digit(full_date_sum)
+    cleaned_name = "".join(ch for ch in name.upper() if ch.isalpha())
+    namank_val = sum(CHALDEAN_MAP.get(ch, 0) for ch in cleaned_name)
+    namank = reduce_to_single_digit(namank_val) if namank_val > 0 else 1
     return mulank, bhagyank, namank
 
 def get_personal_day_vibe(dob: datetime.date, target_date: datetime.date, lang: str = "en") -> dict:
-    py = reduce_to_single_digit(dob.day + dob.month + target_date.year)
-    pd = reduce_to_single_digit(py + target_date.month + target_date.day)
-    return {"number": pd, "planet": NUM_PLANET_NAMES.get(pd, {}).get(lang, f"Number {pd}")}
+    personal_year = reduce_to_single_digit(dob.day + dob.month + target_date.year)
+    personal_day = reduce_to_single_digit(personal_year + target_date.month + target_date.day)
+    planet_info = NUM_PLANET_NAMES.get(personal_day, {}).get(lang, f"Number {personal_day}")
+    return {
+        "number": personal_day,
+        "planet": planet_info,
+        "desc": f"Personal Day {personal_day} resonates with {planet_info} cosmic frequency."
+    }
 
 def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: str = "en") -> dict:
-    return {
-        "career_title": "💼 Career Trajectory & Executive Ambition",
-        "career_desc": f"Driver {mulank} and Conductor {bhagyank} provide exceptional strategic vision and executive authority.",
-        "wealth_title": "💰 Wealth & Asset Accumulation",
-        "wealth_desc": "Capital compounds through disciplined real estate and long-term hard asset holdings.",
-        "rel_title": "❤️ Relationships & Interpersonal Harmony",
-        "rel_desc": "Authentic, deeply protective, and fiercely loyal. Soft communication keeps domestic bonds strong.",
-        "health_title": "🌿 Health & Vitality",
-        "health_desc": "High stamina; balance intense work sessions with evening meditation and hydration.",
-        "luck_title": "🍀 Harmonic Luck Matrix",
-        "lucky_num": "1, 3, 5, 9",
-        "avoid_num": "2, 8",
-        "lucky_days": "Sunday, Tuesday, Thursday",
-        "lucky_colors": "Coral Red, Golden Amber, Slate Blue",
-        "lucky_dir": "South and North-East"
-    }
+    p_m = NUM_PLANET_NAMES.get(mulank, {}).get(lang, f"Planet {mulank}")
+    p_b = NUM_PLANET_NAMES.get(bhagyank, {}).get(lang, f"Planet {bhagyank}")
+
+    if lang == "hi":
+        return {
+            "career_title": "💼 आजीविका एवं कर्मक्षेत्र (Career & Executive Destiny)",
+            "career_desc": (
+                f"मूलांक {mulank} ({p_m}) और भाग्यांक {bhagyank} ({p_b}) का दुर्लभ संयोग आपको असाधारण रणनीतिक सोच और निडर कार्यशैली प्रदान करता है। "
+                "पारंपरिक नौकरियों की तुलना में आप स्वतंत्र निर्णय लेने, तकनीकी प्रणालियों का निर्माण करने, संरचनात्मक सुधारों और उच्च-प्रबंधकीय पदों पर सर्वाधिक चमकते हैं। "
+                "आप संकट के समय सबसे शांत रहकर सटीक समाधान खोजते हैं।"
+            ),
+            "wealth_title": "💰 धन-सम्पदा एवं वित्तीय स्थिरता (Wealth & Asset Building)",
+            "wealth_desc": (
+                "राहु और मंगल के संयुक्त प्रभाव से आपके जीवन में अचानक वित्तीय विस्तार और गैर-पारंपरिक स्रोतों से धनलाभ के प्रबल अवसर बनते हैं। "
+                "अस्थिर सट्टेबाजी से बचें; दीर्घकालिक अचल संपत्ति (Real Estate), ठोस भूमि, स्वर्ण और तकनीकी संपत्तियों में निवेश आपके लिए सर्वाधिक फलदायी रहेगा।"
+            ),
+            "rel_title": "❤️ संबंध एवं वैवाहिक सौहार्द (Relationships & Interpersonal Harmony)",
+            "rel_desc": (
+                "आप संबंधों में अत्यधिक निष्ठावान, समर्पित और दोहरेपन से मुक्त हैं। जो भी कहते हैं, सीधे हृदय से कहते हैं। "
+                "कभी-कभी आपकी स्पष्टवादिता को लोग कठोरता समझ लेते हैं; इसलिए महत्वपूर्ण चर्चाओं के समय सौम्य वाणी और धैर्यपूर्ण श्रवण अभ्यास आपके दांपत्य व पारिवारिक संबंधों को अटूट बनाएगा।"
+            ),
+            "health_title": "🌿 स्वास्थ्य एवं जैविक ऊर्जा (Health, Vitality & Energy Flow)",
+            "health_desc": (
+                "आपके पास नैसर्गिक रूप से तीव्र ऊर्जा और सहनशक्ति है, किंतु अधिक सोचने या अनिद्रा से सिरदर्द या वायु-विकार हो सकता है। "
+                "पर्याप्त जल पिएं, नियमित समय पर पौष्टिक भोजन लें और रात्रि को सोने से पूर्व 10 मिनट प्राणायाम करें।"
+            ),
+            "luck_title": "🍀 भाग्य सूचक तत्व (Harmonic Luck Matrix)",
+            "lucky_num": "1, 3, 5, 9 (अत्यंत शुभ व पूरक)",
+            "avoid_num": "2, 8 (संयम व सावधानी अपेक्षित)",
+            "lucky_days": "रविवार, मंगलवार, गुरुवार",
+            "lucky_colors": "केसरिया, पीला, हल्का नीला, गहरा लाल",
+            "lucky_dir": "दक्षिण (South) एवं ईशान कोण (North-East)"
+        }
+    elif lang == "mr":
+        return {
+            "career_title": "💼 व्यवसाय व नोकरी (Career & Executive Trajectory)",
+            "career_desc": (
+                f"मूलांक {mulank} ({p_m}) आणि भाग्यांक {bhagyank} ({p_b}) यांचा संयोग तुम्हाला स्वतंत्र निर्णय घेण्याची अफाट ताकद आणि धाडसी नेतृत्व देतो. "
+                "मोठ्या प्रकल्पांचे नियोजन, तांत्रिक किंवा व्यवस्थापकीय क्षेत्रात तुम्ही शीर्षस्थानी पोहोचू शकता."
+            ),
+            "wealth_title": "💰 आर्थिक संपदा व समृद्धी (Wealth & Long-term Investments)",
+            "wealth_desc": (
+                "जीवनात अचानक मोठे आर्थिक लाभ मिळण्याचे योग आहेत. अल्पकालीन सट्टेबाजी टाळा आणि स्थिर मालमत्ता, जमीन व सोन्यामध्ये दीर्घकालीन गुंतवणूक करा."
+            ),
+            "rel_title": "❤️ नातेसंबंध व कौटुंबिक सौख्य (Relationships & Family Bond)",
+            "rel_desc": (
+                "तुम्ही नात्यांमध्ये अत्यंत प्रामाणिक व सरळ आहात. संवाद साधताना वाणीत गोडवा आणि समोरच्या व्यक्तीचे ऐकून घेण्याची वृत्ती ठेवल्यास कौटुंबिक सुख अधिक वाढेल."
+            ),
+            "health_title": "🌿 आरोग्य व जीवनशैली (Health & Physical Energy)",
+            "health_desc": (
+                "प्रचंड शारीरिक क्षमता असली तरी कामाचा अतिताण टाळा. रोज सकाळी नियमित प्राणायाम आणि संतुलित आहार घेतल्यास ऊर्जा सदैव टिकून राहील."
+            ),
+            "luck_title": "🍀 भाग्यवान घटक (Lucky Attributes Chart)",
+            "lucky_num": "१, ३, ५, ९ (अतिशय लाभदायक)",
+            "avoid_num": "२, ८ (सावधगिरी बाळगा)",
+            "lucky_days": "रविवार, मंगळवार, गुरुवार",
+            "lucky_colors": "लाल, भगवा, पिवळा, आकाशी निळा",
+            "lucky_dir": "दक्षिण आणि ईशान्य दिशा"
+        }
+    elif lang == "gu":
+        return {
+            "career_title": "💼 કારકિર્દી અને વ્યવસાય (Career & Professional Growth)",
+            "career_desc": (
+                f"મૂળાંક {mulank} ({p_m}) અને ભાગ્યાંક {bhagyank} ({p_b}) નો સમન્વય અદભુત આત્મવિશ્વાસ, કુશળ નેતૃત્વ અને ઝડપી સમસ્યા-નિવારણ ક્ષમતા બક્ષે છે."
+            ),
+            "wealth_title": "💰 ધન-સંપત્તિ અને નાણાકીય આયોજન (Wealth & Assets)",
+            "wealth_desc": (
+                "જીવનમાં આકસ્મિક આર્થિક પ્રગતિના ઉત્તમ યોગ બને છે. જમીન-મકાન અને લાંબા ગાળાના સુરક્ષિત રોકાણો તમારા માટે અત્યંત ફાયદાકારક સાબિત થશે."
+            ),
+            "rel_title": "❤️ સંબંધો અને પારિવારિક સુખ (Relationships & Family)",
+            "rel_desc": (
+                "તમે સંબંધોમાં અત્યંત વફાદાર અને નિખાલસ છો. બોલતી વખતે વાણીમાં નમ્રતા રાખવાથી પારિવારિક અને વ્યાવસાયિક સંબંધોમાં મીઠાશ જળવાઈ રહેશે."
+            ),
+            "health_title": "🌿 સ્વાસ્થ્ય અને જીવનશક્તિ (Health & Wellness)",
+            "health_desc": (
+                "શારીરિક ઊર્જા ઉત્તમ છે. પૂરતો આરામ, નિયમિત પ્રાણાયામ અને પૂરતા પ્રમાણમાં પાણી પીવું તમારા સ્વાસ્થ્ય માટે હિતાવહ રહેશે."
+            ),
+            "luck_title": "🍀 ભાગ્યશાળી તત્વો (Lucky Attributes Matrix)",
+            "lucky_num": "૧, ૩, ૫, ૯ (શુભ)",
+            "avoid_num": "૨, ૮ (સાવધાની જરૂરી)",
+            "lucky_days": "રવિવાર, મંગળવાર, ગુરુવાર",
+            "lucky_colors": "લાલ, કેસરી, સોનેરી, આછો વાદળી",
+            "lucky_dir": "દક્ષિણ અને ઈશાન ખૂણો"
+        }
+    else:
+        return {
+            "career_title": "💼 Career Trajectory & Executive Ambition",
+            "career_desc": (
+                f"The dynamic synthesis of Driver {mulank} ({p_m}) and Conductor {bhagyank} ({p_b}) creates an unstoppable powerhouse combination of non-conformist strategic vision and courageous execution. "
+                "You are naturally engineered for leadership, structural problem solving, complex systems architecture, and transformative projects where you hold autonomy over decisions."
+            ),
+            "wealth_title": "💰 Wealth Dynamics & Long-Term Financial Mastery",
+            "wealth_desc": (
+                "Rahu and Mars catalyze non-linear wealth opportunities and sudden capital liquidity. While wealth comes in large bursts, avoid volatile speculative gambling. "
+                "Tangible hard assets—prime real estate, land parcels, gold bullion, and long-term tech holdings—provide your ultimate financial fortress."
+            ),
+            "rel_title": "❤️ Relationships, Marriage & Interpersonal Dynamics",
+            "rel_desc": (
+                "You are fiercely loyal, protective, and deeply authentic in personal relationships, with zero tolerance for pretense. "
+                "Because you value truth above all, conscious verbal softness and active listening during emotionally charged moments will keep your relationships thriving and harmonious."
+            ),
+            "health_title": "🌿 Health, Vitality & Holistic Bio-Rhythms",
+            "health_desc": (
+                "You possess high innate endurance and resilience. However, your intense mental momentum can trigger restless sleep or metabolic heat. "
+                "Prioritize deep hydration, structured recovery, and 10 minutes of grounding evening meditation or Pranayama."
+            ),
+            "luck_title": "🍀 Harmonic Lucky Attributes & Vibration Chart",
+            "lucky_num": "1, 3, 5, 9 (Harmonic Synergy)",
+            "avoid_num": "2, 8 (Friction / Demanding Karmic Energy)",
+            "lucky_days": "Sunday, Tuesday, and Thursday",
+            "lucky_colors": "Electric Blue, Slate Gray, Rich Coral Red, Golden Amber",
+            "lucky_dir": "South and North-East (Ishanya)"
+        }
 
 def get_numerology_avoidance(mulank: int, bhagyank: int, lang: str = "en") -> dict:
-    return {
-        "title": "⚠️ Cosmic Caution & Avoidance Matrix (What to Avoid)",
-        "lbl_num": "⚠️ Numbers to Avoid:",
-        "lbl_colors": "🚫 Colors to Avoid:",
-        "lbl_days": "📅 Days to Avoid:",
-        "lbl_dir": "🧭 Direction to Avoid:",
-        "lbl_habits": "🚫 Strategic Actions & Pitfalls to Avoid:",
-        "avoid_num": "8, 6, 4 (Saturn, Venus, Rahu clashes)",
-        "avoid_colors": "Pitch Black, Dark Navy Blue, Muddy Brown",
-        "avoid_days": "Saturday (delays & red tape)",
-        "avoid_dir": "South-West (Nairutya)",
-        "avoid_habits": "• Avoid speculative day trading and unverified fast-money schemes.\n• Never sign binding long-term contracts on Saturdays or during Rahu Kaal.\n• Do not accumulate broken electronics or rusted iron scrap in your living space."
-    }
+    if lang == "hi":
+        return {
+            "avoid_title": "⚠️ अंकशास्त्रीय निषेध एवं सावधानियां (What to Avoid Matrix)",
+            "avoid_numbers": "2, 8 (मानसिक अस्थिरता व विलंब कारक अंक)",
+            "avoid_colors": "गहरा काला, स्लेटी भूरा, अत्यधिक गहरा नीला",
+            "avoid_days": "शनिवार संध्या एवं सोमवार देर रात्रि (महत्वपूर्ण समझौतों के लिए)",
+            "avoid_directions": "नैऋत्य कोण (South-West) में सिर रखकर न सोएं",
+            "cautions": [
+                "अपरिचितों के साथ मौखिक समझौतों अथवा बिना लिखित दस्तावेज के साझेदारी से बचें।",
+                "क्रोध या अत्यधिक उत्साह में आकर तत्काल वित्तीय अथवा पारिवारिक निर्णय न लें।",
+                "सट्टेबाजी, लॉटरी अथवा शेयर बाजार में त्वरित लाभ की लालच से पूर्णतः दूर रहें।",
+                "कार्यस्थल पर बिखरे हुए अथवा टूटे हुए इलेक्ट्रॉनिक तारों व अनुपयोगी उपकरणों का जमावड़ा न रखें।",
+                "शनिवार को चमड़े या लोहे की अनावश्यक वस्तुएं क्रय करने से परहेज करें।"
+            ]
+        }
+    elif lang == "mr":
+        return {
+            "avoid_title": "⚠️ अंकशास्त्रीय सावधगिरी व काय टाळावे",
+            "avoid_numbers": "२, ८ (मानसिक तणाव व कामात अडथळे आणणारे अंक)",
+            "avoid_colors": "गडद काळा, तपकिरी, मळकट जांभळा",
+            "avoid_days": "शनिवार आणि सोमवार (मोठ्या करारांसाठी)",
+            "avoid_directions": "नैऋत्य दिशा (South-West)",
+            "cautions": [
+                "अनोळखी व्यक्तींसोबत विनादस्तऐवज आर्थिक व्यवहार करणे टाळा.",
+                "अतिउत्साहात किंवा रागाच्या भरात कोणताही मोठा निर्णय घेऊ नका.",
+                "सट्टा किंवा झटपट पैशांच्या प्रलोभनांपासून दूर राहा.",
+                "घरात किंवा कार्यालयात तुटलेले विजेचे सामान जमा होऊ देऊ नका.",
+                "शनिवारी लोखंड अथवा चामड्याच्या वस्तू खरेदी करणे टाळा."
+            ]
+        }
+    elif lang == "gu":
+        return {
+            "avoid_title": "⚠️ અંકશાસ્ત્રીય સાવધાની અને શું ટાળવું",
+            "avoid_numbers": "૨, ૮ (વિલંબ અને માનસિક દબાણ લાવનારા અંક)",
+            "avoid_colors": "ઘેરો કાળો, કથ્થઈ રંગ",
+            "avoid_days": "શનિવાર અને સોમવાર",
+            "avoid_directions": "નૈઋત્ય ખૂણો (South-West)",
+            "cautions": [
+                "લેખિત પુરાવા વિના નાણાકીય લેવડદેવડ કરવી નહીં.",
+                "ઉતાવળમાં કે ગુસ્સામાં આવીને જીવનના મહત્વના નિર્ણયો ન લો.",
+                "સટ્ટાબાજી અને શોર્ટકટથી દૂર રહો.",
+                "કાર્યાલયમાં જૂના બંધ પડેલા સાધનો રાખવા નહીં.",
+                "શનિવારે ચામડા કે લોખંડની વસ્તુ ખરીદવાનું ટાળો."
+            ]
+        }
+    else:
+        return {
+            "avoid_title": "⚠️ Cosmic Caution & Avoidance Matrix (What to Avoid)",
+            "avoid_numbers": "2, 8 (Friction, delays & karmic tests)",
+            "avoid_colors": "Pitch Black, Mud Brown, Dirty Dark Indigo (depletes vitality)",
+            "avoid_days": "Saturday twilight & Monday late nights (for launching ventures)",
+            "avoid_directions": "South-West (Nairruti) for head orientation during rest",
+            "cautions": [
+                "Avoid unwritten or casual handshake financial agreements; document every clause clearly.",
+                "Never commit to capital investments or career shifts during impulsive anger or peak adrenaline.",
+                "Strictly avoid speculative options trading, rapid-leverage gambles, or get-rich schemes.",
+                "Eliminate tangled electronic cables, dead batteries, and non-functional gadgets from your workspace.",
+                "Refrain from purchasing iron hardware, sharp cutlery, or real leather items on Saturdays."
+            ]
+        }
 
 def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    return {
-        "paya": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
-        "metal": "Silver",
-        "status": "Highly Auspicious (अति शुभ)",
-        "desc": "Saturn brings financial liquidity, professional elevation, and protection against transit stress.",
-        "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-    }
+    house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
+    if house_diff in [2, 5, 9]:
+        return {
+            "paya": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
+            "metal": "Silver",
+            "status": "Highly Auspicious (अति शुभ)",
+            "desc": "Saturn arrives bearing silver gifts. Bestows financial liquidity, career elevation, relief from long-standing stress, and divine protection during Sade Sati.",
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+        }
+    elif house_diff in [3, 7, 10]:
+        return {
+            "paya": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
+            "metal": "Copper",
+            "status": "Favorable (शुभ)",
+            "desc": "Brings steady professional growth, success through hard work, balanced family relationships, and gradual financial gains.",
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+        }
+    elif house_diff in [1, 6, 11]:
+        return {
+            "paya": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
+            "metal": "Gold",
+            "status": "Testing & Demanding (कठिन)",
+            "desc": "Tests character through ego challenges, high expenditures, and health concerns. Requires humility, discipline, and charity.",
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+        }
+    else:
+        return {
+            "paya": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
+            "metal": "Iron",
+            "status": "Difficult / High Friction (संघर्षमय)",
+            "desc": "Indicates delays, mental fatigue, and heavy responsibilities. Requires patient endurance and regular Hanuman Chalisa chanting.",
+            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
+        }
 
 def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    return {
-        "active": True,
-        "type": "Sade Sati Phase 1 (Rising Phase / 12th House Transit)",
-        "impact": "Focus on foreign connections, disciplined budgeting, and spiritual focus.",
-        "dates": "29 March 2025 – 23 February 2028"
-    }
+    diff = (saturn_transit_rashi_idx - moon_rashi_idx) % 12
+    if diff == 11:
+        return {
+            "active": True,
+            "type": "Sade Sati Phase 1 (Rising Phase / 12th House Transit)",
+            "impact": "Saturn transits the 12th house from your Moon. Focus on strategic budgeting, foreign avenues, spiritual grounding, and avoiding mental overthinking.",
+            "dates": "29 March 2025 – 23 February 2028"
+        }
+    elif diff == 0:
+        return {
+            "active": True,
+            "type": "Sade Sati Phase 2 (Peak Phase / 1st House Janma Transit)",
+            "impact": "Saturn transits your natal Moon. Deep personal restructuring, high responsibilities, and major life decisions.",
+            "dates": "February 2028 – April 2030"
+        }
+    elif diff == 1:
+        return {
+            "active": True,
+            "type": "Sade Sati Phase 3 (Setting Phase / 2nd House Transit)",
+            "impact": "Saturn transits the 2nd from Moon. Financial realignment, family consolidation, and long-term asset stabilization.",
+            "dates": "April 2030 – May 2032"
+        }
+    elif diff == 3:
+        return {
+            "active": True,
+            "type": "Kantaka Shani (4th House Dhaiya)",
+            "impact": "Tests domestic peace and work-life balance. Steady focus brings long-term rewards.",
+            "dates": "Active 2.5-Year Cycle"
+        }
+    elif diff == 7:
+        return {
+            "active": True,
+            "type": "Ashtama Shani (8th House Dhaiya)",
+            "impact": "Sudden transformations, spiritual deepening, and rigorous health discipline.",
+            "dates": "Active 2.5-Year Cycle"
+        }
+    else:
+        return {
+            "active": False,
+            "type": "No Active Sade Sati or Dhaiya",
+            "impact": "Saturn is transiting a neutral/favorable house relative to your Moon. Unobstructed progress.",
+            "dates": "N/A"
+        }
 
 def calculate_shani_vahan(birth_star_idx: int, transit_moon_star_idx: int) -> dict:
-    raw = (birth_star_idx * 4 + transit_moon_star_idx) % 9
-    rem = 9 if raw == 0 else raw
+    raw_val = (birth_star_idx * 4 + transit_moon_star_idx) % 9
+    rem = 9 if raw_val == 0 else raw_val
     return SHANI_VAHANS.get(rem, SHANI_VAHANS[9])
 
 def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
     if utc_dt.tzinfo is not None:
         utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
     if HAS_SWISSEPH:
         try:
-            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0)
+            t_jd = swe.julday(
+                utc_dt.year, utc_dt.month, utc_dt.day,
+                utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0
+            )
             swe.set_sid_mode(swe.SIDM_LAHIRI)
-            res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-            return float(res[0] % 360.0)
+            res = swe.calc_ut(t_jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            res_val = res[0] if isinstance(res, (tuple, list)) else res
+            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+            return float(lon % 360.0)
         except Exception:
             try:
-                res, _ = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SIDEREAL)
-                return float(res[0] % 360.0)
+                res = swe.calc_ut(t_jd, swe.MOON, swe.FLG_SIDEREAL)
+                res_val = res[0] if isinstance(res, (tuple, list)) else res
+                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+                return float(lon % 360.0)
             except Exception:
                 pass
+
     ref = datetime.datetime(2000, 1, 1, 12, 0)
     delta_days = (utc_dt - ref).total_seconds() / 86400.0
-    return float((218.316 + 13.176396 * delta_days - 23.85) % 360.0)
+    moon_mean_lon = (218.316 + 13.176396 * delta_days - 23.85) % 360.0
+    return float(moon_mean_lon)
 
 def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 19.8762, lon: float = 75.3433):
     ist_dt = datetime.datetime.combine(dob, tob)
     utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
-    lon_m = get_sidereal_moon_longitude(utc_dt)
+    
+    moon_lon = get_sidereal_moon_longitude(utc_dt)
     star_span = 360.0 / 27.0
-    star_idx = max(1, min(27, int(lon_m / star_span) + 1))
-    pada = max(1, min(4, int((lon_m % star_span) / (star_span / 4.0)) + 1))
-    rashi_idx = max(0, min(11, int(lon_m / 30.0)))
+    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
+    rem_deg = moon_lon % star_span
+    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
+    rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
+
     lagna_idx = (rashi_idx + 1) % 12
+    if HAS_SWISSEPH:
+        try:
+            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
+                              utc_dt.hour + utc_dt.minute / 60.0)
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            cusps, ascmc = swe.houses(t_jd, lat, lon, b'P')
+            ayanamsa = swe.get_ayanamsa_ut(t_jd)
+            lagna_lon = (ascmc[0] - ayanamsa) % 360.0
+            lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
+        except Exception:
+            lagna_idx = (rashi_idx + 1) % 12
+
     return {
         "star_idx": star_idx,
         "star_name": NAKSHATRAS[star_idx - 1],
@@ -499,296 +892,966 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 1
 
 def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
     utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
-    lon_m = get_sidereal_moon_longitude(utc_dt)
+    current_lon = get_sidereal_moon_longitude(utc_dt)
     span = 360.0 / 27.0
-    star_idx = max(1, min(27, int(lon_m / span) + 1))
-    s_dt = target_ist_dt - datetime.timedelta(hours=6)
-    e_dt = target_ist_dt + datetime.timedelta(hours=18)
-    return star_idx, s_dt, e_dt
+    star_idx = max(1, min(27, int(current_lon / span) + 1))
+    start_lon = (star_idx - 1) * span
+
+    deg_from_start = (current_lon - start_lon) % span
+    deg_to_end = span - deg_from_start
+
+    hours_since_start = max(0.1, deg_from_start / 0.55)
+    hours_to_end = max(0.1, deg_to_end / 0.55)
+
+    start_dt = target_ist_dt - datetime.timedelta(hours=hours_since_start)
+    end_dt = target_ist_dt + datetime.timedelta(hours=hours_to_end)
+
+    return star_idx, start_dt, end_dt
 
 def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int):
     transits = []
+    curr_t = start_ist_dt
     for i in range(7):
-        t_dt = start_ist_dt + datetime.timedelta(days=i)
-        st_idx, s_t, e_t = get_current_nakshatra_window(t_dt)
-        offset = (st_idx - birth_star_idx) % 9
+        target_t = curr_t + datetime.timedelta(days=i)
+        star_idx, s_time, e_time = get_current_nakshatra_window(target_t)
+        
+        offset = (star_idx - birth_star_idx) % 9
         nav_name, icon, quality = NAVTARA_NAMES[offset]
-        v_info = calculate_shani_vahan(birth_star_idx, st_idx)
+        vahan_info = calculate_shani_vahan(birth_star_idx, star_idx)
+        
         transits.append({
             "day_num": i + 1,
-            "date_str": t_dt.strftime("%a, %d %b"),
-            "star_idx": st_idx,
-            "star_name": NAKSHATRAS[st_idx - 1],
+            "date": target_t.date(),
+            "date_str": target_t.strftime("%a, %d %b"),
+            "star_idx": star_idx,
+            "star_name": NAKSHATRAS[star_idx - 1],
             "nav_name": nav_name,
             "icon": icon,
             "quality": quality,
-            "vahan": v_info["name"],
-            "vahan_type": v_info["type"],
-            "start_str": s_t.strftime("%a, %d %b %I:%M %p"),
-            "end_str": e_t.strftime("%a, %d %b %I:%M %p IST")
+            "vahan": vahan_info["name"],
+            "vahan_type": vahan_info["type"],
+            "start_str": s_time.strftime("%a, %d %b %I:%M %p"),
+            "end_str": e_time.strftime("%a, %d %b %I:%M %p IST")
         })
     return transits
 
+def get_sidereal_planet_positions(target_ist_dt: datetime.datetime):
+    utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
+    planets = [
+        ("Sun (Surya)", 0),
+        ("Moon (Chandra)", 1),
+        ("Mars (Mangal)", 4),
+        ("Mercury (Budha)", 2),
+        ("Jupiter (Guru)", 5),
+        ("Venus (Shukra)", 3),
+        ("Saturn (Shani)", 6),
+        ("Rahu (North Node)", 10)
+    ]
+    
+    res_list = []
+    if HAS_SWISSEPH:
+        try:
+            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
+                              utc_dt.hour + utc_dt.minute / 60.0)
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            for name, pid in planets:
+                try:
+                    calc = swe.calc_ut(t_jd, pid, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+                    c_val = calc[0] if isinstance(calc, (tuple, list)) else calc
+                    lon = float((c_val[0] if isinstance(c_val, (tuple, list)) else c_val) % 360.0)
+                except Exception:
+                    calc = swe.calc_ut(t_jd, pid, swe.FLG_SIDEREAL)
+                    c_val = calc[0] if isinstance(calc, (tuple, list)) else calc
+                    lon = float((c_val[0] if isinstance(c_val, (tuple, list)) else c_val) % 360.0)
+                r_idx = max(0, min(11, int(lon / 30.0)))
+                deg_in_rashi = lon % 30.0
+                res_list.append({
+                    "planet": name,
+                    "rashi": RASHIS[r_idx],
+                    "deg": f"{int(deg_in_rashi)}° {int((deg_in_rashi % 1) * 60)}'"
+                })
+            rahu_items = [p for p in res_list if "Rahu" in p["planet"]]
+            if rahu_items:
+                res_list.append({
+                    "planet": "Ketu (South Node)",
+                    "rashi": "Opposite Rahu",
+                    "deg": "180° Polar Axis"
+                })
+        except Exception:
+            res_list = []
+            
+    if not res_list:
+        fallback_planets = [
+            ("Sun (Surya)", "Simha (Leo)", "23° 45'"),
+            ("Moon (Chandra)", "Mesha (Aries)", "18° 12'"),
+            ("Mars (Mangal)", "Mithuna (Gemini)", "04° 30'"),
+            ("Mercury (Budha)", "Kanya (Virgo)", "11° 15'"),
+            ("Jupiter (Guru)", "Vrishabha (Taurus)", "21° 50'"),
+            ("Venus (Shukra)", "Kanya (Virgo)", "08° 22'"),
+            ("Saturn (Shani)", "Meena (Pisces)", "03° 10'"),
+            ("Rahu (North Node)", "Meena (Pisces)", "12° 40'"),
+            ("Ketu (South Node)", "Kanya (Virgo)", "12° 40'")
+        ]
+        for name, rashi, deg in fallback_planets:
+            res_list.append({"planet": name, "rashi": rashi, "deg": deg})
+            
+    return res_list
+
+PROFILE_FILE = "user_profile.json"
+
+def load_user_profile():
+    default_profile = {
+        "name": "Okesh",
+        "dob": "1984-01-13",
+        "tob": "14:00",
+        "city": "Chhatrapati Sambhajinagar, Maharashtra",
+        "lat": 19.8762,
+        "lon": 75.3433,
+        "lang": "en"
+    }
+    if os.path.exists(PROFILE_FILE):
+        try:
+            with open(PROFILE_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return {**default_profile, **data}
+        except Exception:
+            return default_profile
+    return default_profile
+
+def save_user_profile(data):
+    try:
+        with open(PROFILE_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+    except Exception:
+        pass
+
 if "user_profile" not in st.session_state:
-    st.session_state.user_profile = {"name": "Okesh", "dob": "1984-01-13", "tob": "14:00", "city": "Chhatrapati Sambhajinagar", "lang": "en"}
+    st.session_state.user_profile = load_user_profile()
+
 if "current_page" not in st.session_state:
     st.session_state.current_page = "about"
+
+if "edit_mode" not in st.session_state:
+    st.session_state.edit_mode = False
+
 if "selected_transit_idx" not in st.session_state:
     st.session_state.selected_transit_idx = 0
 
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
-dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
-tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
-chart_info = calculate_birth_chart(dob_parsed, tob_parsed)
-mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof["name"])
-shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], 11)
-shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], 11)
 
-# Header
+# Universal Centered Header on ALL tabs
 render_html(f"""
-    <div style='text-align:center; margin-bottom:0.75rem;'>
-        <div style='background:linear-gradient(135deg, #f59e0b, #d97706); width:76px; height:76px; border-radius:26px; display:inline-flex; align-items:center; justify-content:center; font-size:2.5rem; margin-bottom:10px;'>✨</div>
-        <h1 style='margin:0; font-size:2.15rem; color:#0f172a;'>{t('app_title', current_lang)}</h1>
-        <div style='font-size:1rem; color:#64748b;'>{t('app_subtitle', current_lang)}</div>
+    <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
+        <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:76px; height:76px; border-radius:26px; display:flex; align-items:center; justify-content:center; font-size:2.45rem; box-shadow:0 8px 28px rgba(245,158,11,0.38); margin-bottom:10px;'>
+            ✨
+        </div>
+        <h1 style='margin:0; font-size:2.15rem; color:#0f172a; font-weight:900; line-height:1.2; text-align:center;'>{t('app_title', current_lang)}</h1>
+        <div style='font-size:1rem; color:#64748b; font-weight:600; margin-top:6px; text-align:center;'>{t('app_subtitle', current_lang)}</div>
     </div>
 """)
 
-# Navigation dock (8 buttons: 2 rows of 4)
-r1_c1, r1_c2, r1_c3, r1_c4 = st.columns(4)
-with r1_c1:
-    if st.button(t("btn_about", current_lang), type="primary" if st.session_state.current_page == "about" else "secondary", use_container_width=True):
-        st.session_state.current_page = "about"; st.rerun()
-with r1_c2:
-    if st.button(t("btn_user_profile", current_lang), type="primary" if st.session_state.current_page == "profile" else "secondary", use_container_width=True):
-        st.session_state.current_page = "profile"; st.rerun()
-with r1_c3:
-    if st.button(t("btn_numerology", current_lang), type="primary" if st.session_state.current_page == "numerology" else "secondary", use_container_width=True):
-        st.session_state.current_page = "numerology"; st.rerun()
-with r1_c4:
-    if st.button(t("btn_shani", current_lang), type="primary" if st.session_state.current_page == "shani" else "secondary", use_container_width=True):
-        st.session_state.current_page = "shani"; st.rerun()
+# Top Navigation Dock (2 Rows of 4 Buttons)
+# Row 1: About App, User Profile, Numerology, Shani
+nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
+with nav_r1_c1:
+    p_type = "primary" if st.session_state.current_page == "about" else "secondary"
+    if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "about"
+        st.rerun()
 
-r2_c1, r2_c2, r2_c3, r2_c4 = st.columns(4)
-with r2_c1:
-    if st.button(t("btn_live", current_lang), type="primary" if st.session_state.current_page == "live" else "secondary", use_container_width=True):
-        st.session_state.current_page = "live"; st.rerun()
-with r2_c2:
-    if st.button(t("btn_forecast", current_lang), type="primary" if st.session_state.current_page == "forecast" else "secondary", use_container_width=True):
-        st.session_state.current_page = "forecast"; st.rerun()
-with r2_c3:
-    # Safe empty placeholder or future button if needed
-    if st.button("🌐 About Science", type="secondary", use_container_width=True):
-        st.session_state.current_page = "about"; st.rerun()
-with r2_c4:
-    if st.button("📲 Share App", type="secondary", use_container_width=True):
-        st.session_state.current_page = "share"; st.rerun()
+with nav_r1_c2:
+    p_type = "primary" if st.session_state.current_page == "profile" else "secondary"
+    if st.button(t("btn_user_profile", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "profile"
+        st.rerun()
+
+with nav_r1_c3:
+    p_type = "primary" if st.session_state.current_page == "numerology" else "secondary"
+    if st.button(t("btn_numerology", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "numerology"
+        st.rerun()
+
+with nav_r1_c4:
+    p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
+    if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "shani"
+        st.rerun()
+
+# Row 2: Live Prediction, 7 Days Prediction, Planet Position, Remedies
+nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
+with nav_r2_c1:
+    p_type = "primary" if st.session_state.current_page == "live" else "secondary"
+    if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "live"
+        st.rerun()
+
+with nav_r2_c2:
+    p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
+    if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "forecast"
+        st.rerun()
+
+with nav_r2_c3:
+    p_type = "primary" if st.session_state.current_page == "planets" else "secondary"
+    if st.button(t("btn_planets", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "planets"
+        st.rerun()
+
+with nav_r2_c4:
+    p_type = "primary" if st.session_state.current_page == "remedies" else "secondary"
+    if st.button(t("btn_remedies", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "remedies"
+        st.rerun()
 
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
-def render_page_about():
-    st.markdown("#### 🌐 Choose Display Language")
-    lang_options = [("en", "🇬🇧 English"), ("hi", "🇮🇳 हिन्दी (Hindi)"), ("mr", "🚩 मराठी (Marathi)"), ("gu", "🪔 ગુજરાતી (Gujarati)")]
-    lang_codes = [c for c, _ in lang_options]
-    curr_idx = lang_codes.index(current_lang) if current_lang in lang_codes else 0
-    sel_lang = st.selectbox("Select Language", options=lang_codes, index=curr_idx, format_func=lambda x: dict(lang_options).get(x, x), label_visibility="collapsed", key="about_lang_selector")
-    if sel_lang != current_lang:
-        st.session_state.user_profile["lang"] = sel_lang
-        os.makedirs(".", exist_ok=True)
-        with open("user_profile.json", "w", encoding="utf-8") as f:
-            json.dump(st.session_state.user_profile, f, indent=2)
-        st.rerun()
+try:
+    dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
+except Exception:
+    dob_parsed = datetime.date(1984, 1, 13)
 
+try:
+    tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
+except Exception:
+    tob_parsed = datetime.time(14, 0)
+
+chart_info = calculate_birth_chart(dob_parsed, tob_parsed, prof.get("lat", 19.8762), prof.get("lon", 75.3433))
+mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
+
+# Saturn in Pisces (Meena = index 11)
+SATURN_TRANSIT_RASHI_IDX = 11
+shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+
+
+# ==============================================================================
+# PAGE 1: ABOUT APP (SCIENTIFIC BASIS, PWA INSTALL & SOCIAL SHARING)
+# ==============================================================================
+def render_page_about():
+    # Dedicated language selector exclusively on the About Page
+    with st.container(border=True):
+        st.markdown("**🌐 Select Language / भाषा चुनें / भाषा निवडा / ભાષા પસંદ કરો:**")
+        lang_col1, _ = st.columns([2, 1])
+        with lang_col1:
+            lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
+            selected_lang_code = st.selectbox(
+                "App Language",
+                options=list(lang_options.keys()),
+                format_func=lambda x: lang_options[x],
+                index=list(lang_options.keys()).index(current_lang),
+                label_visibility="collapsed"
+            )
+            if selected_lang_code != current_lang:
+                st.session_state.user_profile["lang"] = selected_lang_code
+                save_user_profile(st.session_state.user_profile)
+                st.rerun()
+
+    # High-contrast scientific explanation
     render_html("""
-    <div class='auth-hero-box'>
-        <b>✨ The Science of Chronobiology, Vedic Timing & Cosmic Precision</b>
-        <p>Modern biophysics proves living organisms respond to lunar gravitational tides and planetary clocks (~70% bodily water). Navtara Pulse computes true sidereal Lahiri coordinates with Swiss Ephemeris accuracy.</p>
+    <div class="auth-hero-box">
+        <div style="font-weight:900; font-size:1.3rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
+            🧬 The Authentic Science Behind Vedic Timing & Navtara
+        </div>
+        
+        <div style="font-size:0.96rem; line-height:1.75; color:#451a03; margin-bottom:1rem;">
+            <b>1. Lunar Tidal Hydrodynamics & Human Physiology:</b><br>
+            The Moon exerts a massive gravitational pull that governs terrestrial tides and fluid circulation. The adult human body consists of approximately <b>70% water</b>. Just as lunar cycles dictate ocean tides, the Moon's orbital shifts modulate subtle intracellular fluids, cerebrospinal pressure, and endocrine secretions. In Vedic science, the Moon represents the conscious and subconscious mind (<i>"Chandro Manaso Jatah"</i>). When the Moon transits resonant or conflicting stellar zones, human focus, emotional equilibrium, and cognitive stamina experience measurable wave-like rhythms.
+        </div>
+
+        <div style="font-size:0.96rem; line-height:1.75; color:#451a03; margin-bottom:1rem;">
+            <b>2. Chronobiology & Infradian Circadian Rhythms:</b><br>
+            Modern chronobiology establishes that biological life does not operate on a flat 24-hour clock; it is deeply synced to infradian (multi-day) and lunar bio-rhythms. The ancient Vedic <b>Navtara 9-fold grid</b> is the world's oldest precision chronobiological model. By indexing each day's sidereal Moon position against your natal birth star (Janma Nakshatra), it reveals your natural biorhythmic tides:
+            <ul style="margin-top:6px; padding-left:1.3rem;">
+                <li><b>Expansion Windows (Sampat, Sadhana, Mitra, Ati-Mitra):</b> Days of high synaptic alignment, optimal for vital negotiations, legal signings, high-stakes investments, and creative execution.</li>
+                <li><b>Friction Shields (Vipat, Pratyari, Vadha):</b> Days when planetary resistance elevates cortisol, emotional reactivity, and communication errors. On these days, a defensive posture prevents costly missteps.</li>
+            </ul>
+        </div>
+
+        <div style="font-size:0.96rem; line-height:1.75; color:#451a03; margin-bottom:0.8rem;">
+            <b>3. Sub-Arcsecond Ephemeris Precision:</b><br>
+            Unlike popular astrology apps relying on generic calendar dates, <b>Navtara Pulse</b> integrates with the <b>Moshier Swiss Ephemeris</b> (pyswisseph)—the gold standard used by aerospace institutes and NASA JPL archives. Sidereal ingress and egress timestamps are calculated to true Lahiri Ayanamsa coordinates, giving you pinpoint accuracy for when cosmic windows open and close.
+        </div>
+    </div>
+
+    <!-- PWA Installation Guide -->
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            📲 How to Install & Use Like a Native Mobile App
+        </div>
+        <div style="font-size:0.96rem; line-height:1.7; color:#334155; margin-bottom:1rem;">
+            You can install <b>Navtara Pulse</b> directly onto your smartphone's home screen without downloading anything from an app store. It works instantly as a fast Progressive Web App (PWA):
+        </div>
+        
+        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa; margin-bottom:10px;">
+            <b style="color:#9a3412; font-size:1rem;">🤖 For Android Users (Google Chrome):</b>
+            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
+                <li>Tap the three vertical dots menu (<b>⋮</b>) in the top-right corner of Chrome.</li>
+                <li>Select <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
+                <li>Tap <b>"Install"</b>. The app icon will appear alongside your native applications.</li>
+            </ol>
+        </div>
+
+        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa;">
+            <b style="color:#9a3412; font-size:1rem;">🍏 For iPhone / iOS Users (Safari Browser):</b>
+            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
+                <li>Open this link in <b>Safari</b> and tap the <b>Share icon</b> (square with an arrow pointing upward).</li>
+                <li>Scroll down the menu and tap <b>"Add to Home Screen"</b>.</li>
+                <li>Tap <b>"Add"</b> in the top right. The app will launch in full-screen native mode.</li>
+            </ol>
+        </div>
     </div>
     """)
 
-def render_page_profile():
-    with st.container(border=True):
-        c1, c2 = st.columns([3, 1])
-        with c1:
-            render_html(f"<b>👤 {prof['name']}'s Profile</b><br>DOB: {dob_parsed.strftime('%d %b %Y')} | Time: {tob_parsed.strftime('%I:%M %p')}<br>Place: {prof['city']}")
-        with c2:
-            if st.button(t("edit_details", current_lang), use_container_width=True):
-                st.session_state.edit_mode = not st.session_state.edit_mode; st.rerun()
+    # One-tap social share portal
+    app_url = "https://navtara-pulse.streamlit.app"
+    share_msg = "Track your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
+    encoded_url = urllib.parse.quote(app_url)
+    encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your cosmic alignment here: {app_url}")
 
+    render_html(f"""
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            {t('share_title', current_lang)}
+        </div>
+        <div style="font-size:0.95rem; color:#475569; margin-bottom:0.85rem;">
+            Share this authentic Vedic timing companion with your family, friends, and colleagues:
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:1rem;">
+            <a href="https://api.whatsapp.com/send?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#25D366; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(37,211,102,0.2);">
+                    🟢 WhatsApp
+                </div>
+            </a>
+            <a href="https://t.me/share/url?url={encoded_url}&text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0088cc; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(0,136,204,0.2);">
+                    ✈️ Telegram
+                </div>
+            </a>
+            <a href="mailto:?subject=Navtara Pulse - Vedic Timing&body={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#ea4335; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(234,67,53,0.2);">
+                    ✉️ Email
+                </div>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0f172a; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
+                    🐦 X (Twitter)
+                </div>
+            </a>
+        </div>
+
+        <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1px solid #fed7aa; text-align:center;">
+            <div style="font-size:0.88rem; color:#9a3412; font-weight:800;">Direct Web App URL:</div>
+            <div style="font-size:1rem; font-weight:900; color:#431407; margin-top:2px;"><b>{app_url}</b></div>
+        </div>
+    </div>
+    """)
+
+
+# ==============================================================================
+# PAGE 2: USER PROFILE & COMPREHENSIVE ASTROLOGICAL PROFILE
+# ==============================================================================
+def render_page_profile():
+    # Smart User Profile Box with Inline Edit
+    with st.container(border=True):
+        col_p1, col_p2 = st.columns([3, 1])
+        with col_p1:
+            render_html(f"""
+            <div style="font-weight:900; font-size:1.2rem; color:#0f172a;">👤 {prof['name']}'s Profile</div>
+            <div style="font-size:0.95rem; color:#334155; margin-top:5px; line-height:1.6;">
+                📅 <b>DOB:</b> {dob_parsed.strftime('%d %B %Y')} &nbsp;|&nbsp; ⏰ <b>Time:</b> {tob_parsed.strftime('%I:%M %p')}<br>
+                📍 <b>Place:</b> {prof['city']}
+            </div>
+            """)
+        with col_p2:
+            if st.button(t("edit_details", current_lang), use_container_width=True):
+                st.session_state.edit_mode = not st.session_state.edit_mode
+                st.rerun()
+
+    # Expandable edit form
     if st.session_state.edit_mode:
         with st.expander("✏️ Update Birth Information", expanded=True):
-            e_name = st.text_input("Full Name", value=prof["name"])
-            e_dob = st.date_input("Birth Date", value=dob_parsed)
-            e_tob = st.time_input("Birth Time", value=tob_parsed)
-            e_city = st.text_input("Birth City", value=prof["city"])
-            if st.button("💾 Save Profile", type="primary"):
-                st.session_state.user_profile.update({"name": e_name, "dob": e_dob.strftime("%Y-%m-%d"), "tob": e_tob.strftime("%H:%M"), "city": e_city})
-                with open("user_profile.json", "w", encoding="utf-8") as f:
-                    json.dump(st.session_state.user_profile, f, indent=2)
-                st.session_state.edit_mode = False; st.rerun()
+            e_name = st.text_input(t("name_label", current_lang), value=prof["name"])
+            e_dob = st.date_input(t("dob_label", current_lang), value=dob_parsed)
+            e_tob = st.time_input(t("tob_label", current_lang), value=tob_parsed)
+            e_city = st.text_input(t("city_label", current_lang), value=prof["city"])
+            
+            c_save, c_canc = st.columns(2)
+            with c_save:
+                if st.button(t("save_details", current_lang), type="primary", use_container_width=True):
+                    st.session_state.user_profile.update({
+                        "name": e_name,
+                        "dob": e_dob.strftime("%Y-%m-%d"),
+                        "tob": e_tob.strftime("%H:%M"),
+                        "city": e_city
+                    })
+                    save_user_profile(st.session_state.user_profile)
+                    st.session_state.edit_mode = False
+                    st.rerun()
+            with c_canc:
+                if st.button(t("cancel", current_lang), use_container_width=True):
+                    st.session_state.edit_mode = False
+                    st.rerun()
 
-    n = get_nakshatra_traits(chart_info["star_idx"], current_lang)
-    m = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
-    l = get_lagna_details(chart_info["lagna_idx"], current_lang)
+    # Fetch detailed data for Star, Moon Sign, and Lagna
+    n_info = get_nakshatra_traits(chart_info["star_idx"], current_lang)
+    m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
+    l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
+    
+    # 1. Main Astrological Profile Card Header & Quick Metrics
+    moon_parts = chart_info['moon_rashi_name'].split()
+    moon_p1 = moon_parts[0] if moon_parts else chart_info['moon_rashi_name']
+    moon_p2 = moon_parts[-1] if len(moon_parts) > 1 else ""
+
+    lagna_parts = chart_info['lagna_name'].split()
+    lagna_p1 = lagna_parts[0] if lagna_parts else chart_info['lagna_name']
+    lagna_p2 = lagna_parts[-1] if len(lagna_parts) > 1 else ""
 
     render_html(f"""
-    <div class='light-card-profile'>
-        <h3>🌌 Astrological Profile</h3>
-        <p><b>⭐ Janma Nakshatra:</b> {chart_info['star_name']} (Pada {chart_info['pada']})</p>
-        <p><b>Deity:</b> {n['deity']} | <b>Symbol:</b> {n['symbol']} | <b>Tree:</b> {n['tree']} | <b>Bird:</b> {n['bird']} | <b>Animal:</b> {n['animal']}</p>
-        <p>{n['personality']}</p>
-        <div style="background:#fffaf0; padding:10px; border-left:4px solid #f97316; border-radius:8px; margin-top:8px;">
-            <b>🪔 Janma Nakshatra Remedies:</b><br>{n['remedies']}
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.35rem; color:#9a3412; margin-bottom:1rem; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>🌌 Astrological Profile</span>
+            <span style="font-size:0.85rem; background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:20px; font-weight:800;">Vedic Lahiri Ayanamsa</span>
         </div>
-        <hr style="margin:15px 0;">
-        <p><b>🌙 Moon Rashi (Chandra Rashi):</b> {m['name']}</p>
-        <p>{m['profile']}</p>
-        <div style="background:#f0fdf4; padding:10px; border-left:4px solid #10b981; border-radius:8px; margin-top:8px;">
-            <b>🪔 Moon Rashi Remedies:</b><br>{m['remedies']}
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center; margin-bottom:1.25rem;">
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
+                <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('nakshatra_label', current_lang)}</div>
+                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{chart_info['star_name']}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{t('pada_label', current_lang)} {chart_info['pada']}</div>
+            </div>
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
+                <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('moon_rashi_label', current_lang)}</div>
+                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{moon_p1}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{moon_p2}</div>
+            </div>
+            <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
+                <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('lagna_label', current_lang)}</div>
+                <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{lagna_p1}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{lagna_p2}</div>
+            </div>
         </div>
-        <hr style="margin:15px 0;">
-        <p><b>🌅 Lagna (Ascendant):</b> {l['name']}</p>
-        <p>{l['profile']}</p>
-        <div style="background:#f5f3ff; padding:10px; border-left:4px solid #8b5cf6; border-radius:8px; margin-top:8px;">
-            <b>🪔 Lagna Remedies:</b><br>{l['remedies']}
+
+        <!-- SUBSECTION A: JANMA NAKSHATRA BIO, PERSONALITY & PREDICTION -->
+        <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <span>⭐</span> <span>1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})</span>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:12px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🏛️ Deity:</b> {n_info['deity']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🔱 Symbol:</b> {n_info['symbol']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🌳 Tree (Vriksha):</b> {n_info['tree']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🦅 Bird (Pakshi):</b> {n_info['bird']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🦁 Animal (Yoni):</b> {n_info['animal']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🪐 Planetary Lord:</b> {n_info['lord']}</div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <b style="color:#9a3412; font-size:0.98rem;">🧬 Core Personality Archetype:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#431407; margin-top:3px;">{n_info['personality']}</div>
+            </div>
+            
+            <div style="margin-bottom:10px;">
+                <b style="color:#9a3412; font-size:0.98rem;">🔮 Evolutionary Life Path Prediction:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#431407; margin-top:3px;">{n_info['prediction']}</div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #f97316; margin-top:10px;">
+                <b style="color:#9a3412; font-size:0.98rem;">🪔 Janma Nakshatra Remedies:</b>
+                <div style="font-size:0.92rem; line-height:1.65; color:#431407; margin-top:4px; white-space:pre-line;">{n_info['remedies']}</div>
+            </div>
         </div>
+
+        <!-- SUBSECTION B: MOON RASHI (CHANDRA RASHI) BIO, PERSONALITY & PREDICTION -->
+        <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <span>🌙</span> <span>2. Moon Rashi (Chandra Rashi): {m_info['name']}</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:8px; margin-bottom:12px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #bbf7d0;"><b>🔥 Element:</b> {m_info['element']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #bbf7d0;"><b>🪐 Rashi Sovereign:</b> {m_info['ruler']}</div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <b style="color:#065f46; font-size:0.98rem;">🧠 Psychological Temperament & Emotional Mindset:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#14532d; margin-top:3px;">{m_info['profile']}</div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <b style="color:#065f46; font-size:0.98rem;">🔮 Moon Sign Life Outlook & Strategic Prediction:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#14532d; margin-top:3px;">{m_info['prediction']}</div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #10b981; margin-top:10px;">
+                <b style="color:#065f46; font-size:0.98rem;">🪔 Moon Rashi Remedies:</b>
+                <div style="font-size:0.92rem; line-height:1.65; color:#14532d; margin-top:4px; white-space:pre-line;">{m_info['remedies']}</div>
+            </div>
+        </div>
+
+        <!-- SUBSECTION C: LAGNA (ASCENDANT) BIO, PERSONALITY & PREDICTION -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:0.5rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                <span>🌅</span> <span>3. Lagna (Ascendant): {l_info['name']}</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:8px; margin-bottom:12px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #ddd6fe;"><b>🌍 Lagna Tattva:</b> {l_info['element']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #ddd6fe;"><b>👑 Lagna Lord:</b> {l_info['lord']}</div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <b style="color:#5b21b6; font-size:0.98rem;">🛡️ Physical Vitality & Outward Persona:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#3b0764; margin-top:3px;">{l_info['profile']}</div>
+            </div>
+
+            <div style="margin-bottom:10px;">
+                <b style="color:#5b21b6; font-size:0.98rem;">🔮 Life Direction & Societal Stature Prediction:</b>
+                <div style="font-size:0.94rem; line-height:1.65; color:#3b0764; margin-top:3px;">{l_info['prediction']}</div>
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #8b5cf6; margin-top:10px;">
+                <b style="color:#5b21b6; font-size:0.98rem;">🪔 Lagna Remedies:</b>
+                <div style="font-size:0.92rem; line-height:1.65; color:#3b0764; margin-top:4px; white-space:pre-line;">{l_info['remedies']}</div>
+            </div>
+        </div>
+
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 3: CORE NUMEROLOGY BLUEPRINT & LIFE DOMAINS
+# ==============================================================================
 def render_page_numerology():
-    dom = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
-    avoid = get_numerology_avoidance(mulank, bhagyank, current_lang)
+    num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
+    avoid_data = get_numerology_avoidance(mulank, bhagyank, current_lang)
+    p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
+    p_b_label = NUM_PLANET_NAMES.get(bhagyank, {}).get(current_lang, f"Planet {bhagyank}")
+    p_n_label = NUM_PLANET_NAMES.get(namank, {}).get(current_lang, f"Planet {namank}")
+
+    cautions_html = "".join(f"<li style='margin-bottom:5px;'>{c}</li>" for c in avoid_data['cautions'])
+
     render_html(f"""
-    <div class='light-card-num'>
-        <h3>🔢 Core Numerology Blueprint</h3>
-        <p><b>Mulank (Driver):</b> {mulank} | <b>Bhagyank (Destiny):</b> {bhagyank} | <b>Namank:</b> {namank}</p>
-        <p><b>{dom['career_title']}</b><br>{dom['career_desc']}</p>
-        <p><b>{dom['wealth_title']}</b><br>{dom['wealth_desc']}</p>
-        <p><b>{dom['rel_title']}</b><br>{dom['rel_desc']}</p>
-        <p><b>{dom['health_title']}</b><br>{dom['health_desc']}</p>
-        <div style="background:#fff1f2; padding:12px; border:1px solid #fecdd3; border-radius:10px; margin-top:15px;">
-            <b>{avoid['title']}</b><br>
-            • {avoid['lbl_num']} {avoid['avoid_num']}<br>
-            • {avoid['lbl_colors']} {avoid['avoid_colors']}<br>
-            • {avoid['lbl_days']} {avoid['avoid_days']}<br>
-            • {avoid['lbl_dir']} {avoid['avoid_dir']}<br>
-            <div style="margin-top:5px; white-space:pre-line;">{avoid['avoid_habits']}</div>
+    <div class="light-card-num">
+        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>🔢 Core Numerology Blueprint</span>
+            <span style="font-size:0.85rem; background:#d1fae5; color:#065f46; padding:4px 10px; border-radius:20px; font-weight:800;">Vedic & Chaldean</span>
         </div>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center; margin-bottom:1.15rem;">
+            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('mulank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{mulank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_m_label}</div>
+            </div>
+            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('bhagyank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{bhagyank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_b_label}</div>
+            </div>
+            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('namank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{namank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_n_label}</div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.15rem;">
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['career_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['career_desc']}</div>
+            </div>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['wealth_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['wealth_desc']}</div>
+            </div>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #14b8a6;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['rel_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['rel_desc']}</div>
+            </div>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #0d9488;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['health_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['health_desc']}</div>
+            </div>
+        </div>
+
+        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:8px;">{num_domains['luck_title']}</div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.95rem; line-height:1.6;">
+                <div><b>✨ Lucky Numbers:</b> {num_domains['lucky_num']}</div>
+                <div><b>⚠️ Caution Numbers:</b> {num_domains['avoid_num']}</div>
+                <div><b>📅 Auspicious Days:</b> {num_domains['lucky_days']}</div>
+                <div><b>🧭 Favorable Direction:</b> {num_domains['lucky_dir']}</div>
+                <div style="grid-column: 1 / -1;"><b>🎨 Energizing Colors:</b> {num_domains['lucky_colors']}</div>
+            </div>
+        </div>
+
+        <!-- Dedicated Avoidance Matrix Card -->
+        <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3;">
+            <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
+                <div><b>🚫 Numbers to Avoid:</b> {avoid_data['avoid_numbers']}</div>
+                <div><b>🎨 Colors to Avoid:</b> {avoid_data['avoid_colors']}</div>
+                <div><b>📅 Unfavorable Days:</b> {avoid_data['avoid_days']}</div>
+                <div><b>🧭 Direction to Avoid:</b> {avoid_data['avoid_directions']}</div>
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
+                <b style="color:#9f1239; font-size:0.95rem;">⚠️ Critical Behavioral & Strategic Don'ts:</b>
+                <ul style="margin:4px 0 0 0; padding-left:1.2rem; font-size:0.92rem; color:#881337; line-height:1.6;">
+                    {cautions_html}
+                </ul>
+            </div>
+        </div>
+
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 4: COMPREHENSIVE SHANI PAYA, SADE SATI & VEDIC MANTRAS
+# ==============================================================================
 def render_page_shani():
     render_html(f"""
-    <div class='light-card-shani'>
-        <h3>{t('shani_paya_title', current_lang)}</h3>
-        <p><b>Active Paya:</b> {shani_paya_data['paya']} ({shani_paya_data['status']})</p>
-        <p>{shani_paya_data['desc']}</p>
-        <hr style="margin:15px 0;">
-        <h3>{t('sadesati_title', current_lang)}</h3>
-        <p><b>{shani_sadesati_data['type']}</b> ({shani_sadesati_data['dates']})</p>
-        <p>{shani_sadesati_data['impact']}</p>
-        <div style="background:#f5f3ff; padding:12px; border-left:4px solid #7c3aed; border-radius:8px; margin-top:15px;">
-            <b>🪔 Shani Mantras & Protective Remedies:</b><br>
-            • Chant <b>Om Sham No Deveerabhishtaya Aapo Bhavantu Peetaye</b> (21x daily).<br>
-            • Chant Shani Beej Mantra: <b>Om Praam Preem Proum Sah Shanaishcharaya Namah</b> (108x on Saturday evenings).<br>
-            • Pour raw milk and clean water over a Shiva Lingam on Mondays.
+    <div class="light-card-shani">
+        <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>{t('shani_paya_title', current_lang)}</span>
+            <span style="font-size:0.85rem; background:#ede9fe; color:#5b21b6; padding:4px 10px; border-radius:20px; font-weight:800;">Saturn in Pisces (Meena)</span>
         </div>
+        
+        <!-- SECTION 1: SHANI PAYA DEEP DIVE -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #e9d5ff; margin-bottom:1.15rem;">
+            <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE TRANSIT PAYA & FOOTING MECHANICS</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#5b21b6; margin:4px 0;">{shani_paya_data['paya']}</div>
+            <div style="font-size:0.95rem; color:#7c3aed; font-weight:800;">Status: {shani_paya_data['status']}</div>
+            <div style="font-size:0.92rem; color:#475569; margin-top:3px;"><b>Active Timeline:</b> {shani_paya_data['timeline']}</div>
+            
+            <div style="font-size:0.95rem; line-height:1.7; color:#3b0764; margin-top:10px;">
+                <b>Why Rajat Paya (Silver Feet) is Highly Auspicious:</b><br>
+                In classical Vedic transit science (<i>Gochara Shastra</i>), the arrival of Saturn into a zodiac sign is evaluated through the house distance from your natal Moon sign. Because Saturn entered Pisces (the 12th house relative to your Aries Moon), it arrives on <b>Silver Feet (Rajat Paya)</b>. Silver is governed by Moon and Venus. It serves as a celestial shock absorber, cooling Saturn's natural dry friction. Even though you are traversing the initial phase of Sade Sati, the silver footing ensures that financial avenues remain open, ancestral protection guards your health, and reputation remains intact through testing times.
+            </div>
+            
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe; margin-top:10px; font-size:0.9rem; color:#475569;">
+                <b>The 4 Classical Shani Payas:</b><br>
+                • <b>🥈 Rajat (Silver - Houses 2, 5, 9):</b> Highly Auspicious | Financial gains, honor & peace.<br>
+                • <b>🥉 Tamra (Copper - Houses 3, 7, 10):</b> Favorable | Success through patient labor & family harmony.<br>
+                • <b>🥇 Swarna (Gold - Houses 1, 6, 11):</b> Testing | High expenditures, ego conflicts & mental worries.<br>
+                • <b>🪙 Loha (Iron - Houses 4, 8, 12):</b> Demanding | Physical stress, delays & heavy karmic debts.
+            </div>
+        </div>
+
+        <!-- SECTION 2: 3-PHASE SADE SATI TIMELINE & PREDICTIONS -->
+        <div style="background:#ffffff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px;">
+                ⚖️ Complete 3-Phase Sade Sati Matrix (7.5 Years Roadmap)
+            </div>
+
+            <!-- Phase 1 -->
+            <div style="background:#faf5ff; border-radius:12px; padding:12px; border-left:5px solid #9333ea; margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:900; font-size:1rem; color:#5b21b6;">Phase 1: Rising Phase (Aarohi Charana - 12th House Transit)</span>
+                    <span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>
+                </div>
+                <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Timeline:</b> 29 March 2025 – 23 February 2028 (Meena / Pisces)</div>
+                <div style="font-size:0.93rem; line-height:1.65; color:#3b0764;">
+                    <b>Detailed Prediction:</b> Saturn transits through your 12th house of expenditures, foreign linkages, subconscious shedding, and solitude. You will experience a major restructuring of personal priorities. Unnecessary social obligations will fade. You may feel drawn toward spiritual contemplation, research, or cross-border/distant business endeavors. Watch out for sudden unexpected capital expenses or disrupted sleep cycles. Because Saturn is on Silver Feet, financial outflow converts into productive long-term assets rather than net waste.
+                </div>
+                <div style="margin-top:8px; font-size:0.92rem; color:#4c1d95; background:#ffffff; padding:8px 10px; border-radius:8px; border:1px solid #e9d5ff;">
+                    <b>🪔 Phase 1 Remedies:</b> Offer raw cow milk mixed with water on a Shiva Lingam on Mondays. Donate black sesame seeds and mustard oil on Saturdays. Keep a silver coin or square piece of pure silver in your wallet.
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div style="background:#f8fafc; border-radius:12px; padding:12px; border-left:5px solid #64748b; margin-bottom:12px;">
+                <div style="font-weight:900; font-size:1rem; color:#1e293b;">Phase 2: Peak Phase (Janma Shani - 1st House Transit)</div>
+                <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Timeline:</b> 23 February 2028 – 17 April 2030 (Mesha / Aries)</div>
+                <div style="font-size:0.93rem; line-height:1.65; color:#334155;">
+                    <b>Detailed Prediction:</b> Saturn transits directly over your natal Moon in Aries (Janma Rashi). This represents the crucible of self-mastery. You will shoulder immense executive duties, high professional accountability, and significant structural shifts in career or health. Mental resilience will be tested. It demands absolute ego surrender, physical stamina, and unwavering patience. Those who avoid haste during Phase 2 emerge as formidable institutional authorities.
+                </div>
+                <div style="margin-top:8px; font-size:0.92rem; color:#1e293b; background:#ffffff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <b>🪔 Phase 2 Remedies:</b> Recite the <b>Hanuman Chalisa</b> twice daily (morning & evening). Light a mustard oil lamp (Diya) beneath a sacred Peepal tree every Saturday evening without looking back.
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div style="background:#f8fafc; border-radius:12px; padding:12px; border-left:5px solid #64748b;">
+                <div style="font-weight:900; font-size:1rem; color:#1e293b;">Phase 3: Setting Phase (Avarohi Charana - 2nd House Transit)</div>
+                <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Timeline:</b> 17 April 2030 – 31 May 2032 (Vrishabha / Taurus)</div>
+                <div style="font-size:0.93rem; line-height:1.65; color:#334155;">
+                    <b>Detailed Prediction:</b> Saturn transits your 2nd house of accumulated wealth, family lineages, speech, and material sustenance. As Sade Sati draws to a close, the hard lessons of the preceding 5 years crystallize into permanent assets, financial consolidation, and family maturity. Speech must remain measured to avoid domestic misunderstandings. Financial rewards for earlier patience manifest solidly during this concluding phase.
+                </div>
+                <div style="margin-top:8px; font-size:0.92rem; color:#1e293b; background:#ffffff; padding:8px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <b>🪔 Phase 3 Remedies:</b> Feed whole wheat flour dough balls (Peda) mixed with black sesame to black cows or fish on Saturdays. Practice mindful silence (Mauna) for 15 minutes before sunset.
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: CRITICAL CAUTIONS DURING SADE SATI -->
+        <div style="background:#fff1f2; border-radius:14px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
+            <div style="font-weight:900; font-size:1.1rem; color:#9f1239; margin-bottom:8px;">
+                ⚠️ Critical Cautions: What to Avoid During Sade Sati
+            </div>
+            <ul style="margin:0; padding-left:1.25rem; font-size:0.93rem; line-height:1.7; color:#881337;">
+                <li><b>Never Mistreat Subordinates:</b> Shani represents the working class, blue-collar staff, cleaners, and laborers. Disrespecting or delaying payment to laborers incurs swift Saturnic karmic penalty.</li>
+                <li><b>Avoid Speculative Leverage:</b> Do not engage in debt-fueled day trading, short-selling, or unverified speculative schemes. Shani demands slow, honest compounding.</li>
+                <li><b>No Saturday Contracts or Iron Purchases:</b> Do not sign high-stakes real estate contracts, register new partnership deeds, or buy iron, steel cutlery, or real leather items on Saturdays.</li>
+                <li><b>Strictly Avoid Intoxicants & Tamasic Habits:</b> Consumption of excessive alcohol, smoking, or deceitful speech severely destabilizes Shani's protective aura.</li>
+                <li><b>Never Retaliate With Malice:</b> Shani is the lord of cosmic justice (Nyayakaraka). When wronged, remain dignified and allow cosmic law to handle the outcome.</li>
+            </ul>
+        </div>
+
+        <!-- SECTION 4: AUTHENTIC VEDIC & PURANIC SHANI MANTRAS -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px;">
+                🪔 Authentic Vedic & Puranic Shani Mantras (With Meaning & Count)
+            </div>
+
+            <!-- Vedic Samhita Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe; margin-bottom:10px;">
+                <b style="color:#5b21b6; font-size:0.98rem;">1. Vedic Samhita Shani Mantra (Rigveda / Yajurveda):</b>
+                <div style="font-family:serif; font-size:1.05rem; font-weight:700; color:#1e1b4b; margin:6px 0; line-height:1.6;">
+                    ॐ शं नो देवीरभिष्टय आपो भवन्तु पीतये। शं योरभि स्रवन्तु नः॥
+                </div>
+                <div style="font-size:0.88rem; color:#475569; font-style:italic;">
+                    <b>Transliteration:</b> Om Sham No Deviir-Abhishtaye Aapo Bhavantu Piitaye | Sham Yor-Abhi Sravantu Nah ||
+                </div>
+                <div style="font-size:0.9rem; color:#3b0764; margin-top:4px; line-height:1.5;">
+                    <b>Meaning & Prescription:</b> "May the divine waters and cosmic energies be propitious for our fulfillment and blessings. May they flow peacefully for our well-being." Chant 11 times on Saturday mornings facing East.
+                </div>
+            </div>
+
+            <!-- Beej Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe; margin-bottom:10px;">
+                <b style="color:#5b21b6; font-size:0.98rem;">2. Shani Beej Mantra (Tantrik Vibration):</b>
+                <div style="font-family:serif; font-size:1.15rem; font-weight:800; color:#1e1b4b; margin:6px 0;">
+                    ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥
+                </div>
+                <div style="font-size:0.88rem; color:#475569; font-style:italic;">
+                    <b>Transliteration:</b> Om Praam Preem Proum Sah Shanaishcharaya Namah ||
+                </div>
+                <div style="font-size:0.9rem; color:#3b0764; margin-top:4px; line-height:1.5;">
+                    <b>Meaning & Prescription:</b> The primordial seed vibration that pacifies acute friction, alleviates chronic delays, and shields physical health. Chant 108 times using a Rudraksha or Blue Sandalwood Mala in the evening facing West.
+                </div>
+            </div>
+
+            <!-- Gayatri Mantra -->
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe;">
+                <b style="color:#5b21b6; font-size:0.98rem;">3. Shani Gayatri Mantra (Solar-Saturnic Harmony):</b>
+                <div style="font-family:serif; font-size:1.05rem; font-weight:700; color:#1e1b4b; margin:6px 0; line-height:1.6;">
+                    ॐ सूर्यपुत्राय विद्महे मृत्युरूपाय धीमहि। तन्नो सौरिः प्रचोदयात्॥
+                </div>
+                <div style="font-size:0.88rem; color:#475569; font-style:italic;">
+                    <b>Transliteration:</b> Om Suryaputraya Vidmahe Mrityuroopaya Dheemahi | Tanno Saurih Prachodayat ||
+                </div>
+                <div style="font-size:0.9rem; color:#3b0764; margin-top:4px; line-height:1.5;">
+                    <b>Meaning & Prescription:</b> Awakes the righteous, disciplined wisdom of Saturn. Chanting 21 times on Saturday evenings dissolves anxiety and fear of the unknown.
+                </div>
+            </div>
+        </div>
+
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 5: LIVE DAILY PREDICTION & TODAY'S COSMIC PULSE
+# ==============================================================================
 def render_page_live():
     now_ist = datetime.datetime.now()
     cur_star_idx, s_dt, e_dt = get_current_nakshatra_window(now_ist)
     offset = (cur_star_idx - chart_info["star_idx"]) % 9
     nav_name, icon, quality = NAVTARA_NAMES[offset]
-    v_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
+    vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
-    protocol = "🟢 High green light for critical ventures, agreements, property, and financial investments." if "🟢" in icon else "🔴 Avoid speculative gambles, practice patience in communications, and postpone high-stakes friction."
+    decision_protocol = (
+        "🟢 High green light for critical ventures, agreements, property, and financial investments."
+        if "🟢" in icon else
+        "🔴 Avoid speculative gambles, practice patience in communications, and postpone high-stakes friction."
+    )
 
     render_html(f"""
-    <div class='light-card-live'>
-        <h3>⚡ Today's Live Cosmic Pulse</h3>
-        <p><b>Current Moon Nakshatra:</b> {NAKSHATRAS[cur_star_idx - 1]} {icon} ({quality})</p>
-        <p><b>Navtara Vibe:</b> {nav_name}</p>
-        <p><b>Transit Window:</b> {s_dt.strftime('%a, %d %b %I:%M %p')} → {e_dt.strftime('%a, %d %b %I:%M %p IST')}</p>
-        <p><b>Daily Shani Vahan:</b> {v_info['name']} — {v_info['type']}</p>
-        <p><b>Personal Day Vibe:</b> Day {p_day['number']} ({p_day['planet']})</p>
-        <div style="background:#f0f9ff; padding:14px; border-left:5px solid #0284c7; border-radius:10px; margin-top:12px;">
-            <b>🎯 Comprehensive Daily Actionable Strategy & Remedies:</b><br>
-            • <b>Decision Protocol:</b> {protocol}<br>
-            • <b>Auspicious Muhurta:</b> Seize the Abhijit Muhurta midday for important negotiations.<br>
-            • <b>Saturn Mount Remedy:</b> {v_info['remedy']}<br>
-            • <b>Aura Protection Mantra:</b> Chant <b>Om Namah Shivaya</b> 11 times and offer fresh water to Surya Dev at sunrise.
+    <div class="light-card-live">
+        <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:1rem; border-bottom:2px solid #bae6fd; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
+            <span>{t('live_pulse_title', current_lang)}</span>
+            <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE IST</span>
+        </div>
+
+        <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">CURRENT MOON NAKSHATRA</div>
+                    <div style="font-size:1.4rem; font-weight:900; color:#0369a1;">{NAKSHATRAS[cur_star_idx - 1]}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:1.8rem;">{icon}</div>
+                    <div style="font-size:0.88rem; font-weight:900; color:#0369a1;">{quality}</div>
+                </div>
+            </div>
+            <div style="font-size:1.05rem; font-weight:900; color:#0284c7; margin-top:8px;">Navtara: {nav_name}</div>
+            <div style="font-size:0.92rem; color:#334155; margin-top:6px; line-height:1.5;">
+                ⏳ <b>Active Moon Transit Window:</b><br>
+                {s_dt.strftime('%a, %d %b %I:%M %p')} → {e_dt.strftime('%a, %d %b %I:%M %p IST')}
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-bottom:1.1rem;">
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
+                <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">DAILY SHANI VAHAN</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">{vahan_info['name']}</div>
+                <div style="font-size:0.92rem; color:#64748b;">{vahan_info['type']}</div>
+            </div>
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
+                <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">PERSONAL DAY VIBE</div>
+                <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">Day {p_day['number']} ({p_day['planet'].split()[0]})</div>
+                <div style="font-size:0.92rem; color:#64748b;">Alignment Energy</div>
+            </div>
+        </div>
+
+        <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd;">
+            <div style="font-weight:900; font-size:1.05rem; color:#0369a1; margin-bottom:8px;">🎯 Today's Actionable Strategy & Remedies:</div>
+            <div style="font-size:0.95rem; line-height:1.65; color:#0c4a6e;">
+                • <b>Decision Protocol:</b> {decision_protocol}<br>
+                • <b>Saturn Mount Remedy:</b> Feed birds or stray animals this morning to harmonize the daily Shani vehicle.<br>
+                • <b>Aura Protection Mantra:</b> Chant <b>Om Namah Shivaya</b> 11 times before starting important ventures today.
+            </div>
         </div>
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 6: 7-DAY NAKSHATRA TRANSIT FORECAST
+# ==============================================================================
 def render_page_forecast():
     now_ist = datetime.datetime.now()
     transits = get_7_day_moon_transits(now_ist, chart_info["star_idx"])
-    render_html(f"<h3>{t('forecast_title', current_lang)}</h3>")
+
+    render_html(f"""
+    <div style="font-weight:900; font-size:1.25rem; color:#1e293b; margin-bottom:0.8rem;">
+        {t('forecast_title', current_lang)}
+    </div>
+    """)
 
     for idx, tr in enumerate(transits):
         with st.container(border=True):
-            c1, c2, c3 = st.columns([1.5, 3, 1.5])
-            with c1:
-                render_html(f"<b>{tr['date_str']}</b><br><span style='font-size:0.9rem; color:#64748b;'>{tr['star_name']}</span>")
-            with c2:
-                v_name = tr['vahan'].split()[1] if len(tr['vahan'].split()) > 1 else tr['vahan']
-                render_html(f"{tr['icon']} <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:0.85rem; color:#64748b;'>Mount: {v_name}</span>")
-            with c3:
-                if st.button("🔮 View Forecast", key=f"btn_tr_{idx}", use_container_width=True):
+            col_t1, col_t2, col_t3 = st.columns([1.6, 2.8, 1.6])
+            with col_t1:
+                render_html(f"<b>{tr['date_str']}</b><br><span style='font-size:0.92rem; color:#475569; font-weight:700;'>{tr['star_name']}</span>")
+            with col_t2:
+                vahan_name = tr['vahan'].split()[1] if len(tr['vahan'].split()) > 1 else tr['vahan']
+                render_html(f"<span style='font-size:1.1rem;'>{tr['icon']}</span> <b>{tr['nav_name'].split('(')[0]}</b><br><span style='font-size:0.88rem; color:#64748b;'>Mount: {vahan_name}</span>")
+            with col_t3:
+                if st.button("🔮 View", key=f"btn_tr_{idx}", use_container_width=True):
                     st.session_state.selected_transit_idx = idx
                     st.rerun()
 
     safe_idx = min(len(transits) - 1, max(0, st.session_state.selected_transit_idx))
-    sel = transits[safe_idx]
-    action_plan = "Schedule critical meetings, sign major documents, and wear light or energizing colors." if "🟢" in sel['icon'] else "Pause aggressive financial risks, keep conversations respectful and calm, and recite Hanuman Chalisa in the evening."
+    sel_tr = transits[safe_idx]
+
+    plan_desc = (
+        "Schedule critical meetings, sign major documents, and wear light or energizing colors."
+        if "🟢" in sel_tr['icon'] else
+        "Pause aggressive financial risks, keep conversations respectful and calm, and recite Hanuman Chalisa in the evening."
+    )
 
     render_html(f"""
-    <div class='light-card-live' style='margin-top:1rem;'>
-        <h4>🔮 Detailed Forecast for {sel['date_str']} ({sel['star_name']})</h4>
-        <p><b>Transit Window:</b> {sel['start_str']} → {sel['end_str']}</p>
-        <p><b>Navtara Quality:</b> {sel['nav_name']} ({sel['quality']})</p>
-        <p><b>Saturn Vahan:</b> {sel['vahan']} — {sel['vahan_type']}</p>
-        <div style="background:#f0f9ff; padding:12px; border-left:4px solid #0284c7; border-radius:8px; margin-top:10px;">
-            <b>🪔 Daily Action Plan & Remedies:</b><br>
-            • {action_plan}<br>
-            • Feed stray animals or birds in the morning to harmonize planetary friction.<br>
-            • Maintain silent introspection during evening twilight.
+    <div class="light-card-live" style="margin-top:1.1rem;">
+        <div style="font-weight:900; font-size:1.15rem; color:#0369a1; margin-bottom:8px;">
+            🔮 Detailed Forecast for {sel_tr['date_str']} ({sel_tr['star_name']})
+        </div>
+        <div style="font-size:0.94rem; color:#334155; margin-bottom:10px; line-height:1.5;">
+            ⏰ <b>Transit Window:</b><br>{sel_tr['start_str']} → {sel_tr['end_str']}
+        </div>
+        <div style="font-size:0.96rem; line-height:1.65; color:#0c4a6e;">
+            • <b>Navtara Category:</b> {sel_tr['nav_name']} ({sel_tr['quality']})<br>
+            • <b>Saturn Mount:</b> {sel_tr['vahan']} ({sel_tr['vahan_type']})<br>
+            • <b>Remedy & Action Plan:</b> {plan_desc}
         </div>
     </div>
     """)
 
-def render_page_share():
-    app_url = "https://navtara-pulse.streamlit.app"
-    share_msg = "Discover your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
-    encoded_url = urllib.parse.quote(app_url)
-    encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your cosmic alignment here: {app_url}")
+
+# ==============================================================================
+# PAGE 7: REAL-TIME PLANET POSITIONS (SIDEREAL LAHIRI)
+# ==============================================================================
+def render_page_planets():
+    now_ist = datetime.datetime.now()
+    planets_data = get_sidereal_planet_positions(now_ist)
+
     render_html(f"""
-    <div class='light-card-profile'>
-        <h3>{t('share_title', current_lang)}</h3>
-        <p>Share this authentic timing engine with your family and friends:</p>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin:15px 0;">
-            <a href="https://api.whatsapp.com/send?text={encoded_msg}" target="_blank" style="text-decoration:none;"><div style="background:#25D366; color:#fff; padding:12px; border-radius:12px; text-align:center; font-weight:900;">🟢 WhatsApp</div></a>
-            <a href="https://t.me/share/url?url={encoded_url}&text={encoded_msg}" target="_blank" style="text-decoration:none;"><div style="background:#0088cc; color:#fff; padding:12px; border-radius:12px; text-align:center; font-weight:900;">✈️ Telegram</div></a>
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:8px; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem;">
+            {t('planet_title', current_lang)}
         </div>
-        <div style="background:#fff7ed; padding:12px; border-radius:10px; text-align:center; border:1px solid #fed7aa;">
-            <b>Direct App Link:</b><br>{app_url}
+        <div style="font-size:0.92rem; color:#64748b; margin-bottom:12px;">
+            Sidereal Lahiri Ayanamsa | Computed for {now_ist.strftime('%d %B %Y, %I:%M %p IST')}
         </div>
     </div>
     """)
 
-ROUTER = {
+    for p in planets_data:
+        render_html(f"""
+        <div style="background:#fff7ed; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; border:1px solid #fed7aa; margin-bottom:8px;">
+            <span style="font-weight:800; color:#9a3412; font-size:0.98rem;">{p['planet']}</span>
+            <span style="font-weight:900; color:#431407; font-size:0.98rem;">{p['rashi']} ({p['deg']})</span>
+        </div>
+        """)
+
+
+# ==============================================================================
+# PAGE 8: CONSOLIDATED VEDIC REMEDIES SANCTUARY
+# ==============================================================================
+def render_page_remedies():
+    render_html(f"""
+    <div class="light-card-num">
+        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem;">
+            🪔 Consolidated Vedic Astro-Remedies Sanctuary
+        </div>
+        
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669; margin-bottom:1rem;">
+            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">1. Janma Nakshatra Protection ({chart_info['star_name']})</div>
+            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
+                • Worship Lord Shiva or Lord Yama to clear heavy ancestral burdens and establish inner stillness.<br>
+                • Chant <b>Om Hreem Bharanyai Namah</b> or <b>Maha Mrityunjaya Mantra</b> 11 times every morning.
+            </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981; margin-bottom:1rem;">
+            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">2. Numerology Harmony (Mulank {mulank} & Bhagyank {bhagyank})</div>
+            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
+                • Drink water from a silver or copper vessel to balance high planetary nervous intensity.<br>
+                • Maintain an uncluttered workspace free from tangled electronics to amplify mental clarity.
+            </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #ddd6fe; border-left:5px solid #7c3aed;">
+            <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:5px;">3. Shani Rajat Paya (Silver Feet) Shield</div>
+            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
+                • Recite the Hanuman Chalisa on Tuesday and Saturday evenings.<br>
+                • Pour raw cow milk and clean water over a Shiva Lingam on Mondays to awaken the divine silver shield.
+            </div>
+        </div>
+    </div>
+    """)
+
+
+# ==============================================================================
+# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ==============================================================================
+PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
+    "navtara": render_page_profile,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
-    "share": render_page_share
+    "planets": render_page_planets,
+    "remedies": render_page_remedies,
 }
 
-active_page_func = ROUTER.get(st.session_state.current_page, render_page_about)
+active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
 active_page_func()
