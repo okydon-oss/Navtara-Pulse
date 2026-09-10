@@ -21,10 +21,6 @@ st.set_page_config(
 
 # Helper function to inject clean HTML without triggering Markdown code block formatting
 def render_html(html_string: str):
-    """
-    Renders HTML safely by stripping all leading whitespace from every line.
-    Prevents Streamlit Markdown engine from mistaking indented HTML for <pre><code> blocks.
-    """
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
@@ -143,7 +139,7 @@ NAVTARA_NAMES = [
 ]
 
 SHANI_VAHANS = {
-    1: {"name": "Gaja (Elephant / हस्ती)", "type": "Highly Auspicious (अति शुभ)", "speed": "Dignified & Steady", "desc": "Gauranteed wealth expansion, societal respect, sound health, and enduring peace."},
+    1: {"name": "Gaja (Elephant / हस्ती)", "type": "Highly Auspicious (अति शुभ)", "speed": "Dignified & Steady", "desc": "Guaranteed wealth expansion, societal respect, sound health, and enduring peace."},
     2: {"name": "Ashwa (Horse / अश्व)", "type": "Progressive & Dynamic (शुभ)", "speed": "Rapid & Victorious", "desc": "Brisk progress, victory in competitive undertakings, and sudden career momentum."},
     3: {"name": "Simha (Lion / सिंह)", "type": "Victorious & Authoritative (शुभ)", "speed": "Commanding & Decisive", "desc": "Dominance over competitors, professional promotion, and clear leadership recognition."},
     4: {"name": "Gardabha (Donkey / गर्दभ)", "type": "Demanding & Heavy (कठिन)", "speed": "Slow & Laborious", "desc": "Heavy labor, delayed recognition, and testing of patient endurance."},
@@ -172,7 +168,7 @@ NUM_PLANET_NAMES = {
     4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)", "mr": "राहू (Rahu)", "gu": "રાહુ (Rahu)"},
     5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)", "mr": "बुध (Mercury)", "gu": "બુધ (Mercury)"},
     6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
-    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "केतू (Ketu)", "gu": "કેતુ (Ketu)"},
+    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
     8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
     9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
 }
@@ -926,6 +922,7 @@ def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int
             "star_idx": star_idx,
             "star_name": NAKSHATRAS[star_idx - 1],
             "nav_name": nav_name,
+            "nav_offset": offset,
             "icon": icon,
             "quality": quality,
             "vahan": vahan_info["name"],
@@ -1126,10 +1123,9 @@ shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx
 
 
 # ==============================================================================
-# PAGE 1: ABOUT APP (SCIENTIFIC BASIS, PWA INSTALL & SOCIAL SHARING)
+# PAGE 1: ABOUT APP
 # ==============================================================================
 def render_page_about():
-    # Dedicated language selector exclusively on the About Page
     with st.container(border=True):
         st.markdown("**🌐 Select Language / भाषा चुनें / भाषा निवडा / ભાષા પસંદ કરો:**")
         lang_col1, _ = st.columns([2, 1])
@@ -1147,7 +1143,6 @@ def render_page_about():
                 save_user_profile(st.session_state.user_profile)
                 st.rerun()
 
-    # High-contrast scientific explanation
     render_html("""
     <div class="auth-hero-box">
         <div style="font-weight:900; font-size:1.3rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
@@ -1174,7 +1169,6 @@ def render_page_about():
         </div>
     </div>
 
-    <!-- PWA Installation Guide -->
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
             📲 How to Install & Use Like a Native Mobile App
@@ -1203,7 +1197,6 @@ def render_page_about():
     </div>
     """)
 
-    # One-tap social share portal
     app_url = "https://navtara-pulse.streamlit.app"
     share_msg = "Track your real-time Vedic Moon transit rhythm, Shani Paya, and personalized Numerology blueprint with Navtara Pulse!"
     encoded_url = urllib.parse.quote(app_url)
@@ -1250,10 +1243,9 @@ def render_page_about():
 
 
 # ==============================================================================
-# PAGE 2: USER PROFILE & COMPREHENSIVE ASTROLOGICAL PROFILE
+# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE
 # ==============================================================================
 def render_page_profile():
-    # Smart User Profile Box with Inline Edit
     with st.container(border=True):
         col_p1, col_p2 = st.columns([3, 1])
         with col_p1:
@@ -1269,7 +1261,6 @@ def render_page_profile():
                 st.session_state.edit_mode = not st.session_state.edit_mode
                 st.rerun()
 
-    # Expandable edit form
     if st.session_state.edit_mode:
         with st.expander("✏️ Update Birth Information", expanded=True):
             e_name = st.text_input(t("name_label", current_lang), value=prof["name"])
@@ -1294,12 +1285,10 @@ def render_page_profile():
                     st.session_state.edit_mode = False
                     st.rerun()
 
-    # Fetch detailed data for Star, Moon Sign, and Lagna
     n_info = get_nakshatra_traits(chart_info["star_idx"], current_lang)
     m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
     l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
     
-    # 1. Main Astrological Profile Card Header & Quick Metrics
     moon_parts = chart_info['moon_rashi_name'].split()
     moon_p1 = moon_parts[0] if moon_parts else chart_info['moon_rashi_name']
     moon_p2 = moon_parts[-1] if len(moon_parts) > 1 else ""
@@ -1364,7 +1353,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION B: MOON RASHI (CHANDRA RASHI) BIO, PERSONALITY & PREDICTION -->
+        <!-- SUBSECTION B: MOON RASHI BIO, PERSONALITY & PREDICTION -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌙</span> <span>2. Moon Rashi (Chandra Rashi): {m_info['name']}</span>
@@ -1391,7 +1380,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION C: LAGNA (ASCENDANT) BIO, PERSONALITY & PREDICTION -->
+        <!-- SUBSECTION C: LAGNA BIO, PERSONALITY & PREDICTION -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:0.5rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌅</span> <span>3. Lagna (Ascendant): {l_info['name']}</span>
@@ -1423,7 +1412,7 @@ def render_page_profile():
 
 
 # ==============================================================================
-# PAGE 3: CORE NUMEROLOGY BLUEPRINT & LIFE DOMAINS
+# PAGE 3: NUMEROLOGY
 # ==============================================================================
 def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
@@ -1489,7 +1478,6 @@ def render_page_numerology():
             </div>
         </div>
 
-        <!-- Dedicated Avoidance Matrix Card -->
         <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3;">
             <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
@@ -1505,13 +1493,12 @@ def render_page_numerology():
                 </ul>
             </div>
         </div>
-
     </div>
     """)
 
 
 # ==============================================================================
-# PAGE 4: COMPREHENSIVE SHANI PAYA, SADE SATI & VEDIC MANTRAS
+# PAGE 4: SHANI
 # ==============================================================================
 def render_page_shani():
     render_html(f"""
@@ -1521,7 +1508,6 @@ def render_page_shani():
             <span style="font-size:0.85rem; background:#ede9fe; color:#5b21b6; padding:4px 10px; border-radius:20px; font-weight:800;">Saturn in Pisces (Meena)</span>
         </div>
         
-        <!-- SECTION 1: SHANI PAYA DEEP DIVE -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #e9d5ff; margin-bottom:1.15rem;">
             <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE TRANSIT PAYA & FOOTING MECHANICS</div>
             <div style="font-size:1.4rem; font-weight:900; color:#5b21b6; margin:4px 0;">{shani_paya_data['paya']}</div>
@@ -1542,13 +1528,11 @@ def render_page_shani():
             </div>
         </div>
 
-        <!-- SECTION 2: 3-PHASE SADE SATI TIMELINE & PREDICTIONS -->
         <div style="background:#ffffff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px;">
                 ⚖️ Complete 3-Phase Sade Sati Matrix (7.5 Years Roadmap)
             </div>
 
-            <!-- Phase 1 -->
             <div style="background:#faf5ff; border-radius:12px; padding:12px; border-left:5px solid #9333ea; margin-bottom:12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:900; font-size:1rem; color:#5b21b6;">Phase 1: Rising Phase (Aarohi Charana - 12th House Transit)</span>
@@ -1563,7 +1547,6 @@ def render_page_shani():
                 </div>
             </div>
 
-            <!-- Phase 2 -->
             <div style="background:#f8fafc; border-radius:12px; padding:12px; border-left:5px solid #64748b; margin-bottom:12px;">
                 <div style="font-weight:900; font-size:1rem; color:#1e293b;">Phase 2: Peak Phase (Janma Shani - 1st House Transit)</div>
                 <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Timeline:</b> 23 February 2028 – 17 April 2030 (Mesha / Aries)</div>
@@ -1575,7 +1558,6 @@ def render_page_shani():
                 </div>
             </div>
 
-            <!-- Phase 3 -->
             <div style="background:#f8fafc; border-radius:12px; padding:12px; border-left:5px solid #64748b;">
                 <div style="font-weight:900; font-size:1rem; color:#1e293b;">Phase 3: Setting Phase (Avarohi Charana - 2nd House Transit)</div>
                 <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Timeline:</b> 17 April 2030 – 31 May 2032 (Vrishabha / Taurus)</div>
@@ -1588,7 +1570,6 @@ def render_page_shani():
             </div>
         </div>
 
-        <!-- SECTION 3: CRITICAL CAUTIONS DURING SADE SATI -->
         <div style="background:#fff1f2; border-radius:14px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.1rem; color:#9f1239; margin-bottom:8px;">
                 ⚠️ Critical Cautions: What to Avoid During Sade Sati
@@ -1602,13 +1583,11 @@ def render_page_shani():
             </ul>
         </div>
 
-        <!-- SECTION 4: AUTHENTIC VEDIC & PURANIC SHANI MANTRAS -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px;">
                 🪔 Authentic Vedic & Puranic Shani Mantras (With Meaning & Count)
             </div>
 
-            <!-- Vedic Samhita Mantra -->
             <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe; margin-bottom:10px;">
                 <b style="color:#5b21b6; font-size:0.98rem;">1. Vedic Samhita Shani Mantra (Rigveda / Yajurveda):</b>
                 <div style="font-family:serif; font-size:1.05rem; font-weight:700; color:#1e1b4b; margin:6px 0; line-height:1.6;">
@@ -1622,7 +1601,6 @@ def render_page_shani():
                 </div>
             </div>
 
-            <!-- Beej Mantra -->
             <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe; margin-bottom:10px;">
                 <b style="color:#5b21b6; font-size:0.98rem;">2. Shani Beej Mantra (Tantrik Vibration):</b>
                 <div style="font-family:serif; font-size:1.15rem; font-weight:800; color:#1e1b4b; margin:6px 0;">
@@ -1636,7 +1614,6 @@ def render_page_shani():
                 </div>
             </div>
 
-            <!-- Gayatri Mantra -->
             <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #ddd6fe;">
                 <b style="color:#5b21b6; font-size:0.98rem;">3. Shani Gayatri Mantra (Solar-Saturnic Harmony):</b>
                 <div style="font-family:serif; font-size:1.05rem; font-weight:700; color:#1e1b4b; margin:6px 0; line-height:1.6;">
@@ -1650,13 +1627,57 @@ def render_page_shani():
                 </div>
             </div>
         </div>
-
     </div>
     """)
 
 
 # ==============================================================================
-# PAGE 5: LIVE DAILY PREDICTION & TODAY'S COSMIC PULSE
+# DETAILED PREDICTION & REMEDIES ENGINE (FOR LIVE & 7-DAY FORECASTS)
+# ==============================================================================
+def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
+    is_positive = offset in [1, 3, 5, 7, 8]
+    is_extreme_friction = offset in [2, 4, 6]
+
+    theme_map = {
+        0: ("Identity Renewal & Foundation (Janma)", "Mind feels intensely sensitive, reflective, and connected to root desires. Vital for self-evaluation rather than high-stakes friction.", "Focus on foundational planning, health diagnostics, routine execution, and self-care.", "Avoid impulsive career shifts, major loans, or initiating confrontational meetings."),
+        1: ("Accelerated Wealth & Liquidity (Sampat)", "High financial synchronicity. Cosmic doors open for asset acquisition, high-ticket proposals, and capital expansion.", "Sign partnership deeds, initiate investments, submit proposals, and collect receivables.", "Avoid complacency; strike while the cosmic window is open."),
+        2: ("Friction Shield & Crisis Deflection (Vipat)", "Elevated environmental resistance. Unforeseen delays, technological glitches, and administrative roadblocks.", "Conduct defensive administrative checks, review error margins, and maintain low profile.", "Strictly avoid speculative bets, aggressive confrontations, or signing irreversible contracts."),
+        3: ("Peace, Health & Structural Security (Kshema)", "Sustaining, healing vibrational flow. Excellent for domestic harmony, property matters, and emotional equilibrium.", "Finalize contracts, purchase durable goods, enjoy family gatherings, and resolve old disputes.", "Avoid over-exhaustion; maintain balanced dietary and rest rhythms."),
+        4: ("Overcoming Roadblocks & Opposition (Pratyari)", "Testing of diplomatic acumen. Hidden opposition, critical auditors, or challenging counterparties may emerge.", "Gather airtight evidence, exercise extreme tactical patience, and listen twice as much as you speak.", "Avoid losing temper in official communications; do not escalate legal friction."),
+        5: ("Strategic Mastery & Manifestation (Sadhana)", "Golden window for high-order accomplishments. Mental faculties are razor sharp for complex engineering, strategy, and execution.", "Launch critical campaigns, undertake complex technical projects, negotiate promotions, and study.", "Do not waste this high-frequency window on superficial trivialities."),
+        6: ("High Friction Zone & Defensive Prudence (Vadha)", "Heaviest energetic friction. Physical vitality and mental stamina feel vulnerable to depletion.", "Keep a minimalist agenda, practice quiet perseverance, and double-check all critical data.", "Do not drive long distances late at night; postpone major financial commitments."),
+        7: ("Cooperative Harmony & Alliance Building (Mitra)", "Pleasurable, cordial cosmic atmosphere. High responsiveness from peers, mentors, and prospective partners.", "Network with key decision-makers, resolve estrangements, host important discussions, and socialize.", "Avoid being overly accommodating; ensure business boundaries remain firm."),
+        8: ("Supreme Synergy & Pinnacle Triumph (Ati-Mitra)", "Peak celestial resonance. The rarest, most fruitful timing window for long-term victories and monumental leaps.", "Pitch high-value clients, launch new business verticals, close major property deals, and celebrate.", "Do not doubt yourself; step forward with unwavering confidence.")
+    }
+
+    theme_title, theme_desc, opportunities, hazards = theme_map.get(offset, theme_map[0])
+
+    if is_positive:
+        remedy_mantra = "ॐ नमो भगवते वासुदेवाय (Om Namo Bhagavate Vasudevaya) - 11 times in morning facing East."
+        remedy_charity = "Offer sweet yellow fruits or milk sweets to elders, mentors, or temples to seal cosmic prosperity."
+        remedy_action = "Wear light, vibrant shades (Coral Red, Amber Gold, or Electric White) to broadcast peak resonance."
+    elif is_extreme_friction:
+        remedy_mantra = "ॐ नमः शिवाय (Om Namah Shivaya) or Maha Mrityunjaya Mantra - 108 times at twilight facing North."
+        remedy_charity = "Feed stray dogs, crows, or donate dark grains/black sesame to pacify planetary friction."
+        remedy_action = "Apply white sandalwood paste to forehead/wrists; maintain 15 minutes of silent mindfulness (Mauna) before sunset."
+    else:
+        remedy_mantra = "ॐ सूर्याय नमः (Om Suryaya Namah) - Offer pure water in a copper vessel to morning Sun."
+        remedy_charity = "Feed green grass or fresh spinach to cows to enhance cellular vitality and grounding."
+        remedy_action = "Drink warm water from a silver cup; strictly abstain from fast food and erratic sleep patterns."
+
+    return {
+        "theme_title": theme_title,
+        "theme_desc": theme_desc,
+        "opportunities": opportunities,
+        "hazards": hazards,
+        "remedy_mantra": remedy_mantra,
+        "remedy_charity": remedy_charity,
+        "remedy_action": remedy_action
+    }
+
+
+# ==============================================================================
+# PAGE 5: LIVE DAILY PREDICTION
 # ==============================================================================
 def render_page_live():
     now_ist = datetime.datetime.now()
@@ -1666,11 +1687,7 @@ def render_page_live():
     vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
-    decision_protocol = (
-        "🟢 High green light for critical ventures, agreements, property, and financial investments."
-        if "🟢" in icon else
-        "🔴 Avoid speculative gambles, practice patience in communications, and postpone high-stakes friction."
-    )
+    insights = get_detailed_day_insights(offset, vahan_info, NAKSHATRAS[cur_star_idx - 1], p_day)
 
     render_html(f"""
     <div class="light-card-live">
@@ -1701,21 +1718,44 @@ def render_page_live():
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
                 <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">DAILY SHANI VAHAN</div>
                 <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">{vahan_info['name']}</div>
-                <div style="font-size:0.92rem; color:#64748b;">{vahan_info['type']}</div>
+                <div style="font-size:0.88rem; color:#64748b;"><b>Type:</b> {vahan_info['type']} ({vahan_info['speed']})</div>
+                <div style="font-size:0.88rem; color:#0369a1; margin-top:4px;">{vahan_info['desc']}</div>
             </div>
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
-                <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">PERSONAL DAY VIBE</div>
+                <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">PERSONAL DAY VIBRATION</div>
                 <div style="font-size:1.15rem; font-weight:900; color:#0369a1;">Day {p_day['number']} ({p_day['planet'].split()[0]})</div>
-                <div style="font-size:0.92rem; color:#64748b;">Alignment Energy</div>
+                <div style="font-size:0.88rem; color:#64748b;"><b>Planetary Tone:</b> {p_day['planet']}</div>
+                <div style="font-size:0.88rem; color:#0369a1; margin-top:4px;">{p_day['desc']}</div>
+            </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
+            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #e0f2fe; padding-bottom:5px;">
+                🧠 In-Depth Cognitive & Strategic Theme: {insights['theme_title']}
+            </div>
+            <div style="font-size:0.95rem; line-height:1.7; color:#1e293b; margin-bottom:12px;">
+                {insights['theme_desc']}
+            </div>
+
+            <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #16a34a; margin-bottom:10px;">
+                <b style="color:#15803d; font-size:0.95rem;">🚀 Prime Opportunities & Action Protocols:</b>
+                <div style="font-size:0.92rem; line-height:1.6; color:#166534; margin-top:2px;">{insights['opportunities']}</div>
+            </div>
+
+            <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
+                <b style="color:#be123c; font-size:0.95rem;">⚠️ Potential Hazards & Strategic Don'ts:</b>
+                <div style="font-size:0.92rem; line-height:1.6; color:#9f1239; margin-top:2px;">{insights['hazards']}</div>
             </div>
         </div>
 
         <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd;">
-            <div style="font-weight:900; font-size:1.05rem; color:#0369a1; margin-bottom:8px;">🎯 Today's Actionable Strategy & Remedies:</div>
-            <div style="font-size:0.95rem; line-height:1.65; color:#0c4a6e;">
-                • <b>Decision Protocol:</b> {decision_protocol}<br>
-                • <b>Saturn Mount Remedy:</b> Feed birds or stray animals this morning to harmonize the daily Shani vehicle.<br>
-                • <b>Aura Protection Mantra:</b> Chant <b>Om Namah Shivaya</b> 11 times before starting important ventures today.
+            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #bae6fd; padding-bottom:5px;">
+                🪔 Targeted Daily Cosmic Remedies:
+            </div>
+            <div style="font-size:0.94rem; line-height:1.7; color:#0c4a6e;">
+                • <b>Aura Protection Mantra:</b> {insights['remedy_mantra']}<br>
+                • <b>Elemental Harmony & Donation:</b> {insights['remedy_charity']}<br>
+                • <b>Behavioral & Color Calibration:</b> {insights['remedy_action']}
             </div>
         </div>
     </div>
@@ -1750,25 +1790,48 @@ def render_page_forecast():
 
     safe_idx = min(len(transits) - 1, max(0, st.session_state.selected_transit_idx))
     sel_tr = transits[safe_idx]
-
-    plan_desc = (
-        "Schedule critical meetings, sign major documents, and wear light or energizing colors."
-        if "🟢" in sel_tr['icon'] else
-        "Pause aggressive financial risks, keep conversations respectful and calm, and recite Hanuman Chalisa in the evening."
-    )
+    
+    sel_p_day = get_personal_day_vibe(dob_parsed, sel_tr['date'], current_lang)
+    v_info = calculate_shani_vahan(chart_info["star_idx"], sel_tr["star_idx"])
+    sel_insights = get_detailed_day_insights(sel_tr["nav_offset"], v_info, sel_tr['star_name'], sel_p_day)
 
     render_html(f"""
     <div class="light-card-live" style="margin-top:1.1rem;">
-        <div style="font-weight:900; font-size:1.15rem; color:#0369a1; margin-bottom:8px;">
-            🔮 Detailed Forecast for {sel_tr['date_str']} ({sel_tr['star_name']})
+        <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:8px; border-bottom:1.5px solid #bae6fd; padding-bottom:5px;">
+            🔮 Detailed Transit Forecast: {sel_tr['date_str']} ({sel_tr['star_name']})
         </div>
-        <div style="font-size:0.94rem; color:#334155; margin-bottom:10px; line-height:1.5;">
-            ⏰ <b>Transit Window:</b><br>{sel_tr['start_str']} → {sel_tr['end_str']}
+        
+        <div style="font-size:0.94rem; color:#334155; margin-bottom:12px; line-height:1.5;">
+            ⏰ <b>Transit Window:</b> {sel_tr['start_str']} → {sel_tr['end_str']}<br>
+            🧭 <b>Navtara Classification:</b> {sel_tr['nav_name']} ({sel_tr['quality']})<br>
+            🪐 <b>Saturn Mount (Vahan):</b> {v_info['name']} — <i>{v_info['speed']} ({v_info['type']})</i>
         </div>
-        <div style="font-size:0.96rem; line-height:1.65; color:#0c4a6e;">
-            • <b>Navtara Category:</b> {sel_tr['nav_name']} ({sel_tr['quality']})<br>
-            • <b>Saturn Mount:</b> {sel_tr['vahan']} ({sel_tr['vahan_type']})<br>
-            • <b>Remedy & Action Plan:</b> {plan_desc}
+
+        <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #bae6fd; margin-bottom:12px;">
+            <b style="color:#0369a1; font-size:1rem;">🎯 Cosmic Archetype: {sel_insights['theme_title']}</b>
+            <div style="font-size:0.94rem; line-height:1.65; color:#1e293b; margin-top:4px;">
+                {sel_insights['theme_desc']}
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:8px; margin-bottom:12px;">
+            <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #16a34a;">
+                <b style="color:#15803d; font-size:0.92rem;">🟢 Favorable Initiatives & Green Lights:</b>
+                <div style="font-size:0.91rem; line-height:1.6; color:#166534; margin-top:2px;">{sel_insights['opportunities']}</div>
+            </div>
+            <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
+                <b style="color:#be123c; font-size:0.92rem;">🔴 Hazards, Caution & Red Lights:</b>
+                <div style="font-size:0.91rem; line-height:1.6; color:#9f1239; margin-top:2px;">{sel_insights['hazards']}</div>
+            </div>
+        </div>
+
+        <div style="background:#f0f9ff; border-radius:10px; padding:12px; border:1px solid #bae6fd;">
+            <b style="color:#0369a1; font-size:0.98rem;">🪔 Prescribed Daily Remedies for this Window:</b>
+            <div style="font-size:0.92rem; line-height:1.65; color:#0c4a6e; margin-top:4px;">
+                • <b>Mantra Japa:</b> {sel_insights['remedy_mantra']}<br>
+                • <b>Elemental Donation:</b> {sel_insights['remedy_charity']}<br>
+                • <b>Personal Protocol:</b> {sel_insights['remedy_action']}
+            </div>
         </div>
     </div>
     """)
@@ -1802,7 +1865,7 @@ def render_page_planets():
 
 
 # ==============================================================================
-# PAGE 8: CONSOLIDATED VEDIC REMEDIES SANCTUARY
+# PAGE 8: REMEDIES
 # ==============================================================================
 def render_page_remedies():
     render_html(f"""
@@ -1839,7 +1902,7 @@ def render_page_remedies():
 
 
 # ==============================================================================
-# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ROUTER DISPATCHER
 # ==============================================================================
 PAGES = {
     "about": render_page_about,
