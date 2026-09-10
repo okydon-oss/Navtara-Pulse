@@ -875,6 +875,11 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 1
         "lagna_name": RASHIS[lagna_idx]
     }
 
+def get_current_ist_datetime() -> datetime.datetime:
+    """Returns the true Indian Standard Time (IST, UTC+5:30) regardless of host server location."""
+    ist_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
+    return datetime.datetime.now(datetime.timezone.utc).astimezone(ist_tz).replace(tzinfo=None)
+
 def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
     utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
     current_lon = get_sidereal_moon_longitude(utc_dt)
@@ -1774,93 +1779,12 @@ def render_page_shani():
                     <b>Transliteration:</b> Om Suryaputraya Vidmahe Mrityuroopaya Dheemahi | Tanno Saurih Prachodayat ||
                 </div>
                 <div style="font-size:0.9rem; color:#3b0764; margin-top:4px; line-height:1.5;">
-                    <b>Meaning & Prescription:</b> Awakes the righteous, disciplined wisdom of Saturn. Chanting 21 times on Saturday evenings dissolves anxiety and fear of the unknown.
-                </div>
-            </div>
-        </div>
-    </div>
-    """)
-
-    # Interactive Japa Mala Counter Widget
-    render_html("""
-    <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:16px; padding:1.15rem; margin-top:1.15rem; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
-        <div style="font-weight:900; font-size:1.18rem; color:#5b21b6; margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
-            <span>📿 Interactive Japa Mala Counter (108 Chants)</span>
-            <span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">Digital Sadhana</span>
-        </div>
-        <div style="font-size:0.88rem; color:#64748b; margin-bottom:10px;">
-            Tap to count your daily <b>Shani Beej Mantra (ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः)</b> or Maha Mrityunjaya chants directly on screen:
-        </div>
-    </div>
-    """)
-
-    with st.container():
-        j_col1, j_col2, j_col3 = st.columns([1.5, 1.2, 1.2])
-        with j_col1:
-            curr_bead = st.session_state.japa_count
-            pct = min(100, int((curr_bead / 108.0) * 100))
-            render_html(f"""
-            <div style="background:#f5f3ff; border-radius:12px; padding:12px 14px; text-align:center; border:1.5px solid #ddd6fe;">
-                <div style="font-size:0.82rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">BEADS COMPLETED</div>
-                <div style="font-size:2.2rem; font-weight:900; color:#5b21b6; line-height:1.1;">{curr_bead} <span style="font-size:1.1rem; color:#a78bfa;">/ 108</span></div>
-                <div style="font-size:0.82rem; color:#7c3aed; font-weight:700; margin-top:2px;">Mala Progress: {pct}%</div>
-            </div>
-            """)
-        with j_col2:
-            if st.button("📿 Tap Bead (+1)", type="primary", use_container_width=True, key="btn_japa_add"):
-                if st.session_state.japa_count < 108:
-                    st.session_state.japa_count += 1
-                else:
-                    st.session_state.japa_count = 1
-                st.rerun()
-        with j_col3:
-            if st.button("🔄 Reset Mala", type="secondary", use_container_width=True, key="btn_japa_reset"):
-                st.session_state.japa_count = 0
-                st.rerun()
-
-def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
-    is_positive = offset in [1, 3, 5, 7, 8]
-    is_extreme_friction = offset in [2, 4, 6]
-
-    theme_map = {
-        0: ("Identity Renewal & Foundation (Janma)", "Mind feels intensely sensitive, reflective, and connected to root desires. Vital for self-evaluation rather than high-stakes friction.", "Focus on foundational planning, health diagnostics, routine execution, and self-care.", "Avoid impulsive career shifts, major loans, or initiating confrontational meetings."),
-        1: ("Accelerated Wealth & Liquidity (Sampat)", "High financial synchronicity. Cosmic doors open for asset acquisition, high-ticket proposals, and capital expansion.", "Sign partnership deeds, initiate investments, submit proposals, and collect receivables.", "Avoid complacency; strike while the cosmic window is open."),
-        2: ("Friction Shield & Crisis Deflection (Vipat)", "Elevated environmental resistance. Unforeseen delays, technological glitches, and administrative roadblocks.", "Conduct defensive administrative checks, review error margins, and maintain low profile.", "Strictly avoid speculative bets, aggressive confrontations, or signing irreversible contracts."),
-        3: ("Peace, Health & Structural Security (Kshema)", "Sustaining, healing vibrational flow. Excellent for domestic harmony, property matters, and emotional equilibrium.", "Finalize contracts, purchase durable goods, enjoy family gatherings, and resolve old disputes.", "Avoid over-exhaustion; maintain balanced dietary and rest rhythms."),
-        4: ("Overcoming Roadblocks & Opposition (Pratyari)", "Testing of diplomatic acumen. Hidden opposition, critical auditors, or challenging counterparties may emerge.", "Gather airtight evidence, exercise extreme tactical patience, and listen twice as much as you speak.", "Avoid losing temper in official communications; do not escalate legal friction."),
-        5: ("Strategic Mastery & Manifestation (Sadhana)", "Golden window for high-order accomplishments. Mental faculties are razor sharp for complex engineering, strategy, and execution.", "Launch critical campaigns, undertake complex technical projects, negotiate promotions, and study.", "Do not waste this high-frequency window on superficial trivialities."),
-        6: ("High Friction Zone & Defensive Prudence (Vadha)", "Heaviest energetic friction. Physical vitality and mental stamina feel vulnerable to depletion.", "Keep a minimalist agenda, practice quiet perseverance, and double-check all critical data.", "Do not drive long distances late at night; postpone major financial commitments."),
-        7: ("Cooperative Harmony & Alliance Building (Mitra)", "Pleasurable, cordial cosmic atmosphere. High responsiveness from peers, mentors, and prospective partners.", "Network with key decision-makers, resolve estrangements, host important discussions, and socialize.", "Avoid being overly accommodating; ensure business boundaries remain firm."),
-        8: ("Supreme Synergy & Pinnacle Triumph (Ati-Mitra)", "Peak celestial resonance. The rarest, most fruitful timing window for long-term victories and monumental leaps.", "Pitch high-value clients, launch new business verticals, close major property deals, and celebrate.", "Do not doubt yourself; step forward with unwavering confidence.")
-    }
-
-    theme_title, theme_desc, opportunities, hazards = theme_map.get(offset, theme_map[0])
-
-    if is_positive:
-        remedy_mantra = "ॐ नमो भगवते वासुदेवाय (Om Namo Bhagavate Vasudevaya) - 11 times in morning facing East."
-        remedy_charity = "Offer sweet yellow fruits or milk sweets to elders, mentors, or temples to seal cosmic prosperity."
-        remedy_action = "Wear light, vibrant shades (Coral Red, Amber Gold, or Electric White) to broadcast peak resonance."
-    elif is_extreme_friction:
-        remedy_mantra = "ॐ नमः शिवाय (Om Namah Shivaya) or Maha Mrityunjaya Mantra - 108 times at twilight facing North."
-        remedy_charity = "Feed stray dogs, crows, or donate dark grains/black sesame to pacify planetary friction."
-        remedy_action = "Apply white sandalwood paste to forehead/wrists; maintain 15 minutes of silent mindfulness (Mauna) before sunset."
-    else:
-        remedy_mantra = "ॐ सूर्याय नमः (Om Suryaya Namah) - Offer pure water in a copper vessel to morning Sun."
-        remedy_charity = "Feed green grass or fresh spinach to cows to enhance cellular vitality and grounding."
-        remedy_action = "Drink warm water from a silver cup; strictly abstain from fast food and erratic sleep patterns."
-
-    return {
-        "theme_title": theme_title,
-        "theme_desc": theme_desc,
-        "opportunities": opportunities,
-        "hazards": hazards,
-        "remedy_mantra": remedy_mantra,
-        "remedy_charity": remedy_charity,
-        "remedy_action": remedy_action
-    }
-
+# ==============================================================================
+# PAGE 5: LIVE DAILY PREDICTION
+# ==============================================================================
 def render_page_live():
-    now_ist = datetime.datetime.now()
+    # Enforce precise Indian Standard Time (IST)
+    now_ist = get_current_ist_datetime()
     cur_star_idx, s_dt, e_dt = get_current_nakshatra_window(now_ist)
     offset = (cur_star_idx - chart_info["star_idx"]) % 9
     nav_name, icon, quality = NAVTARA_NAMES[offset]
@@ -1879,18 +1803,25 @@ def render_page_live():
     yama_s, yama_e = muhurtas["yamaganda"]
     brahma_s, brahma_e = muhurtas["brahma"]
 
+    # Strict IST Window evaluation: active ONLY when start <= now_ist <= end
     is_abhijit = abhijit_s <= now_ist <= abhijit_e
     is_rahu = rahu_s <= now_ist <= rahu_e
     is_yama = yama_s <= now_ist <= yama_e
 
+    now_time_str = now_ist.strftime('%I:%M %p')
+
+    # Construct dynamic live status banner
     if is_rahu:
         status_banner = f"""
         <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
                 <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Rahu Kaal in Operation</b>
-                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Pause new contract signing, travel departures, and major transactions until {rahu_e.strftime('%I:%M %p')}.</div>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:3px;">
+                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {rahu_e.strftime('%I:%M %p IST')}<br>
+                    Pause new contract signing, financial disbursements, and travel departures.
+                </div>
             </div>
-            <span style="font-size:1.8rem;">🛑</span>
+            <span style="font-size:1.9rem;">🛑</span>
         </div>
         """
     elif is_yama:
@@ -1898,9 +1829,12 @@ def render_page_live():
         <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
                 <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Yamaganda in Operation</b>
-                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Avoid launching crucial ventures or financial agreements until {yama_e.strftime('%I:%M %p')}.</div>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:3px;">
+                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {yama_e.strftime('%I:%M %p IST')}<br>
+                    Avoid initiating brand-new high-stakes ventures or critical negotiations.
+                </div>
             </div>
-            <span style="font-size:1.8rem;">⚠️</span>
+            <span style="font-size:1.9rem;">⚠️</span>
         </div>
         """
     elif is_abhijit:
@@ -1908,19 +1842,101 @@ def render_page_live():
         <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
                 <b style="color:#15803d; font-size:1.02rem;">🟢 GOLDEN ACTION WINDOW ACTIVE: Abhijit Muhurta</b>
-                <div style="font-size:0.88rem; color:#14532d; margin-top:2px;">Supreme cosmic victory window. Highly auspicious for approvals, launches, and decisions until {abhijit_e.strftime('%I:%M %p')}.</div>
+                <div style="font-size:0.88rem; color:#14532d; margin-top:3px;">
+                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {abhijit_e.strftime('%I:%M %p IST')}<br>
+                    Supreme victory window. Highly auspicious for signings, proposals, and decisions.
+                </div>
             </div>
-            <span style="font-size:1.8rem;">🌟</span>
+            <span style="font-size:1.9rem;">🌟</span>
         </div>
         """
     else:
+        # Determine upcoming events that have NOT ended yet
+        upcoming_notes = []
+        if now_ist < abhijit_s:
+            upcoming_notes.append(f"Next Abhijit: {abhijit_s.strftime('%I:%M %p')}")
+        if now_ist < rahu_s:
+            upcoming_notes.append(f"Upcoming Rahu Kaal: {rahu_s.strftime('%I:%M %p')}")
+        if now_ist < yama_s:
+            upcoming_notes.append(f"Upcoming Yamaganda: {yama_s.strftime('%I:%M %p')}")
+
+        if upcoming_notes:
+            timing_note = " | ".join(upcoming_notes)
+        else:
+            timing_note = "All major caution windows for today have ended. Clear path for operations."
+
         status_banner = f"""
         <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
                 <b style="color:#166534; font-size:0.98rem;">🟢 SAFE TO ACT: Standard Favorable Orbit</b>
-                <div style="font-size:0.86rem; color:#15803d; margin-top:2px;">No planetary friction windows currently active. Next Abhijit: {abhijit_s.strftime('%I:%M %p')} | Rahu Kaal: {rahu_s.strftime('%I:%M %p')}</div>
+                <div style="font-size:0.86rem; color:#15803d; margin-top:3px;">
+                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; {timing_note}
+                </div>
             </div>
             <span style="font-size:1.6rem;">⏱️</span>
+        </div>
+        """
+
+    # Build Golden Windows: OMIT completely if the window timeline is over
+    golden_items = []
+    if now_ist <= abhijit_e:
+        badge = "<span style='background:#22c55e; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_abhijit else "<span style='background:#dcfce7; color:#15803d; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        golden_items.append(f"""
+            <div style="margin-bottom:8px; line-height:1.5;">
+                • <b>Abhijit Muhurta:</b> {badge}<br>
+                <span style="font-size:1.02rem; font-weight:900; color:#15803d;">{abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')}</span><br>
+                <i style="font-size:0.83rem; color:#166534;">(Supreme window for agreements, launches & investments)</i>
+            </div>
+        """)
+    if now_ist <= brahma_e:
+        is_brahma = brahma_s <= now_ist <= brahma_e
+        badge = "<span style='background:#22c55e; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_brahma else "<span style='background:#dcfce7; color:#15803d; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        golden_items.append(f"""
+            <div style="line-height:1.5;">
+                • <b>Brahma Muhurta:</b> {badge}<br>
+                <span style="font-weight:800; color:#15803d;">{brahma_s.strftime('%I:%M %p')} – {brahma_e.strftime('%I:%M %p IST')}</span><br>
+                <i style="font-size:0.83rem; color:#166534;">(Peak sattvic time for meditation & spiritual grounding)</i>
+            </div>
+        """)
+
+    if golden_items:
+        golden_content_html = "".join(golden_items)
+    else:
+        golden_content_html = f"""
+        <div style="font-size:0.88rem; color:#15803d; line-height:1.5; padding:4px 0;">
+            ✅ <b>Completed for Today</b><br>
+            Abhijit and Brahma Muhurtas have concluded. Standard favorable energetic flow continues until sunset.
+        </div>
+        """
+
+    # Build Caution Windows: OMIT completely if the window timeline is over
+    caution_items = []
+    if now_ist <= rahu_e:
+        badge = "<span style='background:#ef4444; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_rahu else "<span style='background:#fee2e2; color:#991b1b; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        caution_items.append(f"""
+            <div style="margin-bottom:8px; line-height:1.5;">
+                • <b>Rahu Kaal (Avoid Signings):</b> {badge}<br>
+                <span style="font-size:1.02rem; font-weight:900; color:#be123c;">{rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')}</span><br>
+                <i style="font-size:0.83rem; color:#9f1239;">(Pause high-risk trades, signing deeds & departures)</i>
+            </div>
+        """)
+    if now_ist <= yama_e:
+        badge = "<span style='background:#ef4444; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_yama else "<span style='background:#fee2e2; color:#991b1b; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        caution_items.append(f"""
+            <div style="line-height:1.5;">
+                • <b>Yamaganda (Delays):</b> {badge}<br>
+                <span style="font-weight:800; color:#be123c;">{yama_s.strftime('%I:%M %p')} – {yama_e.strftime('%I:%M %p IST')}</span><br>
+                <i style="font-size:0.83rem; color:#9f1239;">(Avoid starting brand-new critical ventures)</i>
+            </div>
+        """)
+
+    if caution_items:
+        caution_content_html = "".join(caution_items)
+    else:
+        caution_content_html = f"""
+        <div style="font-size:0.88rem; color:#991b1b; line-height:1.5; padding:4px 0;">
+            ✅ <b>All Clear for Today</b><br>
+            All caution windows (Rahu Kaal & Yamaganda) have concluded. Clear path for operations.
         </div>
         """
 
@@ -1928,7 +1944,7 @@ def render_page_live():
     <div class="light-card-live">
         <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:1rem; border-bottom:2px solid #bae6fd; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
             <span>{t('live_pulse_title', current_lang)}</span>
-            <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE IST</span>
+            <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE {now_time_str} IST</span>
         </div>
 
         {status_banner}
@@ -1974,39 +1990,25 @@ def render_page_live():
             </div>
         </div>
 
-        <!-- PRECISION MUHURTA TIMING WINDOWS -->
+        <!-- PRECISION MUHURTA TIMING WINDOWS (FILTERED TO OMIT OVER TIMELINES) -->
         <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
             <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:10px; border-bottom:1px solid #e0f2fe; padding-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                <span>⏱️ Precision Timing Windows for Today</span>
+                <span>⏱️ Today's Timing Windows (Active & Upcoming)</span>
                 <span style="font-size:0.8rem; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:12px; font-weight:800;">{prof['city'].split(',')[0]} Solar Geometry</span>
             </div>
 
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:10px;">
                 <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border:1px solid #86efac;">
                     <b style="color:#166534; font-size:0.95rem;">🌟 Golden Auspicious Windows:</b>
-                    <div style="font-size:0.92rem; color:#14532d; margin-top:5px; line-height:1.6;">
-                        • <b>Abhijit Muhurta:</b><br>
-                        <span style="font-size:1.05rem; font-weight:900; color:#15803d;">{abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')}</span><br>
-                        <i style="font-size:0.84rem; color:#166534;">(Supreme window for agreements, launches & investments)</i>
-                    </div>
-                    <div style="font-size:0.92rem; color:#14532d; margin-top:8px; line-height:1.6;">
-                        • <b>Brahma Muhurta:</b><br>
-                        <span style="font-weight:800; color:#15803d;">{brahma_s.strftime('%I:%M %p')} – {brahma_e.strftime('%I:%M %p IST')}</span><br>
-                        <i style="font-size:0.84rem; color:#166534;">(Peak sattvic time for meditation & spiritual grounding)</i>
+                    <div style="margin-top:6px;">
+                        {golden_content_html}
                     </div>
                 </div>
 
                 <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border:1px solid #fecdd3;">
                     <b style="color:#9f1239; font-size:0.95rem;">⚠️ Caution & Inauspicious Windows:</b>
-                    <div style="font-size:0.92rem; color:#881337; margin-top:5px; line-height:1.6;">
-                        • <b>Rahu Kaal (Avoid Signings):</b><br>
-                        <span style="font-size:1.05rem; font-weight:900; color:#be123c;">{rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')}</span><br>
-                        <i style="font-size:0.84rem; color:#9f1239;">(Pause high-risk trades, signing deeds & departures)</i>
-                    </div>
-                    <div style="font-size:0.92rem; color:#881337; margin-top:8px; line-height:1.6;">
-                        • <b>Yamaganda (Delays):</b><br>
-                        <span style="font-weight:800; color:#be123c;">{yama_s.strftime('%I:%M %p')} – {yama_e.strftime('%I:%M %p IST')}</span><br>
-                        <i style="font-size:0.84rem; color:#9f1239;">(Avoid starting brand-new critical ventures)</i>
+                    <div style="margin-top:6px;">
+                        {caution_content_html}
                     </div>
                 </div>
             </div>
@@ -2041,11 +2043,11 @@ def render_page_live():
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.92rem;">
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>💼 Career & Execution:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in Abhijit window' if offset in [1,3,5,7,8] else '🔴 Hold Back: Avoid starting disputes or high-stakes requests'}</span>
+                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in favorable window' if offset in [1,3,5,7,8] and not is_rahu and not is_yama else '🔴 Hold Back: Caution in effect; avoid starting disputes or high-stakes requests'}</span>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>💰 Wealth & Financials:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
+                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] and not is_rahu and not is_yama else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>🏠 Domestic & Relations:</b><br>
@@ -2092,8 +2094,11 @@ def render_page_live():
     </div>
     """)
 
+# ==============================================================================
+# PAGE 6: 7-DAY NAKSHATRA TRANSIT FORECAST
+# ==============================================================================
 def render_page_forecast():
-    now_ist = datetime.datetime.now()
+    now_ist = get_current_ist_datetime()
     transits = get_7_day_moon_transits(now_ist, chart_info["star_idx"])
     heatmap_items, power_day = get_7_day_heatmap_and_power_day(transits)
 
