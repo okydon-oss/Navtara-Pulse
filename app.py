@@ -3,7 +3,6 @@ import streamlit as st
 import datetime
 import urllib.parse
 import json
-import os
 import math
 
 try:
@@ -13,7 +12,12 @@ try:
 except Exception:
     HAS_SWISSEPH = False
 
-# Configure Streamlit page settings
+try:
+    from geopy.geocoders import Nominatim
+    HAS_GEOPY = True
+except Exception:
+    HAS_GEOPY = False
+
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -21,7 +25,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Helper function to inject clean HTML safely
 def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
@@ -114,35 +117,36 @@ render_html("""
 """)
 
 # ==============================================================================
-# GEODETIC ATLAS (EXACT CITY COORDINATE REGISTRY)
+# DYNAMIC GEODETIC ATLAS (AUTOMATIC LOCATION LOOKUP FROM NAME)
 # ==============================================================================
-# STREAMLIT_CHUNK:Defining geodetic atlas registries...
-CITY_COORDINATES = {
-    "Delhi / New Delhi, India": (28.6139, 77.2090),
-    "Mumbai, Maharashtra, India": (19.0760, 72.8777),
-    "Chhatrapati Sambhajinagar (Aurangabad), Maharashtra, India": (19.8762, 75.3433),
-    "Pune, Maharashtra, India": (18.5204, 73.8567),
-    "Nagpur, Maharashtra, India": (21.1458, 79.0882),
-    "Bengaluru, Karnataka, India": (12.9716, 77.5946),
-    "Hyderabad, Telangana, India": (17.3850, 78.4867),
-    "Chennai, Tamil Nadu, India": (13.0827, 80.2707),
-    "Kolkata, West Bengal, India": (22.5726, 88.3639),
-    "Ahmedabad, Gujarat, India": (23.0225, 72.5714),
-    "Surat, Gujarat, India": (21.1702, 72.8311),
-    "Jaipur, Rajasthan, India": (26.9124, 75.7873),
-    "Lucknow, Uttar Pradesh, India": (26.8467, 80.9462),
-    "Varanasi, Uttar Pradesh, India": (25.3176, 82.9739),
-    "Patna, Bihar, India": (25.5941, 85.1376),
-    "Bhopal, Madhya Pradesh, India": (23.2599, 77.4126),
-    "Indore, Madhya Pradesh, India": (22.7196, 75.8577),
-    "Chandigarh, India": (30.7333, 76.7794),
-    "Dubai, UAE": (25.2048, 55.2708),
-    "London, UK": (51.5074, -0.1278),
-    "New York, USA": (40.7128, -74.0060),
-    "San Francisco, USA": (37.7749, -122.4194),
-    "Singapore": (1.3521, 103.8198),
-    "Toronto, Canada": (43.6532, -79.3832)
-}
+# STREAMLIT_CHUNK:Defining dynamic geocoder engine...
+def get_location_coordinates(place_query: str):
+    clean_q = place_query.strip()
+    if not clean_q:
+        return 28.6139, 77.2090 # Default Delhi
+        
+    if HAS_GEOPY:
+        try:
+            geolocator = Nominatim(user_agent="navtara_pulse_astro_app")
+            location = geolocator.geocode(clean_q, timeout=4)
+            if location:
+                return float(location.latitude), float(location.longitude)
+        except Exception:
+            pass
+            
+    # Fallback heuristics
+    q_low = clean_q.lower()
+    if "mumbai" in q_low: return (19.0760, 72.8777)
+    if "pune" in q_low: return (18.5204, 73.8567)
+    if "delhi" in q_low: return (28.6139, 77.2090)
+    if "bengaluru" in q_low or "bangalore" in q_low: return (12.9716, 77.5946)
+    if "kolkata" in q_low: return (22.5726, 88.3639)
+    if "chennai" in q_low: return (13.0827, 80.2707)
+    if "hyderabad" in q_low: return (17.3850, 78.4867)
+    if "nashik" in q_low: return (19.9975, 73.7898)
+    if "nagpur" in q_low: return (21.1458, 79.0882)
+    
+    return 28.6139, 77.2090
 
 NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
@@ -222,7 +226,7 @@ TRANSLATIONS = {
         "name_label": "Full Name",
         "dob_label": "Birth Date",
         "tob_label": "Birth Time",
-        "city_label": "Birth Location / City",
+        "city_label": "Birth Place / Town / City",
         "nakshatra_label": "Janma Nakshatra",
         "pada_label": "Pada (Quarter)",
         "moon_rashi_label": "Moon Sign (Rashi)",
@@ -252,7 +256,7 @@ TRANSLATIONS = {
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
         "tob_label": "जन्म समय",
-        "city_label": "जन्म स्थान",
+        "city_label": "जन्म स्थान (शहर / गाँव)",
         "nakshatra_label": "जन्म नक्षत्र",
         "pada_label": "चरण",
         "moon_rashi_label": "चन्द्र राशि",
@@ -282,7 +286,7 @@ TRANSLATIONS = {
         "name_label": "पूर्ण नाव",
         "dob_label": "जन्म तारीख",
         "tob_label": "जन्म वेळ",
-        "city_label": "जन्म ठिकाण",
+        "city_label": "जन्म ठिकाण (शहर)",
         "nakshatra_label": "जन्म नक्षत्र",
         "pada_label": "चरण",
         "moon_rashi_label": "चंद्र रास",
@@ -334,7 +338,6 @@ def t(key: str, lang: str = "en") -> str:
 # ==============================================================================
 # ENCYCLOPEDIA (ALL 27 NAKSHATRAS)
 # ==============================================================================
-# STREAMLIT_CHUNK:Defining nakshatra and rashi encyclopedias...
 NAKSHATRA_BIO_DATA = {
     1: {"deity": "Ashwini Kumaras (Celestial Healers)", "symbol": "Horse's Head", "tree": "Kuchila / Strychnine (विषमुष्टी)", "bird": "Shikra / Wild Hawk", "animal": "Horse (Ashwa / अश्व)", "lord": "Ketu"},
     2: {"deity": "Lord Yama (Dharma & Cosmic Justice)", "symbol": "Yoni / Creative Triangle", "tree": "Amla / Indian Gooseberry (धात्री)", "bird": "Crow (काक)", "animal": "Elephant (Gaja / गज)", "lord": "Venus (Shukra)"},
@@ -359,7 +362,7 @@ NAKSHATRA_BIO_DATA = {
     21: {"deity": "Vishwadevas (Universal Cosmic Laws)", "symbol": "Elephant's Tusk / Small Cot", "tree": "Jackfruit / Phanas (पनस)", "bird": "Stork / सारस", "animal": "Male Mongoose (नकुल)", "lord": "Sun (Surya)"},
     22: {"deity": "Lord Vishnu (Cosmic Preserver)", "symbol": "Three Footprints / Ear of Listening", "tree": "Aak / Rui / Calotropis (मदार)", "bird": "Francolin / Kapinjala", "animal": "Female Monkey (वानर)", "lord": "Moon (Chandra)"},
     23: {"deity": "Eight Vasus (Elemental Energy Lords)", "symbol": "Mridangam / Drum / Flute", "tree": "Shami / Khejri (शमी वृक्ष)", "bird": "Golden Bee / Peacock", "animal": "Female Lion (सिंह)", "lord": "Mars (Mangal)"},
-    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काક)", "animal": "Female Horse (અશ્વ)", "lord": "Rahu"},
+    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (अश्व)", "lord": "Rahu"},
     25: {"deity": "Aja Ekapada (One-Footed Cosmic Fire)", "symbol": "Two Front Legs of Bed / Crossed Swords", "tree": "Mango / Neem (आम्र/निम्ब)", "bird": "Avocet / Peacock", "animal": "Male Lion (सिंह)", "lord": "Jupiter (Guru)"},
     26: {"deity": "Ahirbudhnya (Serpent of Deep Depths)", "symbol": "Two Back Legs of Bed / Serpent in Water", "tree": "Neem / Pithari (निम्ब)", "bird": "Kotwal / Rainbird", "animal": "Female Cow (गौ)", "lord": "Saturn (Shani)"},
     27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
@@ -491,6 +494,9 @@ def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
         "advice": advice
     }
 
+# ==============================================================================
+# NUMEROLOGY & GEODESICS
+# ==============================================================================
 def reduce_to_single_digit(num: int) -> int:
     while num > 9:
         num = sum(int(ch) for ch in str(num))
@@ -553,7 +559,7 @@ def get_numerology_avoidance(mulank: int, bhagyank: int, lang: str = "en") -> di
     }
 
 # ==============================================================================
-# RIGOROUS ASTRONOMICAL ENGINE (TOPOCENTRIC HORIZON & SIDEREAL LAGNA)
+# RIGOROUS ASTRONOMICAL ENGINE
 # ==============================================================================
 def get_julian_day(utc_dt: datetime.datetime) -> float:
     y = utc_dt.year
@@ -636,7 +642,6 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lo
     ist_dt = datetime.datetime.combine(dob, tob)
     utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
     
-    # Sidereal Moon & Nakshatra
     moon_lon = get_sidereal_moon_longitude(utc_dt)
     star_span = 360.0 / 27.0
     star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
@@ -644,7 +649,6 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lo
     pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
     moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
 
-    # Exact Topocentric Sidereal Lagna
     lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
     lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
 
@@ -661,122 +665,6 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lo
         "lagna_name": RASHIS[lagna_idx]
     }
 
-# ==============================================================================
-# DYNAMIC SHANI SADE SATI ENGINE (BASED ON USER MOON SIGN)
-# ==============================================================================
-def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
-    m_name = RASHIS[moon_rashi_idx].split()[0]
-    if house_diff in [2, 5, 9]:
-        return {
-            "paya": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
-            "metal": "Silver",
-            "status": "Highly Auspicious (अति शुभ)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon, arriving on Silver Feet. Bestows financial liquidity, career protection, and divine resilience during Sade Sati.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
-    elif house_diff in [3, 7, 10]:
-        return {
-            "paya": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
-            "metal": "Copper",
-            "status": "Favorable (शुभ)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Copper Feet. Brings steady professional growth, success through patient labor, and balanced family relationships.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
-    elif house_diff in [1, 6, 11]:
-        return {
-            "paya": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
-            "metal": "Gold",
-            "status": "Testing & Demanding (कठिन)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Gold Feet. Demands ego dissolution, strict budgetary control, and humility in communication.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
-    else:
-        return {
-            "paya": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
-            "metal": "Iron",
-            "status": "Difficult / High Friction (संघर्षमय)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Iron Feet. Requires rigorous discipline, health vigilance, and persistent spiritual grounding.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
-
-def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    diff = (saturn_transit_rashi_idx - moon_rashi_idx) % 12
-    m_name = RASHIS[moon_rashi_idx].split()[0]
-
-    rashi_12th = RASHIS[(moon_rashi_idx - 1) % 12].split()[0]
-    rashi_1st = m_name
-    rashi_2nd = RASHIS[(moon_rashi_idx + 1) % 12].split()[0]
-
-    if diff == 11:
-        return {
-            "active": True,
-            "status_title": "Phase 1: Rising Phase (Aarohi Charana / 12th House Transit)",
-            "phase_num": 1,
-            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon. Prompts restructuring of personal priorities, foreign linkages, and elimination of unnecessary expenses.",
-            "dates": "Active Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": True, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 0:
-        return {
-            "active": True,
-            "status_title": "Phase 2: Peak Phase (Janma Shani / 1st House Core Transit)",
-            "phase_num": 2,
-            "impact": f"Saturn is transiting directly over your natal Moon in {m_name} (Janma Shani). This represents the core crucible of character and endurance, demanding physical stamina, absolute ego surrender, and executive clarity.",
-            "dates": "Active Peak Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": False, "phase_2_active": True, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 1:
-        return {
-            "active": True,
-            "status_title": "Phase 3: Setting Phase (Avarohi Charana / 2nd House Transit)",
-            "phase_num": 3,
-            "impact": f"Saturn transits the 2nd house from your {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. As Sade Sati draws toward conclusion, hard lessons solidify into financial consolidation, mature speech, and stabilized family assets.",
-            "dates": "Active Concluding Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": True,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 3:
-        return {
-            "active": True,
-            "status_title": "Kantaka Shani (4th House Dhaiya / अर्धाष्टमी शनि)",
-            "phase_num": 4,
-            "impact": f"Saturn is transiting your 4th house from {m_name} Moon. Focus on domestic peace, property maintenance, balanced emotional health, and work-life equilibrium.",
-            "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 7:
-        return {
-            "active": True,
-            "status_title": "Ashtama Shani (8th House Dhaiya / अष्टम शनि)",
-            "phase_num": 8,
-            "impact": f"Saturn is transiting your 8th house from {m_name} Moon. Demands disciplined health habits, careful driving, transparent financial ethics, and avoidance of unhedged risks.",
-            "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    else:
-        return {
-            "active": False,
-            "status_title": "No Active Sade Sati or Dhaiya",
-            "phase_num": 0,
-            "impact": f"Saturn is currently in Pisces ({RASHIS[saturn_transit_rashi_idx].split()[0]}), placing it in an auspicious or neutral {((saturn_transit_rashi_idx - moon_rashi_idx) % 12) + 1}th house relative to your {m_name} Moon. Unimpeded progress.",
-            "dates": "No Current Friction Cycle",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-
-def calculate_shani_vahan(birth_star_idx: int, transit_moon_star_idx: int) -> dict:
-    raw_val = (birth_star_idx * 4 + transit_moon_star_idx) % 9
-    rem = 9 if raw_val == 0 else raw_val
-    return SHANI_VAHANS.get(rem, SHANI_VAHANS[9])
-
-# ==============================================================================
-# PRECISION SOLAR & MUHURTA CALCULATION ENGINE
-# ==============================================================================
 def calculate_sun_times(date_obj: datetime.date, lat: float, lon: float):
     day_of_year = date_obj.timetuple().tm_yday
     decl = 23.45 * math.sin(math.radians((360 / 365) * (day_of_year - 81)))
@@ -881,9 +769,6 @@ def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int
         })
     return transits
 
-# ==============================================================================
-# DETAILED PREDICTION & REMEDIES ENGINE
-# ==============================================================================
 def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
     is_positive = offset in [1, 3, 5, 7, 8]
     is_extreme_friction = offset in [2, 4, 6]
@@ -1213,21 +1098,12 @@ def render_page_profile():
                 init_ampm = "PM" if (tob_parsed and tob_parsed.hour >= 12) else "AM"
                 in_ampm = st.selectbox("AM / PM", options=["AM", "PM"], index=1 if init_ampm == "PM" else 0)
 
-            city_options = list(CITY_COORDINATES.keys()) + ["Other (Enter Coordinates)"]
-            cur_city = prof.get("city", "")
-            city_idx = city_options.index(cur_city) if cur_city in city_options else 0
-            
-            sel_city = st.selectbox(t("city_label", current_lang), options=city_options, index=city_idx)
-            
-            if sel_city == "Other (Enter Coordinates)":
-                c_lat_in = st.number_input("Latitude (° N):", value=float(prof.get("lat", 28.6139)), format="%.4f")
-                c_lon_in = st.number_input("Longitude (° E):", value=float(prof.get("lon", 77.2090)), format="%.4f")
-                final_city = f"{c_lat_in:.2f}N, {c_lon_in:.2f}E"
-                final_lat = float(c_lat_in)
-                final_lon = float(c_lon_in)
-            else:
-                final_city = sel_city
-                final_lat, final_lon = CITY_COORDINATES[sel_city]
+            # Free-form birth place input (city/town/village)
+            in_city_input = st.text_input(
+                t("city_label", current_lang),
+                value=prof.get("city", ""),
+                placeholder="e.g. Delhi, Mumbai, Satara, London"
+            )
             
             c_save, c_canc = st.columns([2, 1])
             with c_save:
@@ -1238,19 +1114,24 @@ def render_page_profile():
             if submitted:
                 if not new_name.strip():
                     st.error("Please provide your full name.")
+                elif not in_city_input.strip():
+                    st.error("Please provide your birth city or location.")
                 else:
                     hr_24 = in_hour % 12
                     if in_ampm == "PM":
                         hr_24 += 12
                     final_tob_str = f"{hr_24:02d}:{in_minute:02d}"
 
+                    # Automatically resolve latitude and longitude from the provided location name
+                    resolved_lat, resolved_lon = get_location_coordinates(in_city_input)
+
                     st.session_state.user_profile.update({
                         "name": new_name.strip(),
                         "dob": new_dob.strftime("%Y-%m-%d"),
                         "tob": final_tob_str,
-                        "city": final_city,
-                        "lat": final_lat,
-                        "lon": final_lon
+                        "city": in_city_input.strip(),
+                        "lat": resolved_lat,
+                        "lon": resolved_lon
                     })
                     save_user_profile(st.session_state.user_profile)
                     st.session_state.edit_mode = False
@@ -1363,19 +1244,17 @@ def render_page_profile():
                 <b>🪔 Lagna Remedies:</b><br>{l_info['remedies']}
             </div>
         </div>
-    </div>
+
+        <!-- SUBSECTION D: NAKSHATRA SOCIAL & BUSINESS SYNERGY MATRIX (TARA BALA) -->
+        <div style="background:#ffffff; border-radius:14px; padding:14px; border:1.5px solid #fed7aa;">
+            <div style="font-weight:900; font-size:1.1rem; color:#9a3412; margin-bottom:8px; border-bottom:1px solid #ffedd5; padding-bottom:4px;">
+                🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)
+            </div>
+            <div style="font-size:0.92rem; color:#475569; margin-bottom:10px;">
+                Select any colleague, business partner, or family member's Janma Nakshatra to evaluate mutual cosmic resonance:
+            </div>
     """)
 
-    render_html("""
-    <div class="light-card-profile" style="margin-top: 1rem;">
-        <div style="font-weight:900; font-size:1.1rem; color:#9a3412; margin-bottom:8px; border-bottom:1px solid #ffedd5; padding-bottom:4px;">
-            🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)
-        </div>
-        <div style="font-size:0.92rem; color:#475569; margin-bottom:10px;">
-            Select any colleague, business partner, or family member's Janma Nakshatra to evaluate mutual cosmic resonance:
-        </div>
-    </div>
-    """)
     partner_star_choice = st.selectbox(
         "Select Counterpart's Birth Star:",
         options=NAKSHATRAS,
@@ -1390,18 +1269,21 @@ def render_page_profile():
     text_color = '#15803d' if tara_res['is_allied'] else ('#be123c' if tara_res['is_friction'] else '#0f172a')
 
     render_html(f"""
-    <div style="background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:12px; margin-top:8px; margin-bottom:1.25rem;">
-        <div style="font-size:1.05rem; font-weight:800; color:{text_color};">
-            {tara_res['icon']} {tara_res['tara_name']} — {tara_res['quality']}
-        </div>
-        <div style="font-size:0.92rem; font-weight:700; color:#334155; margin-top:4px;">
-            Dynamic: {tara_res['relationship_tone']}
-        </div>
-        <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.5;">
-            {tara_res['advice']}
+            <div style="background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:12px; margin-top:8px;">
+                <div style="font-size:1.05rem; font-weight:800; color:{text_color};">
+                    {tara_res['icon']} {tara_res['tara_name']} — {tara_res['quality']}
+                </div>
+                <div style="font-size:0.92rem; font-weight:700; color:#334155; margin-top:4px;">
+                    Dynamic: {tara_res['relationship_tone']}
+                </div>
+                <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.5;">
+                    {tara_res['advice']}
+                </div>
+            </div>
         </div>
     </div>
     """)
+
 
 # ==============================================================================
 # TAB 3: NUMEROLOGY
@@ -1489,17 +1371,9 @@ def render_page_numerology():
                 </ul>
             </div>
         </div>
-
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
-                • <b>Metal Vessel Grounding:</b> Drink water from a pure silver or copper vessel to pacify nervous restlessness and enhance bio-electrical harmony.<br>
-                • <b>Digital & Workspace Bio-Shield:</b> Remove tangled charging cables, broken electronic gadgets, and inactive clocks from your workspace.<br>
-                • <b>Name Resonance (Namank):</b> Use green or blue ink when writing or endorsing important planning documents to harmonize your {namank} name vibration.
-            </div>
-        </div>
     </div>
     """)
+
 
 # ==============================================================================
 # TAB 4: SHANI (DYNAMIC SADE SATI ENGINE BASED ON USER MOON SIGN)
@@ -1576,7 +1450,7 @@ def render_page_shani():
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
             <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:6px;">🪔 Prescribed Remedies for Shani Alignment:</div>
             <div style="font-size:0.93rem; line-height:1.65; color:#3b0764;">
-                • Chant the <b>Shani Beej Mantra</b> 108 times on Saturday twilight facing West.<br>
+                • Chant the <b>Shani Beej Mantra</b> (<i>ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः</i>) 108 times on Saturday twilight facing West.<br>
                 • Recite the <b>Hanuman Chalisa</b> daily to channel inner vitality and protect emotional equilibrium.<br>
                 • Donate mustard oil, black sesame seeds, or blue cloth to laborers or the needy on Saturdays.
             </div>
@@ -1597,6 +1471,7 @@ def render_page_shani():
             if st.button("🔄 Reset", use_container_width=True):
                 st.session_state.japa_count = 0
                 st.rerun()
+
 
 # ==============================================================================
 # TAB 5: LIVE PREDICTION
@@ -1679,21 +1554,9 @@ def render_page_live():
         {status_banner}
 
         <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">CURRENT MOON NAKSHATRA</div>
-                    <div style="font-size:1.4rem; font-weight:900; color:#0369a1;">{NAKSHATRAS[cur_star_idx - 1]}</div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:1.8rem;">{icon}</div>
-                    <div style="font-size:0.88rem; font-weight:900; color:#0369a1;">{quality}</div>
-                </div>
-            </div>
-            <div style="font-size:1.05rem; font-weight:900; color:#0284c7; margin-top:8px;">Navtara: {nav_name}</div>
-            <div style="font-size:0.92rem; color:#334155; margin-top:6px; line-height:1.5;">
-                ⏳ <b>Active Moon Transit Window:</b><br>
-                {s_dt.strftime('%a, %d %b %I:%M %p')} → {e_dt.strftime('%a, %d %b %I:%M %p IST')}
-            </div>
+            <div style="font-size:1.3rem; font-weight:900; color:#0369a1;">{icon} Navtara: {nav_name}</div>
+            <div style="font-size:0.92rem; color:#0284c7; font-weight:700; margin-top:4px;">Current Transit Moon: {NAKSHATRAS[cur_star_idx-1]} ({quality})</div>
+            <div style="font-size:0.88rem; color:#475569; margin-top:6px;">Window: {s_dt.strftime('%d %b %I:%M %p')} → {e_dt.strftime('%d %b %I:%M %p IST')}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
@@ -1701,64 +1564,9 @@ def render_page_live():
             • 🌟 <b>Abhijit Muhurta:</b> {abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')} (Golden Window)<br>
             • ⚠️ <b>Rahu Kaal:</b> {rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')} (Avoid Signings)
         </div>
-
-        <!-- 4-DOMAIN ACTION QUICK CHECKLIST -->
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
-            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:10px; border-bottom:1px solid #e0f2fe; padding-bottom:5px;">
-                📋 Practical Action Green Light Checklist
-            </div>
-            
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.92rem;">
-                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
-                    <b>💼 Career & Execution:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in Abhijit window' if offset in [1,3,5,7,8] else '🔴 Hold Back: Avoid starting disputes or high-stakes requests'}</span>
-                </div>
-                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
-                    <b>💰 Wealth & Financials:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
-                </div>
-                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
-                    <b>🏠 Domestic & Relations:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Harmonious: Excellent for family discussions' if offset in [1,3,5,7,8] else '🟡 Sensitive: Practice calm listening; avoid debates'}</span>
-                </div>
-                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
-                    <b>🌿 Health & Energy:</b><br>
-                    <span style="color:#0f172a;">{'🟢 High Vitality: Great for workouts & physical tasks' if offset in [1,3,5,7,8] else '🔴 Prone to Fatigue: Rest well and hydrate deeply'}</span>
-                </div>
-            </div>
-        </div>
-
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
-            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #e0f2fe; padding-bottom:5px;">
-                🧠 Cognitive & Strategic Archetype: {insights['theme_title']}
-            </div>
-            <div style="font-size:0.95rem; line-height:1.7; color:#1e293b; margin-bottom:12px;">
-                {insights['theme_desc']}
-            </div>
-
-            <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #16a34a; margin-bottom:10px;">
-                <b style="color:#15803d; font-size:0.95rem;">🚀 Prime Opportunities & Protocols:</b>
-                <div style="font-size:0.92rem; line-height:1.6; color:#166534; margin-top:2px;">{insights['opportunities']}</div>
-            </div>
-
-            <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
-                <b style="color:#be123c; font-size:0.95rem;">⚠️ Potential Hazards & Red Flags:</b>
-                <div style="font-size:0.92rem; line-height:1.6; color:#9f1239; margin-top:2px;">{insights['hazards']}</div>
-            </div>
-        </div>
-
-        <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd;">
-            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #bae6fd; padding-bottom:5px;">
-                🪔 Targeted Daily Cosmic Remedies:
-            </div>
-            <div style="font-size:0.94rem; line-height:1.7; color:#0c4a6e;">
-                • <b>Aura Protection Mantra:</b> {insights['remedy_mantra']}<br>
-                • <b>Elemental Harmony & Donation:</b> {insights['remedy_charity']}<br>
-                • <b>Behavioral & Color Calibration:</b> {insights['remedy_action']}
-            </div>
-        </div>
     </div>
     """)
+
 
 # ==============================================================================
 # TAB 6: 7 DAYS PREDICTION
@@ -1845,35 +1653,9 @@ def render_page_forecast():
             • 🌟 <b>Abhijit Muhurta:</b> {sel_muh['abhijit'][0].strftime('%I:%M %p')} – {sel_muh['abhijit'][1].strftime('%I:%M %p IST')} (Golden Period)<br>
             • ⚠️ <b>Rahu Kaal:</b> {sel_muh['rahu'][0].strftime('%I:%M %p')} – {sel_muh['rahu'][1].strftime('%I:%M %p IST')} (Avoid Signings)
         </div>
-
-        <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #bae6fd; margin-bottom:12px;">
-            <b style="color:#0369a1; font-size:1rem;">🎯 Cosmic Archetype: {sel_insights['theme_title']}</b>
-            <div style="font-size:0.94rem; line-height:1.65; color:#1e293b; margin-top:4px;">
-                {sel_insights['theme_desc']}
-            </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr; gap:8px; margin-bottom:12px;">
-            <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #16a34a;">
-                <b style="color:#15803d; font-size:0.92rem;">🟢 Favorable Initiatives & Green Lights:</b>
-                <div style="font-size:0.91rem; line-height:1.6; color:#166534; margin-top:2px;">{sel_insights['opportunities']}</div>
-            </div>
-            <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
-                <b style="color:#be123c; font-size:0.92rem;">🔴 Hazards, Caution & Red Lights:</b>
-                <div style="font-size:0.91rem; line-height:1.6; color:#9f1239; margin-top:2px;">{sel_insights['hazards']}</div>
-            </div>
-        </div>
-
-        <div style="background:#f0f9ff; border-radius:10px; padding:12px; border:1px solid #bae6fd;">
-            <b style="color:#0369a1; font-size:0.98rem;">🪔 Prescribed Daily Remedies for this Window:</b>
-            <div style="font-size:0.92rem; line-height:1.65; color:#0c4a6e; margin-top:4px;">
-                • <b>Mantra Japa:</b> {sel_insights['remedy_mantra']}<br>
-                • <b>Elemental Donation:</b> {sel_insights['remedy_charity']}<br>
-                • <b>Personal Protocol:</b> {sel_insights['remedy_action']}
-            </div>
-        </div>
     </div>
     """)
+
 
 # ==============================================================================
 # ROUTER DISPATCHER
