@@ -497,6 +497,67 @@ def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
         "advice": advice
     }
 
+def reduce_to_single_digit(num: int) -> int:
+    while num > 9:
+        num = sum(int(ch) for ch in str(num))
+    return num if num > 0 else 9
+
+def calculate_numerology(dob: datetime.date, name: str):
+    mulank = reduce_to_single_digit(dob.day)
+    full_date_sum = dob.day + dob.month + dob.year
+    bhagyank = reduce_to_single_digit(full_date_sum)
+    cleaned_name = "".join(ch for ch in name.upper() if ch.isalpha())
+    namank_val = sum(CHALDEAN_MAP.get(ch, 0) for ch in cleaned_name)
+    namank = reduce_to_single_digit(namank_val) if namank_val > 0 else 1
+    return mulank, bhagyank, namank
+
+def get_personal_day_vibe(dob: datetime.date, target_date: datetime.date, lang: str = "en") -> dict:
+    personal_year = reduce_to_single_digit(dob.day + dob.month + target_date.year)
+    personal_day = reduce_to_single_digit(personal_year + target_date.month + target_date.day)
+    planet_info = NUM_PLANET_NAMES.get(personal_day, {}).get(lang, f"Number {personal_day}")
+    return {
+        "number": personal_day,
+        "planet": planet_info,
+        "desc": f"Personal Day {personal_day} resonates with {planet_info} cosmic frequency."
+    }
+
+def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: str = "en") -> dict:
+    p_m = NUM_PLANET_NAMES.get(mulank, {}).get(lang, f"Planet {mulank}")
+    p_b = NUM_PLANET_NAMES.get(bhagyank, {}).get(lang, f"Planet {bhagyank}")
+
+    return {
+        "career_title": "💼 Career Trajectory & Executive Ambition",
+        "career_desc": f"The dynamic synthesis of Driver {mulank} ({p_m}) and Conductor {bhagyank} ({p_b}) creates an unstoppable powerhouse combination of strategic vision and courageous execution. You are naturally engineered for leadership, structural problem solving, and projects where you hold autonomy over key decisions.",
+        "wealth_title": "💰 Wealth Dynamics & Financial Mastery",
+        "wealth_desc": "Your vibrational alignment supports long-term asset accumulation. Avoid volatile speculative day-trading; tangible assets—real estate, gold, and established technical systems—yield supreme compounding.",
+        "rel_title": "❤️ Relationships & Interpersonal Dynamics",
+        "rel_desc": "You value authentic, pretense-free connections. Practicing active listening and measured verbal composure during crucial discussions will keep family and professional bonds deeply harmonious.",
+        "health_title": "🌿 Health, Vitality & Holistic Bio-Rhythms",
+        "health_desc": "You possess strong physical endurance. Counteract mental fatigue with structured sleep rhythms, deep hydration, and 10 minutes of evening breathwork.",
+        "luck_title": "🍀 Harmonic Lucky Attributes",
+        "lucky_num": f"{mulank}, {bhagyank}, {(mulank + bhagyank) % 9 or 9}",
+        "avoid_num": "2, 8 (Exercise tactful patience)",
+        "lucky_days": "Tuesday, Thursday, and Sunday",
+        "lucky_colors": "Electric Blue, Slate Gray, Rich Amber Gold",
+        "lucky_dir": "South and North-East"
+    }
+
+def get_numerology_avoidance(mulank: int, bhagyank: int, lang: str = "en") -> dict:
+    return {
+        "avoid_title": "⚠️ Cosmic Caution & Avoidance Matrix",
+        "avoid_numbers": "2, 8 (Challenging karmic tests)",
+        "avoid_colors": "Pitch Black, Mud Brown, Dirty Dark Indigo",
+        "avoid_days": "Saturday twilight & Monday late nights (for high-stakes launches)",
+        "avoid_directions": "South-West during rest",
+        "cautions": [
+            "Avoid verbal agreements without clearly documented written contracts.",
+            "Never commit to capital investments or legal deeds during sudden anger or peak haste.",
+            "Strictly avoid speculative options trading and get-rich-quick shortcuts.",
+            "Eliminate tangled electronic cables and broken appliances from your primary workspace.",
+            "Refrain from purchasing iron hardware or heavy scrap on Saturdays."
+        ]
+    }
+
 # ==============================================================================
 # RIGOROUS ASTRONOMICAL ENGINE (TOPOCENTRIC HORIZON & SIDEREAL LAGNA)
 # ==============================================================================
@@ -1308,37 +1369,42 @@ def render_page_profile():
                 <b>🪔 Lagna Remedies:</b><br>{l_info['remedies']}
             </div>
         </div>
+    </div>
+    """)
 
-        <!-- SUBSECTION D: NAKSHATRA SOCIAL & BUSINESS SYNERGY MATRIX (TARA BALA) -->
-        <div style="background:#ffffff; border-radius:14px; padding:14px; border:1.5px solid #fed7aa;">
-            <div style="font-weight:900; font-size:1.1rem; color:#9a3412; margin-bottom:8px; border-bottom:1px solid #ffedd5; padding-bottom:4px;">
-                🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)
-            </div>
-            <div style="font-size:0.92rem; color:#475569; margin-bottom:10px;">
-                Select any colleague, business partner, or family member's Janma Nakshatra to evaluate mutual cosmic resonance:
-            </div>
-            
-            partner_star_choice = st.selectbox(
-                "Select Counterpart's Birth Star:",
-                options=NAKSHATRAS,
-                index=0
-            )
-            p_star_idx = NAKSHATRAS.index(partner_star_choice) + 1
-            tara_res = get_tara_bala_info(chart_info['star_idx'], p_star_idx)
+    render_html("""
+    <div class="light-card-profile" style="margin-top: 1rem;">
+        <div style="font-weight:900; font-size:1.1rem; color:#9a3412; margin-bottom:8px; border-bottom:1px solid #ffedd5; padding-bottom:4px;">
+            🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)
+        </div>
+        <div style="font-size:0.92rem; color:#475569; margin-bottom:10px;">
+            Select any colleague, business partner, or family member's Janma Nakshatra to evaluate mutual cosmic resonance:
+        </div>
+    </div>
+    """)
+    partner_star_choice = st.selectbox(
+        "Select Counterpart's Birth Star:",
+        options=NAKSHATRAS,
+        index=0,
+        key="profile_partner_star_choice"
+    )
+    p_star_idx = NAKSHATRAS.index(partner_star_choice) + 1
+    tara_res = get_tara_bala_info(chart_info['star_idx'], p_star_idx)
 
-            st.markdown(f"""
-            <div style="background:{'#f0fdf4' if tara_res['is_allied'] else ('#fff1f2' if tara_res['is_friction'] else '#f8fafc')}; border:1px solid {'#86efac' if tara_res['is_allied'] else ('#fecdd3' if tara_res['is_friction'] else '#e2e8f0')}; border-radius:10px; padding:12px; margin-top:8px;">
-                <div style="font-size:1.05rem; font-weight:800; color:{'#15803d' if tara_res['is_allied'] else ('#be123c' if tara_res['is_friction'] else '#0f172a')};">
-                    {tara_res['icon']} {tara_res['tara_name']} — {tara_res['quality']}
-                </div>
-                <div style="font-size:0.92rem; font-weight:700; color:#334155; margin-top:4px;">
-                    Dynamic: {tara_res['relationship_tone']}
-                </div>
-                <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.5;">
-                    {tara_res['advice']}
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+    bg_color = '#f0fdf4' if tara_res['is_allied'] else ('#fff1f2' if tara_res['is_friction'] else '#f8fafc')
+    border_color = '#86efac' if tara_res['is_allied'] else ('#fecdd3' if tara_res['is_friction'] else '#e2e8f0')
+    text_color = '#15803d' if tara_res['is_allied'] else ('#be123c' if tara_res['is_friction'] else '#0f172a')
+
+    render_html(f"""
+    <div style="background:{bg_color}; border:1px solid {border_color}; border-radius:10px; padding:12px; margin-top:8px; margin-bottom:1.25rem;">
+        <div style="font-size:1.05rem; font-weight:800; color:{text_color};">
+            {tara_res['icon']} {tara_res['tara_name']} — {tara_res['quality']}
+        </div>
+        <div style="font-size:0.92rem; font-weight:700; color:#334155; margin-top:4px;">
+            Dynamic: {tara_res['relationship_tone']}
+        </div>
+        <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.5;">
+            {tara_res['advice']}
         </div>
     </div>
     """)
