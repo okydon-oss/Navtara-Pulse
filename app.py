@@ -1,3 +1,4 @@
+# STREAMLIT_CHUNK:Initializing imports and configuration...
 import streamlit as st
 import datetime
 import urllib.parse
@@ -25,7 +26,7 @@ def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
-# Mobile-optimized CSS styling
+# STREAMLIT_CHUNK:Styling the layout...
 render_html("""
 <style>
     html {
@@ -115,6 +116,7 @@ render_html("""
 # ==============================================================================
 # GEODETIC ATLAS (EXACT CITY COORDINATE REGISTRY)
 # ==============================================================================
+# STREAMLIT_CHUNK:Defining geodetic atlas registries...
 CITY_COORDINATES = {
     "Delhi / New Delhi, India": (28.6139, 77.2090),
     "Mumbai, Maharashtra, India": (19.0760, 72.8777),
@@ -332,6 +334,7 @@ def t(key: str, lang: str = "en") -> str:
 # ==============================================================================
 # ENCYCLOPEDIA (ALL 27 NAKSHATRAS)
 # ==============================================================================
+# STREAMLIT_CHUNK:Defining nakshatra and rashi encyclopedias...
 NAKSHATRA_BIO_DATA = {
     1: {"deity": "Ashwini Kumaras (Celestial Healers)", "symbol": "Horse's Head", "tree": "Kuchila / Strychnine (विषमुष्टी)", "bird": "Shikra / Wild Hawk", "animal": "Horse (Ashwa / अश्व)", "lord": "Ketu"},
     2: {"deity": "Lord Yama (Dharma & Cosmic Justice)", "symbol": "Yoni / Creative Triangle", "tree": "Amla / Indian Gooseberry (धात्री)", "bird": "Crow (काक)", "animal": "Elephant (Gaja / गज)", "lord": "Venus (Shukra)"},
@@ -395,7 +398,6 @@ NAKSHATRA_PROFILES = {
 def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
     bio = NAKSHATRA_BIO_DATA.get(star_idx, NAKSHATRA_BIO_DATA[2])
     p_archetype, p_pred, p_rem = NAKSHATRA_PROFILES.get(star_idx, NAKSHATRA_PROFILES[2])
-    
     return {
         "deity": bio["deity"],
         "symbol": bio["symbol"],
@@ -418,7 +420,7 @@ RASHI_DETAILED_INFO = {
     6: ("Air (Vayu)", "Venus (Shukra)", "Diplomatic equilibrium, refined justice, architectural balance, and partnership brilliance.", "Success in legal, negotiation, luxury commodities, and institutional governance.", "• Worship Goddess Lakshmi on Fridays.\n• Wear clean pressed pastel attire.\n• Maintain strict fairness in business agreements."),
     7: ("Water (Jala)", "Mars (Mangal)", "Penetrating investigative acumen, intense psychological depth, and unyielding transformative grit.", "Command over strategic operations, crisis management, and private compounding wealth.", "• Chant Kartikeya or Shiva Mantras on Tuesdays.\n• Donate jaggery and roasted chickpeas.\n• Guard against vengeful thoughts."),
     8: ("Fire (Agni)", "Jupiter (Guru)", "Expansive philosophical vision, legal and moral integrity, and inspiring pedagogical leadership.", "High institutional mentorship, cross-border ventures, and enduring reputational prestige.", "• Chant Guru Mantra on Thursdays.\n• Apply turmeric or yellow sandalwood tilak on forehead.\n• Water a Peepal tree without touching on Thursdays."),
-    9: ("Earth (Prithvi)", "Saturn (Shani)", "Enduring tactical patience, monumental organizational grit, and structured pragmatic climbing.", "Sovereign institutional leadership, permanent asset foundations, and lasting mature authority.", "• Light a mustard oil lamp under Peepal on Saturday.\n• Recite Hanuman Chalisa daily.\n• Respect and tip blue-collar workers."),
+    9: ("Earth (Prithvi)", "Saturn (Shani)", "Enduring tactical patience, monumental organizational grit, and structured pragmatic climbing.", "Sovereign institutional leadership, permanent asset foundations, and lasting mature authority.", "• Light mustard oil lamp under Peepal on Saturday.\n• Recite Hanuman Chalisa daily.\n• Respect and tip blue-collar workers."),
     10: ("Air (Vayu)", "Saturn (Shani)", "Universal visionary ideals, scientific detachment, systems reformation, and egalitarian ethics.", "Pioneering technological breakthroughs, social architecture, and non-linear prosperity.", "• Chant Shani Gayatri Mantra on Saturdays.\n• Donate black sesame or oil.\n• Keep electronic workspaces free of tangled cables."),
     11: ("Water (Jala)", "Jupiter (Guru)", "Oceanic subconscious intuition, compassionate wisdom, creative transcendence, and spiritual resonance.", "Success in counseling, foreign realms, creative arts, and profound inner peace.", "• Chant Om Namo Bhagavate Vasudevaya on Thursdays.\n• Feed fish with wheat dough on Thursdays.\n• Meditate for 15 minutes at twilight.")
 }
@@ -461,7 +463,7 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
     }
 
 # ==============================================================================
-# TARA BALA COMPATIBILITY ENGINE (NAKSHATRA SOCIAL & BUSINESS SYNERGY)
+# TARA BALA COMPATIBILITY ENGINE
 # ==============================================================================
 def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
     offset = (partner_star_idx - user_star_idx) % 9
