@@ -183,8 +183,6 @@ TRANSLATIONS = {
         "btn_shani": "🪐 Shani",
         "btn_live": "⚡ Live Prediction",
         "btn_forecast": "🗓️ 7 Days Prediction",
-        "btn_planets": "🔭 Planet position",
-        "btn_remedies": "🪔 Remedies",
         "btn_share": "📲 Share App",
         "edit_details": "✏️ Edit Details",
         "save_details": "💾 Save Profile",
@@ -204,7 +202,6 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Status",
         "live_pulse_title": "⚡ Today's Live Cosmic Pulse",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
-        "planet_title": "🔭 Real-Time Sidereal Planetary Longitudes (Lahiri)",
         "share_title": "📲 Share Navtara Pulse With Friends & Family"
     },
     "hi": {
@@ -216,8 +213,6 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनि पाया",
         "btn_live": "⚡ आज का फल",
         "btn_forecast": "🗓️ 7 दिवसीय फल",
-        "btn_planets": "🔭 ग्रह स्थिति",
-        "btn_remedies": "🪔 वैदिक उपाय",
         "btn_share": "📲 शेयर करें",
         "edit_details": "✏️ विवरण बदलें",
         "save_details": "💾 सुरक्षित करें",
@@ -237,7 +232,6 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या स्थिति",
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
-        "planet_title": "🔭 वास्तविक निरयण ग्रह स्पष्ट (लाहिड़ी)",
         "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें"
     },
     "mr": {
@@ -249,8 +243,6 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनी पाया",
         "btn_live": "⚡ आजचे भविष्य",
         "btn_forecast": "🗓️ ७ दिवसांचे भविष्य",
-        "btn_planets": "🔭 ग्रह स्थिती",
-        "btn_remedies": "🪔 वैदिक उपाय",
         "btn_share": "📲 शेअर करा",
         "edit_details": "✏️ माहिती बदला",
         "save_details": "💾 सेव्ह करा",
@@ -270,7 +262,6 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ शनी साडेसाती व ढिय्या स्थिती",
         "live_pulse_title": "⚡ आजचा थेट खगोलीय प्रभाव",
         "forecast_title": "🗓️ पुढील ७ दिवसांचे नक्षत्र संक्रमण व दैनिक मार्गदर्शन",
-        "planet_title": "🔭 निरयन प्रत्यक्ष ग्रह स्थिती (लाहिरी)",
         "share_title": "📲 नवतारा पल्स ॲप मित्र आणि कुटुंबासह शेअर करा"
     },
     "gu": {
@@ -282,8 +273,6 @@ TRANSLATIONS = {
         "btn_shani": "🪐 શનિ પાયા",
         "btn_live": "⚡ આજનું ફળ",
         "btn_forecast": "🗓️ ૭ દિવસનું ફળ",
-        "btn_planets": "🔭 ગ્રહ સ્થિતિ",
-        "btn_remedies": "🪔 વૈદિક ઉપાયો",
         "btn_share": "📲 શેર કરો",
         "edit_details": "✏️ વિગત બદલો",
         "save_details": "💾 સેવ કરો",
@@ -303,7 +292,6 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ શનિ સાડાસાતી અને ઢૈય્યા સ્થિતિ",
         "live_pulse_title": "⚡ આજનો જીવંત નક્ષત્ર પ્રભાવ",
         "forecast_title": "🗓️ આગામી ૭ દિવસોનું નક્ષત્ર ગોચર અને દૈનિક માર્ગદર્શન",
-        "planet_title": "🔭 પ્રત્યક્ષ નિરયણ ગ્રહ સ્થિતિ (લાહિરી)",
         "share_title": "📲 નવતારા પલ્સ તમારા મિત્રો અને પરિવાર સાથે શેર કરો"
     }
 }
@@ -513,6 +501,7 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
             "en": "Lagna lord harmony guides health, executive ambition, and societal standing across life cycles.",
             "hi": "लग्नेश की शुभता से जीवन में आरोग्य, दीर्घायु और सामाजिक प्रभाव का विस्तार होता है।",
             "mr": "लग्नेश अनुकूल असल्यास उत्तम आरोग्य आणि सामाजिक प्रतिष्ठा लाभते.",
+            "gu": "લગ્નેશના શુભ પ્રભાવથી उत्तम आरोग्य आणि प्रतिष्ठा वाढते.",
             "gu": "લગ્નેશના શુભ પ્રભાવથી ઉત્તમ આરોગ્ય અને પ્રતિષ્ઠા વધે છે."
         },
         "remedies": {
@@ -932,68 +921,6 @@ def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int
         })
     return transits
 
-def get_sidereal_planet_positions(target_ist_dt: datetime.datetime):
-    utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
-    planets = [
-        ("Sun (Surya)", 0),
-        ("Moon (Chandra)", 1),
-        ("Mars (Mangal)", 4),
-        ("Mercury (Budha)", 2),
-        ("Jupiter (Guru)", 5),
-        ("Venus (Shukra)", 3),
-        ("Saturn (Shani)", 6),
-        ("Rahu (North Node)", 10)
-    ]
-    
-    res_list = []
-    if HAS_SWISSEPH:
-        try:
-            t_jd = swe.julday(utc_dt.year, utc_dt.month, utc_dt.day,
-                              utc_dt.hour + utc_dt.minute / 60.0)
-            swe.set_sid_mode(swe.SIDM_LAHIRI)
-            for name, pid in planets:
-                try:
-                    calc = swe.calc_ut(t_jd, pid, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-                    c_val = calc[0] if isinstance(calc, (tuple, list)) else calc
-                    lon = float((c_val[0] if isinstance(c_val, (tuple, list)) else c_val) % 360.0)
-                except Exception:
-                    calc = swe.calc_ut(t_jd, pid, swe.FLG_SIDEREAL)
-                    c_val = calc[0] if isinstance(calc, (tuple, list)) else calc
-                    lon = float((c_val[0] if isinstance(c_val, (tuple, list)) else c_val) % 360.0)
-                r_idx = max(0, min(11, int(lon / 30.0)))
-                deg_in_rashi = lon % 30.0
-                res_list.append({
-                    "planet": name,
-                    "rashi": RASHIS[r_idx],
-                    "deg": f"{int(deg_in_rashi)}° {int((deg_in_rashi % 1) * 60)}'"
-                })
-            rahu_items = [p for p in res_list if "Rahu" in p["planet"]]
-            if rahu_items:
-                res_list.append({
-                    "planet": "Ketu (South Node)",
-                    "rashi": "Opposite Rahu",
-                    "deg": "180° Polar Axis"
-                })
-        except Exception:
-            res_list = []
-            
-    if not res_list:
-        fallback_planets = [
-            ("Sun (Surya)", "Simha (Leo)", "23° 45'"),
-            ("Moon (Chandra)", "Mesha (Aries)", "18° 12'"),
-            ("Mars (Mangal)", "Mithuna (Gemini)", "04° 30'"),
-            ("Mercury (Budha)", "Kanya (Virgo)", "11° 15'"),
-            ("Jupiter (Guru)", "Vrishabha (Taurus)", "21° 50'"),
-            ("Venus (Shukra)", "Kanya (Virgo)", "08° 22'"),
-            ("Saturn (Shani)", "Meena (Pisces)", "03° 10'"),
-            ("Rahu (North Node)", "Meena (Pisces)", "12° 40'"),
-            ("Ketu (South Node)", "Kanya (Virgo)", "12° 40'")
-        ]
-        for name, rashi, deg in fallback_planets:
-            res_list.append({"planet": name, "rashi": rashi, "deg": deg})
-            
-    return res_list
-
 PROFILE_FILE = "user_profile.json"
 
 def load_user_profile():
@@ -1048,9 +975,9 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock (2 Rows of 4 Buttons)
-# Row 1: About App, User Profile, Numerology, Shani
-nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
+# Top Navigation Dock (Clean 2 Rows of 3 Buttons - Removed Planets and Remedies)
+# Row 1: About App, User Profile, Numerology
+nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
 with nav_r1_c1:
     p_type = "primary" if st.session_state.current_page == "about" else "secondary"
     if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
@@ -1069,36 +996,24 @@ with nav_r1_c3:
         st.session_state.current_page = "numerology"
         st.rerun()
 
-with nav_r1_c4:
+# Row 2: Shani, Live Prediction, 7 Days Prediction
+nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
+with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
     if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "shani"
         st.rerun()
 
-# Row 2: Live Prediction, 7 Days Prediction, Planet Position, Remedies
-nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
-with nav_r2_c1:
+with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
     if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
 
-with nav_r2_c2:
+with nav_r2_c3:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
     if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
-        st.rerun()
-
-with nav_r2_c3:
-    p_type = "primary" if st.session_state.current_page == "planets" else "secondary"
-    if st.button(t("btn_planets", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "planets"
-        st.rerun()
-
-with nav_r2_c4:
-    p_type = "primary" if st.session_state.current_page == "remedies" else "secondary"
-    if st.button(t("btn_remedies", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "remedies"
         st.rerun()
 
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
@@ -1243,7 +1158,7 @@ def render_page_about():
 
 
 # ==============================================================================
-# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE
+# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE (CONTAINS FIXED REMEDIES)
 # ==============================================================================
 def render_page_profile():
     with st.container(border=True):
@@ -1322,7 +1237,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION A: JANMA NAKSHATRA BIO, PERSONALITY & PREDICTION -->
+        <!-- SUBSECTION A: JANMA NAKSHATRA BIO, PERSONALITY & REMEDIES -->
         <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>⭐</span> <span>1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})</span>
@@ -1353,7 +1268,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION B: MOON RASHI BIO, PERSONALITY & PREDICTION -->
+        <!-- SUBSECTION B: MOON RASHI BIO, PERSONALITY & REMEDIES -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌙</span> <span>2. Moon Rashi (Chandra Rashi): {m_info['name']}</span>
@@ -1380,7 +1295,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION C: LAGNA BIO, PERSONALITY & PREDICTION -->
+        <!-- SUBSECTION C: LAGNA BIO, PERSONALITY & REMEDIES -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:0.5rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌅</span> <span>3. Lagna (Ascendant): {l_info['name']}</span>
@@ -1412,7 +1327,7 @@ def render_page_profile():
 
 
 # ==============================================================================
-# PAGE 3: NUMEROLOGY
+# PAGE 3: NUMEROLOGY (CONTAINS NUMEROLOGY HARMONY REMEDIES)
 # ==============================================================================
 def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
@@ -1478,7 +1393,8 @@ def render_page_numerology():
             </div>
         </div>
 
-        <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3;">
+        <!-- Numerology Avoidance Matrix -->
+        <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
                 <div><b>🚫 Numbers to Avoid:</b> {avoid_data['avoid_numbers']}</div>
@@ -1493,12 +1409,22 @@ def render_page_numerology():
                 </ul>
             </div>
         </div>
+
+        <!-- Dedicated Numerology Remedies Card -->
+        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
+            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
+            <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
+                • <b>Metal Vessel Grounding:</b> Drink water from a pure silver or copper vessel to pacify Rahu-Mars nervous restlessness and enhance bio-electrical harmony.<br>
+                • <b>Digital & Workspace Bio-Shield:</b> Remove tangled charging cables, broken electronic gadgets, and inactive clocks from your study/office desk to unblock Mercury-Rahu frequencies.<br>
+                • <b>Name Resonance (Namank):</b> Use green or blue ink when writing or endorsing important planning documents to harmonize your {namank} name vibration.
+            </div>
+        </div>
     </div>
     """)
 
 
 # ==============================================================================
-# PAGE 4: SHANI
+# PAGE 4: SHANI (CONTAINS ALL SHANI & SADE SATI REMEDIES)
 # ==============================================================================
 def render_page_shani():
     render_html(f"""
@@ -1632,7 +1558,7 @@ def render_page_shani():
 
 
 # ==============================================================================
-# DETAILED PREDICTION & REMEDIES ENGINE (FOR LIVE & 7-DAY FORECASTS)
+# DETAILED PREDICTION & REMEDIES ENGINE
 # ==============================================================================
 def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
     is_positive = offset in [1, 3, 5, 7, 8]
@@ -1838,71 +1764,7 @@ def render_page_forecast():
 
 
 # ==============================================================================
-# PAGE 7: REAL-TIME PLANET POSITIONS (SIDEREAL LAHIRI)
-# ==============================================================================
-def render_page_planets():
-    now_ist = datetime.datetime.now()
-    planets_data = get_sidereal_planet_positions(now_ist)
-
-    render_html(f"""
-    <div class="light-card-profile">
-        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:8px; border-bottom:2px solid #fed7aa; padding-bottom:0.5rem;">
-            {t('planet_title', current_lang)}
-        </div>
-        <div style="font-size:0.92rem; color:#64748b; margin-bottom:12px;">
-            Sidereal Lahiri Ayanamsa | Computed for {now_ist.strftime('%d %B %Y, %I:%M %p IST')}
-        </div>
-    </div>
-    """)
-
-    for p in planets_data:
-        render_html(f"""
-        <div style="background:#fff7ed; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; border:1px solid #fed7aa; margin-bottom:8px;">
-            <span style="font-weight:800; color:#9a3412; font-size:0.98rem;">{p['planet']}</span>
-            <span style="font-weight:900; color:#431407; font-size:0.98rem;">{p['rashi']} ({p['deg']})</span>
-        </div>
-        """)
-
-
-# ==============================================================================
-# PAGE 8: REMEDIES
-# ==============================================================================
-def render_page_remedies():
-    render_html(f"""
-    <div class="light-card-num">
-        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem;">
-            🪔 Consolidated Vedic Astro-Remedies Sanctuary
-        </div>
-        
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669; margin-bottom:1rem;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">1. Janma Nakshatra Protection ({chart_info['star_name']})</div>
-            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
-                • Worship Lord Shiva or Lord Yama to clear heavy ancestral burdens and establish inner stillness.<br>
-                • Chant <b>Om Hreem Bharanyai Namah</b> or <b>Maha Mrityunjaya Mantra</b> 11 times every morning.
-            </div>
-        </div>
-
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981; margin-bottom:1rem;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">2. Numerology Harmony (Mulank {mulank} & Bhagyank {bhagyank})</div>
-            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
-                • Drink water from a silver or copper vessel to balance high planetary nervous intensity.<br>
-                • Maintain an uncluttered workspace free from tangled electronics to amplify mental clarity.
-            </div>
-        </div>
-
-        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #ddd6fe; border-left:5px solid #7c3aed;">
-            <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:5px;">3. Shani Rajat Paya (Silver Feet) Shield</div>
-            <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">
-                • Recite the Hanuman Chalisa on Tuesday and Saturday evenings.<br>
-                • Pour raw cow milk and clean water over a Shiva Lingam on Mondays to awaken the divine silver shield.
-            </div>
-        </div>
-    </div>
-    """)
-
-
-# ==============================================================================
-# ROUTER DISPATCHER
+# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
 # ==============================================================================
 PAGES = {
     "about": render_page_about,
@@ -1912,8 +1774,6 @@ PAGES = {
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
-    "planets": render_page_planets,
-    "remedies": render_page_remedies,
 }
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
