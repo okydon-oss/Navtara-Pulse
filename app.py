@@ -1779,6 +1779,75 @@ def render_page_shani():
                     <b>Transliteration:</b> Om Suryaputraya Vidmahe Mrityuroopaya Dheemahi | Tanno Saurih Prachodayat ||
                 </div>
                 <div style="font-size:0.9rem; color:#3b0764; margin-top:4px; line-height:1.5;">
+                    <b>Meaning & Prescription:</b> Awakes the righteous, disciplined wisdom of Saturn. Chanting 21 times on Saturday evenings dissolves anxiety and fear of the unknown.
+                </div>
+            </div>
+        </div>
+    </div>
+    """)
+
+    # Interactive Digital Japa Mala Counter
+    with st.container():
+        st.markdown("#### 📿 Digital Japa Mala Counter (108)")
+        j_col1, j_col2, j_col3 = st.columns([2, 1, 1])
+        with j_col1:
+            st.progress(min(1.0, st.session_state.japa_count / 108.0))
+            st.caption(f"Beads Chanted: {st.session_state.japa_count} / 108")
+        with j_col2:
+            if st.button("📿 Chant (+1)", key="shani_japa_btn", use_container_width=True):
+                st.session_state.japa_count += 1
+                if st.session_state.japa_count > 108:
+                    st.session_state.japa_count = 1
+                st.rerun()
+        with j_col3:
+            if st.button("🔄 Reset", key="shani_japa_reset", use_container_width=True):
+                st.session_state.japa_count = 0
+                st.rerun()
+
+# ==============================================================================
+# DETAILED PREDICTION & REMEDIES ENGINE
+# ==============================================================================
+def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
+    is_positive = offset in [1, 3, 5, 7, 8]
+    is_extreme_friction = offset in [2, 4, 6]
+
+    theme_map = {
+        0: ("Identity Renewal & Foundation (Janma)", "Mind feels intensely sensitive, reflective, and connected to root desires. Vital for self-evaluation rather than high-stakes friction.", "Focus on foundational planning, health diagnostics, routine execution, and self-care.", "Avoid impulsive career shifts, major loans, or initiating confrontational meetings."),
+        1: ("Accelerated Wealth & Liquidity (Sampat)", "High financial synchronicity. Cosmic doors open for asset acquisition, high-ticket proposals, and capital expansion.", "Sign partnership deeds, initiate investments, submit proposals, and collect receivables.", "Avoid complacency; strike while the cosmic window is open."),
+        2: ("Friction Shield & Crisis Deflection (Vipat)", "Elevated environmental resistance. Unforeseen delays, technological glitches, and administrative roadblocks.", "Conduct defensive administrative checks, review error margins, and maintain low profile.", "Strictly avoid speculative bets, aggressive confrontations, or signing irreversible contracts."),
+        3: ("Peace, Health & Structural Security (Kshema)", "Sustaining, healing vibrational flow. Excellent for domestic harmony, property matters, and emotional equilibrium.", "Finalize contracts, purchase durable goods, enjoy family gatherings, and resolve old disputes.", "Avoid over-exhaustion; maintain balanced dietary and rest rhythms."),
+        4: ("Overcoming Roadblocks & Opposition (Pratyari)", "Testing of diplomatic acumen. Hidden opposition, critical auditors, or challenging counterparties may emerge.", "Gather airtight evidence, exercise extreme tactical patience, and listen twice as much as you speak.", "Avoid losing temper in official communications; do not escalate legal friction."),
+        5: ("Strategic Mastery & Manifestation (Sadhana)", "Golden window for high-order accomplishments. Mental faculties are razor sharp for complex engineering, strategy, and execution.", "Launch critical campaigns, undertake complex technical projects, negotiate promotions, and study.", "Do not waste this high-frequency window on superficial trivialities."),
+        6: ("High Friction Zone & Defensive Prudence (Vadha)", "Heaviest energetic friction. Physical vitality and mental stamina feel vulnerable to depletion.", "Keep a minimalist agenda, practice quiet perseverance, and double-check all critical data.", "Do not drive long distances late at night; postpone major financial commitments."),
+        7: ("Cooperative Harmony & Alliance Building (Mitra)", "Pleasurable, cordial cosmic atmosphere. High responsiveness from peers, mentors, and prospective partners.", "Network with key decision-makers, resolve estrangements, host important discussions, and socialize.", "Avoid being overly accommodating; ensure business boundaries remain firm."),
+        8: ("Supreme Synergy & Pinnacle Triumph (Ati-Mitra)", "Peak celestial resonance. The rarest, most fruitful timing window for long-term victories and monumental leaps.", "Pitch high-value clients, launch new business verticals, close major property deals, and celebrate.", "Do not doubt yourself; step forward with unwavering confidence.")
+    }
+
+    theme_title, theme_desc, opportunities, hazards = theme_map.get(offset, theme_map[0])
+
+    if is_positive:
+        remedy_mantra = "ॐ नमो भगवते वासुदेवाय (Om Namo Bhagavate Vasudevaya) - 11 times in morning facing East."
+        remedy_charity = "Offer sweet yellow fruits or milk sweets to elders, mentors, or temples to seal cosmic prosperity."
+        remedy_action = "Wear light, vibrant shades (Coral Red, Amber Gold, or Electric White) to broadcast peak resonance."
+    elif is_extreme_friction:
+        remedy_mantra = "ॐ नमः शिवाय (Om Namah Shivaya) or Maha Mrityunjaya Mantra - 108 times at twilight facing North."
+        remedy_charity = "Feed stray dogs, crows, or donate dark grains/black sesame to pacify planetary friction."
+        remedy_action = "Apply white sandalwood paste to forehead/wrists; maintain 15 minutes of silent mindfulness (Mauna) before sunset."
+    else:
+        remedy_mantra = "ॐ सूर्याय नमः (Om Suryaya Namah) - Offer pure water in a copper vessel to morning Sun."
+        remedy_charity = "Feed green grass or fresh spinach to cows to enhance cellular vitality and grounding."
+        remedy_action = "Drink warm water from a silver cup; strictly abstain from fast food and erratic sleep patterns."
+
+    return {
+        "theme_title": theme_title,
+        "theme_desc": theme_desc,
+        "opportunities": opportunities,
+        "hazards": hazards,
+        "remedy_mantra": remedy_mantra,
+        "remedy_charity": remedy_charity,
+        "remedy_action": remedy_action
+    }
+
 # ==============================================================================
 # PAGE 5: LIVE DAILY PREDICTION
 # ==============================================================================
