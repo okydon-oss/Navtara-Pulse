@@ -3,6 +3,7 @@ import datetime
 import urllib.parse
 import json
 import os
+import math
 
 try:
     import swisseph as swe
@@ -19,7 +20,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Helper function to inject clean HTML without triggering Markdown code block formatting
+# Helper function to inject clean HTML safely
 def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
@@ -168,7 +169,7 @@ NUM_PLANET_NAMES = {
     4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)", "mr": "राहू (Rahu)", "gu": "રાહુ (Rahu)"},
     5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)", "mr": "बुध (Mercury)", "gu": "બુધ (Mercury)"},
     6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
-    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
+    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "केतू (Ketu)", "gu": "કેતુ (Ketu)"},
     8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
     9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
 }
@@ -501,7 +502,6 @@ def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
             "en": "Lagna lord harmony guides health, executive ambition, and societal standing across life cycles.",
             "hi": "लग्नेश की शुभता से जीवन में आरोग्य, दीर्घायु और सामाजिक प्रभाव का विस्तार होता है।",
             "mr": "लग्नेश अनुकूल असल्यास उत्तम आरोग्य आणि सामाजिक प्रतिष्ठा लाभते.",
-            "gu": "લગ્નેશના શુભ પ્રભાવથી उत्तम आरोग्य आणि प्रतिष्ठा वाढते.",
             "gu": "લગ્નેશના શુભ પ્રભાવથી ઉત્તમ આરોગ્ય અને પ્રતિષ્ઠા વધે છે."
         },
         "remedies": {
@@ -893,6 +893,84 @@ def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
 
     return star_idx, start_dt, end_dt
 
+# ==============================================================================
+# PRECISION SOLAR & MUHURTA CALCULATION ENGINE
+# ==============================================================================
+def calculate_sun_times(date_obj: datetime.date, lat: float, lon: float):
+    """
+    Computes local astronomical Sunrise, Sunset and Solar Midday with equation of time.
+    """
+    day_of_year = date_obj.timetuple().tm_yday
+    # Solar declination approximation
+    decl = 23.45 * math.sin(math.radians((360 / 365) * (day_of_year - 81)))
+    lat_rad = math.radians(lat)
+    decl_rad = math.radians(decl)
+    
+    # Hour angle
+    cos_ha = -math.tan(lat_rad) * math.tan(decl_rad)
+    cos_ha = max(-1.0, min(1.0, cos_ha))
+    ha_deg = math.degrees(math.acos(cos_ha))
+    
+    # Equation of time in minutes
+    b = math.radians((360 / 365) * (day_of_year - 81))
+    eot = 9.87 * math.sin(2 * b) - 7.53 * math.cos(b) - 1.5 * math.sin(b)
+    
+    # Solar noon in IST (IST = UTC + 5:30 -> standard meridian = 82.5° E)
+    time_corr = 4 * (lon - 82.5) + eot
+    solar_noon_minutes = 720 - time_corr
+    half_day_minutes = (ha_deg / 15.0) * 60.0
+    
+    sr_minutes = solar_noon_minutes - half_day_minutes
+    ss_minutes = solar_noon_minutes + half_day_minutes
+    
+    base_dt = datetime.datetime.combine(date_obj, datetime.time.min)
+    sunrise_dt = base_dt + datetime.timedelta(minutes=sr_minutes)
+    sunset_dt = base_dt + datetime.timedelta(minutes=ss_minutes)
+    solar_noon_dt = base_dt + datetime.timedelta(minutes=solar_noon_minutes)
+    
+    return sunrise_dt, sunset_dt, solar_noon_dt
+
+def calculate_daily_muhurtas(date_obj: datetime.date, lat: float, lon: float):
+    """
+    Computes Abhijit Muhurta, Rahu Kaal, Yamaganda, and Brahma Muhurta windows.
+    """
+    sunrise, sunset, noon = calculate_sun_times(date_obj, lat, lon)
+    day_duration = (sunset - sunrise).total_seconds()
+    
+    # 1. Abhijit Muhurta: 8th of 15 daylight segments (approx 48 mins around solar noon)
+    muhurta_duration = day_duration / 15.0
+    abhijit_start = sunrise + datetime.timedelta(seconds=7 * muhurta_duration)
+    abhijit_end = sunrise + datetime.timedelta(seconds=8 * muhurta_duration)
+    
+    # 2. Daytime 8 equal segments (Ashtama Bhaga)
+    eighth_part = day_duration / 8.0
+    
+    # Weekday mapping (Python: Mon=0, Tue=1, Wed=2, Thu=3, Fri=4, Sat=5, Sun=6)
+    wday = date_obj.weekday()
+    rahu_parts = {0: 2, 1: 7, 2: 5, 3: 6, 4: 4, 5: 3, 6: 8} # 1-indexed
+    yamaganda_parts = {0: 4, 1: 3, 2: 2, 3: 1, 4: 7, 5: 6, 6: 5} # 1-indexed
+    
+    r_idx = rahu_parts.get(wday, 6)
+    rahu_start = sunrise + datetime.timedelta(seconds=(r_idx - 1) * eighth_part)
+    rahu_end = sunrise + datetime.timedelta(seconds=r_idx * eighth_part)
+    
+    y_idx = yamaganda_parts.get(wday, 1)
+    yama_start = sunrise + datetime.timedelta(seconds=(y_idx - 1) * eighth_part)
+    yama_end = sunrise + datetime.timedelta(seconds=y_idx * eighth_part)
+    
+    # 3. Brahma Muhurta: 96 to 48 minutes before sunrise
+    brahma_start = sunrise - datetime.timedelta(minutes=96)
+    brahma_end = sunrise - datetime.timedelta(minutes=48)
+    
+    return {
+        "sunrise": sunrise,
+        "sunset": sunset,
+        "abhijit": (abhijit_start, abhijit_end),
+        "rahu": (rahu_start, rahu_end),
+        "yamaganda": (yama_start, yama_end),
+        "brahma": (brahma_start, brahma_end)
+    }
+
 def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int):
     transits = []
     curr_t = start_ist_dt
@@ -975,7 +1053,7 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock (Clean 2 Rows of 3 Buttons - Removed Planets and Remedies)
+# Top Navigation Dock (Clean 2 Rows of 3 Buttons)
 # Row 1: About App, User Profile, Numerology
 nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
 with nav_r1_c1:
@@ -1158,7 +1236,7 @@ def render_page_about():
 
 
 # ==============================================================================
-# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE (CONTAINS FIXED REMEDIES)
+# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE
 # ==============================================================================
 def render_page_profile():
     with st.container(border=True):
@@ -1237,7 +1315,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION A: JANMA NAKSHATRA BIO, PERSONALITY & REMEDIES -->
+        <!-- SUBSECTION A: JANMA NAKSHATRA BIO & REMEDIES -->
         <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>⭐</span> <span>1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})</span>
@@ -1268,7 +1346,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION B: MOON RASHI BIO, PERSONALITY & REMEDIES -->
+        <!-- SUBSECTION B: MOON RASHI BIO & REMEDIES -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌙</span> <span>2. Moon Rashi (Chandra Rashi): {m_info['name']}</span>
@@ -1295,7 +1373,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- SUBSECTION C: LAGNA BIO, PERSONALITY & REMEDIES -->
+        <!-- SUBSECTION C: LAGNA BIO & REMEDIES -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:0.5rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌅</span> <span>3. Lagna (Ascendant): {l_info['name']}</span>
@@ -1327,7 +1405,7 @@ def render_page_profile():
 
 
 # ==============================================================================
-# PAGE 3: NUMEROLOGY (CONTAINS NUMEROLOGY HARMONY REMEDIES)
+# PAGE 3: NUMEROLOGY
 # ==============================================================================
 def render_page_numerology():
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
@@ -1393,7 +1471,6 @@ def render_page_numerology():
             </div>
         </div>
 
-        <!-- Numerology Avoidance Matrix -->
         <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
@@ -1410,7 +1487,6 @@ def render_page_numerology():
             </div>
         </div>
 
-        <!-- Dedicated Numerology Remedies Card -->
         <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
             <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
             <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
@@ -1424,7 +1500,7 @@ def render_page_numerology():
 
 
 # ==============================================================================
-# PAGE 4: SHANI (CONTAINS ALL SHANI & SADE SATI REMEDIES)
+# PAGE 4: SHANI
 # ==============================================================================
 def render_page_shani():
     render_html(f"""
@@ -1603,7 +1679,7 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
 
 
 # ==============================================================================
-# PAGE 5: LIVE DAILY PREDICTION
+# PAGE 5: LIVE DAILY PREDICTION (FEATURING PRECISION MUHURTA ENGINE)
 # ==============================================================================
 def render_page_live():
     now_ist = datetime.datetime.now()
@@ -1615,6 +1691,62 @@ def render_page_live():
 
     insights = get_detailed_day_insights(offset, vahan_info, NAKSHATRAS[cur_star_idx - 1], p_day)
 
+    # Compute live precision Muhurtas
+    u_lat = prof.get("lat", 19.8762)
+    u_lon = prof.get("lon", 75.3433)
+    muhurtas = calculate_daily_muhurtas(now_ist.date(), u_lat, u_lon)
+    
+    abhijit_s, abhijit_e = muhurtas["abhijit"]
+    rahu_s, rahu_e = muhurtas["rahu"]
+    yama_s, yama_e = muhurtas["yamaganda"]
+    brahma_s, brahma_e = muhurtas["brahma"]
+
+    # Dynamic Safe-to-Act Indicator logic
+    is_abhijit = abhijit_s <= now_ist <= abhijit_e
+    is_rahu = rahu_s <= now_ist <= rahu_e
+    is_yama = yama_s <= now_ist <= yama_e
+
+    if is_rahu:
+        status_banner = f"""
+        <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <div>
+                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Rahu Kaal in Operation</b>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Pause new contract signing, travel departures, and major transactions until {rahu_e.strftime('%I:%M %p')}.</div>
+            </div>
+            <span style="font-size:1.8rem;">🛑</span>
+        </div>
+        """
+    elif is_yama:
+        status_banner = f"""
+        <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <div>
+                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Yamaganda in Operation</b>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Avoid launching crucial ventures or financial agreements until {yama_e.strftime('%I:%M %p')}.</div>
+            </div>
+            <span style="font-size:1.8rem;">⚠️</span>
+        </div>
+        """
+    elif is_abhijit:
+        status_banner = f"""
+        <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <div>
+                <b style="color:#15803d; font-size:1.02rem;">🟢 GOLDEN ACTION WINDOW ACTIVE: Abhijit Muhurta</b>
+                <div style="font-size:0.88rem; color:#14532d; margin-top:2px;">Supreme cosmic victory window. Highly auspicious for approvals, launches, and decisions until {abhijit_e.strftime('%I:%M %p')}.</div>
+            </div>
+            <span style="font-size:1.8rem;">🌟</span>
+        </div>
+        """
+    else:
+        status_banner = f"""
+        <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+            <div>
+                <b style="color:#166534; font-size:0.98rem;">🟢 SAFE TO ACT: Standard Favorable Orbit</b>
+                <div style="font-size:0.86rem; color:#15803d; margin-top:2px;">No planetary friction windows currently active. Next Abhijit: {abhijit_s.strftime('%I:%M %p')} | Rahu Kaal: {rahu_s.strftime('%I:%M %p')}</div>
+            </div>
+            <span style="font-size:1.6rem;">⏱️</span>
+        </div>
+        """
+
     render_html(f"""
     <div class="light-card-live">
         <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:1rem; border-bottom:2px solid #bae6fd; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -1622,6 +1754,9 @@ def render_page_live():
             <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE IST</span>
         </div>
 
+        {status_banner}
+
+        <!-- TRANSIT HEADER -->
         <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
@@ -1640,6 +1775,51 @@ def render_page_live():
             </div>
         </div>
 
+        <!-- PRECISION MUHURTA TIMING WINDOWS -->
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
+            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:10px; border-bottom:1px solid #e0f2fe; padding-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
+                <span>⏱️ Precision Timing Windows for Today</span>
+                <span style="font-size:0.8rem; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:12px; font-weight:800;">{prof['city'].split(',')[0]} Solar Geometry</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:10px;">
+                <!-- Golden Windows -->
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border:1px solid #86efac;">
+                    <b style="color:#166534; font-size:0.95rem;">🌟 Golden Auspicious Windows:</b>
+                    <div style="font-size:0.92rem; color:#14532d; margin-top:5px; line-height:1.6;">
+                        • <b>Abhijit Muhurta:</b><br>
+                        <span style="font-size:1.05rem; font-weight:900; color:#15803d;">{abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')}</span><br>
+                        <i style="font-size:0.84rem; color:#166534;">(Supreme window for agreements, launches & investments)</i>
+                    </div>
+                    <div style="font-size:0.92rem; color:#14532d; margin-top:8px; line-height:1.6;">
+                        • <b>Brahma Muhurta:</b><br>
+                        <span style="font-weight:800; color:#15803d;">{brahma_s.strftime('%I:%M %p')} – {brahma_e.strftime('%I:%M %p IST')}</span><br>
+                        <i style="font-size:0.84rem; color:#166534;">(Peak sattvic time for meditation & spiritual grounding)</i>
+                    </div>
+                </div>
+
+                <!-- Caution Windows -->
+                <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border:1px solid #fecdd3;">
+                    <b style="color:#9f1239; font-size:0.95rem;">⚠️ Caution & Inauspicious Windows:</b>
+                    <div style="font-size:0.92rem; color:#881337; margin-top:5px; line-height:1.6;">
+                        • <b>Rahu Kaal (Avoid Signings):</b><br>
+                        <span style="font-size:1.05rem; font-weight:900; color:#be123c;">{rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')}</span><br>
+                        <i style="font-size:0.84rem; color:#9f1239;">(Pause high-risk trades, signing deeds & departures)</i>
+                    </div>
+                    <div style="font-size:0.92rem; color:#881337; margin-top:8px; line-height:1.6;">
+                        • <b>Yamaganda (Delays):</b><br>
+                        <span style="font-weight:800; color:#be123c;">{yama_s.strftime('%I:%M %p')} – {yama_e.strftime('%I:%M %p IST')}</span><br>
+                        <i style="font-size:0.84rem; color:#9f1239;">(Avoid starting brand-new critical ventures)</i>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="font-size:0.85rem; color:#64748b; text-align:right;">
+                🌅 Sunrise: <b>{muhurtas['sunrise'].strftime('%I:%M %p')}</b> &nbsp;|&nbsp; 🌇 Sunset: <b>{muhurtas['sunset'].strftime('%I:%M %p IST')}</b>
+            </div>
+        </div>
+
+        <!-- DUAL METRICS -->
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; margin-bottom:1.1rem;">
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd;">
                 <div style="font-size:0.85rem; color:#0284c7; font-weight:800; text-transform:uppercase;">DAILY SHANI VAHAN</div>
@@ -1655,25 +1835,53 @@ def render_page_live():
             </div>
         </div>
 
+        <!-- 4-DOMAIN ACTION QUICK CHECKLIST -->
+        <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
+            <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:10px; border-bottom:1px solid #e0f2fe; padding-bottom:5px;">
+                📋 Practical Action Green Light Checklist
+            </div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.92rem;">
+                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                    <b>💼 Career & Execution:</b><br>
+                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in Abhijit window' if offset in [1,3,5,7,8] else '🔴 Hold Back: Avoid starting disputes or high-stakes requests'}</span>
+                </div>
+                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                    <b>💰 Wealth & Financials:</b><br>
+                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
+                </div>
+                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                    <b>🏠 Domestic & Relations:</b><br>
+                    <span style="color:#0f172a;">{'🟢 Harmonious: Excellent for family discussions' if offset in [1,3,5,7,8] else '🟡 Sensitive: Practice calm listening; avoid debates'}</span>
+                </div>
+                <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                    <b>🌿 Health & Energy:</b><br>
+                    <span style="color:#0f172a;">{'🟢 High Vitality: Great for workouts & physical tasks' if offset in [1,3,5,7,8] else '🔴 Prone to Fatigue: Rest well and hydrate deeply'}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- IN-DEPTH COGNITIVE & STRATEGIC THEME -->
         <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
             <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #e0f2fe; padding-bottom:5px;">
-                🧠 In-Depth Cognitive & Strategic Theme: {insights['theme_title']}
+                🧠 Cognitive & Strategic Archetype: {insights['theme_title']}
             </div>
             <div style="font-size:0.95rem; line-height:1.7; color:#1e293b; margin-bottom:12px;">
                 {insights['theme_desc']}
             </div>
 
             <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #16a34a; margin-bottom:10px;">
-                <b style="color:#15803d; font-size:0.95rem;">🚀 Prime Opportunities & Action Protocols:</b>
+                <b style="color:#15803d; font-size:0.95rem;">🚀 Prime Opportunities & Protocols:</b>
                 <div style="font-size:0.92rem; line-height:1.6; color:#166534; margin-top:2px;">{insights['opportunities']}</div>
             </div>
 
             <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
-                <b style="color:#be123c; font-size:0.95rem;">⚠️ Potential Hazards & Strategic Don'ts:</b>
+                <b style="color:#be123c; font-size:0.95rem;">⚠️ Potential Hazards & Red Flags:</b>
                 <div style="font-size:0.92rem; line-height:1.6; color:#9f1239; margin-top:2px;">{insights['hazards']}</div>
             </div>
         </div>
 
+        <!-- COMPREHENSIVE ACTIONABLE REMEDIES -->
         <div style="background:#f0f9ff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd;">
             <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:8px; border-bottom:1px solid #bae6fd; padding-bottom:5px;">
                 🪔 Targeted Daily Cosmic Remedies:
@@ -1721,16 +1929,27 @@ def render_page_forecast():
     v_info = calculate_shani_vahan(chart_info["star_idx"], sel_tr["star_idx"])
     sel_insights = get_detailed_day_insights(sel_tr["nav_offset"], v_info, sel_tr['star_name'], sel_p_day)
 
+    # Compute Muhurta for selected forecast day
+    u_lat = prof.get("lat", 19.8762)
+    u_lon = prof.get("lon", 75.3433)
+    sel_muh = calculate_daily_muhurtas(sel_tr['date'], u_lat, u_lon)
+
     render_html(f"""
     <div class="light-card-live" style="margin-top:1.1rem;">
         <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:8px; border-bottom:1.5px solid #bae6fd; padding-bottom:5px;">
             🔮 Detailed Transit Forecast: {sel_tr['date_str']} ({sel_tr['star_name']})
         </div>
         
-        <div style="font-size:0.94rem; color:#334155; margin-bottom:12px; line-height:1.5;">
+        <div style="font-size:0.94rem; color:#334155; margin-bottom:10px; line-height:1.5;">
             ⏰ <b>Transit Window:</b> {sel_tr['start_str']} → {sel_tr['end_str']}<br>
             🧭 <b>Navtara Classification:</b> {sel_tr['nav_name']} ({sel_tr['quality']})<br>
             🪐 <b>Saturn Mount (Vahan):</b> {v_info['name']} — <i>{v_info['speed']} ({v_info['type']})</i>
+        </div>
+
+        <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #bae6fd; margin-bottom:10px; font-size:0.91rem;">
+            <b>⏱️ Key Timing Windows for {sel_tr['date_str']}:</b><br>
+            • 🌟 <b>Abhijit Muhurta:</b> {sel_muh['abhijit'][0].strftime('%I:%M %p')} – {sel_muh['abhijit'][1].strftime('%I:%M %p IST')} (Golden Period)<br>
+            • ⚠️ <b>Rahu Kaal:</b> {sel_muh['rahu'][0].strftime('%I:%M %p')} – {sel_muh['rahu'][1].strftime('%I:%M %p IST')} (Avoid Signings)
         </div>
 
         <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #bae6fd; margin-bottom:12px;">
