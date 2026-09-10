@@ -5,7 +5,6 @@ import json
 import os
 import math
 
-# Initialize Swiss Ephemeris engine with sidereal Lahiri configuration
 try:
     import swisseph as swe
     HAS_SWISSEPH = True
@@ -13,7 +12,7 @@ try:
 except Exception:
     HAS_SWISSEPH = False
 
-# Configure Streamlit page layout and viewport settings
+# Configure Streamlit page settings
 st.set_page_config(
     page_title="Navtara Pulse",
     page_icon="✨",
@@ -21,11 +20,12 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Helper function to inject clean, responsive HTML without markdown code-block wrapping
+# Helper function to inject clean HTML safely
 def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
+# Mobile-optimized CSS styling
 render_html("""
 <style>
     html {
@@ -38,16 +38,16 @@ render_html("""
         .block-container {
             padding-left: 0.65rem !important;
             padding-right: 0.65rem !important;
-            padding-top: 0.9rem !important;
+            padding-top: 1rem !important;
             padding-bottom: 5.5rem !important;
         }
     }
     
     .block-container {
-        padding-top: 1.1rem;
+        padding-top: 1.2rem;
         padding-bottom: 5.5rem;
-        padding-left: 0.85rem;
-        padding-right: 0.85rem;
+        padding-left: 0.9rem;
+        padding-right: 0.9rem;
         max-width: 780px;
     }
     
@@ -119,7 +119,7 @@ NAKSHATRAS = [
     "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
-NAKHATRAS = NAKSHATRAS  # Robust backward-compatible alias
+NAKHATRAS = NAKSHATRAS
 
 RASHIS = [
     "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
@@ -136,7 +136,7 @@ NAVTARA_NAMES = [
     ("Sadhana (Accomplishment)", "🟢", "Success, Discipline & Mastery"),
     ("Vadha (Destruction/Loss)", "🔴", "Heavy Friction & Caution"),
     ("Mitra (Friendship/Allies)", "🟢", "Cordiality & Cooperative Harmony"),
-    ("Ati-Mitra (Supreme Alliance)", "🟢🟢", "Supreme Synergy & Deep Expansion")
+    ("Ati-Mitra (Supreme Alliance)", "🟢", "Supreme Synergy & Deep Expansion")
 ]
 
 SHANI_VAHANS = {
@@ -171,7 +171,7 @@ NUM_PLANET_NAMES = {
     6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
     7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
     8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
-    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
+    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "મંગળ (Mars)", "gu": "મંગળ (Mars)"}
 }
 
 TRANSLATIONS = {
@@ -875,11 +875,6 @@ def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float = 1
         "lagna_name": RASHIS[lagna_idx]
     }
 
-def get_current_ist_datetime() -> datetime.datetime:
-    """Returns the true Indian Standard Time (IST, UTC+5:30) regardless of host server location."""
-    ist_tz = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
-    return datetime.datetime.now(datetime.timezone.utc).astimezone(ist_tz).replace(tzinfo=None)
-
 def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
     utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
     current_lon = get_sidereal_moon_longitude(utc_dt)
@@ -898,6 +893,9 @@ def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
 
     return star_idx, start_dt, end_dt
 
+# ==============================================================================
+# PRECISION SOLAR & MUHURTA CALCULATION ENGINE
+# ==============================================================================
 def calculate_sun_times(date_obj: datetime.date, lat: float, lon: float):
     day_of_year = date_obj.timetuple().tm_yday
     decl = 23.45 * math.sin(math.radians((360 / 365) * (day_of_year - 81)))
@@ -958,121 +956,6 @@ def calculate_daily_muhurtas(date_obj: datetime.date, lat: float, lon: float):
         "brahma": (brahma_start, brahma_end)
     }
 
-def get_daily_micro_habit(transit_star_idx: int, navtara_offset: int):
-    star_lord = NAKSHATRA_BIO_DATA.get(transit_star_idx, {}).get("lord", "Moon")
-    
-    palette_map = {
-        "Sun": ("Amber Gold, Saffron & Warm Copper", "☀️ Surya Vitality", "Stand facing morning sunlight for 2 minutes while taking 7 deep belly breaths to activate solar metabolic drive."),
-        "Moon": ("Pearl White, Cream & Silver Mist", "🌙 Chandra Serenity", "Drink a glass of fresh water stored in a silver vessel; splash cool water over eyes to soothe mental agitation."),
-        "Mars": ("Coral Red, Vermilion & Crimson", "🔥 Mangal Courage", "Keep posture straight; stretch spine and calves for 2 minutes to discharge restlessness and channel focused physical resolve."),
-        "Mercury": ("Emerald Green, Mint & Jade", "🌿 Budha Intellect", "Write down your top 3 priority decisions in green ink; wash face with rose water to sharpen synaptic communication."),
-        "Jupiter": ("Bright Yellow, Golden Ochre & Turmeric", "✨ Brihaspati Wisdom", "Apply a faint dot of yellow sandalwood or pure saffron on wrists; honor mentors mentally before high-stakes talks."),
-        "Venus": ("Pastel Pink, Silken White & Floral Lilac", "🌸 Shukra Harmony", "Apply natural sandalwood or rose attar to pulse points; cultivate aesthetic neatness in your immediate workstation."),
-        "Saturn": ("Slate Gray, Deep Indigo & Midnight Navy", "🪐 Shani Discipline", "Practice silent conscious breathing (Mauna) for 2 minutes before speaking; stretch lower back to ground nervous energy."),
-        "Rahu": ("Electric Blue, Smoky Charcoal & Metallic Silver", "⚡ Rahu Shield", "Tidy cluttered electronics, discard unneeded digital tabs, and avoid rash unverified commitments during twilight."),
-        "Ketu": ("Earthy Khaki, Warm Sand & Smoked Hazel", "🕊️ Ketu Detachment", "Close eyes for 2 minutes of silent observation of breath at the eyebrow center (Ajna Chakra) to unhook from chaotic stimuli.")
-    }
-    
-    lord_key = next((k for k in palette_map.keys() if k in star_lord), "Moon")
-    color_name, archetype, habit_desc = palette_map[lord_key]
-    
-    if navtara_offset in [2, 4, 6]:
-        caution_cue = "🔴 High-Friction Day Bio-Shield: Avoid harsh confrontation between 12:00 PM and 03:00 PM; drink warm water with a pinch of black salt."
-    else:
-        caution_cue = "🟢 Expansion Day Synergy: Wear this color prominently to amplify cognitive charisma and executive magnetism."
-        
-    return {
-        "color": color_name,
-        "lord": star_lord,
-        "archetype": archetype,
-        "habit": habit_desc,
-        "caution_cue": caution_cue
-    }
-
-def get_nakshatra_synergy_data(user_star_idx: int):
-    allied_stars = []
-    friction_stars = []
-    
-    for i in range(1, 28):
-        offset = (i - user_star_idx) % 9
-        star_name = NAKSHATRAS[i - 1]
-        if offset in [7, 8]:  # Mitra, Ati-Mitra
-            allied_stars.append((star_name, NAVTARA_NAMES[offset][0].split('(')[0].strip()))
-        elif offset in [2, 4, 6]:  # Vipat, Pratyari, Vadha
-            friction_stars.append((star_name, NAVTARA_NAMES[offset][0].split('(')[0].strip()))
-            
-    return allied_stars, friction_stars
-
-def calculate_partner_compatibility(user_star_idx: int, partner_star_idx: int):
-    user_to_partner = (partner_star_idx - user_star_idx) % 9
-    partner_to_user = (user_star_idx - partner_star_idx) % 9
-    
-    u_nav_name, u_icon, u_quality = NAVTARA_NAMES[user_to_partner]
-    p_nav_name, p_icon, p_quality = NAVTARA_NAMES[partner_to_user]
-    
-    is_high_synergy = user_to_partner in [1, 3, 5, 7, 8] and partner_to_user in [1, 3, 5, 7, 8]
-    is_karmic_friction = user_to_partner in [2, 4, 6] or partner_to_user in [2, 4, 6]
-    
-    if is_high_synergy:
-        verdict = "🌟 High Mutual Synergy & Natural Alliance"
-        verdict_color = "#15803d"
-        verdict_bg = "#dcfce7"
-        advice = "Natural mutual understanding, effortless communication, and collaborative expansion. Great for business partnerships, marriage, and long-term joint ventures."
-    elif is_karmic_friction:
-        verdict = "⚠️ Karmic Growth & High Caution Required"
-        verdict_color = "#be123c"
-        verdict_bg = "#ffe4e6"
-        advice = "Prone to unspoken expectations, emotional friction, or administrative disputes. Document all agreements in writing, practice patient listening, and maintain clear boundaries."
-    else:
-        verdict = "⚖️ Dynamic & Growth-Oriented (Moderate Balance)"
-        verdict_color = "#b45309"
-        verdict_bg = "#fef3c7"
-        advice = "Complementary strengths with occasional differences in operational pacing. Alignment thrives when roles and responsibilities are distinctly demarcated."
-        
-    return {
-        "verdict": verdict,
-        "color": verdict_color,
-        "bg": verdict_bg,
-        "user_perspective": f"{u_icon} {u_nav_name} ({u_quality})",
-        "partner_perspective": f"{p_icon} {p_nav_name} ({p_quality})",
-        "advice": advice
-    }
-
-def get_7_day_heatmap_and_power_day(transits: list):
-    score_weights = {8: 10, 7: 9, 5: 8, 1: 8, 3: 7, 0: 5, 4: 4, 2: 3, 6: 2}
-    
-    best_day = None
-    best_score = -1
-    
-    heatmap_items = []
-    for tr in transits:
-        off = tr["nav_offset"]
-        score = score_weights.get(off, 5)
-        if score > best_score:
-            best_score = score
-            best_day = tr
-            
-        if off in [7, 8]:
-            bg = "#bbf7d0"; border = "#16a34a"; text = "#14532d"; badge = "🟢🟢 Peak"
-        elif off in [1, 3, 5]:
-            bg = "#dcfce7"; border = "#22c55e"; text = "#15803d"; badge = "🟢 Good"
-        elif off == 0:
-            bg = "#fef3c7"; border = "#eab308"; text = "#854d0e"; badge = "🟡 Focus"
-        else:
-            bg = "#fee2e2"; border = "#ef4444"; text = "#991b1b"; badge = "🔴 Guard"
-            
-        heatmap_items.append({
-            "day": tr["date_str"].split(',')[0],
-            "date": tr["date_str"].split(',')[1].strip(),
-            "star": tr["star_name"][:5] + ".",
-            "badge": badge,
-            "bg": bg,
-            "border": border,
-            "text": text
-        })
-        
-    return heatmap_items, best_day
-
 def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int):
     transits = []
     curr_t = start_ist_dt
@@ -1101,14 +984,17 @@ def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int
         })
     return transits
 
+# ==============================================================================
+# USER PROFILE STORAGE MANAGEMENT (DEFAULT: BLANK)
+# ==============================================================================
 PROFILE_FILE = "user_profile.json"
 
 def load_user_profile():
     default_profile = {
-        "name": "Okesh",
-        "dob": "1984-01-13",
-        "tob": "14:00",
-        "city": "Chhatrapati Sambhajinagar, Maharashtra",
+        "name": "",
+        "dob": "",
+        "tob": "",
+        "city": "",
         "lat": 19.8762,
         "lon": 75.3433,
         "lang": "en"
@@ -1144,12 +1030,10 @@ if "selected_transit_idx" not in st.session_state:
 if "japa_count" not in st.session_state:
     st.session_state.japa_count = 0
 
-if "partner_star_idx" not in st.session_state:
-    st.session_state.partner_star_idx = 1
-
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
+# Universal Centered Header on ALL tabs
 render_html(f"""
     <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
         <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:76px; height:76px; border-radius:26px; display:flex; align-items:center; justify-content:center; font-size:2.45rem; box-shadow:0 8px 28px rgba(245,158,11,0.38); margin-bottom:10px;'>
@@ -1160,7 +1044,8 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock (Balanced 2 Rows x 3 Columns)
+# Top Navigation Dock (Clean 2 Rows of 3 Buttons)
+# Row 1: About App, User Profile, Numerology
 nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
 with nav_r1_c1:
     p_type = "primary" if st.session_state.current_page == "about" else "secondary"
@@ -1180,6 +1065,7 @@ with nav_r1_c3:
         st.session_state.current_page = "numerology"
         st.rerun()
 
+# Row 2: Shani, Live Prediction, 7 Days Prediction
 nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
 with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
@@ -1201,24 +1087,56 @@ with nav_r2_c3:
 
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
-try:
-    dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
-except Exception:
-    dob_parsed = datetime.date(1984, 1, 13)
+# Profile Presence Validation
+has_valid_profile = bool(prof.get("name") and prof.get("dob") and prof.get("tob"))
 
-try:
-    tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
-except Exception:
-    tob_parsed = datetime.time(14, 0)
+if has_valid_profile:
+    try:
+        dob_parsed = datetime.datetime.strptime(prof["dob"], "%Y-%m-%d").date()
+    except Exception:
+        dob_parsed = datetime.date(1984, 1, 13)
 
-chart_info = calculate_birth_chart(dob_parsed, tob_parsed, prof.get("lat", 19.8762), prof.get("lon", 75.3433))
-mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
+    try:
+        tob_parsed = datetime.datetime.strptime(prof["tob"], "%H:%M").time()
+    except Exception:
+        tob_parsed = datetime.time(14, 0)
 
-# Saturn in Pisces (Meena = index 11)
-SATURN_TRANSIT_RASHI_IDX = 11
-shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
-shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+    chart_info = calculate_birth_chart(dob_parsed, tob_parsed, prof.get("lat", 19.8762), prof.get("lon", 75.3433))
+    mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
 
+    SATURN_TRANSIT_RASHI_IDX = 11  # Saturn in Pisces (Meena)
+    shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+    shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+else:
+    dob_parsed = None
+    tob_parsed = None
+    chart_info = None
+    mulank, bhagyank, namank = None, None, None
+    shani_paya_data = None
+    shani_sadesati_data = None
+
+def render_profile_setup_prompt():
+    render_html("""
+    <div style="background:#fffbeb; border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; margin:1.5rem 0;">
+        <div style="font-size:2.2rem; margin-bottom:8px;">👤</div>
+        <div style="font-weight:900; font-size:1.25rem; color:#92400e; margin-bottom:6px;">
+            Set Up Your Vedic Birth Profile
+        </div>
+        <div style="font-size:0.95rem; color:#78350f; max-width:480px; margin:0 auto 1.2rem auto; line-height:1.6;">
+            To calculate your personalized <b>Janma Nakshatra</b>, <b>Navtara cycle</b>, <b>Shani Paya</b>, and <b>Numerology vibration</b>, please enter your birth details in the User Profile tab.
+        </div>
+    </div>
+    """)
+    _, c_mid, _ = st.columns([1, 2, 1])
+    with c_mid:
+        if st.button("👉 Go to User Profile Setup", type="primary", use_container_width=True):
+            st.session_state.current_page = "profile"
+            st.rerun()
+
+
+# ==============================================================================
+# PAGE 1: ABOUT APP
+# ==============================================================================
 def render_page_about():
     with st.container(border=True):
         st.markdown("**🌐 Select Language / भाषा चुनें / भाषा निवडा / ભાષા પસંદ કરો:**")
@@ -1335,7 +1253,46 @@ def render_page_about():
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 2: USER PROFILE & ASTROLOGICAL PROFILE
+# ==============================================================================
 def render_page_profile():
+    if not has_valid_profile:
+        render_html("""
+        <div class="light-card-profile">
+            <div style="font-weight:900; font-size:1.3rem; color:#9a3412; margin-bottom:0.5rem;">
+                👤 Create Your Vedic Birth Profile
+            </div>
+            <div style="font-size:0.94rem; color:#475569; margin-bottom:1rem;">
+                Please enter your birth details to generate your authentic Vedic chart, Janma Nakshatra, and customized timing rhythm.
+            </div>
+        </div>
+        """)
+        with st.form("create_profile_form"):
+            new_name = st.text_input(t("name_label", current_lang), placeholder="e.g. Okesh Sharma")
+            new_dob = st.date_input(t("dob_label", current_lang), value=datetime.date(1990, 1, 1))
+            new_tob = st.time_input(t("tob_label", current_lang), value=datetime.time(12, 0))
+            new_city = st.text_input(t("city_label", current_lang), placeholder="e.g. Chhatrapati Sambhajinagar, Maharashtra")
+            
+            submitted = st.form_submit_button("✨ Save & Calculate My Profile", type="primary", use_container_width=True)
+            if submitted:
+                if not new_name.strip():
+                    st.error("Please provide your full name.")
+                else:
+                    st.session_state.user_profile.update({
+                        "name": new_name.strip(),
+                        "dob": new_dob.strftime("%Y-%m-%d"),
+                        "tob": new_tob.strftime("%H:%M"),
+                        "city": new_city.strip() or "India",
+                        "lat": 19.8762,
+                        "lon": 75.3433
+                    })
+                    save_user_profile(st.session_state.user_profile)
+                    st.rerun()
+        return
+
+    # Profile exists: display profile summary with edit/clear options
     with st.container(border=True):
         col_p1, col_p2 = st.columns([3, 1])
         with col_p1:
@@ -1352,21 +1309,30 @@ def render_page_profile():
                 st.rerun()
 
     if st.session_state.edit_mode:
-        with st.expander("✏️ Update Birth Information", expanded=True):
+        with st.expander("✏️ Update or Reset Profile Information", expanded=True):
             e_name = st.text_input(t("name_label", current_lang), value=prof["name"])
             e_dob = st.date_input(t("dob_label", current_lang), value=dob_parsed)
             e_tob = st.time_input(t("tob_label", current_lang), value=tob_parsed)
             e_city = st.text_input(t("city_label", current_lang), value=prof["city"])
             
-            c_save, c_canc = st.columns(2)
+            c_save, c_clear, c_canc = st.columns(3)
             with c_save:
                 if st.button(t("save_details", current_lang), type="primary", use_container_width=True):
                     st.session_state.user_profile.update({
-                        "name": e_name,
+                        "name": e_name.strip(),
                         "dob": e_dob.strftime("%Y-%m-%d"),
                         "tob": e_tob.strftime("%H:%M"),
-                        "city": e_city
+                        "city": e_city.strip()
                     })
+                    save_user_profile(st.session_state.user_profile)
+                    st.session_state.edit_mode = False
+                    st.rerun()
+            with c_clear:
+                if st.button("🗑️ Clear Profile", use_container_width=True):
+                    st.session_state.user_profile = {
+                        "name": "", "dob": "", "tob": "", "city": "",
+                        "lat": 19.8762, "lon": 75.3433, "lang": current_lang
+                    }
                     save_user_profile(st.session_state.user_profile)
                     st.session_state.edit_mode = False
                     st.rerun()
@@ -1379,10 +1345,6 @@ def render_page_profile():
     m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
     l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
     
-    allied_stars, friction_stars = get_nakshatra_synergy_data(chart_info["star_idx"])
-    allied_str = ", ".join([s[0] for s in allied_stars[:5]])
-    friction_str = ", ".join([s[0] for s in friction_stars[:5]])
-
     moon_parts = chart_info['moon_rashi_name'].split()
     moon_p1 = moon_parts[0] if moon_parts else chart_info['moon_rashi_name']
     moon_p2 = moon_parts[-1] if len(moon_parts) > 1 else ""
@@ -1416,7 +1378,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 1. JANMA NAKSHATRA SECTION -->
+        <!-- SUBSECTION A: JANMA NAKSHATRA BIO & REMEDIES -->
         <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>⭐</span> <span>1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})</span>
@@ -1447,7 +1409,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 2. MOON RASHI SECTION -->
+        <!-- SUBSECTION B: MOON RASHI BIO & REMEDIES -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌙</span> <span>2. Moon Rashi (Chandra Rashi): {m_info['name']}</span>
@@ -1474,8 +1436,8 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 3. LAGNA (ASCENDANT) SECTION -->
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
+        <!-- SUBSECTION C: LAGNA BIO & REMEDIES -->
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:0.5rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px; display:flex; align-items:center; gap:8px;">
                 <span>🌅</span> <span>3. Lagna (Ascendant): {l_info['name']}</span>
             </div>
@@ -1501,69 +1463,18 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 4. NAKSHATRA SOCIAL & BUSINESS SYNERGY MATRIX -->
-        <div style="background:#fdf4ff; border-radius:14px; padding:14px; border:1.5px solid #f0abfc;">
-            <div style="font-weight:900; font-size:1.18rem; color:#86198f; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
-                <span>🤝</span> <span>4. Nakshatra Social & Business Synergy Matrix</span>
-            </div>
-            <div style="font-size:0.92rem; color:#4a044e; margin-bottom:10px; line-height:1.5;">
-                Cosmic resonance mapping based on your <b>Janma Nakshatra ({chart_info['star_name']})</b>. Evaluate co-founders, partners, and key alliances:
-            </div>
-            
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:14px;">
-                <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #f0abfc; border-left:4px solid #a21caf;">
-                    <b style="color:#86198f; font-size:0.94rem;">🌟 Allied Stars (Mitra & Ati-Mitra):</b>
-                    <div style="font-size:0.88rem; color:#4a044e; margin-top:4px; line-height:1.6;">
-                        • <b>Key Allied Stars:</b> {allied_str}<br>
-                        <i style="color:#701a75;">(Natural allies who bring high support, ease, and mutual growth)</i>
-                    </div>
-                </div>
-                <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #fecdd3; border-left:4px solid #e11d48;">
-                    <b style="color:#9f1239; font-size:0.94rem;">⚠️ Friction Stars (Vipat & Vadha):</b>
-                    <div style="font-size:0.88rem; color:#881337; margin-top:4px; line-height:1.6;">
-                        • <b>Key Friction Stars:</b> {friction_str}<br>
-                        <i style="color:#9f1239;">(Require clear written terms, conscious patience, and low ego)</i>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #f0abfc;">
-                <b style="color:#86198f; font-size:0.95rem;">🔍 Interactive Partner / Colleague Synergy Checker:</b>
-                <div style="font-size:0.88rem; color:#64748b; margin:2px 0 8px 0;">Select a partner's, spouse's, or colleague's Janma Nakshatra to inspect mutual compatibility:</div>
-            </div>
-        </div>
     </div>
     """)
 
-    # Interactive partner selectbox right below profile card
-    with st.container():
-        synergy_col1, synergy_col2 = st.columns([2, 3])
-        with synergy_col1:
-            sel_partner_star = st.selectbox(
-                "Select Colleague / Partner Nakshatra:",
-                options=NAKSHATRAS,
-                index=st.session_state.partner_star_idx - 1,
-                key="profile_partner_star_select"
-            )
-            partner_idx = NAKSHATRAS.index(sel_partner_star) + 1
-            st.session_state.partner_star_idx = partner_idx
-            
-        with synergy_col2:
-            syn_result = calculate_partner_compatibility(chart_info["star_idx"], partner_idx)
-            render_html(f"""
-            <div style="background:{syn_result['bg']}; border:1.5px solid {syn_result['color']}; border-radius:10px; padding:10px 12px; margin-top:6px;">
-                <b style="color:{syn_result['color']}; font-size:0.95rem;">{syn_result['verdict']}</b>
-                <div style="font-size:0.86rem; color:#1e293b; margin-top:4px; line-height:1.5;">
-                    <b>Your view of them:</b> {syn_result['user_perspective']}<br>
-                    <b>Their view of you:</b> {syn_result['partner_perspective']}
-                </div>
-                <div style="font-size:0.85rem; color:#334155; margin-top:5px; font-style:italic;">
-                    💡 {syn_result['advice']}
-                </div>
-            </div>
-            """)
 
+# ==============================================================================
+# PAGE 3: NUMEROLOGY
+# ==============================================================================
 def render_page_numerology():
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
     num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
     avoid_data = get_numerology_avoidance(mulank, bhagyank, current_lang)
     p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
@@ -1627,7 +1538,6 @@ def render_page_numerology():
             </div>
         </div>
 
-        <!-- Numerology Avoidance Matrix -->
         <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
@@ -1644,7 +1554,6 @@ def render_page_numerology():
             </div>
         </div>
 
-        <!-- Dedicated Numerology Remedies Card -->
         <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
             <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
             <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
@@ -1656,7 +1565,15 @@ def render_page_numerology():
     </div>
     """)
 
+
+# ==============================================================================
+# PAGE 4: SHANI
+# ==============================================================================
 def render_page_shani():
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
     render_html(f"""
     <div class="light-card-shani">
         <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -1739,7 +1656,7 @@ def render_page_shani():
             </ul>
         </div>
 
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px;">
                 🪔 Authentic Vedic & Puranic Shani Mantras (With Meaning & Count)
             </div>
@@ -1786,23 +1703,24 @@ def render_page_shani():
     </div>
     """)
 
-    # Interactive Digital Japa Mala Counter
-    with st.container():
-        st.markdown("#### 📿 Digital Japa Mala Counter (108)")
-        j_col1, j_col2, j_col3 = st.columns([2, 1, 1])
-        with j_col1:
-            st.progress(min(1.0, st.session_state.japa_count / 108.0))
-            st.caption(f"Beads Chanted: {st.session_state.japa_count} / 108")
-        with j_col2:
-            if st.button("📿 Chant (+1)", key="shani_japa_btn", use_container_width=True):
+    # Interactive Digital Japa Mala Counter (1 to 108 Beads)
+    with st.container(border=True):
+        st.markdown("**📿 Interactive Digital Japa Mala Counter (108 Beads)**")
+        progress_pct = min(1.0, st.session_state.japa_count / 108.0)
+        st.progress(progress_pct, text=f"Bead Count: {st.session_state.japa_count} / 108 ({int(progress_pct * 100)}%)")
+        
+        c_tap, c_reset = st.columns([2, 1])
+        with c_tap:
+            if st.button("📿 Tap Bead (+1)", type="primary", use_container_width=True):
                 st.session_state.japa_count += 1
                 if st.session_state.japa_count > 108:
                     st.session_state.japa_count = 1
                 st.rerun()
-        with j_col3:
-            if st.button("🔄 Reset", key="shani_japa_reset", use_container_width=True):
+        with c_reset:
+            if st.button("🔄 Reset Mala", use_container_width=True):
                 st.session_state.japa_count = 0
                 st.rerun()
+
 
 # ==============================================================================
 # DETAILED PREDICTION & REMEDIES ENGINE
@@ -1848,12 +1766,18 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
         "remedy_action": remedy_action
     }
 
+
 # ==============================================================================
-# PAGE 5: LIVE DAILY PREDICTION
+# PAGE 5: LIVE DAILY PREDICTION (FEATURING PRECISION MUHURTA ENGINE)
 # ==============================================================================
 def render_page_live():
-    # Enforce precise Indian Standard Time (IST)
-    now_ist = get_current_ist_datetime()
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
+    now_ist = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
+    now_ist = now_ist.replace(tzinfo=None)
+
     cur_star_idx, s_dt, e_dt = get_current_nakshatra_window(now_ist)
     offset = (cur_star_idx - chart_info["star_idx"]) % 9
     nav_name, icon, quality = NAVTARA_NAMES[offset]
@@ -1861,8 +1785,8 @@ def render_page_live():
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
     insights = get_detailed_day_insights(offset, vahan_info, NAKSHATRAS[cur_star_idx - 1], p_day)
-    micro_habit = get_daily_micro_habit(cur_star_idx, offset)
 
+    # Compute live precision Muhurtas
     u_lat = prof.get("lat", 19.8762)
     u_lon = prof.get("lon", 75.3433)
     muhurtas = calculate_daily_muhurtas(now_ist.date(), u_lat, u_lon)
@@ -1872,148 +1796,117 @@ def render_page_live():
     yama_s, yama_e = muhurtas["yamaganda"]
     brahma_s, brahma_e = muhurtas["brahma"]
 
-    # Strict IST Window evaluation: active ONLY when start <= now_ist <= end
     is_abhijit = abhijit_s <= now_ist <= abhijit_e
     is_rahu = rahu_s <= now_ist <= rahu_e
     is_yama = yama_s <= now_ist <= yama_e
 
     now_time_str = now_ist.strftime('%I:%M %p')
 
-    # Construct dynamic live status banner
     if is_rahu:
         status_banner = f"""
         <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
-                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Rahu Kaal in Operation</b>
-                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:3px;">
-                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {rahu_e.strftime('%I:%M %p IST')}<br>
-                    Pause new contract signing, financial disbursements, and travel departures.
-                </div>
+                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Rahu Kaal in Operation ({now_time_str} IST)</b>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Pause new contract signing, travel departures, and major capital moves until {rahu_e.strftime('%I:%M %p')}.</div>
             </div>
-            <span style="font-size:1.9rem;">🛑</span>
+            <span style="font-size:1.8rem;">🛑</span>
         </div>
         """
     elif is_yama:
         status_banner = f"""
         <div style="background:#fee2e2; border:2px solid #ef4444; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
-                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Yamaganda in Operation</b>
-                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:3px;">
-                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {yama_e.strftime('%I:%M %p IST')}<br>
-                    Avoid initiating brand-new high-stakes ventures or critical negotiations.
-                </div>
+                <b style="color:#b91c1c; font-size:1.02rem;">🔴 CAUTION WINDOW ACTIVE: Yamaganda in Operation ({now_time_str} IST)</b>
+                <div style="font-size:0.88rem; color:#7f1d1d; margin-top:2px;">Avoid launching crucial ventures or final legal settlements until {yama_e.strftime('%I:%M %p')}.</div>
             </div>
-            <span style="font-size:1.9rem;">⚠️</span>
+            <span style="font-size:1.8rem;">⚠️</span>
         </div>
         """
     elif is_abhijit:
         status_banner = f"""
         <div style="background:#dcfce7; border:2px solid #22c55e; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
-                <b style="color:#15803d; font-size:1.02rem;">🟢 GOLDEN ACTION WINDOW ACTIVE: Abhijit Muhurta</b>
-                <div style="font-size:0.88rem; color:#14532d; margin-top:3px;">
-                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; <b>Active Until:</b> {abhijit_e.strftime('%I:%M %p IST')}<br>
-                    Supreme victory window. Highly auspicious for signings, proposals, and decisions.
-                </div>
+                <b style="color:#15803d; font-size:1.02rem;">🟢 GOLDEN ACTION WINDOW ACTIVE: Abhijit Muhurta ({now_time_str} IST)</b>
+                <div style="font-size:0.88rem; color:#14532d; margin-top:2px;">Supreme cosmic victory window. Highly auspicious for approvals, launches, and decisions until {abhijit_e.strftime('%I:%M %p')}.</div>
             </div>
-            <span style="font-size:1.9rem;">🌟</span>
+            <span style="font-size:1.8rem;">🌟</span>
         </div>
         """
     else:
-        # Determine upcoming events that have NOT ended yet
+        # Check for upcoming windows today
         upcoming_notes = []
         if now_ist < abhijit_s:
             upcoming_notes.append(f"Next Abhijit: {abhijit_s.strftime('%I:%M %p')}")
         if now_ist < rahu_s:
-            upcoming_notes.append(f"Upcoming Rahu Kaal: {rahu_s.strftime('%I:%M %p')}")
-        if now_ist < yama_s:
-            upcoming_notes.append(f"Upcoming Yamaganda: {yama_s.strftime('%I:%M %p')}")
-
-        if upcoming_notes:
-            timing_note = " | ".join(upcoming_notes)
-        else:
-            timing_note = "All major caution windows for today have ended. Clear path for operations."
+            upcoming_notes.append(f"Rahu Kaal: {rahu_s.strftime('%I:%M %p')}")
+        
+        note_str = " | ".join(upcoming_notes) if upcoming_notes else "All major caution and golden windows for today have concluded."
 
         status_banner = f"""
         <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
             <div>
-                <b style="color:#166534; font-size:0.98rem;">🟢 SAFE TO ACT: Standard Favorable Orbit</b>
-                <div style="font-size:0.86rem; color:#15803d; margin-top:3px;">
-                    <b>Current Time:</b> {now_time_str} IST &nbsp;|&nbsp; {timing_note}
-                </div>
+                <b style="color:#166534; font-size:0.98rem;">🟢 SAFE TO ACT: Standard Favorable Orbit ({now_time_str} IST)</b>
+                <div style="font-size:0.86rem; color:#15803d; margin-top:2px;">No planetary friction windows currently active. {note_str}</div>
             </div>
             <span style="font-size:1.6rem;">⏱️</span>
         </div>
         """
 
-    # Build Golden Windows: OMIT completely if the window timeline is over
+    # Build dynamically filtered active/upcoming windows (excluding expired)
     golden_items = []
     if now_ist <= abhijit_e:
-        badge = "<span style='background:#22c55e; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_abhijit else "<span style='background:#dcfce7; color:#15803d; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        status_tag = "ACTIVE NOW" if is_abhijit else "Upcoming"
         golden_items.append(f"""
-            <div style="margin-bottom:8px; line-height:1.5;">
-                • <b>Abhijit Muhurta:</b> {badge}<br>
-                <span style="font-size:1.02rem; font-weight:900; color:#15803d;">{abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')}</span><br>
-                <i style="font-size:0.83rem; color:#166534;">(Supreme window for agreements, launches & investments)</i>
-            </div>
+        <div style="margin-bottom:8px;">
+            • <b>Abhijit Muhurta ({status_tag}):</b><br>
+            <span style="font-size:1.05rem; font-weight:900; color:#15803d;">{abhijit_s.strftime('%I:%M %p')} – {abhijit_e.strftime('%I:%M %p IST')}</span><br>
+            <i style="font-size:0.84rem; color:#166534;">(Supreme window for agreements, launches & investments)</i>
+        </div>
         """)
     if now_ist <= brahma_e:
-        is_brahma = brahma_s <= now_ist <= brahma_e
-        badge = "<span style='background:#22c55e; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_brahma else "<span style='background:#dcfce7; color:#15803d; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
         golden_items.append(f"""
-            <div style="line-height:1.5;">
-                • <b>Brahma Muhurta:</b> {badge}<br>
-                <span style="font-weight:800; color:#15803d;">{brahma_s.strftime('%I:%M %p')} – {brahma_e.strftime('%I:%M %p IST')}</span><br>
-                <i style="font-size:0.83rem; color:#166534;">(Peak sattvic time for meditation & spiritual grounding)</i>
-            </div>
-        """)
-
-    if golden_items:
-        golden_content_html = "".join(golden_items)
-    else:
-        golden_content_html = f"""
-        <div style="font-size:0.88rem; color:#15803d; line-height:1.5; padding:4px 0;">
-            ✅ <b>Completed for Today</b><br>
-            Abhijit and Brahma Muhurtas have concluded. Standard favorable energetic flow continues until sunset.
+        <div style="margin-bottom:8px;">
+            • <b>Brahma Muhurta:</b><br>
+            <span style="font-weight:800; color:#15803d;">{brahma_s.strftime('%I:%M %p')} – {brahma_e.strftime('%I:%M %p IST')}</span><br>
+            <i style="font-size:0.84rem; color:#166534;">(Peak sattvic time for meditation & spiritual grounding)</i>
         </div>
-        """
+        """)
+    
+    if not golden_items:
+        golden_html = "<div style='font-size:0.9rem; color:#166534; font-style:italic;'>Today's morning & midday golden windows (Brahma & Abhijit) have concluded for the day.</div>"
+    else:
+        golden_html = "".join(golden_items)
 
-    # Build Caution Windows: OMIT completely if the window timeline is over
     caution_items = []
     if now_ist <= rahu_e:
-        badge = "<span style='background:#ef4444; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_rahu else "<span style='background:#fee2e2; color:#991b1b; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        status_tag = "ACTIVE NOW" if is_rahu else "Upcoming"
         caution_items.append(f"""
-            <div style="margin-bottom:8px; line-height:1.5;">
-                • <b>Rahu Kaal (Avoid Signings):</b> {badge}<br>
-                <span style="font-size:1.02rem; font-weight:900; color:#be123c;">{rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')}</span><br>
-                <i style="font-size:0.83rem; color:#9f1239;">(Pause high-risk trades, signing deeds & departures)</i>
-            </div>
+        <div style="margin-bottom:8px;">
+            • <b>Rahu Kaal ({status_tag}):</b><br>
+            <span style="font-size:1.05rem; font-weight:900; color:#be123c;">{rahu_s.strftime('%I:%M %p')} – {rahu_e.strftime('%I:%M %p IST')}</span><br>
+            <i style="font-size:0.84rem; color:#9f1239;">(Pause high-risk trades, signing deeds & departures)</i>
+        </div>
         """)
     if now_ist <= yama_e:
-        badge = "<span style='background:#ef4444; color:#ffffff; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>ACTIVE NOW</span>" if is_yama else "<span style='background:#fee2e2; color:#991b1b; padding:1px 7px; border-radius:6px; font-size:0.75rem; font-weight:800;'>UPCOMING</span>"
+        status_tag = "ACTIVE NOW" if is_yama else "Upcoming"
         caution_items.append(f"""
-            <div style="line-height:1.5;">
-                • <b>Yamaganda (Delays):</b> {badge}<br>
-                <span style="font-weight:800; color:#be123c;">{yama_s.strftime('%I:%M %p')} – {yama_e.strftime('%I:%M %p IST')}</span><br>
-                <i style="font-size:0.83rem; color:#9f1239;">(Avoid starting brand-new critical ventures)</i>
-            </div>
+        <div style="margin-bottom:8px;">
+            • <b>Yamaganda ({status_tag}):</b><br>
+            <span style="font-weight:800; color:#be123c;">{yama_s.strftime('%I:%M %p')} – {yama_e.strftime('%I:%M %p IST')}</span><br>
+            <i style="font-size:0.84rem; color:#9f1239;">(Avoid starting brand-new critical ventures)</i>
+        </div>
         """)
 
-    if caution_items:
-        caution_content_html = "".join(caution_items)
+    if not caution_items:
+        caution_html = "<div style='font-size:0.9rem; color:#9f1239; font-style:italic;'>🟢 Clear Cosmic Highway: Today's Rahu Kaal and Yamaganda periods have ended.</div>"
     else:
-        caution_content_html = f"""
-        <div style="font-size:0.88rem; color:#991b1b; line-height:1.5; padding:4px 0;">
-            ✅ <b>All Clear for Today</b><br>
-            All caution windows (Rahu Kaal & Yamaganda) have concluded. Clear path for operations.
-        </div>
-        """
+        caution_html = "".join(caution_items)
 
     render_html(f"""
     <div class="light-card-live">
         <div style="font-weight:900; font-size:1.25rem; color:#0369a1; margin-bottom:1rem; border-bottom:2px solid #bae6fd; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
             <span>{t('live_pulse_title', current_lang)}</span>
-            <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE {now_time_str} IST</span>
+            <span style="font-size:0.85rem; background:#e0f2fe; color:#0369a1; padding:4px 10px; border-radius:20px; font-weight:900;">LIVE IST</span>
         </div>
 
         {status_banner}
@@ -2037,48 +1930,21 @@ def render_page_live():
             </div>
         </div>
 
-        <!-- ATTIRE COLOR OF THE DAY & BIO-SHIELD -->
-        <div style="background:#f8fafc; border-radius:12px; padding:14px; border:1.5px solid #cbd5e1; margin-bottom:1.1rem;">
-            <div style="font-weight:900; font-size:1.08rem; color:#0f172a; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                <span>🎨 Attire Color of the Day & 2-Minute Bio-Shield</span>
-                <span style="font-size:0.8rem; background:#e2e8f0; color:#334155; padding:2px 8px; border-radius:10px; font-weight:800;">{micro_habit['archetype']}</span>
-            </div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.92rem;">
-                <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #e2e8f0;">
-                    <b style="color:#0284c7;">👔 Harmonizing Attire Color:</b><br>
-                    <span style="font-weight:800; color:#0f172a; font-size:0.96rem;">{micro_habit['color']}</span><br>
-                    <span style="font-size:0.84rem; color:#64748b;">(Resonates with {micro_habit['lord']} frequency)</span>
-                </div>
-                <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #e2e8f0;">
-                    <b style="color:#059669;">🌿 2-Minute Grounding Habit:</b><br>
-                    <span style="color:#1e293b; font-size:0.88rem; line-height:1.5;">{micro_habit['habit']}</span>
-                </div>
-            </div>
-            <div style="font-size:0.85rem; color:#475569; margin-top:8px; font-style:italic;">
-                {micro_habit['caution_cue']}
-            </div>
-        </div>
-
-        <!-- PRECISION MUHURTA TIMING WINDOWS (FILTERED TO OMIT OVER TIMELINES) -->
+        <!-- PRECISION MUHURTA TIMING WINDOWS (WITH DYNAMIC EXPIRATION) -->
         <div style="background:#ffffff; border-radius:12px; padding:14px; border:1.5px solid #bae6fd; margin-bottom:1.1rem;">
             <div style="font-weight:900; font-size:1.1rem; color:#0369a1; margin-bottom:10px; border-bottom:1px solid #e0f2fe; padding-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                <span>⏱️ Today's Timing Windows (Active & Upcoming)</span>
-                <span style="font-size:0.8rem; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:12px; font-weight:800;">{prof['city'].split(',')[0]} Solar Geometry</span>
+                <span>⏱️ Active & Upcoming Timing Windows</span>
+                <span style="font-size:0.8rem; color:#0284c7; background:#e0f2fe; padding:2px 8px; border-radius:12px; font-weight:800;">Real-Time IST</span>
             </div>
 
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:10px;">
                 <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border:1px solid #86efac;">
                     <b style="color:#166534; font-size:0.95rem;">🌟 Golden Auspicious Windows:</b>
-                    <div style="margin-top:6px;">
-                        {golden_content_html}
-                    </div>
+                    <div style="margin-top:6px;">{golden_html}</div>
                 </div>
-
                 <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border:1px solid #fecdd3;">
                     <b style="color:#9f1239; font-size:0.95rem;">⚠️ Caution & Inauspicious Windows:</b>
-                    <div style="margin-top:6px;">
-                        {caution_content_html}
-                    </div>
+                    <div style="margin-top:6px;">{caution_html}</div>
                 </div>
             </div>
             
@@ -2112,11 +1978,11 @@ def render_page_live():
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.92rem;">
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>💼 Career & Execution:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in favorable window' if offset in [1,3,5,7,8] and not is_rahu and not is_yama else '🔴 Hold Back: Caution in effect; avoid starting disputes or high-stakes requests'}</span>
+                    <span style="color:#0f172a;">{'🟢 Green Light: Take bold action in Abhijit window' if offset in [1,3,5,7,8] else '🔴 Hold Back: Avoid starting disputes or high-stakes requests'}</span>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>💰 Wealth & Financials:</b><br>
-                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] and not is_rahu and not is_yama else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
+                    <span style="color:#0f172a;">{'🟢 Favorable: Execute capital transfers & investments' if offset in [1,3,5,7,8] else '🔴 Cautious: Strictly avoid speculative leverage & loans'}</span>
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
                     <b>🏠 Domestic & Relations:</b><br>
@@ -2163,13 +2029,19 @@ def render_page_live():
     </div>
     """)
 
+
 # ==============================================================================
 # PAGE 6: 7-DAY NAKSHATRA TRANSIT FORECAST
 # ==============================================================================
 def render_page_forecast():
-    now_ist = get_current_ist_datetime()
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
+    now_ist = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=5, minutes=30)
+    now_ist = now_ist.replace(tzinfo=None)
+
     transits = get_7_day_moon_transits(now_ist, chart_info["star_idx"])
-    heatmap_items, power_day = get_7_day_heatmap_and_power_day(transits)
 
     render_html(f"""
     <div style="font-weight:900; font-size:1.25rem; color:#1e293b; margin-bottom:0.8rem;">
@@ -2177,37 +2049,30 @@ def render_page_forecast():
     </div>
     """)
 
-    heatmap_cards_html = "".join([
-        f"""<div style="background:{h['bg']}; border:1.5px solid {h['border']}; border-radius:10px; padding:8px 6px; text-align:center; min-width:68px; flex:1;">
-            <div style="font-size:0.78rem; font-weight:800; color:{h['text']};">{h['day']}</div>
-            <div style="font-size:0.86rem; font-weight:900; color:#0f172a;">{h['date']}</div>
-            <div style="font-size:0.75rem; color:#475569; margin:2px 0;">{h['star']}</div>
-            <div style="font-size:0.72rem; font-weight:800; color:{h['text']};">{h['badge']}</div>
-        </div>""" for h in heatmap_items
-    ])
+    # 7-Day Visual Energy Heatmap Strip
+    pill_elements = []
+    for tr in transits:
+        off = tr["nav_offset"]
+        if off in [1, 8]:
+            bg, fg, label = "#dcfce7", "#15803d", "Peak 🟢🟢"
+        elif off in [3, 5, 7]:
+            bg, fg, label = "#f0fdf4", "#166534", "Good 🟢"
+        elif off == 0:
+            bg, fg, label = "#fef9c3", "#854d0e", "Focus 🟡"
+        else:
+            bg, fg, label = "#fee2e2", "#b91c1c", "Guard 🔴"
+        pill_elements.append(f"""
+        <div style="background:{bg}; color:{fg}; padding:8px 6px; border-radius:10px; text-align:center; font-size:0.8rem; font-weight:800; border:1px solid rgba(0,0,0,0.06);">
+            <div>{tr['date_str'].split(',')[0]}</div>
+            <div style="font-size:0.86rem; margin:2px 0;">{label.split()[1]}</div>
+            <div style="font-size:0.75rem;">{tr['star_name'][:4]}</div>
+        </div>
+        """)
+    pills_html = "".join(pill_elements)
 
-    v_pname = power_day['vahan'].split()[1] if len(power_day['vahan'].split()) > 1 else power_day['vahan']
     render_html(f"""
-    <!-- 7-Day Visual Energy Heatmap Strip -->
-    <div style="background:#ffffff; border-radius:14px; padding:12px; border:1.5px solid #e2e8f0; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.03);">
-        <div style="font-weight:900; font-size:0.95rem; color:#334155; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-            <span>📊 Weekly Transit Energy Heatmap</span>
-            <span style="font-size:0.8rem; color:#64748b;">(7-Day Glance)</span>
-        </div>
-        <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;">
-            {heatmap_cards_html}
-        </div>
-    </div>
-
-    <!-- Power Day of the Week Banner -->
-    <div style="background:linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border:2px solid #22c55e; border-radius:14px; padding:12px 14px; margin-bottom:16px; box-shadow:0 4px 12px rgba(34,197,94,0.12);">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <b style="color:#15803d; font-size:1.05rem;">🌟 Power Day of the Week: {power_day['date_str']}</b>
-            <span style="font-size:0.82rem; background:#22c55e; color:#ffffff; padding:3px 8px; border-radius:12px; font-weight:800;">PEAK VIBRATION</span>
-        </div>
-        <div style="font-size:0.92rem; color:#14532d; margin-top:4px; line-height:1.5;">
-            Moon transits <b>{power_day['star_name']}</b> activating <b>{power_day['nav_name']}</b> (Mount: {v_pname}). This is your highest-leverage window this week for high-stakes agreements, capital investments, key negotiations, and major career initiatives.
-        </div>
+    <div style="display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; margin-bottom:1rem;">
+        {pills_html}
     </div>
     """)
 
@@ -2241,7 +2106,7 @@ def render_page_forecast():
             🔮 Detailed Transit Forecast: {sel_tr['date_str']} ({sel_tr['star_name']})
         </div>
         
-        <div style="font-size:0.94rem; color:#334155; margin-bottom:12px; line-height:1.5;">
+        <div style="font-size:0.94rem; color:#334155; margin-bottom:10px; line-height:1.5;">
             ⏰ <b>Transit Window:</b> {sel_tr['start_str']} → {sel_tr['end_str']}<br>
             🧭 <b>Navtara Classification:</b> {sel_tr['nav_name']} ({sel_tr['quality']})<br>
             🪐 <b>Saturn Mount (Vahan):</b> {v_info['name']} — <i>{v_info['speed']} ({v_info['type']})</i>
@@ -2282,6 +2147,10 @@ def render_page_forecast():
     </div>
     """)
 
+
+# ==============================================================================
+# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ==============================================================================
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
