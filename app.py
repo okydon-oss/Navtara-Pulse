@@ -113,7 +113,7 @@ render_html("""
 """)
 
 # ==============================================================================
-# GEODETIC ATLAS (CITY COORDINATE REGISTRY)
+# GEODETIC ATLAS (EXACT CITY COORDINATE REGISTRY)
 # ==============================================================================
 CITY_COORDINATES = {
     "Delhi / New Delhi, India": (28.6139, 77.2090),
@@ -142,13 +142,6 @@ CITY_COORDINATES = {
     "Toronto, Canada": (43.6532, -79.3832)
 }
 
-def resolve_city_coordinates(city_name: str, fallback_lat: float = 28.6139, fallback_lon: float = 77.2090):
-    c_clean = city_name.strip().lower()
-    for name, coords in CITY_COORDINATES.items():
-        if c_clean in name.lower() or any(part in name.lower() for part in c_clean.split(',')):
-            return coords[0], coords[1]
-    return fallback_lat, fallback_lon
-
 NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -156,7 +149,6 @@ NAKSHATRAS = [
     "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
-NAKHATRAS = NAKSHATRAS
 
 RASHIS = [
     "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
@@ -426,7 +418,7 @@ RASHI_DETAILED_INFO = {
     6: ("Air (Vayu)", "Venus (Shukra)", "Diplomatic equilibrium, refined justice, architectural balance, and partnership brilliance.", "Success in legal, negotiation, luxury commodities, and institutional governance.", "• Worship Goddess Lakshmi on Fridays.\n• Wear clean pressed pastel attire.\n• Maintain strict fairness in business agreements."),
     7: ("Water (Jala)", "Mars (Mangal)", "Penetrating investigative acumen, intense psychological depth, and unyielding transformative grit.", "Command over strategic operations, crisis management, and private compounding wealth.", "• Chant Kartikeya or Shiva Mantras on Tuesdays.\n• Donate jaggery and roasted chickpeas.\n• Guard against vengeful thoughts."),
     8: ("Fire (Agni)", "Jupiter (Guru)", "Expansive philosophical vision, legal and moral integrity, and inspiring pedagogical leadership.", "High institutional mentorship, cross-border ventures, and enduring reputational prestige.", "• Chant Guru Mantra on Thursdays.\n• Apply turmeric or yellow sandalwood tilak on forehead.\n• Water a Peepal tree without touching on Thursdays."),
-    9: ("Earth (Prithvi)", "Saturn (Shani)", "Enduring tactical patience, monumental organizational grit, and structured pragmatic climbing.", "Sovereign institutional leadership, permanent asset foundations, and lasting mature authority.", "• Light mustard oil lamp under Peepal on Saturday.\n• Recite Hanuman Chalisa daily.\n• Respect and tip blue-collar workers."),
+    9: ("Earth (Prithvi)", "Saturn (Shani)", "Enduring tactical patience, monumental organizational grit, and structured pragmatic climbing.", "Sovereign institutional leadership, permanent asset foundations, and lasting mature authority.", "• Light a mustard oil lamp under Peepal on Saturday.\n• Recite Hanuman Chalisa daily.\n• Respect and tip blue-collar workers."),
     10: ("Air (Vayu)", "Saturn (Shani)", "Universal visionary ideals, scientific detachment, systems reformation, and egalitarian ethics.", "Pioneering technological breakthroughs, social architecture, and non-linear prosperity.", "• Chant Shani Gayatri Mantra on Saturdays.\n• Donate black sesame or oil.\n• Keep electronic workspaces free of tangled cables."),
     11: ("Water (Jala)", "Jupiter (Guru)", "Oceanic subconscious intuition, compassionate wisdom, creative transcendence, and spiritual resonance.", "Success in counseling, foreign realms, creative arts, and profound inner peace.", "• Chant Om Namo Bhagavate Vasudevaya on Thursdays.\n• Feed fish with wheat dough on Thursdays.\n• Meditate for 15 minutes at twilight.")
 }
@@ -1427,44 +1419,45 @@ def render_page_numerology():
 
     render_html(f"""
     <div class="light-card-num">
-        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem;">
+        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
             <span>🔢 Core Numerology Blueprint</span>
+            <span style="font-size:0.85rem; background:#d1fae5; color:#065f46; padding:4px 10px; border-radius:20px; font-weight:800;">Vedic & Chaldean</span>
         </div>
         
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center; margin-bottom:1.15rem;">
             <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('mulank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{mulank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_m_label}</div>
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('mulank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{mulank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_m_label}</div>
             </div>
             <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('bhagyank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{bhagyank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_b_label}</div>
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('bhagyank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{bhagyank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_b_label}</div>
             </div>
             <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('namank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{namank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_n_label}</div>
+                <div style="font-size:0.85rem; color:#047857; font-weight:900; text-transform:uppercase;">{t('namank_label', current_lang)}</div>
+                <div style="font-size:1.85rem; font-weight:900; color:#065f46; margin:2px 0;">{namank}</div>
+                <div style="font-size:0.9rem; color:#059669; font-weight:800;">{p_n_label}</div>
             </div>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:1.15rem;">
-            <div style="background:#ffffff; border-radius:12px; padding:12px; border:1px solid #d1fae5; border-left:5px solid #059669;">
-                <b>{num_domains['career_title']}</b><br>
-                <span style="font-size:0.94rem; color:#1e293b;">{num_domains['career_desc']}</span>
+        <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.15rem;">
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['career_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['career_desc']}</div>
             </div>
-            <div style="background:#ffffff; border-radius:12px; padding:12px; border:1px solid #d1fae5; border-left:5px solid #10b981;">
-                <b>{num_domains['wealth_title']}</b><br>
-                <span style="font-size:0.94rem; color:#1e293b;">{num_domains['wealth_desc']}</span>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['wealth_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['wealth_desc']}</div>
             </div>
-            <div style="background:#ffffff; border-radius:12px; padding:12px; border:1px solid #d1fae5; border-left:5px solid #14b8a6;">
-                <b>{num_domains['rel_title']}</b><br>
-                <span style="font-size:0.94rem; color:#1e293b;">{num_domains['rel_desc']}</span>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #14b8a6;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['rel_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['rel_desc']}</div>
             </div>
-            <div style="background:#ffffff; border-radius:12px; padding:12px; border:1px solid #d1fae5; border-left:5px solid #0d9488;">
-                <b>{num_domains['health_title']}</b><br>
-                <span style="font-size:0.94rem; color:#1e293b;">{num_domains['health_desc']}</span>
+            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #0d9488;">
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['health_title']}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['health_desc']}</div>
             </div>
         </div>
 
