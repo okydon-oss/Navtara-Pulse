@@ -1,4 +1,3 @@
-# STREAMLIT_CHUNK:Initializing imports and configuration...
 import streamlit as st
 import datetime
 import urllib.parse
@@ -1098,7 +1097,6 @@ def render_page_profile():
                 init_ampm = "PM" if (tob_parsed and tob_parsed.hour >= 12) else "AM"
                 in_ampm = st.selectbox("AM / PM", options=["AM", "PM"], index=1 if init_ampm == "PM" else 0)
 
-            # Free-form birth place input (city/town/village)
             in_city_input = st.text_input(
                 t("city_label", current_lang),
                 value=prof.get("city", ""),
@@ -1122,7 +1120,6 @@ def render_page_profile():
                         hr_24 += 12
                     final_tob_str = f"{hr_24:02d}:{in_minute:02d}"
 
-                    # Automatically resolve latitude and longitude from the provided location name
                     resolved_lat, resolved_lon = get_location_coordinates(in_city_input)
 
                     st.session_state.user_profile.update({
