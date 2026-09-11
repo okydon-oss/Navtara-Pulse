@@ -60,9 +60,9 @@ render_html("""
         background: linear-gradient(135deg, #fdfbf7 0%, #fffbeb 100%);
         border: 1.5px solid #fde68a;
         border-radius: 16px;
-        padding: 1.1rem 1.2rem;
-        margin-bottom: 1.1rem;
-        box-shadow: 0 2px 10px rgba(245, 158, 11, 0.08);
+        padding: 1.2rem 1.3rem;
+        margin-bottom: 1.15rem;
+        box-shadow: 0 3px 14px rgba(245, 158, 11, 0.08);
     }
     .light-card-profile {
         background: #ffffff;
@@ -162,7 +162,7 @@ NUM_PLANET_NAMES = {
     4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)", "mr": "राहू (Rahu)", "gu": "રાહુ (Rahu)"},
     5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)", "mr": "बुध (Mercury)", "gu": "બુધ (Mercury)"},
     6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
-    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "केतू (Ketu)", "gu": "કેતુ (Ketu)"},
+    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
     8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
     9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
 }
@@ -317,10 +317,10 @@ NAKSHATRA_BIO_DATA = {
     21: {"deity": "Vishwadevas (Universal Cosmic Laws)", "symbol": "Elephant's Tusk / Small Cot", "tree": "Jackfruit / Phanas (पनस)", "bird": "Stork / सारस", "animal": "Male Mongoose (नकुल)", "lord": "Sun (Surya)"},
     22: {"deity": "Lord Vishnu (Cosmic Preserver)", "symbol": "Three Footprints / Ear of Listening", "tree": "Aak / Rui / Calotropis (मदार)", "bird": "Francolin / Kapinjala", "animal": "Female Monkey (वानर)", "lord": "Moon (Chandra)"},
     23: {"deity": "Eight Vasus (Elemental Energy Lords)", "symbol": "Mridangam / Drum / Flute", "tree": "Shami / Khejri (शमी वृक्ष)", "bird": "Golden Bee / Peacock", "animal": "Female Lion (सिंह)", "lord": "Mars (Mangal)"},
-    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (अश्व)", "lord": "Rahu"},
+    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (અશ્વ)", "lord": "Rahu"},
     25: {"deity": "Aja Ekapada (One-Footed Cosmic Fire)", "symbol": "Two Front Legs of Bed / Crossed Swords", "tree": "Mango / Neem (आम्र/निम्ब)", "bird": "Avocet / Peacock", "animal": "Male Lion (सिंह)", "lord": "Jupiter (Guru)"},
     26: {"deity": "Ahirbudhnya (Serpent of Deep Depths)", "symbol": "Two Back Legs of Bed / Serpent in Water", "tree": "Neem / Pithari (निम्ब)", "bird": "Kotwal / Rainbird", "animal": "Female Cow (गौ)", "lord": "Saturn (Shani)"},
-    27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
+    27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (હસ્તિની)", "lord": "Mercury (Budha)"}
 }
 
 NAKSHATRA_PROFILES = {
@@ -1009,11 +1009,11 @@ def render_profile_setup_prompt():
             st.rerun()
 
 # ==============================================================================
-# TAB 1: ABOUT APP
+# TAB 1: ABOUT APP (FULL DETAILS & SHARING - AVAILABLE WITHOUT USER PROFILE)
 # ==============================================================================
 def render_page_about():
     with st.container(border=True):
-        st.markdown("**🌐 Select Language / भाषा चुनें:**")
+        st.markdown("**🌐 Select Language / भाषा चुनें / भाषा निवडा / ભાષા પસંદ કરો:**")
         lang_col1, _ = st.columns([2, 1])
         with lang_col1:
             lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
@@ -1029,13 +1029,153 @@ def render_page_about():
                 st.rerun()
 
     render_html("""
+    <!-- SECTION 1: CORE ESSENCE & VALUE PROPOSITION -->
     <div class="auth-hero-box">
-        <div style="font-weight:900; font-size:1.3rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
-            🧬 Classical Sidereal Vedic Engine (Lahiri Ayanamsa)
+        <div style="font-weight:900; font-size:1.35rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
+            🧬 Navtara Pulse: Precision Chronobiology & Vedic Timing Engine
         </div>
-        <div style="font-size:0.96rem; line-height:1.75; color:#451a03; margin-bottom:0.8rem;">
-            <b>Astronomical Precision & Kundali Alignment:</b><br>
-            Navtara Pulse derives Local Sidereal Time (RAMC) and topocentric planetary horizons using true geographical coordinates and Swiss Ephemeris tables. All calculations—including Janma Nakshatra, Lagna, and Shani Sade Sati—dynamically compute from your exact birth profile.
+        <div style="font-size:0.98rem; line-height:1.8; color:#451a03; margin-bottom:0.8rem;">
+            <b>Navtara Pulse</b> bridges ancient Sidereal Jyotish with modern chronobiology. It is an algorithmic decision-support compass designed to answer one crucial question: <b>"Is today mathematically aligned for aggressive action, or does it demand strategic defense?"</b><br>
+            By mapping the Moon's real-time transit through the 27 lunar mansions (Nakshatras) against your natal birth frequency, the app calculates your personalized 9-fold bio-rhythm, pinpointing exact windows of peak influence, effortless execution, and friction avoidance.
+        </div>
+    </div>
+
+    <!-- SECTION 2: SCIENTIFIC LOGIC & CHRONOBIOLOGY -->
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            🔬 The Scientific Logic: Gravitational Hydrodynamics & Bio-Rhythms
+        </div>
+        
+        <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
+            <b>1. Lunar Tidal Hydrodynamics & Neuro-Endocrine Flow:</b><br>
+            The adult human brain and body are composed of approximately <b>70% water and electrolytic fluids</b>. Just as the Moon's gravitational and electro-magnetic shifts generate planetary ocean tides, peer-reviewed chronobiology confirms that lunar periodicity modulates circadian gene expression, sleep architecture (REM cycles), cerebrospinal fluid pressure, and neuro-transmitter output. In classical Vedic science, the Moon governs the mind (<i>"Chandro Manaso Jatah"</i>). When the celestial Moon aligns harmoniously with your natal Moon's electro-magnetic horizon, neural processing operates at peak cognitive clarity.
+        </div>
+
+        <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
+            <b>2. The 9-Fold Mathematical Resonance Grid (27 = 9 × 3):</b><br>
+            The zodiac is divided into 27 Nakshatras of 13° 20' each. The Vedic <b>Navtara Chakra</b> is an infradian mathematical model that groups these 27 stars into 3 repeating cycles of 9 qualitative energetic frequencies (Taras). Every single day, the Moon activates one of these 9 energetic chambers for your unique neural wiring:
+            <ul style="margin-top:6px; padding-left:1.3rem;">
+                <li><b>Expansion Windows (Sampat, Sadhana, Mitra, Ati-Mitra):</b> Characterized by high environmental receptivity and synaptic coherence. Ideal for high-stakes business negotiations, signing contracts, strategic investing, and key launches.</li>
+                <li><b>Friction Shields (Vipat, Pratyari, Vadha):</b> Characterized by elevated resistance, biochemical fatigue, and communication misfires. On these days, defensive prudence and patient review prevent costly missteps.</li>
+                <li><b>Foundational & Consolidation Days (Janma, Kshema):</b> Optimal for internal diagnostics, physical recuperation, and team alignment.</li>
+            </ul>
+        </div>
+
+        <div style="font-size:0.96rem; line-height:1.75; color:#334155;">
+            <b>3. Sub-Arcsecond Planetary Ephemeris (Swiss Ephemeris):</b><br>
+            Unlike conventional astrology apps that rely on generic sun signs or flat 24-hour sunrise assumptions, <b>Navtara Pulse</b> incorporates the <b>Moshier Swiss Ephemeris</b> (pyswisseph) with true topocentric Chitrapaksha Lahiri Ayanamsa. Ingress and egress timestamps are calculated down to the exact second for your geographical horizon.
+        </div>
+    </div>
+
+    <!-- SECTION 3: HOW THIS APP EMPOWERS AN INDIVIDUAL -->
+    <div class="light-card-num">
+        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:0.75rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem;">
+            🎯 How Navtara Pulse Empowers You in Daily Life
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:0.5rem;">
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #059669;">
+                <b style="color:#065f46; font-size:1rem;">💼 Strategic Career & Business Execution:</b><br>
+                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
+                    Never schedule critical client pitches, salary reviews, or investor meetings blind. Aligning major professional leaps with your <b>Sadhana (Accomplishment)</b> or <b>Ati-Mitra (Supreme Alliance)</b> days drastically increases closing velocity and reduces friction.
+                </span>
+            </div>
+            
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #10b981;">
+                <b style="color:#065f46; font-size:1rem;">💰 Financial Preservation & Capital Timing:</b><br>
+                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
+                    Shield yourself from impulsive capital deployment. Executing asset purchases during <b>Sampat (Wealth)</b> days supports long-term appreciation, while strictly holding back on <b>Vipat (Friction)</b> and <b>Vadha (Loss)</b> days prevents unforced financial errors.
+                </span>
+            </div>
+
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #14b8a6;">
+                <b style="color:#065f46; font-size:1rem;">❤️ Emotional Composure & Relationship Harmony:</b><br>
+                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
+                    Knowing when you or your partner are traversing high-sensitivity transit days allows you to practice proactive patience, avoid unnecessary arguments, and cultivate deeper empathy.
+                </span>
+            </div>
+
+            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #0d9488;">
+                <b style="color:#065f46; font-size:1rem;">🌿 Bio-Energy Shielding & Burnout Prevention:</b><br>
+                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
+                    Pace your vital energy. Schedule intensive athletic workouts on high-vitality days and prioritize meditation, restorative sleep, and grounding breathwork when biological resistance peaks.
+                </span>
+            </div>
+        </div>
+    </div>
+    """)
+
+    # SECTION 4: NATIVE PROGRESSIVE WEB APP (PWA) INSTALLATION
+    render_html("""
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            📲 Install on Your Mobile Device (No App Store Needed)
+        </div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#334155; margin-bottom:1rem;">
+            You can launch <b>Navtara Pulse</b> in full-screen native mode directly from your smartphone home screen:
+        </div>
+        
+        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa; margin-bottom:10px;">
+            <b style="color:#9a3412; font-size:1rem;">🤖 For Android Users (Chrome Browser):</b>
+            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
+                <li>Tap the three vertical dots menu (<b>⋮</b>) in the top-right corner of Chrome.</li>
+                <li>Select <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
+                <li>Tap <b>"Install"</b>. The app icon will appear instantly on your home screen.</li>
+            </ol>
+        </div>
+
+        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa;">
+            <b style="color:#9a3412; font-size:1rem;">🍏 For iPhone / iOS Users (Safari Browser):</b>
+            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
+                <li>Open this link in <b>Safari</b> and tap the <b>Share icon</b> (square with an arrow pointing upward).</li>
+                <li>Scroll down the menu and tap <b>"Add to Home Screen"</b>.</li>
+                <li>Tap <b>"Add"</b> in the top right. Launch directly from your app grid anytime.</li>
+            </ol>
+        </div>
+    </div>
+    """)
+
+    # SECTION 5: SHARE SUITE (ACCESSIBLE TO ALL VISITORS)
+    app_url = "https://navtara-pulse.streamlit.app"
+    share_msg = "Track your real-time Vedic Moon transit rhythm, Shani Paya, and personalized timing blueprint with Navtara Pulse!"
+    encoded_url = urllib.parse.quote(app_url)
+    encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your cosmic alignment here: {app_url}")
+
+    render_html(f"""
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
+            {t('share_title', current_lang)}
+        </div>
+        <div style="font-size:0.95rem; color:#475569; margin-bottom:0.85rem;">
+            Share this authentic Vedic chronobiology tool with your family, friends, and colleagues:
+        </div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:1rem;">
+            <a href="https://api.whatsapp.com/send?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#25D366; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(37,211,102,0.2);">
+                    🟢 WhatsApp
+                </div>
+            </a>
+            <a href="https://t.me/share/url?url={encoded_url}&text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0088cc; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(0,136,204,0.2);">
+                    ✈️ Telegram
+                </div>
+            </a>
+            <a href="mailto:?subject=Navtara Pulse - Vedic Timing&body={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#ea4335; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(234,67,53,0.2);">
+                    ✉️ Email
+                </div>
+            </a>
+            <a href="https://twitter.com/intent/tweet?text={encoded_msg}" target="_blank" style="text-decoration:none;">
+                <div style="background:#0f172a; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
+                    🐦 X (Twitter)
+                </div>
+            </a>
+        </div>
+
+        <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1px solid #fed7aa; text-align:center;">
+            <div style="font-size:0.88rem; color:#9a3412; font-weight:800;">Direct Web App Link:</div>
+            <div style="font-size:1.05rem; font-weight:900; color:#431407; margin-top:2px;"><b>{app_url}</b></div>
         </div>
     </div>
     """)
@@ -1199,7 +1339,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
             <div style="font-weight:900; font-size:1.1rem; color:#5b21b6; margin-bottom:8px;">
                 🌅 Ascendant (Lagna): {l_info['name']} at {chart_info['lagna_deg']}
             </div>
@@ -1713,6 +1853,7 @@ def render_page_forecast():
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
+    "navtara": render_page_profile,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
