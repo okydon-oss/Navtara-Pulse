@@ -113,7 +113,6 @@ NAKSHATRAS = [
     "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
-NAKHATRAS = NAKSHATRAS
 
 RASHIS = [
     "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
@@ -291,7 +290,6 @@ NAKSHATRA_BIO_DATA = {
     27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
 }
 
-# Rich Multi-Faceted Characteristics for Nakshatras
 NAKSHATRA_RICH_PROFILES = {
     1: {
         "core": "Pioneering initiator, rapid problem solver, intuitive healer, and swift executive.",
@@ -319,10 +317,8 @@ NAKSHATRA_RICH_PROFILES = {
     }
 }
 
-# Fallback generator for remaining Nakshatras
 def get_nakshatra_rich_data(star_idx: int):
     bio = NAKSHATRA_BIO_DATA.get(star_idx, NAKSHATRA_BIO_DATA[2])
-    star_name = NAKSHATRAS[star_idx - 1]
     if star_idx in NAKSHATRA_RICH_PROFILES:
         return NAKSHATRA_RICH_PROFILES[star_idx]
     
@@ -335,7 +331,6 @@ def get_nakshatra_rich_data(star_idx: int):
         "remedies": f"• Chant the sacred Beej Mantra of {bio['deity']} 11 times daily.\n• Water and protect your sacred Nakshatra tree ({bio['tree']}).\n• Feed wild birds ({bio['bird']}) to balance karmic weight."
     }
 
-# Rich Multi-Faceted Characteristics for Chandra Rashis (Moon Signs)
 RASHI_RICH_PROFILES = {
     0: {
         "element": "Fire (Agni Tattva)",
@@ -360,7 +355,6 @@ RASHI_RICH_PROFILES = {
 }
 
 def get_rashi_rich_data(rashi_idx: int):
-    r_name = RASHIS[rashi_idx]
     if rashi_idx in RASHI_RICH_PROFILES:
         return RASHI_RICH_PROFILES[rashi_idx]
     
@@ -385,7 +379,6 @@ def get_rashi_rich_data(rashi_idx: int):
         "remedies": f"• Offer clean water to a Shiva Lingam on Mondays.\n• Respect maternal elders and maintain peaceful speech.\n• Meditate for 10 minutes before sleep to ground mental momentum."
     }
 
-# Rich Multi-Faceted Characteristics for Lagnas (Ascendants)
 LAGNA_RICH_PROFILES = {
     6: {
         "element": "Air (Vayu Tattva)",
@@ -406,7 +399,6 @@ LAGNA_RICH_PROFILES = {
 }
 
 def get_lagna_rich_data(lagna_idx: int):
-    l_name = RASHIS[lagna_idx]
     if lagna_idx in LAGNA_RICH_PROFILES:
         return LAGNA_RICH_PROFILES[lagna_idx]
     
@@ -429,9 +421,6 @@ def get_lagna_rich_data(lagna_idx: int):
         "remedies": f"• Practice morning Pranayama to align physical breath with mental vitality.\n• Strengthen Lagna lord through disciplined daily routines and ethical integrity.\n• Apply natural botanical scents or sandalwood to pulse points."
     }
 
-# ==============================================================================
-# TARA BALA COMPATIBILITY ENGINE
-# ==============================================================================
 def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
     offset = (partner_star_idx - user_star_idx) % 9
     tara_name, icon, quality = NAVTARA_NAMES[offset]
@@ -895,18 +884,32 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
     }
 
 # ==============================================================================
-# BROWSER SESSION STATE (STRICT BLANK DEFAULTS)
+# CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
 # ==============================================================================
+# 1. Read directly from client's browser URL state (persists on user's device/bookmark)
+client_params = st.query_params
+
 if "user_profile" not in st.session_state:
-    st.session_state.user_profile = {
-        "name": "",
-        "dob": "",
-        "tob": "",
-        "city": "",
-        "lat": 28.6139,
-        "lon": 77.2090,
-        "lang": "en"
-    }
+    if client_params.get("name") and client_params.get("dob") and client_params.get("tob"):
+        st.session_state.user_profile = {
+            "name": client_params.get("name", ""),
+            "dob": client_params.get("dob", ""),
+            "tob": client_params.get("tob", ""),
+            "city": client_params.get("city", ""),
+            "lat": float(client_params.get("lat", 28.6139)),
+            "lon": float(client_params.get("lon", 77.2090)),
+            "lang": client_params.get("lang", "en")
+        }
+    else:
+        st.session_state.user_profile = {
+            "name": "",
+            "dob": "",
+            "tob": "",
+            "city": "",
+            "lat": 28.6139,
+            "lon": 77.2090,
+            "lang": "en"
+        }
 
 if "current_page" not in st.session_state:
     st.session_state.current_page = "about"
@@ -1021,6 +1024,56 @@ def render_profile_setup_prompt():
             st.rerun()
 
 # ==============================================================================
+# POST-SUBMISSION ONBOARDING SCREEN: ADD TO HOME SCREEN
+# ==============================================================================
+def render_page_install_guide():
+    render_html("""
+    <div class="auth-hero-box" style="text-align:center; border:2px solid #f59e0b; background:#fffbeb;">
+        <div style="font-size:2.6rem; margin-bottom:8px;">📱</div>
+        <div style="font-weight:900; font-size:1.45rem; color:#92400e; margin-bottom:6px;">
+            Save to Home Screen on Your Device
+        </div>
+        <div style="font-size:0.98rem; color:#78350f; line-height:1.6; margin-bottom:12px;">
+            Your astrological profile & coordinates are now securely loaded in your device's browser bar. 
+            <b>Add Navtara Pulse to your Home Screen now</b> so your profile opens automatically every day without typing anything again!
+        </div>
+    </div>
+
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.18rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:1.5px solid #fed7aa; padding-bottom:0.3rem;">
+            🤖 For Android (Google Chrome)
+        </div>
+        <ol style="margin-top:5px; margin-bottom:6px; padding-left:1.3rem; font-size:0.95rem; color:#431407; line-height:1.75;">
+            <li>Tap the <b>three vertical dots menu (⋮)</b> in the top-right corner of Chrome.</li>
+            <li>Select <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
+            <li>Tap <b>"Install"</b>. The app icon is saved to your phone with your profile intact!</li>
+        </ol>
+    </div>
+
+    <div class="light-card-profile">
+        <div style="font-weight:900; font-size:1.18rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:1.5px solid #fed7aa; padding-bottom:0.3rem;">
+            🍏 For iPhone / iOS (Safari Browser)
+        </div>
+        <ol style="margin-top:5px; margin-bottom:6px; padding-left:1.3rem; font-size:0.95rem; color:#431407; line-height:1.75;">
+            <li>Tap the <b>Share icon</b> (square with an upward arrow) at the bottom of Safari.</li>
+            <li>Scroll down and tap <b>"Add to Home Screen"</b>.</li>
+            <li>Tap <b>"Add"</b> in the top right. Launch directly anytime as a native full-screen app!</li>
+        </ol>
+    </div>
+    """)
+
+    st.write("")
+    c_btn1, c_btn2 = st.columns([1, 1])
+    with c_btn1:
+        if st.button("⚡ Proceed to Today's Prediction", type="primary", use_container_width=True):
+            st.session_state.current_page = "live"
+            st.rerun()
+    with c_btn2:
+        if st.button("👤 View Astrological Profile", use_container_width=True):
+            st.session_state.current_page = "profile"
+            st.rerun()
+
+# ==============================================================================
 # TAB 1: ABOUT APP
 # ==============================================================================
 def render_page_about():
@@ -1038,6 +1091,7 @@ def render_page_about():
             )
             if selected_lang_code != current_lang:
                 st.session_state.user_profile["lang"] = selected_lang_code
+                st.query_params["lang"] = selected_lang_code
                 st.rerun()
 
     render_html("""
@@ -1159,7 +1213,7 @@ def render_page_about():
     """)
 
 # ==============================================================================
-# TAB 2: USER PROFILE (EXPANDED WITH RICH CHARACTERISTICS)
+# TAB 2: USER PROFILE
 # ==============================================================================
 def render_page_profile():
     global u_lat, u_lon
@@ -1221,7 +1275,18 @@ def render_page_profile():
                         "lat": resolved_lat,
                         "lon": resolved_lon
                     })
+                    
+                    # Store on client's device via browser query parameters
+                    st.query_params["name"] = new_name.strip()
+                    st.query_params["dob"] = new_dob.strftime("%Y-%m-%d")
+                    st.query_params["tob"] = final_tob_str
+                    st.query_params["city"] = new_city_query.strip()
+                    st.query_params["lat"] = f"{resolved_lat:.4f}"
+                    st.query_params["lon"] = f"{resolved_lon:.4f}"
+
                     st.session_state.edit_mode = False
+                    # Direct user to the Add to Home Screen onboarding guide
+                    st.session_state.current_page = "install_guide"
                     st.rerun()
             
             if canceled:
@@ -1885,11 +1950,11 @@ def render_page_forecast():
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
-    "navtara": render_page_profile,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
+    "install_guide": render_page_install_guide,
 }
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
