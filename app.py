@@ -174,7 +174,7 @@ TRANSLATIONS = {
         "btn_about": "✨ About App",
         "btn_user_profile": "👤 User Profile",
         "btn_numerology": "🔢 Numerology",
-        "btn_shani": "🪐 Shani",
+        "btn_shani": "🪐 Shani & Sade Sati",
         "btn_live": "⚡ Live Prediction",
         "btn_forecast": "🗓️ 7 Days Prediction",
         "btn_mantra": "📿 Mantra Sadhana",
@@ -193,7 +193,7 @@ TRANSLATIONS = {
         "bhagyank_label": "Bhagyank (Destiny)",
         "namank_label": "Namank (Name Vibration)",
         "shani_paya_title": "🪐 Shani Paya & Active 2.5-Year Transit",
-        "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Status",
+        "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Deep-Dive Matrix",
         "live_pulse_title": "⚡ Today's Live Cosmic Pulse",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
         "share_title": "📲 Share Navtara Pulse With Friends & Family"
@@ -204,7 +204,7 @@ TRANSLATIONS = {
         "btn_about": "✨ ऐप परिचय",
         "btn_user_profile": "👤 यूज़र प्रोफाइल",
         "btn_numerology": "🔢 अंकशास्त्र",
-        "btn_shani": "🪐 शनि पाया",
+        "btn_shani": "🪐 शनि एवं साढ़े साती",
         "btn_live": "⚡ आज का फल",
         "btn_forecast": "🗓️ 7 दिवसीय फल",
         "btn_mantra": "📿 मंत्र साधना",
@@ -223,7 +223,7 @@ TRANSLATIONS = {
         "bhagyank_label": "भाग्यांक (Conductor)",
         "namank_label": "नामांक (Name Vibration)",
         "shani_paya_title": "🪐 वर्तमान शनि पाया एवं 2.5 वर्षीय गोचर",
-        "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या स्थिति",
+        "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या विस्तृत विश्लेषण",
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
         "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें"
@@ -290,6 +290,7 @@ NAKSHATRA_BIO_DATA = {
     27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
 }
 
+# Rich Multi-Faceted Characteristics for Nakshatras
 NAKSHATRA_RICH_PROFILES = {
     1: {
         "core": "Pioneering initiator, rapid problem solver, intuitive healer, and swift executive.",
@@ -421,188 +422,135 @@ def get_lagna_rich_data(lagna_idx: int):
         "remedies": f"• Practice morning Pranayama to align physical breath with mental vitality.\n• Strengthen Lagna lord through disciplined daily routines and ethical integrity.\n• Apply natural botanical scents or sandalwood to pulse points."
     }
 
-def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
-    offset = (partner_star_idx - user_star_idx) % 9
-    tara_name, icon, quality = NAVTARA_NAMES[offset]
-    is_allied = offset in [1, 3, 5, 7, 8]
-    is_friction = offset in [2, 4, 6]
-    
-    if is_allied:
-        relationship_tone = "High Harmonic Resonance (Constructive Growth & Mutual Trust)"
-        advice = "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance."
-    elif is_friction:
-        relationship_tone = "Testing & High Friction (Demands Clear Boundaries & Patience)"
-        advice = "Differences in communication tempo or expectations can trigger misunderstandings. Ensure all commitments are formally written and expectations calibrated."
-    else:
-        relationship_tone = "Mirror / Foundational Synergy (Intense Alignment & Reflective Growth)"
-        advice = "High mutual identification. Both individuals share foundational biorhythms; great for long-term loyalty if ego boundaries remain healthy."
-
-    return {
-        "tara_name": tara_name,
-        "icon": icon,
-        "quality": quality,
-        "is_allied": is_allied,
-        "is_friction": is_friction,
-        "relationship_tone": relationship_tone,
-        "advice": advice
+# ==============================================================================
+# DETAILED SHANI PAYA ENCYCLOPEDIA (ALL 4 PAYAS)
+# ==============================================================================
+SHANI_PAYA_ENCYCLOPEDIA = {
+    "Silver": {
+        "title": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
+        "grade": "Supreme Auspiciousness (अति शुभ फलदायी)",
+        "tone": "Divine Cushion, Financial Liquidity & Reputational Growth",
+        "houses": "2nd, 5th, or 9th house from natal Moon",
+        "psychology": "Calm, composed mental resilience. Saturn's natural severity is cooled by the soothing lunar vibrations of silver, reducing anxiety and promoting clear strategic foresight.",
+        "wealth": "Exceptional capital expansion, stabilization of liquid cash flow, recovery of long-pending debts, and lucrative property compounding.",
+        "career": "Steady executive advancement, elevation in institutional rank, favorable rapport with seniors, and public honors.",
+        "vitality": "Strong biological shield, peaceful sleep patterns, and rapid recovery from physical fatigue.",
+        "protocol": "Wear a solid pure silver square or ring on the little finger, offer raw cow's milk mixed with water on a Shiva Lingam on Mondays."
+    },
+    "Copper": {
+        "title": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
+        "grade": "Favorable & Productive (शुभ फलदायी)",
+        "tone": "Laborious Progress, Competitive Mastery & Sustained Effort",
+        "houses": "3rd, 7th, or 10th house from natal Moon",
+        "psychology": "High determination and fiery resolve. The fiery energy of copper channels Saturn's discipline into unshakeable work ethic and stamina.",
+        "wealth": "Wealth grows through direct exertion, disciplined investments, and commercial ventures. Returns are steady rather than sudden.",
+        "career": "Dominance over competitors, successful project turnarounds, expansion of client networks, and triumph in challenging negotiations.",
+        "vitality": "Elevated metabolic heat (Pitta). Requires regular hydration and avoidance of erratic meal schedules.",
+        "protocol": "Drink water stored overnight in a pure copper vessel, donate jaggery and roasted chickpeas on Tuesdays, maintain strict truthfulness."
+    },
+    "Gold": {
+        "title": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
+        "grade": "Testing & Demanding (कठिन एवं संघर्षमय)",
+        "tone": "Ego Restructuring, Expense Spikes & Need for Extreme Prudence",
+        "houses": "1st, 6th, or 11th house from natal Moon",
+        "psychology": "Mental friction between personal pride and external circumstances. Teaches profound humility, detachment from vanity, and emotional patience.",
+        "wealth": "Unforeseen expenses, family commitments consuming cash reserves, and slow returns on speculative ventures. Demands strict budgetary austerity.",
+        "career": "Ego disputes with seniors or partners, misunderstandings regarding credit, and heightened professional scrutiny.",
+        "vitality": "Nervous exhaustion and erratic sleep. Vital energy requires conscious preservation through pranayama and restorative rest.",
+        "protocol": "Avoid excessive yellow gold jewelry; wear clean silver; donate yellow lentils or turmeric to temple priests on Thursdays; cultivate humility."
+    },
+    "Iron": {
+        "title": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
+        "grade": "Heavy Crucible & High Friction (अति कठिन / संघर्षमय)",
+        "tone": "Karmic Weight, Heavy Responsibilities & Constitutional Testing",
+        "houses": "4th, 8th, or 12th house from natal Moon",
+        "psychology": "Sense of isolation, mental heaviness, and feeling unappreciated despite immense labor. Saturn strips illusions to build unassailable inner grit.",
+        "wealth": "Sudden financial leaks, legal or administrative hurdles, and stalled asset liquidity. Strictly avoid leveraged bets, speculative trading, or lending money.",
+        "career": "Strenuous workloads, organizational restructuring, delays in promotions, and demanding subordinate management.",
+        "vitality": "Prone to joint stiffness, lower back vulnerability, and sluggish digestion. Demands regular walking, clean diet, and early bedtime.",
+        "protocol": "Light a mustard-oil lamp under a sacred Peepal tree every Saturday evening; feed black dogs or crows; donate iron items or black sesame."
     }
+}
 
-def resolve_location_name(place_query: str):
-    if not place_query or not place_query.strip():
-        return 28.6139, 77.2090
-    clean_q = place_query.strip()
-    for name, coords in CITY_COORDINATES.items():
-        if clean_q.lower() in name.lower() or any(part.strip().lower() in name.lower() for part in clean_q.split(',')):
-            return coords[0], coords[1]
-    if HAS_GEOPY:
-        try:
-            geolocator = Nominatim(user_agent="navtara_pulse_app", timeout=4)
-            loc = geolocator.geocode(clean_q)
-            if loc:
-                return float(loc.latitude), float(loc.longitude)
-        except Exception:
-            pass
-    return 28.6139, 77.2090
-
-def get_julian_day(utc_dt: datetime.datetime) -> float:
-    y = utc_dt.year
-    m = utc_dt.month
-    d = utc_dt.day + (utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0) / 24.0
-    if m <= 2:
-        y -= 1
-        m += 12
-    a = math.floor(y / 100)
-    b = 2 - a + math.floor(a / 4)
-    return math.floor(365.25 * (y + 4716)) + math.floor(30.6001 * (m + 1)) + d + b - 1524.5
-
-def get_approx_lahiri_ayanamsa(jd: float) -> float:
-    t_val = (jd - 2451545.0) / 36525.0
-    return 23.85848 + 1.396042 * t_val + 0.000308 * (t_val ** 2)
-
-def calculate_sidereal_ascendant(utc_dt: datetime.datetime, lat: float, lon: float) -> float:
-    jd = get_julian_day(utc_dt)
-    if HAS_SWISSEPH:
-        try:
-            swe.set_sid_mode(swe.SIDM_LAHIRI)
-            ayanamsa = swe.get_ayanamsa_ut(jd)
-            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
-            return float((ascmc[0] - ayanamsa) % 360.0)
-        except Exception:
-            pass
-
-    t_val = (jd - 2451545.0) / 36525.0
-    gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t_val**2) - (t_val**3) / 38710000.0) % 360.0
-    lst = (gmst + lon) % 360.0
-    eps = 23.439291 - 0.0130042 * t_val
-    
-    eps_rad = math.radians(eps)
-    lat_rad = math.radians(lat)
-    lst_rad = math.radians(lst)
-    
-    y = math.cos(lst_rad)
-    x = - (math.sin(lst_rad) * math.cos(eps_rad) + math.tan(lat_rad) * math.sin(eps_rad))
-    tropical_asc = math.degrees(math.atan2(y, x)) % 360.0
-    
-    ayanamsa = get_approx_lahiri_ayanamsa(jd)
-    return float((tropical_asc - ayanamsa) % 360.0)
-
-def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
-    if utc_dt.tzinfo is not None:
-        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-
-    jd = get_julian_day(utc_dt)
-    if HAS_SWISSEPH:
-        try:
-            swe.set_sid_mode(swe.SIDM_LAHIRI)
-            res = swe.calc_ut(jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-            res_val = res[0] if isinstance(res, (tuple, list)) else res
-            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
-            return float(lon % 360.0)
-        except Exception:
-            try:
-                res = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
-                res_val = res[0] if isinstance(res, (tuple, list)) else res
-                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
-                return float(lon % 360.0)
-            except Exception:
-                pass
-
-    d = jd - 2451545.0
-    moon_mean_lon = (218.316 + 13.176396 * d) % 360.0
-    sun_mean_lon = (280.466 + 0.9856474 * d) % 360.0
-    sun_mean_anom = math.radians((357.528 + 0.9856003 * d) % 360.0)
-    moon_mean_anom = math.radians((134.963 + 13.064993 * d) % 360.0)
-    
-    evec = 1.274 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon) - moon_mean_anom)
-    eq_center = 6.289 * math.sin(moon_mean_anom)
-    var = 0.658 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon))
-    tropical_moon = (moon_mean_lon + eq_center + evec + var) % 360.0
-    
-    ayanamsa = get_approx_lahiri_ayanamsa(jd)
-    return float((tropical_moon - ayanamsa) % 360.0)
-
-def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lon: float):
-    ist_dt = datetime.datetime.combine(dob, tob)
-    utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
-    
-    moon_lon = get_sidereal_moon_longitude(utc_dt)
-    star_span = 360.0 / 27.0
-    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
-    rem_deg = moon_lon % star_span
-    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
-    moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
-
-    lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
-    lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
-
-    return {
-        "star_idx": star_idx,
-        "star_name": NAKSHATRAS[star_idx - 1],
-        "pada": pada,
-        "moon_lon": moon_lon,
-        "moon_rashi_idx": moon_rashi_idx,
-        "moon_rashi_name": RASHIS[moon_rashi_idx],
-        "lagna_lon": lagna_lon,
-        "lagna_deg": f"{int(lagna_lon % 30)}° {int(((lagna_lon % 30) % 1) * 60)}'",
-        "lagna_idx": lagna_idx,
-        "lagna_name": RASHIS[lagna_idx]
+# ==============================================================================
+# DETAILED SADE SATI & DHAIYA MATRIX (ALL PHASES)
+# ==============================================================================
+SADE_SATI_PHASE_ENCYCLOPEDIA = {
+    1: {
+        "phase_name": "Phase 1: Rising Phase (Aarohi Charana / 12th House Transit)",
+        "focus": "Subconscious Cleansing, Isolation, Expense Spikes & Detachment",
+        "mental": "Internal restlessness, vivid or erratic dreams, subconscious auditing of past life choices, and periodic bouts of anxiety or mental fatigue.",
+        "financial": "High unbudgeted expenditures, investments in foreign affairs or healthcare, and necessity to plug financial leaks. Not favorable for speculative risks.",
+        "career": "Relocation, foreign assignments, working behind the scenes, or navigating corporate restructuring. Recognition may feel delayed despite intense efforts.",
+        "health": "Sleep fragmentation, eye strain, joint fatigue in feet/ankles, and vulnerability to psychosomatic stress.",
+        "remedy": "Recite Maha Mrityunjaya Mantra 108 times at twilight; donate dark blankets to homeless individuals; avoid major financial commitments during late night hours."
+    },
+    2: {
+        "phase_name": "Phase 2: Peak Janma Shani (Core Transit / 1st House Over Natal Moon)",
+        "focus": "Identity Rebirth, Character Crucible, Physical Endurance & Leadership",
+        "mental": "Deep psychological transformation. Saturn operates directly on the core emotional fabric, forcing absolute dissolution of ego and false pretense.",
+        "financial": "Cash flow requires meticulous cash-reserve management. Assets are restructured into solid, unshakeable foundations rather than liquid luxuries.",
+        "career": "Massive increase in executive responsibilities. You become the reliable pillar managing crises, yet must endure high scrutiny and professional solitude.",
+        "health": "Demands strict physical discipline, spinal and joint care, adequate hydration, and emotional containment to prevent burnout.",
+        "remedy": "Chant Shani Beej Mantra 108 times on Saturdays; offer water with blue flowers to Lord Shiva; treat factory workers and subordinates with deep respect."
+    },
+    3: {
+        "phase_name": "Phase 3: Setting Phase (Avarohi Charana / 2nd House Transit)",
+        "focus": "Asset Consolidation, Speech Discipline, Family Healing & Permanent Rewards",
+        "mental": "Gradual lifting of psychological clouds. Mental composure solidifies into profound wisdom, measured speech, and pragmatic optimism.",
+        "financial": "Recovery of financial momentum, accumulation of permanent tangible wealth, stabilization of family estates, and steady cash-flow turnaround.",
+        "career": "Consolidation of executive authority, reaping the enduring benefits of hard labor endured during Phase 1 & 2, and achieving long-term respect.",
+        "health": "Teeth, throat, vocal cord, and dietary adjustments. Restoring nutritional balance and cellular vitality.",
+        "remedy": "Practice strict honesty and avoid harsh speech; drink water from a silver cup; donate whole black urad dal and mustard oil on Saturdays."
     }
+}
+
+DHAIYA_ENCYCLOPEDIA = {
+    4: {
+        "name": "Kantaka Shani (4th House Dhaiya / Ardhashtama Shani)",
+        "focus": "Domestic Equilibrium, Property Challenges & Work-Life Balance",
+        "mental": "Emotional friction at home, mental dissatisfaction despite outer success, and restlessness regarding living arrangements.",
+        "career": "Strenuous workplace politics, change of department or relocation, and balancing heavy domestic needs with professional demands.",
+        "remedy": "Serve and respect your mother; light a mustard-oil lamp under a Peepal tree on Saturdays; keep living space clean and clutter-free."
+    },
+    8: {
+        "name": "Ashtama Shani (8th House Dhaiya / High Friction)",
+        "focus": "Deep Transformation, Crisis Mitigation, Health Vigilance & Karmic Debts",
+        "mental": "Elevated vulnerability to stress, fear of the unknown, and testing of inner spiritual fortitude.",
+        "career": "Unexpected obstacles in career progression, legal or tax audits, and necessity for absolute transparency in business contracts.",
+        "remedy": "Recite Hanuman Chalisa twice daily; avoid risky driving late at night; strictly abstain from speculative financial gambling."
+    }
+}
 
 def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
     house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
     m_name = RASHIS[moon_rashi_idx].split()[0]
+    
     if house_diff in [2, 5, 9]:
-        return {
-            "paya": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
-            "metal": "Silver",
-            "status": "Highly Auspicious (अति शुभ)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon, arriving on Silver Feet. Bestows financial liquidity, career protection, and divine resilience during Sade Sati.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
+        metal = "Silver"
     elif house_diff in [3, 7, 10]:
-        return {
-            "paya": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
-            "metal": "Copper",
-            "status": "Favorable (शुभ)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Copper Feet. Brings steady professional growth, success through patient labor, and balanced family relationships.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
+        metal = "Copper"
     elif house_diff in [1, 6, 11]:
-        return {
-            "paya": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
-            "metal": "Gold",
-            "status": "Testing & Demanding (कठिन)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Gold Feet. Demands ego dissolution, strict budgetary control, and humility in communication.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
+        metal = "Gold"
     else:
-        return {
-            "paya": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
-            "metal": "Iron",
-            "status": "Difficult / High Friction (संघर्षमय)",
-            "desc": f"Saturn transits the {house_diff}th house relative to your {m_name} Moon on Iron Feet. Requires rigorous discipline, health vigilance, and persistent spiritual grounding.",
-            "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces)"
-        }
+        metal = "Iron"
+
+    ency = SHANI_PAYA_ENCYCLOPEDIA[metal]
+    
+    return {
+        "paya": ency["title"],
+        "metal": metal,
+        "status": ency["grade"],
+        "tone": ency["tone"],
+        "houses": ency["houses"],
+        "psychology": ency["psychology"],
+        "wealth": ency["wealth"],
+        "career": ency["career"],
+        "vitality": ency["vitality"],
+        "protocol": ency["protocol"],
+        "desc": f"Saturn is currently transiting the {house_diff}th house relative to your {m_name} Moon, arriving on {metal} Feet ({ency['title'].split('(')[1].split('/')[0].strip()}).",
+        "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
+    }
 
 def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
     diff = (saturn_transit_rashi_idx - moon_rashi_idx) % 12
@@ -613,51 +561,86 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
     rashi_2nd = RASHIS[(moon_rashi_idx + 1) % 12].split()[0]
 
     if diff == 11:
+        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[1]
         return {
             "active": True,
-            "status_title": "Phase 1: Rising Phase (Aarohi Charana / 12th House Transit)",
+            "status_title": p_info["phase_name"],
             "phase_num": 1,
-            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon. Prompts restructuring of personal priorities, foreign linkages, and elimination of unnecessary expenses.",
+            "focus": p_info["focus"],
+            "mental": p_info["mental"],
+            "financial": p_info["financial"],
+            "career": p_info["career"],
+            "health": p_info["health"],
+            "remedy": p_info["remedy"],
+            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon. Prompts deep restructuring of personal priorities, elimination of wasteful financial habits, and subconscious purification.",
             "dates": "Active Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": True, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
         }
     elif diff == 0:
+        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[2]
         return {
             "active": True,
-            "status_title": "Phase 2: Peak Phase (Janma Shani / 1st House Core Transit)",
+            "status_title": p_info["phase_name"],
             "phase_num": 2,
-            "impact": f"Saturn is transiting directly over your natal Moon in {m_name} (Janma Shani). This represents the core crucible of character and endurance, demanding physical stamina, absolute ego surrender, and executive clarity.",
+            "focus": p_info["focus"],
+            "mental": p_info["mental"],
+            "financial": p_info["financial"],
+            "career": p_info["career"],
+            "health": p_info["health"],
+            "remedy": p_info["remedy"],
+            "impact": f"Saturn transits directly over your natal Moon in {m_name} (Janma Shani). This is the supreme crucible of character, requiring physical stamina, ego dissolution, leadership responsibility, and unwavering moral grounding.",
             "dates": "Active Peak Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": False, "phase_2_active": True, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
         }
     elif diff == 1:
+        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[3]
         return {
             "active": True,
-            "status_title": "Phase 3: Setting Phase (Avarohi Charana / 2nd House Transit)",
+            "status_title": p_info["phase_name"],
             "phase_num": 3,
-            "impact": f"Saturn transits the 2nd house from your {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. As Sade Sati draws toward conclusion, hard lessons solidify into financial consolidation, mature speech, and stabilized family assets.",
+            "focus": p_info["focus"],
+            "mental": p_info["mental"],
+            "financial": p_info["financial"],
+            "career": p_info["career"],
+            "health": p_info["health"],
+            "remedy": p_info["remedy"],
+            "impact": f"Saturn transits the 2nd house from your {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. As Sade Sati draws toward conclusion, hard lessons solidify into permanent wealth consolidation, stabilized speech, and generational assets.",
             "dates": "Active Concluding Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": True,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
         }
     elif diff == 3:
+        dh_info = DHAIYA_ENCYCLOPEDIA[4]
         return {
             "active": True,
-            "status_title": "Kantaka Shani (4th House Dhaiya / अर्धाष्टमी शनि)",
+            "status_title": dh_info["name"],
             "phase_num": 4,
-            "impact": f"Saturn is transiting your 4th house from {m_name} Moon. Focus on domestic peace, property maintenance, balanced emotional health, and work-life equilibrium.",
+            "focus": dh_info["focus"],
+            "mental": dh_info["mental"],
+            "financial": "Focus on domestic expenses and property asset consolidation.",
+            "career": dh_info["career"],
+            "health": "Chest, respiratory, and heart-rate balance under work pressure.",
+            "remedy": dh_info["remedy"],
+            "impact": f"Saturn transits your 4th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Focus on home stability, vehicle care, maternal health, and inner peace.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
         }
     elif diff == 7:
+        dh_info = DHAIYA_ENCYCLOPEDIA[8]
         return {
             "active": True,
-            "status_title": "Ashtama Shani (8th House Dhaiya / अष्टम शनि)",
+            "status_title": dh_info["name"],
             "phase_num": 8,
-            "impact": f"Saturn is transiting your 8th house from {m_name} Moon. Demands disciplined health habits, careful driving, transparent financial ethics, and avoidance of unhedged risks.",
+            "focus": dh_info["focus"],
+            "mental": dh_info["mental"],
+            "financial": "Avoid unhedged market leverage, speculative schemes, and unsecured loans.",
+            "career": dh_info["career"],
+            "health": "Avoid fatigue, check chronic symptoms, and maintain daily walking discipline.",
+            "remedy": dh_info["remedy"],
+            "impact": f"Saturn transits your 8th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Demands disciplined health habits, careful driving, transparent financial ethics, and spiritual introspection.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -667,7 +650,13 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "active": False,
             "status_title": "No Active Sade Sati or Dhaiya",
             "phase_num": 0,
-            "impact": f"Saturn is currently in Pisces ({RASHIS[saturn_transit_rashi_idx].split()[0]}), placing it in an auspicious or neutral {((saturn_transit_rashi_idx - moon_rashi_idx) % 12) + 1}th house relative to your {m_name} Moon. Unimpeded progress.",
+            "focus": "Unimpeded Progress & Expansion",
+            "mental": "Mental clarity is high; favorable for launching new enterprises.",
+            "financial": "Standard financial liquidity based on active Dasha periods.",
+            "career": "Constructive career growth with minimal Saturnic friction.",
+            "health": "Standard biological stamina.",
+            "remedy": "Continue daily prayers and ethical business practices.",
+            "impact": f"Saturn is currently in Pisces ({RASHIS[saturn_transit_rashi_idx].split()[0]}), placing it in an auspicious or neutral {((saturn_transit_rashi_idx - moon_rashi_idx) % 12) + 1}th house relative to your {m_name} Moon.",
             "dates": "No Current Friction Cycle",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -881,6 +870,153 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
         "remedy_mantra": remedy_mantra,
         "remedy_charity": remedy_charity,
         "remedy_action": remedy_action
+    }
+
+def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
+    offset = (partner_star_idx - user_star_idx) % 9
+    tara_name, icon, quality = NAVTARA_NAMES[offset]
+    is_allied = offset in [1, 3, 5, 7, 8]
+    is_friction = offset in [2, 4, 6]
+    
+    if is_allied:
+        relationship_tone = "High Harmonic Resonance (Constructive Growth & Mutual Trust)"
+        advice = "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance."
+    elif is_friction:
+        relationship_tone = "Testing & High Friction (Demands Clear Boundaries & Patience)"
+        advice = "Differences in communication tempo or expectations can trigger misunderstandings. Ensure all commitments are formally written and expectations calibrated."
+    else:
+        relationship_tone = "Mirror / Foundational Synergy (Intense Alignment & Reflective Growth)"
+        advice = "High mutual identification. Both individuals share foundational biorhythms; great for long-term loyalty if ego boundaries remain healthy."
+
+    return {
+        "tara_name": tara_name,
+        "icon": icon,
+        "quality": quality,
+        "is_allied": is_allied,
+        "is_friction": is_friction,
+        "relationship_tone": relationship_tone,
+        "advice": advice
+    }
+
+def resolve_location_name(place_query: str):
+    if not place_query or not place_query.strip():
+        return 28.6139, 77.2090
+    clean_q = place_query.strip()
+    for name, coords in CITY_COORDINATES.items():
+        if clean_q.lower() in name.lower() or any(part.strip().lower() in name.lower() for part in clean_q.split(',')):
+            return coords[0], coords[1]
+    if HAS_GEOPY:
+        try:
+            geolocator = Nominatim(user_agent="navtara_pulse_app", timeout=4)
+            loc = geolocator.geocode(clean_q)
+            if loc:
+                return float(loc.latitude), float(loc.longitude)
+        except Exception:
+            pass
+    return 28.6139, 77.2090
+
+def get_julian_day(utc_dt: datetime.datetime) -> float:
+    y = utc_dt.year
+    m = utc_dt.month
+    d = utc_dt.day + (utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0) / 24.0
+    if m <= 2:
+        y -= 1
+        m += 12
+    a = math.floor(y / 100)
+    b = 2 - a + math.floor(a / 4)
+    return math.floor(365.25 * (y + 4716)) + math.floor(30.6001 * (m + 1)) + d + b - 1524.5
+
+def get_approx_lahiri_ayanamsa(jd: float) -> float:
+    t_val = (jd - 2451545.0) / 36525.0
+    return 23.85848 + 1.396042 * t_val + 0.000308 * (t_val ** 2)
+
+def calculate_sidereal_ascendant(utc_dt: datetime.datetime, lat: float, lon: float) -> float:
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            ayanamsa = swe.get_ayanamsa_ut(jd)
+            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
+            return float((ascmc[0] - ayanamsa) % 360.0)
+        except Exception:
+            pass
+
+    t_val = (jd - 2451545.0) / 36525.0
+    gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t_val**2) - (t_val**3) / 38710000.0) % 360.0
+    lst = (gmst + lon) % 360.0
+    eps = 23.439291 - 0.0130042 * t_val
+    
+    eps_rad = math.radians(eps)
+    lat_rad = math.radians(lat)
+    lst_rad = math.radians(lst)
+    
+    y = math.cos(lst_rad)
+    x = - (math.sin(lst_rad) * math.cos(eps_rad) + math.tan(lat_rad) * math.sin(eps_rad))
+    tropical_asc = math.degrees(math.atan2(y, x)) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_asc - ayanamsa) % 360.0)
+
+def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
+    if utc_dt.tzinfo is not None:
+        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            res = swe.calc_ut(jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            res_val = res[0] if isinstance(res, (tuple, list)) else res
+            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+            return float(lon % 360.0)
+        except Exception:
+            try:
+                res = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
+                res_val = res[0] if isinstance(res, (tuple, list)) else res
+                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+                return float(lon % 360.0)
+            except Exception:
+                pass
+
+    d = jd - 2451545.0
+    moon_mean_lon = (218.316 + 13.176396 * d) % 360.0
+    sun_mean_lon = (280.466 + 0.9856474 * d) % 360.0
+    sun_mean_anom = math.radians((357.528 + 0.9856003 * d) % 360.0)
+    moon_mean_anom = math.radians((134.963 + 13.064993 * d) % 360.0)
+    
+    evec = 1.274 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon) - moon_mean_anom)
+    eq_center = 6.289 * math.sin(moon_mean_anom)
+    var = 0.658 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon))
+    tropical_moon = (moon_mean_lon + eq_center + evec + var) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_moon - ayanamsa) % 360.0)
+
+def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lon: float):
+    ist_dt = datetime.datetime.combine(dob, tob)
+    utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
+    
+    moon_lon = get_sidereal_moon_longitude(utc_dt)
+    star_span = 360.0 / 27.0
+    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
+    rem_deg = moon_lon % star_span
+    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
+    moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
+
+    lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
+    lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
+
+    return {
+        "star_idx": star_idx,
+        "star_name": NAKSHATRAS[star_idx - 1],
+        "pada": pada,
+        "moon_lon": moon_lon,
+        "moon_rashi_idx": moon_rashi_idx,
+        "moon_rashi_name": RASHIS[moon_rashi_idx],
+        "lagna_lon": lagna_lon,
+        "lagna_deg": f"{int(lagna_lon % 30)}° {int(((lagna_lon % 30) % 1) * 60)}'",
+        "lagna_idx": lagna_idx,
+        "lagna_name": RASHIS[lagna_idx]
     }
 
 # ==============================================================================
@@ -1138,42 +1274,6 @@ def render_page_about():
             Unlike conventional astrology apps that rely on generic sun signs or flat 24-hour sunrise assumptions, <b>Navtara Pulse</b> incorporates the <b>Moshier Swiss Ephemeris</b> (pyswisseph) with true topocentric Chitrapaksha Lahiri Ayanamsa. Ingress and egress timestamps are calculated down to the exact second for your geographical horizon.
         </div>
     </div>
-
-    <div class="light-card-num">
-        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:0.75rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem;">
-            🎯 How Navtara Pulse Empowers You in Daily Life
-        </div>
-        
-        <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:0.5rem;">
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #059669;">
-                <b style="color:#065f46; font-size:1rem;">💼 Strategic Career & Business Execution:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Never schedule critical client pitches, salary reviews, or investor meetings blind. Aligning major professional leaps with your <b>Sadhana (Accomplishment)</b> or <b>Ati-Mitra (Supreme Alliance)</b> days drastically increases closing velocity and reduces friction.
-                </span>
-            </div>
-            
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #10b981;">
-                <b style="color:#065f46; font-size:1rem;">💰 Financial Preservation & Capital Timing:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Shield yourself from impulsive capital deployment. Executing asset purchases during <b>Sampat (Wealth)</b> days supports long-term appreciation, while strictly holding back on <b>Vipat (Friction)</b> and <b>Vadha (Loss)</b> days prevents unforced financial errors.
-                </span>
-            </div>
-
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #14b8a6;">
-                <b style="color:#065f46; font-size:1rem;">❤️ Emotional Composure & Relationship Harmony:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Knowing when you or your partner are traversing high-sensitivity transit days allows you to practice proactive patience, avoid unnecessary arguments, and cultivate deeper empathy.
-                </span>
-            </div>
-
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #0d9488;">
-                <b style="color:#065f46; font-size:1rem;">🌿 Bio-Energy Shielding & Burnout Prevention:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Pace your vital energy. Schedule intensive athletic workouts on high-vitality days and prioritize meditation, restorative sleep, and grounding breathwork when biological resistance peaks.
-                </span>
-            </div>
-        </div>
-    </div>
     """)
 
     app_url = "https://navtara-pulse.streamlit.app"
@@ -1211,11 +1311,6 @@ def render_page_about():
                     🐦 X (Twitter)
                 </div>
             </a>
-        </div>
-
-        <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1px solid #fed7aa; text-align:center;">
-            <div style="font-size:0.88rem; color:#9a3412; font-weight:800;">Direct Web App Link:</div>
-            <div style="font-size:1.05rem; font-weight:900; color:#431407; margin-top:2px;"><b>{app_url}</b></div>
         </div>
     </div>
     """)
@@ -1456,9 +1551,9 @@ def render_page_profile():
     </div>
     """)
 
+    # Tara Bala Widget
     with st.container(border=True):
         st.markdown("**🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)**")
-        st.write("Select any counterpart's Janma Nakshatra to evaluate mutual cosmic resonance:")
         partner_star_choice = st.selectbox("Select Counterpart's Birth Star:", options=NAKSHATRAS, index=0)
         p_star_idx = NAKSHATRAS.index(partner_star_choice) + 1
         tara_res = get_tara_bala_info(chart_info['star_idx'], p_star_idx)
@@ -1566,105 +1661,11 @@ def render_page_numerology():
                 </ul>
             </div>
         </div>
-
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
-                • <b>Metal Vessel Grounding:</b> Drink water from a pure silver or copper vessel to pacify nervous restlessness and enhance bio-electrical harmony.<br>
-                • <b>Digital & Workspace Bio-Shield:</b> Remove tangled charging cables, broken electronic gadgets, and inactive clocks from your workspace.<br>
-                • <b>Name Resonance (Namank):</b> Use green or blue ink when writing or endorsing important planning documents to harmonize your {namank} name vibration.
-            </div>
-        </div>
     </div>
     """)
 
 # ==============================================================================
-# TAB 4: SHANI (DYNAMIC SADE SATI ENGINE - CLEANED UP WITHOUT INLINE COUNTER)
-# ==============================================================================
-def render_page_shani():
-    if not has_valid_profile:
-        render_profile_setup_prompt()
-        return
-
-    m_name = chart_info['moon_rashi_name'].split()[0]
-    p1_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data['phase_1_active'] else ''
-    p2_active_tag = '<span style="font-size:0.82rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW (PEAK)</span>' if shani_sadesati_data['phase_2_active'] else ''
-    p3_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data['phase_3_active'] else ''
-
-    render_html(f"""
-    <div class="light-card-shani">
-        <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
-            <span>{t('shani_paya_title', current_lang)}</span>
-            <span style="font-size:0.85rem; background:#ede9fe; color:#5b21b6; padding:4px 10px; border-radius:20px; font-weight:800;">Saturn in Pisces (Meena)</span>
-        </div>
-        
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #e9d5ff; margin-bottom:1.15rem;">
-            <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE TRANSIT PAYA FOR YOUR {m_name.upper()} MOON</div>
-            <div style="font-size:1.4rem; font-weight:900; color:#5b21b6; margin:4px 0;">{shani_paya_data['paya']}</div>
-            <div style="font-size:0.95rem; color:#7c3aed; font-weight:800;">Status: {shani_paya_data['status']}</div>
-            <div style="font-size:0.92rem; color:#475569; margin-top:3px;"><b>Active Timeline:</b> {shani_paya_data['timeline']}</div>
-            <div style="font-size:0.95rem; line-height:1.7; color:#3b0764; margin-top:10px;">
-                {shani_paya_data['desc']}
-            </div>
-        </div>
-
-        <div style="background:#ffffff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                <span>⚖️ Sade Sati Status for {m_name} Moon</span>
-                <span style="font-size:0.82rem; background:#ede9fe; color:#5b21b6; padding:3px 8px; border-radius:10px; font-weight:800;">{shani_sadesati_data['status_title'].split(':')[0]}</span>
-            </div>
-            
-            <div style="background:{'#fef2f2' if shani_sadesati_data['phase_2_active'] else '#f5f3ff'}; border-radius:12px; padding:12px; border-left:5px solid {'#ef4444' if shani_sadesati_data['phase_2_active'] else '#9333ea'}; margin-bottom:12px;">
-                <b style="color:{'#991b1b' if shani_sadesati_data['phase_2_active'] else '#5b21b6'}; font-size:1.05rem;">{shani_sadesati_data['status_title']}</b>
-                <div style="font-size:0.9rem; color:#64748b; margin:2px 0 6px 0;"><b>Active Window:</b> {shani_sadesati_data['dates']}</div>
-                <div style="font-size:0.94rem; line-height:1.65; color:#334155;">{shani_sadesati_data['impact']}</div>
-            </div>
-
-            <div style="font-weight:800; font-size:1rem; color:#475569; margin:14px 0 8px 0;">Complete 7.5-Year Sade Sati Trajectory for Your {m_name} Moon:</div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; border-left:4px solid #a855f7; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#5b21b6;">Phase 1: Rising Phase (Saturn in {shani_sadesati_data['rashi_12th']} / 12th from Moon)</b>
-                    {p1_active_tag}
-                </div>
-                <div style="font-size:0.88rem; color:#475569; margin-top:2px;">Restructuring subconscious habits, remote assignments, and elimination of unnecessary expenses.</div>
-            </div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; border-left:4px solid #ef4444; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#991b1b;">Phase 2: Peak Janma Shani (Saturn in {shani_sadesati_data['rashi_1st']} / Over Natal Moon)</b>
-                    {p2_active_tag}
-                </div>
-                <div style="font-size:0.88rem; color:#475569; margin-top:2px;">Crucible of executive endurance, major life transformations, physical stamina, and spiritual maturity.</div>
-            </div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; border-left:4px solid #10b981;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#065f46;">Phase 3: Setting Phase (Saturn in {shani_sadesati_data['rashi_2nd']} / 2nd from Moon)</b>
-                    {p3_active_tag}
-                </div>
-                <div style="font-size:0.88rem; color:#475569; margin-top:2px;">Consolidation of accumulated lessons, stabilization of speech and domestic finances, and permanent asset building.</div>
-            </div>
-        </div>
-
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
-            <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:6px;">🪔 Prescribed Remedies for Shani Alignment:</div>
-            <div style="font-size:0.93rem; line-height:1.65; color:#3b0764;">
-                • Recite the <b>Shani Beej Mantra</b> (ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः) 108 times on Saturday twilight facing West.<br>
-                • Recite the <b>Hanuman Chalisa</b> daily to channel inner vitality and protect emotional equilibrium.<br>
-                • Donate mustard oil, black sesame seeds, or dark blankets to laborers or the needy on Saturdays.
-            </div>
-        </div>
-    </div>
-    """)
-
-    st.write("")
-    if st.button("📿 Open Dedicated Digital Japa Counter", type="primary", use_container_width=True):
-        st.session_state.current_page = "mantra"
-        st.rerun()
-
-# ==============================================================================
-# TAB 5: LIVE PREDICTION
+# TAB 5: LIVE PREDICTION (RESTORED COMPLETE CHECKLIST & PROTOCOLS)
 # ==============================================================================
 def render_page_live():
     if not has_valid_profile:
@@ -1825,7 +1826,7 @@ def render_page_live():
     """)
 
 # ==============================================================================
-# TAB 6: 7 DAYS PREDICTION
+# TAB 6: 7 DAYS PREDICTION (RESTORED COMPLETE DAY MATRIX & DETAILED CARDS)
 # ==============================================================================
 def render_page_forecast():
     if not has_valid_profile:
@@ -1936,101 +1937,6 @@ def render_page_forecast():
         </div>
     </div>
     """)
-
-# ==============================================================================
-# TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
-# ==============================================================================
-def render_page_mantra():
-    render_html("""
-    <div class="light-card-shani">
-        <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:0.4rem;">
-            📿 Japa Sadhana & Vedic Mantra Sanctuary
-        </div>
-        <div style="font-size:0.93rem; color:#475569; line-height:1.6;">
-            Select a personalized planetary, star, or transit mantra to view its authentic Sanskrit verse, 
-            meaning, and chant with the 108-bead interactive digital Mala counter.
-        </div>
-    </div>
-    """)
-
-    mantra_catalog = {
-        "Maha Mrityunjaya Mantra (Supreme Protection)": {
-            "sanskrit": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥",
-            "translit": "Om Tryambakam Yajamahe Sugandhim Pushti-Vardhanam |\nUrvarukamiva Bandhanan-Mrityor-Mukshiya Maamritat ||",
-            "meaning": "We meditate on the Three-Eyed Lord Shiva, who permeates and nourishes all beings. May He liberate us from the bonds of fear and death into immortality.",
-            "rules": "• Best chanted at dawn or dusk facing East or North.\n• Use a Rudraksha Mala.\n• Pacifies severe transit friction (Vipat, Vadha) and shields cellular vitality."
-        },
-        "Shani Beej Mantra (Saturn Pacification)": {
-            "sanskrit": "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥",
-            "translit": "Om Praam Preem Proum Sah Shanaishcharaya Namah ||",
-            "meaning": "Salutations to Lord Saturn, the dispenser of karmic justice. Pacifies delays, chronic exhaustion, and aligns personal discipline during Sade Sati / Dhaiya.",
-            "rules": "• Best chanted at twilight facing West on Saturdays.\n• Use a dark Rudraksha or black tourmaline mala.\n• Sit on an indigo or wool asana."
-        },
-        "Gayatri Mantra (Solar Illumination)": {
-            "sanskrit": "ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्॥",
-            "translit": "Om Bhur Bhuvah Swah Tat Savitur Varenyam Bhargo Devasya Dheemahi Dhiyo Yo Nah Prachodayat ||",
-            "meaning": "We meditate upon the supreme divine brilliance of the Sun who illuminates the inner cosmos. May that divine light awaken and inspire our intellect.",
-            "rules": "• Best chanted during Brahma Muhurta or at sunrise facing East.\n• Use a Tulsi or Sandalwood Mala.\n• Enhances mental clarity, vitality, and cellular healing."
-        },
-        "Vishnu Sahasranama Shloka (Aura Shield)": {
-            "sanskrit": "ॐ नमो भगवते वासुदेवाय॥",
-            "translit": "Om Namo Bhagavate Vasudevaya ||",
-            "meaning": "Salutations to the Supreme Preserver of the Cosmos who dwells within all living hearts.",
-            "rules": "• Chant in the morning facing East.\n• Harmonizes favorable transits (Sampat, Sadhana, Ati-Mitra).\n• Brings peace to the home and liquid capital stability."
-        }
-    }
-
-    if has_valid_profile:
-        bio_nak = NAKSHATRA_BIO_DATA.get(chart_info["star_idx"], NAKSHATRA_BIO_DATA[2])
-        deity_name = bio_nak["deity"].split()[0]
-        nak_key = f"Janma Nakshatra Mantra ({chart_info['star_name']})"
-        mantra_catalog[nak_key] = {
-            "sanskrit": f"ॐ {deity_name} नमः॥",
-            "translit": f"Om {deity_name} Namah ||",
-            "meaning": f"Directly harmonizes the natal electromagnetic bio-frequency of your birth star governed by {bio_nak['deity']}.",
-            "rules": f"• Chant 11, 27, or 108 times daily in the morning.\n• Protects and waters the sacred Nakshatra tree ({bio_nak['tree']}).\n• Enhances natural intuition and executive luck."
-        }
-
-    selected_mantra = st.selectbox("Select Mantra to Chant:", options=list(mantra_catalog.keys()))
-    m_info = mantra_catalog[selected_mantra]
-
-    render_html(f"""
-    <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:14px; padding:16px; margin:14px 0; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
-        <div style="font-size:1.35rem; font-weight:900; color:#1e1b4b; text-align:center; font-family:serif; line-height:1.6; white-space:pre-line;">
-            {m_info['sanskrit']}
-        </div>
-        <div style="font-size:0.93rem; color:#6d28d9; text-align:center; font-style:italic; margin-top:8px; line-height:1.5; white-space:pre-line;">
-            {m_info['translit']}
-        </div>
-        <hr style="margin:12px 0; border:none; border-top:1px solid #ede9fe;">
-        <div style="font-size:0.92rem; color:#334155; line-height:1.65;">
-            <b>📜 Meaning:</b> {m_info['meaning']}<br><br>
-            <b>🧘 Sadhana Guidelines:</b><br>{m_info['rules'].replace(chr(10), '<br>')}
-        </div>
-    </div>
-    """)
-
-    # Interactive 108-Bead Mala Counter
-    with st.container(border=True):
-        st.markdown(f"### 📿 Digital Mala: **{st.session_state.japa_count} / 108** Beads")
-        progress_val = min(1.0, st.session_state.japa_count / 108.0)
-        st.progress(progress_val, text=f"Mala Progress: {int(progress_val * 100)}% | Completed Malas: {st.session_state.mala_rounds}")
-
-        col_tap, col_reset = st.columns([2, 1])
-        with col_tap:
-            if st.button("📿 Tap Bead (+1)", type="primary", use_container_width=True):
-                st.session_state.japa_count += 1
-                if st.session_state.japa_count >= 108:
-                    st.session_state.japa_count = 0
-                    st.session_state.mala_rounds += 1
-                    st.balloons()
-                    st.success("🎉 Om Shanti! You have completed 1 full Mala (108 Chants). May the vibration bring peace and protection!")
-                st.rerun()
-        with col_reset:
-            if st.button("🔄 Reset Counter", use_container_width=True):
-                st.session_state.japa_count = 0
-                st.session_state.mala_rounds = 0
-                st.rerun()
 
 # ==============================================================================
 # ROUTER DISPATCHER: RENDER THE SELECTED PAGE
