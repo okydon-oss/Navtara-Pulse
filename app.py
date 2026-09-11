@@ -60,9 +60,9 @@ render_html("""
         background: linear-gradient(135deg, #fdfbf7 0%, #fffbeb 100%);
         border: 1.5px solid #fde68a;
         border-radius: 16px;
-        padding: 1.2rem 1.3rem;
-        margin-bottom: 1.15rem;
-        box-shadow: 0 3px 14px rgba(245, 158, 11, 0.08);
+        padding: 1.1rem 1.2rem;
+        margin-bottom: 1.1rem;
+        box-shadow: 0 2px 10px rgba(245, 158, 11, 0.08);
     }
     .light-card-profile {
         background: #ffffff;
@@ -156,15 +156,15 @@ CHALDEAN_MAP = {
 }
 
 NUM_PLANET_NAMES = {
-    1: {"en": "Sun (Surya / सूर्य)", "hi": "सूर्य (Sun)", "mr": "सूर्य (Sun)", "gu": "સૂર્ય (Sun)"},
-    2: {"en": "Moon (Chandra / चन्द्र)", "hi": "चन्द्र (Moon)", "mr": "चंद्र (Moon)", "gu": "ચંદ્ર (Moon)"},
-    3: {"en": "Jupiter (Brihaspati / गुरु)", "hi": "गुरु (Jupiter)", "mr": "गुरू (Jupiter)", "gu": "ગુરુ (Jupiter)"},
-    4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)", "mr": "राहू (Rahu)", "gu": "રાહુ (Rahu)"},
-    5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)", "mr": "बुध (Mercury)", "gu": "બુધ (Mercury)"},
-    6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)", "mr": "शुक्र (Venus)", "gu": "શુક્ર (Venus)"},
-    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)", "mr": "કેતુ (Ketu)", "gu": "કેતુ (Ketu)"},
-    8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)", "mr": "शनी (Saturn)", "gu": "શનિ (Saturn)"},
-    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)", "mr": "मंगळ (Mars)", "gu": "મંગળ (Mars)"}
+    1: {"en": "Sun (Surya / सूर्य)", "hi": "सूर्य (Sun)"},
+    2: {"en": "Moon (Chandra / चन्द्र)", "hi": "चन्द्र (Moon)"},
+    3: {"en": "Jupiter (Brihaspati / गुरु)", "hi": "गुरु (Jupiter)"},
+    4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)"},
+    5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)"},
+    6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)"},
+    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)"},
+    8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)"},
+    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)"}
 }
 
 TRANSLATIONS = {
@@ -227,71 +227,38 @@ TRANSLATIONS = {
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
         "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें"
-    },
-    "mr": {
-        "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
-        "app_subtitle": "वैदिक नक्षत्र गोचर आणि वैश्विक ऊर्जा चक्र",
-        "btn_about": "✨ ॲप विषयी",
-        "btn_user_profile": "👤 युझर प्रोफाईल",
-        "btn_numerology": "🔢 अंकशास्त्र",
-        "btn_shani": "🪐 शनी पाया",
-        "btn_live": "⚡ आजचे भविष्य",
-        "btn_forecast": "🗓️ ७ दिवसांचे भविष्य",
-        "btn_share": "📲 शेअर करा",
-        "edit_details": "✏️ माहिती बदला",
-        "save_details": "💾 सेव्ह करा",
-        "cancel": "रद्द करा",
-        "name_label": "पूर्ण नाव",
-        "dob_label": "जन्म तारीख",
-        "tob_label": "जन्म वेळ",
-        "city_label": "जन्म ठिकाण",
-        "nakshatra_label": "जन्म नक्षत्र",
-        "pada_label": "चरण",
-        "moon_rashi_label": "चंद्र रास",
-        "lagna_label": "लग्न रास",
-        "mulank_label": "मूलांक",
-        "bhagyank_label": "भाग्यांक",
-        "namank_label": "नामांक",
-        "shani_paya_title": "🪐 चालू शनी पाया व २.५ वर्षांचे गोचर",
-        "sadesati_title": "⚖️ शनी साडेसाती व ढिय्या स्थिती",
-        "live_pulse_title": "⚡ आजचा थेट खगोलीय प्रभाव",
-        "forecast_title": "🗓️ पुढील ७ दिवसांचे नक्षत्र संक्रमण व दैनिक मार्गदर्शन",
-        "share_title": "📲 नवतारा पल्स ॲप मित्र आणि कुटुंबासह शेअर करा"
-    },
-    "gu": {
-        "app_title": "✨ નવતારા પલ્સ (Navtara Pulse)",
-        "app_subtitle": "વૈદિક નક્ષત્ર ગોચર અને બ્રહ્માંડીય ઊર્જા ચક્ર",
-        "btn_about": "✨ એપ વિશે",
-        "btn_user_profile": "👤 યુઝર પ્રોફાઇલ",
-        "btn_numerology": "🔢 અંકશાસ્ત્ર",
-        "btn_shani": "🪐 શનિ પાયા",
-        "btn_live": "⚡ આજનું ફળ",
-        "btn_forecast": "🗓️ ૭ દિવસનું ફળ",
-        "btn_share": "📲 શેર કરો",
-        "edit_details": "✏️ વિગત બદલો",
-        "save_details": "💾 સેવ કરો",
-        "cancel": "રદ કરો",
-        "name_label": "પૂરું નામ",
-        "dob_label": "જન્મ તારીખ",
-        "tob_label": "જન્મ સમય",
-        "city_label": "જન્મ સ્થળ",
-        "nakshatra_label": "જન્મ નક્ષત્ર",
-        "pada_label": "ચરણ",
-        "moon_rashi_label": "ચંદ્ર રાશિ",
-        "lagna_label": "લગ્ન રાશિ",
-        "mulank_label": "મૂળાંક",
-        "bhagyank_label": "ભાગ્યાંક",
-        "namank_label": "નામાંક",
-        "shani_paya_title": "🪐 વર્તમાન શનિ પાયા અને ૨.૫ વર્ષનું ગોચર",
-        "sadesati_title": "⚖️ શનિ સાડાસાતી અને ઢૈય્યા સ્થિતિ",
-        "live_pulse_title": "⚡ આજનો જીવંત નક્ષત્ર પ્રભાવ",
-        "forecast_title": "🗓️ આગામી ૭ દિવસોનું નક્ષત્ર ગોચર અને દૈનિક માર્ગદર્શન",
-        "share_title": "📲 નવતારા પલ્સ તમારા મિત્રો અને પરિવાર સાથે શેર કરો"
     }
 }
 
 def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
+
+CITY_COORDINATES = {
+    "Delhi / New Delhi, India": (28.6139, 77.2090),
+    "Mumbai, Maharashtra, India": (19.0760, 72.8777),
+    "Chhatrapati Sambhajinagar (Aurangabad), Maharashtra, India": (19.8762, 75.3433),
+    "Pune, Maharashtra, India": (18.5204, 73.8567),
+    "Nagpur, Maharashtra, India": (21.1458, 79.0882),
+    "Bengaluru, Karnataka, India": (12.9716, 77.5946),
+    "Hyderabad, Telangana, India": (17.3850, 78.4867),
+    "Chennai, Tamil Nadu, India": (13.0827, 80.2707),
+    "Kolkata, West Bengal, India": (22.5726, 88.3639),
+    "Ahmedabad, Gujarat, India": (23.0225, 72.5714),
+    "Surat, Gujarat, India": (21.1702, 72.8311),
+    "Jaipur, Rajasthan, India": (26.9124, 75.7873),
+    "Lucknow, Uttar Pradesh, India": (26.8467, 80.9462),
+    "Varanasi, Uttar Pradesh, India": (25.3176, 82.9739),
+    "Patna, Bihar, India": (25.5941, 85.1376),
+    "Bhopal, Madhya Pradesh, India": (23.2599, 77.4126),
+    "Indore, Madhya Pradesh, India": (22.7196, 75.8577),
+    "Chandigarh, India": (30.7333, 76.7794),
+    "Dubai, UAE": (25.2048, 55.2708),
+    "London, UK": (51.5074, -0.1278),
+    "New York, USA": (40.7128, -74.0060),
+    "San Francisco, USA": (37.7749, -122.4194),
+    "Singapore": (1.3521, 103.8198),
+    "Toronto, Canada": (43.6532, -79.3832)
+}
 
 NAKSHATRA_BIO_DATA = {
     1: {"deity": "Ashwini Kumaras (Celestial Healers)", "symbol": "Horse's Head", "tree": "Kuchila / Strychnine (विषमुष्टी)", "bird": "Shikra / Wild Hawk", "animal": "Horse (Ashwa / अश्व)", "lord": "Ketu"},
@@ -317,10 +284,10 @@ NAKSHATRA_BIO_DATA = {
     21: {"deity": "Vishwadevas (Universal Cosmic Laws)", "symbol": "Elephant's Tusk / Small Cot", "tree": "Jackfruit / Phanas (पनस)", "bird": "Stork / सारस", "animal": "Male Mongoose (नकुल)", "lord": "Sun (Surya)"},
     22: {"deity": "Lord Vishnu (Cosmic Preserver)", "symbol": "Three Footprints / Ear of Listening", "tree": "Aak / Rui / Calotropis (मदार)", "bird": "Francolin / Kapinjala", "animal": "Female Monkey (वानर)", "lord": "Moon (Chandra)"},
     23: {"deity": "Eight Vasus (Elemental Energy Lords)", "symbol": "Mridangam / Drum / Flute", "tree": "Shami / Khejri (शमी वृक्ष)", "bird": "Golden Bee / Peacock", "animal": "Female Lion (सिंह)", "lord": "Mars (Mangal)"},
-    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (અશ્વ)", "lord": "Rahu"},
+    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (अश्व)", "lord": "Rahu"},
     25: {"deity": "Aja Ekapada (One-Footed Cosmic Fire)", "symbol": "Two Front Legs of Bed / Crossed Swords", "tree": "Mango / Neem (आम्र/निम्ब)", "bird": "Avocet / Peacock", "animal": "Male Lion (सिंह)", "lord": "Jupiter (Guru)"},
     26: {"deity": "Ahirbudhnya (Serpent of Deep Depths)", "symbol": "Two Back Legs of Bed / Serpent in Water", "tree": "Neem / Pithari (निम्ब)", "bird": "Kotwal / Rainbird", "animal": "Female Cow (गौ)", "lord": "Saturn (Shani)"},
-    27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (હસ્તિની)", "lord": "Mercury (Budha)"}
+    27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
 }
 
 NAKSHATRA_PROFILES = {
@@ -883,7 +850,7 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
     }
 
 # ==============================================================================
-# BROWSER SESSION STATE (STRICT BLANK DEFAULTS - NO SHARED SERVER FILES)
+# BROWSER SESSION STATE (STRICT BLANK DEFAULTS)
 # ==============================================================================
 if "user_profile" not in st.session_state:
     st.session_state.user_profile = {
@@ -1009,19 +976,19 @@ def render_profile_setup_prompt():
             st.rerun()
 
 # ==============================================================================
-# TAB 1: ABOUT APP (FULL DETAILS & SHARING - AVAILABLE WITHOUT USER PROFILE)
+# TAB 1: ABOUT APP
 # ==============================================================================
 def render_page_about():
     with st.container(border=True):
-        st.markdown("**🌐 Select Language / भाषा चुनें / भाषा निवडा / ભાષા પસંદ કરો:**")
+        st.markdown("**🌐 Select Language / भाषा चुनें:**")
         lang_col1, _ = st.columns([2, 1])
         with lang_col1:
-            lang_options = {"en": "English", "hi": "हिन्दी (Hindi)", "mr": "मराठी (Marathi)", "gu": "ગુજરાતી (Gujarati)"}
+            lang_options = {"en": "English", "hi": "हिन्दी (Hindi)"}
             selected_lang_code = st.selectbox(
                 "App Language",
                 options=list(lang_options.keys()),
                 format_func=lambda x: lang_options[x],
-                index=list(lang_options.keys()).index(current_lang),
+                index=list(lang_options.keys()).index(current_lang if current_lang in lang_options else "en"),
                 label_visibility="collapsed"
             )
             if selected_lang_code != current_lang:
@@ -1029,7 +996,6 @@ def render_page_about():
                 st.rerun()
 
     render_html("""
-    <!-- SECTION 1: CORE ESSENCE & VALUE PROPOSITION -->
     <div class="auth-hero-box">
         <div style="font-weight:900; font-size:1.35rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
             🧬 Navtara Pulse: Precision Chronobiology & Vedic Timing Engine
@@ -1040,7 +1006,6 @@ def render_page_about():
         </div>
     </div>
 
-    <!-- SECTION 2: SCIENTIFIC LOGIC & CHRONOBIOLOGY -->
     <div class="light-card-profile">
         <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
             🔬 The Scientific Logic: Gravitational Hydrodynamics & Bio-Rhythms
@@ -1048,7 +1013,7 @@ def render_page_about():
         
         <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
             <b>1. Lunar Tidal Hydrodynamics & Neuro-Endocrine Flow:</b><br>
-            The adult human brain and body are composed of approximately <b>70% water and electrolytic fluids</b>. Just as the Moon's gravitational and electro-magnetic shifts generate planetary ocean tides, peer-reviewed chronobiology confirms that lunar periodicity modulates circadian gene expression, sleep architecture (REM cycles), cerebrospinal fluid pressure, and neuro-transmitter output. In classical Vedic science, the Moon governs the mind (<i>"Chandro Manaso Jatah"</i>). When the celestial Moon aligns harmoniously with your natal Moon's electro-magnetic horizon, neural processing operates at peak cognitive clarity.
+            The adult human brain and body are composed of approximately <b>70% water and electrolytic fluids</b>. Chronobiology confirms that lunar periodicity modulates circadian gene expression, sleep architecture (REM cycles), cerebrospinal fluid pressure, and neuro-transmitter output. In classical Vedic science, the Moon governs the mind (<i>"Chandro Manaso Jatah"</i>). When the celestial Moon aligns harmoniously with your natal Moon's electro-magnetic horizon, neural processing operates at peak cognitive clarity.
         </div>
 
         <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
@@ -1067,7 +1032,6 @@ def render_page_about():
         </div>
     </div>
 
-    <!-- SECTION 3: HOW THIS APP EMPOWERS AN INDIVIDUAL -->
     <div class="light-card-num">
         <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:0.75rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem;">
             🎯 How Navtara Pulse Empowers You in Daily Life
@@ -1105,37 +1069,6 @@ def render_page_about():
     </div>
     """)
 
-    # SECTION 4: NATIVE PROGRESSIVE WEB APP (PWA) INSTALLATION
-    render_html("""
-    <div class="light-card-profile">
-        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
-            📲 Install on Your Mobile Device (No App Store Needed)
-        </div>
-        <div style="font-size:0.95rem; line-height:1.7; color:#334155; margin-bottom:1rem;">
-            You can launch <b>Navtara Pulse</b> in full-screen native mode directly from your smartphone home screen:
-        </div>
-        
-        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa; margin-bottom:10px;">
-            <b style="color:#9a3412; font-size:1rem;">🤖 For Android Users (Chrome Browser):</b>
-            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
-                <li>Tap the three vertical dots menu (<b>⋮</b>) in the top-right corner of Chrome.</li>
-                <li>Select <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
-                <li>Tap <b>"Install"</b>. The app icon will appear instantly on your home screen.</li>
-            </ol>
-        </div>
-
-        <div style="background:#fff7ed; border-radius:12px; padding:12px 14px; border:1px solid #fed7aa;">
-            <b style="color:#9a3412; font-size:1rem;">🍏 For iPhone / iOS Users (Safari Browser):</b>
-            <ol style="margin-top:5px; margin-bottom:2px; padding-left:1.3rem; font-size:0.94rem; color:#431407; line-height:1.6;">
-                <li>Open this link in <b>Safari</b> and tap the <b>Share icon</b> (square with an arrow pointing upward).</li>
-                <li>Scroll down the menu and tap <b>"Add to Home Screen"</b>.</li>
-                <li>Tap <b>"Add"</b> in the top right. Launch directly from your app grid anytime.</li>
-            </ol>
-        </div>
-    </div>
-    """)
-
-    # SECTION 5: SHARE SUITE (ACCESSIBLE TO ALL VISITORS)
     app_url = "https://navtara-pulse.streamlit.app"
     share_msg = "Track your real-time Vedic Moon transit rhythm, Shani Paya, and personalized timing blueprint with Navtara Pulse!"
     encoded_url = urllib.parse.quote(app_url)
@@ -1339,7 +1272,7 @@ def render_page_profile():
             </div>
         </div>
 
-        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
+        <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.1rem; color:#5b21b6; margin-bottom:8px;">
                 🌅 Ascendant (Lagna): {l_info['name']} at {chart_info['lagna_deg']}
             </div>
@@ -1356,7 +1289,6 @@ def render_page_profile():
     </div>
     """)
 
-    # Tara Bala Widget isolated outside HTML strings
     with st.container(border=True):
         st.markdown("**🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)**")
         st.write("Select any counterpart's Janma Nakshatra to evaluate mutual cosmic resonance:")
@@ -1480,7 +1412,7 @@ def render_page_numerology():
     """)
 
 # ==============================================================================
-# TAB 4: SHANI (DYNAMIC SADE SATI ENGINE BASED ON USER MOON SIGN)
+# TAB 4: SHANI (DYNAMIC SADE SATI ENGINE)
 # ==============================================================================
 def render_page_shani():
     if not has_valid_profile:
@@ -1848,12 +1780,11 @@ def render_page_forecast():
     """)
 
 # ==============================================================================
-# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ROUTER DISPATCHER
 # ==============================================================================
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
-    "navtara": render_page_profile,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
