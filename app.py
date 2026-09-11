@@ -113,6 +113,7 @@ NAKSHATRAS = [
     "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
     "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
 ]
+NAKHATRAS = NAKSHATRAS
 
 RASHIS = [
     "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
@@ -290,103 +291,147 @@ NAKSHATRA_BIO_DATA = {
     27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
 }
 
-NAKSHATRA_PROFILES = {
-    1: ("Swift, dynamic initiator with pioneering healing instinct and executive courage.", "Cycles of rapid expansion followed by foundational testing; mature years bring institutional renown.", "• Chant Om Ashwibhyam Namah 11 times.\n• Donate barley or whole grains on Tuesdays.\n• Water a Strychnine (Kuchila) tree."),
-    2: ("Enduring moral resilience, magnetic presence, and unyielding principles under intense pressure.", "Evolution through restructuring into creative authority and permanent asset mastery.", "• Recite Maha Mrityunjaya Mantra 11 times daily.\n• Water an Amla tree.\n• Feed stray dogs or crows on Tuesdays/Fridays."),
-    3: ("Sharp intellect, transformative penetrating focus, and uncompromising truth-seeking nature.", "Command in technical, analytical, or executive leadership after early disciplined labor.", "• Offer red flowers to Surya Dev.\n• Water a Cluster Fig (Gular) tree.\n• Donate copper or jaggery on Sundays."),
-    4: ("Artistic grace, magnetic charm, persistent material focus, and deep emotional sensitivity.", "Continuous compounding of tangible assets, creative triumph, and domestic fulfillment.", "• Offer raw milk on a Shiva Lingam on Mondays.\n• Water a Jamun tree.\n• Drink water from a silver cup."),
-    5: ("Perpetual inquisitiveness, versatile mental agility, and keen aesthetic perception.", "Pioneering discoveries, communicative influence, and steady expansion across mid-career.", "• Chant Om Somaya Namah 11 times.\n• Water an Acacia Catechu (Khair) tree.\n• Donate green lentils or clothing on Wednesdays."),
-    6: ("Transformative emotional depth, storm-like intellect, and resilience through crises.", "Major restructuring phases that unlock supreme spiritual insight and executive authority.", "• Chant Om Namah Shivaya 108 times.\n• Water an Agarwood tree.\n• Feed stray animals on Saturdays."),
-    7: ("Philosophical wisdom, generous benevolence, and remarkable powers of renewal.", "Gradual compounding of respect, educational prestige, and ancestral prosperity.", "• Chant Om Brihaspataye Namah 19 times.\n• Water a sacred Bamboo tree.\n• Donate yellow chickpeas on Thursdays."),
-    8: ("Nourishing discipline, enduring patience, and unwavering institutional integrity.", "Enduring respect, organizational sovereignty, and profound generational stability.", "• Water a sacred Peepal tree on Saturdays.\n• Chant Shani Beej Mantra 21 times.\n• Feed crows with mustard-oil roti."),
-    9: ("Deep philosophical intuition, hypnotic mental acuity, and tactical cunning.", "Mastery over complex human systems, competitive triumph, and spiritual awakening.", "• Offer milk and water to Lord Shiva on Mondays.\n• Water a Nagkeshar tree.\n• Refrain from deceitful speech."),
-    10: ("Regal dignity, ancestral lineage pride, and natural executive authority.", "Leadership in established organizations, ancestral blessings, and legacy assets.", "• Perform Pitru Tarpana or offer water to ancestors.\n• Water a Banyan (Bargad) tree.\n• Donate sesame on Amavasya."),
-    11: ("Charismatic magnetism, refined taste in arts, and relentless pursuit of fortune.", "Harmonious material luxury, social prominence, and enduring partnership success.", "• Chant Om Shukraya Namah 16 times on Fridays.\n• Water a Palasa tree.\n• Donate white sweets to the needy."),
-    12: ("Steadfast nobility, chivalric honor, and devotion to truth and societal contracts.", "Institutional governance, executive stability, and public honoring in mature years.", "• Offer water mixed with kumkum to morning Sun.\n• Water a Plaksha tree.\n• Feed bulls or red cows on Sundays."),
-    13: ("Resourceful dexterity, sharp commercial acumen, and meticulous craftsmanship.", "Success in commercial enterprises, analytical professions, and sudden breakthroughs.", "• Chant Gayatri Mantra 24 times daily.\n• Water a Chameli (Jasmine) plant.\n• Respect mother figures and clean speech."),
-    14: ("Architectural genius, vibrant charisma, and eye for sparkling aesthetic mastery.", "High recognition in design, engineering, or strategic infrastructure projects.", "• Recite Hanuman Chalisa on Tuesdays.\n• Water a Bilva (Bael) tree.\n• Keep a bright red handkerchief in pocket."),
-    15: ("Dynamic adaptability, independent freedom-loving spirit, and subtle diplomatic skill.", "Rapid expansion in trade, cross-border ventures, and broad social networks.", "• Chant Rahu Beej Mantra 18 times at twilight.\n• Water an Arjuna tree.\n• Donate black blankets on Saturdays."),
-    16: ("Intense goal focus, dual energies of alliance and fire, and unstoppable ambition.", "Pinnacle triumph over competitors and steady acquisition of commanding roles.", "• Chant Om Indragni Namah 11 times.\n• Water a Kaith (Wood Apple) tree.\n• Avoid interpersonal ego disputes."),
-    17: ("Diplomatic loyalty, devotional warmth, and unshakeable alliance-building grace.", "Lifelong cordial alliances, international travel, and graceful mature prosperity.", "• Light a mustard oil lamp beneath Peepal on Saturday.\n• Water a Bakula tree.\n• Cultivate truthful friendships."),
-    18: ("Commanding sovereignty, protective courage, and senior administrative stature.", "Executive supremacy, stewardship of large teams, and triumph in civic arenas.", "• Chant Vishnu Sahasranama on Wednesdays.\n• Water a Silk Cotton (Semal) tree.\n• Practice humble listening with subordinates."),
-    19: ("Root-seeking inquiry, profound disillusionment with pretense, and transformative grit.", "Complete rebirth after early trials leading to profound self-mastery and wisdom.", "• Chant Om Ketave Namah 17 times at night.\n• Water a Sal tree.\n• Donate brown blankets or multi-color cloth."),
-    20: ("Invincible optimism, emotional purity, and unstoppable perseverance toward victory.", "Creative mastery, celebrated public accomplishments, and enduring liquid wealth.", "• Chant Shri Suktam on Friday mornings.\n• Water an Ashoka tree.\n• Donate pure cow ghee to a temple."),
-    21: ("Universal integrity, quiet dignity, and adherence to permanent cosmic laws.", "Gradual, unshakeable ascent to senior leadership and widespread societal trust.", "• Offer water in copper vessel to Aditya Hridaya Stotra.\n• Water a Jackfruit tree.\n• Honor elder mentors."),
-    22: ("Scholarly listening acumen, preservation of tradition, and profound learning capacity.", "High educational distinction, public counsel roles, and spiritual tranquility.", "• Chant Om Namo Bhagavate Vasudevaya 108 times.\n• Water an Aak (Calotropis) plant.\n• Maintain strict truthfulness."),
-    23: ("Elemental rhythm, musical or martial agility, and monumental resource mobilization.", "Wealth compounding, leadership in competitive sectors, and material victory.", "• Recite Kartikeya or Hanuman Stotra on Tuesdays.\n• Water a Shami tree.\n• Feed whole wheat dough to birds/animals."),
-    24: ("Esoteric scientific curiosity, investigative mastery, and veil-piercing intuition.", "Breakthroughs in research, medical or technological systems, and hidden gains.", "• Chant Om Varunaya Namah 11 times.\n• Water a Kadamba tree.\n• Keep a pure silver square piece in wallet."),
-    25: ("Fiery ascetic determination, visionary reformist drive, and immense mental force.", "Transformative executive authority and stewardship of radical breakthroughs.", "• Chant Rudra Gayatri Mantra 11 times.\n• Water a Neem or Mango tree.\n• Practice fasting or clean eating on Thursdays."),
-    26: ("Serpentine wisdom of cosmic depths, calm benevolence, and meditative stamina.", "Unassailable peace, philosophical guidance, and solid generational wealth.", "• Chant Om Namah Shivaya 108 times facing East.\n• Water a Neem tree.\n• Feed black cows with green fodder on Saturdays."),
-    27: ("Nourishing grace, safe guidance of journeys, and serene artistic completion.", "Prosperity in distant ventures, universal goodwill, and peaceful mature fulfillment.", "• Chant Budha Beej Mantra 19 times.\n• Water a Mahua tree.\n• Donate green fruits or educational books to children.")
+# Rich Multi-Faceted Characteristics for Nakshatras
+NAKSHATRA_RICH_PROFILES = {
+    1: {
+        "core": "Pioneering initiator, rapid problem solver, intuitive healer, and swift executive.",
+        "strengths": "Instant crisis responsiveness, fearless courage to break new ground, charismatic optimism, and high metabolic recovery speed.",
+        "shadows": "Restlessness, impulsiveness, leaving half-finished projects when adrenaline wanes, and impatience with slower teammates.",
+        "careers": "Emergency response, surgical/medical leadership, technological startups, aviation, high-speed project turnaround.",
+        "prediction": "Dynamic early rise, with structural tests around age 28-30 leading to lasting executive distinction and institutional authority.",
+        "remedies": "• Chant Om Ashwibhyam Namah 11 times every morning.\n• Feed green fodder to horses or cows on Tuesdays.\n• Plant and nurture a Strychnine (Kuchila) tree."
+    },
+    2: {
+        "core": "Enduring moral resilience, deep magnetic charisma, uncompromising principles, and capacity to thrive under immense pressure.",
+        "strengths": "Unshakeable loyalty, profound ability to manage high-stakes turnarounds, emotional fearlessness, and calm authority during restructuring.",
+        "shadows": "All-or-nothing emotional intensity, stubborn resistance to compromise, holding emotional grudges, and taking on extreme burdens alone.",
+        "careers": "Executive management, heavy industry, judicial leadership, forensic investigations, asset management, and creative transformation.",
+        "prediction": "Major life transformations every 7-9 years. Obstacles faced in early career evolve into permanent asset ownership and executive authority in mature years.",
+        "remedies": "• Recite the Maha Mrityunjaya Mantra 11 times daily.\n• Water an Amla tree regularly.\n• Feed stray dogs or crows on Tuesdays and Fridays to balance ancestral weight."
+    },
+    3: {
+        "core": "Transformative intellect, razor-sharp discernment, and relentless pursuit of factual truth.",
+        "strengths": "Uncompromising analytical clarity, piercing through superficial pretense, formidable debate skills, and courageous technical leadership.",
+        "shadows": "Sharp or caustic speech during anger, hyper-critical perfectionism, and internal friction from suppressed irritation.",
+        "careers": "Defense, metallurgy, software engineering, investigative journalism, precision manufacturing, and corporate auditing.",
+        "prediction": "Early disciplined labor lays the foundation for formidable command and senior leadership in mid-to-late life.",
+        "remedies": "• Offer water mixed with red sandalwood to Surya Dev.\n• Recite the Gayatri Mantra 24 times daily.\n• Nurture a Cluster Fig (Gular) tree."
+    }
 }
 
-def get_nakshatra_traits(star_idx: int, lang: str = "en") -> dict:
+# Fallback generator for remaining Nakshatras
+def get_nakshatra_rich_data(star_idx: int):
     bio = NAKSHATRA_BIO_DATA.get(star_idx, NAKSHATRA_BIO_DATA[2])
-    p_archetype, p_pred, p_rem = NAKSHATRA_PROFILES.get(star_idx, NAKSHATRA_PROFILES[2])
+    star_name = NAKSHATRAS[star_idx - 1]
+    if star_idx in NAKSHATRA_RICH_PROFILES:
+        return NAKSHATRA_RICH_PROFILES[star_idx]
+    
     return {
-        "deity": bio["deity"],
-        "symbol": bio["symbol"],
-        "tree": bio["tree"],
-        "bird": bio["bird"],
-        "animal": bio["animal"],
-        "lord": bio["lord"],
-        "personality": p_archetype,
-        "prediction": p_pred,
-        "remedies": p_rem
+        "core": f"Governed by deity {bio['deity']} and planetary lord {bio['lord']}, radiating focused intellect, dynamic stamina, and purposeful ambition.",
+        "strengths": "Deep mental endurance, high intuitive insight, structural reliability, and natural capacity to guide teams through complexity.",
+        "shadows": "Occasional cognitive fatigue from over-analysis, stubborn self-reliance, and hesitation to delegate critical tasks.",
+        "careers": f"Executive management, systems engineering, research and development, advisory stewardship, and domains aligned with {bio['lord']}.",
+        "prediction": "Steady compounding trajectory where initial trials crystallize into permanent institutional respect and wealth security.",
+        "remedies": f"• Chant the sacred Beej Mantra of {bio['deity']} 11 times daily.\n• Water and protect your sacred Nakshatra tree ({bio['tree']}).\n• Feed wild birds ({bio['bird']}) to balance karmic weight."
     }
 
-RASHI_DETAILED_INFO = {
-    0: ("Fire (Agni)", "Mars (Mangal)", "Dynamic pioneering engine, fearless initiative, and rapid intuitive decision-making reflexes.", "Command in competitive fields, technical systems, and executive roles; practice tactical calm to harness mental fire.", "• Offer water with red sandalwood to Surya Dev.\n• Recite Hanuman Chalisa on Tuesdays.\n• Drink water from a silver vessel to cool lunar impulses."),
-    1: ("Earth (Prithvi)", "Venus (Shukra)", "Deliberate stability, refined aesthetic perception, immense perseverance, and strong financial pragmatism.", "Compounding tangible assets, real estate mastery, and comfortable executive longevity.", "• Recite Shri Suktam on Fridays.\n• Apply natural sandalwood attar.\n• Donate curd or white sweets on Fridays."),
-    2: ("Air (Vayu)", "Mercury (Budha)", "Versatile communicative agility, multi-channel intellect, and razor-sharp analytical curiosity.", "Success in media, technology, commerce, and advisory domains through strategic versatility.", "• Chant Vishnu Sahasranama on Wednesdays.\n• Water a Tulsi plant daily.\n• Feed green fodder to cows."),
-    3: ("Water (Jala)", "Moon (Chandra)", "Profound emotional empathy, protective loyalty, intuitive antennae, and rhythmic tenacity.", "Command over institutions, public leadership, and wealth accumulation through emotional intelligence.", "• Offer raw milk on Shiva Lingam on Mondays.\n• Respect mother figures.\n• Drink water from a silver cup."),
-    4: ("Fire (Agni)", "Sun (Surya)", "Regal presence, natural sovereignty, magnanimous leadership, and uncompromising self-respect.", "Senior executive positions, administrative authority, and high societal distinction.", "• Recite Aditya Hridaya Stotra at sunrise.\n• Offer water in copper vessel to Sun.\n• Honor father figures and elders."),
-    5: ("Earth (Prithvi)", "Mercury (Budha)", "Precision discernment, analytical rigor, structured problem-solving, and clean service ethics.", "Mastery over complex systems, organizational architecture, and financial auditing.", "• Chant Budha Beej Mantra on Wednesdays.\n• Donate green stationery or books to students.\n• Practice 10 minutes of daily mindfulness."),
-    6: ("Air (Vayu)", "Venus (Shukra)", "Diplomatic equilibrium, refined justice, architectural balance, and partnership brilliance.", "Success in legal, negotiation, luxury commodities, and institutional governance.", "• Worship Goddess Lakshmi on Fridays.\n• Wear clean pressed pastel attire.\n• Maintain strict fairness in business agreements."),
-    7: ("Water (Jala)", "Mars (Mangal)", "Penetrating investigative acumen, intense psychological depth, and unyielding transformative grit.", "Command over strategic operations, crisis management, and private compounding wealth.", "• Chant Kartikeya or Shiva Mantras on Tuesdays.\n• Donate jaggery and roasted chickpeas.\n• Guard against vengeful thoughts."),
-    8: ("Fire (Agni)", "Jupiter (Guru)", "Expansive philosophical vision, legal and moral integrity, and inspiring pedagogical leadership.", "High institutional mentorship, cross-border ventures, and enduring reputational prestige.", "• Chant Guru Mantra on Thursdays.\n• Apply turmeric or yellow sandalwood tilak on forehead.\n• Water a Peepal tree without touching on Thursdays."),
-    9: ("Earth (Prithvi)", "Saturn (Shani)", "Enduring tactical patience, monumental organizational grit, and structured pragmatic climbing.", "Sovereign institutional leadership, permanent asset foundations, and lasting mature authority.", "• Light mustard oil lamp under Peepal on Saturday.\n• Recite Hanuman Chalisa daily.\n• Respect and tip blue-collar workers."),
-    10: ("Air (Vayu)", "Saturn (Shani)", "Universal visionary ideals, scientific detachment, systems reformation, and egalitarian ethics.", "Pioneering technological breakthroughs, social architecture, and non-linear prosperity.", "• Chant Shani Gayatri Mantra on Saturdays.\n• Donate black sesame or oil.\n• Keep electronic workspaces free of tangled cables."),
-    11: ("Water (Jala)", "Jupiter (Guru)", "Oceanic subconscious intuition, compassionate wisdom, creative transcendence, and spiritual resonance.", "Success in counseling, foreign realms, creative arts, and profound inner peace.", "• Chant Om Namo Bhagavate Vasudevaya on Thursdays.\n• Feed fish with wheat dough on Thursdays.\n• Meditate for 15 minutes at twilight.")
+# Rich Multi-Faceted Characteristics for Chandra Rashis (Moon Signs)
+RASHI_RICH_PROFILES = {
+    0: {
+        "element": "Fire (Agni Tattva)",
+        "ruler": "Mars (Mangal)",
+        "psychology": "Bold, direct, and action-oriented. Mind works like a high-voltage engine that thrives on challenges rather than routine comfort.",
+        "instincts": "Fast emotional recovery, instant decision-making reflexes, and zero tolerance for bureaucratic delays. Needs physical outlets to dissipate stress.",
+        "relations": "Fiercely protective, passionate, and open. Expects total honesty and can be impatient with passive-aggressive behavior.",
+        "health": "Prone to excess metabolic heat (Pitta), headaches, or restless sleep when physical energy is underutilized. Thrives on vigorous daily exercise.",
+        "outlook": "Natural pioneer. Bestows courage to build independent ventures and break industry conventions.",
+        "remedies": "• Offer water with red sandalwood to the morning Sun.\n• Recite Hanuman Chalisa on Tuesdays.\n• Drink water from a pure silver cup to soothe lunar impulses."
+    },
+    11: {
+        "element": "Water (Jala Tattva)",
+        "ruler": "Jupiter (Guru)",
+        "psychology": "Oceanic subconscious intuition, compassionate wisdom, creative transcendence, and profound emotional depth.",
+        "instincts": "Absorbs ambient environmental emotions like a sponge. Exceptional gut instinct that foresees outcomes long before analytical models detect them.",
+        "relations": "Deeply devoted, empathetic, and romantic. Needs quiet emotional sanctuary and mutual respect without harsh critical cynicism.",
+        "health": "Sensitive lymphatic system and fluid balance (Kapha-Vata balance). Vulnerable to psychosomatic fatigue; requires grounding routines and clean hydration.",
+        "outlook": "Unmatched creative imagination and spiritual wisdom. Excels in multi-disciplinary advisory, consulting, and cross-border initiatives.",
+        "remedies": "• Chant Om Namo Bhagavate Vasudevaya 108 times on Thursdays.\n• Feed whole wheat dough balls to fish or water birds on Thursdays.\n• Practice 10 minutes of silent meditation at twilight."
+    }
 }
 
-def get_moon_rashi_details(rashi_idx: int, lang: str = "en") -> dict:
-    elem, ruler, prof, pred, rem = RASHI_DETAILED_INFO.get(rashi_idx, RASHI_DETAILED_INFO[0])
+def get_rashi_rich_data(rashi_idx: int):
+    r_name = RASHIS[rashi_idx]
+    if rashi_idx in RASHI_RICH_PROFILES:
+        return RASHI_RICH_PROFILES[rashi_idx]
+    
+    lords = ["Mars (Mangal)", "Venus (Shukra)", "Mercury (Budha)", "Moon (Chandra)",
+             "Sun (Surya)", "Mercury (Budha)", "Venus (Shukra)", "Mars (Mangal)",
+             "Jupiter (Guru)", "Saturn (Shani)", "Saturn (Shani)", "Jupiter (Guru)"]
+    elements = ["Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)",
+                "Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)",
+                "Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)"]
+    
+    r_elem = elements[rashi_idx]
+    r_lord = lords[rashi_idx]
+
     return {
-        "name": RASHIS[rashi_idx],
-        "element": elem,
-        "ruler": ruler,
-        "profile": prof,
-        "prediction": pred,
-        "remedies": rem
+        "element": f"{r_elem} Tattva",
+        "ruler": r_lord,
+        "psychology": f"Mind operates through the {r_elem} tattva under {r_lord}. Endowed with steady emotional resilience, purposeful focus, and methodical problem-solving.",
+        "instincts": "High intuitive adaptability. Evaluates scenarios through pragmatic long-term consequences rather than temporary emotional turbulence.",
+        "relations": "Authentic, reliable, and respectful of personal boundaries. Communicates with dignified restraint and unwavering loyalty.",
+        "health": "Resilient stamina. Demands regular meal timings, deep hydration, and balanced circadian sleep rhythms to maintain peak vitality.",
+        "outlook": f"Fortified by {r_lord}'s planetary frequency, life unfolds into stable executive authority, societal trust, and compounding assets.",
+        "remedies": f"• Offer clean water to a Shiva Lingam on Mondays.\n• Respect maternal elders and maintain peaceful speech.\n• Meditate for 10 minutes before sleep to ground mental momentum."
     }
 
-LAGNA_DETAILED_INFO = {
-    0: ("Fire (Agni)", "Mars (Mangal)", "Dynamic pioneering demeanor, physical courage, athletic constitution, and direct executive approach.", "Life trajectory driven by bold enterprise, technical leadership, and direct self-assertive victory.", "• Offer water with red sandalwood to Surya Dev.\n• Recite Hanuman Chalisa.\n• Maintain regular physical training."),
-    1: ("Earth (Prithvi)", "Venus (Shukra)", "Calm poise, solid physical constitution, refined aesthetic voice, and unshakeable perseverance.", "Compound worldly assets, real estate mastery, and enduring administrative respect.", "• Apply pure white sandalwood paste.\n• Recite Shri Suktam on Fridays.\n• Respect women and keep clean surroundings."),
-    2: ("Air (Vayu)", "Mercury (Budha)", "Expressive agility, youthful communicative demeanor, adaptable intellect, and versatile presence.", "Intellectual distinction, multi-disciplinary advisory roles, and dynamic commercial growth.", "• Chant Vishnu Sahasranama on Wednesdays.\n• Water a Tulsi plant.\n• Practice measured, clear speech."),
-    3: ("Water (Jala)", "Moon (Chandra)", "Receptive intuitive countenance, nurturing presence, emotional depth, and responsive reflexes.", "Command over public affairs, institutional welfare, and enduring generational wealth.", "• Offer clean water to a Shiva Lingam on Mondays.\n• Respect maternal elders.\n• Drink water from a pure silver cup."),
-    4: ("Fire (Agni)", "Sun (Surya)", "Commanding presence, royal posture, radiant vitality, and natural executive dignity.", "Administrative authority, prominent public standing, and honor in high governance.", "• Perform Surya Namaskar at sunrise.\n• Offer water in a copper vessel to Sun.\n• Cultivate magnanimity in leadership."),
-    5: ("Earth (Prithvi)", "Mercury (Budha)", "Analytical precision, clean structured carriage, meticulous eye for detail, and discerning mind.", "Mastery over complex systems, organizational architecture, and financial integrity.", "• Chant Budha Beej Mantra on Wednesdays.\n• Maintain a clean workspace.\n• Practice evening pranayama."),
-    6: ("Air (Vayu)", "Venus (Shukra)", "Harmonious facial symmetry, diplomatic composure, refined social grace, and balanced presence.", "Success in arbitration, diplomatic leadership, legal distinction, and luxury trade.", "• Worship Goddess Lakshmi on Fridays.\n• Apply natural rose attar.\n• Practice absolute balance in commitments."),
-    7: ("Water (Jala)", "Mars (Mangal)", "Penetrating gaze, magnetic mysterious reserve, immense psychological stamina, and quiet resolve.", "Stewardship of crisis operations, strategic research, and transformative wealth building.", "• Recite Kartikeya or Hanuman Chalisa.\n• Practice honest transparency in speech.\n• Engage in rigorous physical discipline."),
-    8: ("Fire (Agni)", "Jupiter (Guru)", "Tall visionary posture, benevolent optimism, scholarly presence, and philosophical demeanor.", "Senior advisory stature, legal and ethical stewardship, and public veneration.", "• Apply yellow sandalwood tilak on forehead.\n• Chant Guru Mantra on Thursdays.\n• Support educational causes."),
-    9: ("Earth (Prithvi)", "Saturn (Shani)", "Sober pragmatic presence, austere self-discipline, steady constitutional stamina, and mature dignity.", "Permanent institutional foundations, administrative sovereignty, and compound authority.", "• Light a mustard oil lamp under Peepal on Saturdays.\n• Treat blue-collar workers with respect.\n• Maintain patient long-term planning."),
-    10: ("Air (Vayu)", "Saturn (Shani)", "Independent cerebral poise, progressive visionary presence, and egalitarian demeanor.", "Pioneering technological breakthroughs, social systems reform, and original enterprise.", "• Chant Shani Gayatri Mantra on Saturdays.\n• Keep workspace uncluttered.\n• Donate to humanitarian causes."),
-    11: ("Water (Jala)", "Jupiter (Guru)", "Gentle compassionate gaze, intuitive artistic sensibility, philosophical calm, and serene presence.", "Spiritual tranquility, cross-border achievements, creative distinction, and mature peace.", "• Chant Om Namo Bhagavate Vasudevaya on Thursdays.\n• Practice 15 minutes of quiet meditation.\n• Feed fish with whole wheat dough.")
+# Rich Multi-Faceted Characteristics for Lagnas (Ascendants)
+LAGNA_RICH_PROFILES = {
+    6: {
+        "element": "Air (Vayu Tattva)",
+        "lord": "Venus (Shukra)",
+        "constitution": "Balanced Vata-Kapha constitution. Refined aesthetic posture, balanced symmetry, and magnetic social poise.",
+        "persona": "Diplomatic composure, natural arbiter of justice, graceful in high-stakes negotiations, and calm under public pressure.",
+        "life_arc": "Ascendant lord Shukra guides the life toward institutional balance, legal and commercial distinction, high societal networks, and luxury asset compounding.",
+        "remedies": "• Apply pure white sandalwood paste or natural attar on wrists before important meetings.\n• Worship Goddess Lakshmi or recite Shri Suktam on Fridays.\n• Maintain clean, clutter-free surroundings and pristine personal elegance."
+    },
+    7: {
+        "element": "Water (Jala Tattva)",
+        "lord": "Mars (Mangal)",
+        "constitution": "High Pitta-Kapha metabolic intensity. Powerful stamina, penetrating gaze, and immense physical and mental recovery power.",
+        "persona": "Mysterious reserve, authoritative quiet resolve, intense self-command, and zero fear in navigating high-stakes crises.",
+        "life_arc": "Life moves through profound evolutionary transformations. Early challenges forge an impenetrable executive fortress, granting control over complex resources in mature years.",
+        "remedies": "• Recite the Hanuman Chalisa or Kartikeya Stotra on Tuesdays.\n• Maintain strict ethical transparency in all agreements.\n• Practice grounding breathwork (Nadi Shodhana) to channel internal fire."
+    }
 }
 
-def get_lagna_details(lagna_idx: int, lang: str = "en") -> dict:
-    elem, lord, prof, pred, rem = LAGNA_DETAILED_INFO.get(lagna_idx, LAGNA_DETAILED_INFO[6])
+def get_lagna_rich_data(lagna_idx: int):
+    l_name = RASHIS[lagna_idx]
+    if lagna_idx in LAGNA_RICH_PROFILES:
+        return LAGNA_RICH_PROFILES[lagna_idx]
+    
+    lords = ["Mars (Mangal)", "Venus (Shukra)", "Mercury (Budha)", "Moon (Chandra)",
+             "Sun (Surya)", "Mercury (Budha)", "Venus (Shukra)", "Mars (Mangal)",
+             "Jupiter (Guru)", "Saturn (Shani)", "Saturn (Shani)", "Jupiter (Guru)"]
+    elements = ["Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)",
+                "Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)",
+                "Fire (Agni)", "Earth (Prithvi)", "Air (Vayu)", "Water (Jala)"]
+    
+    l_elem = elements[lagna_idx]
+    l_lord = lords[lagna_idx]
+
     return {
-        "name": RASHIS[lagna_idx],
-        "element": elem,
-        "lord": lord,
-        "profile": prof,
-        "prediction": pred,
-        "remedies": rem
+        "element": f"{l_elem} Tattva",
+        "lord": l_lord,
+        "constitution": f"Rooted in {l_elem} tattva under the sovereign lordship of {l_lord}. Balanced vitality, solid physical stamina, and strong biological resistance.",
+        "persona": "Commanding, grounded, and composed. Conveys natural reliability and executive competence in professional interactions.",
+        "life_arc": f"With {l_lord} presiding over the first house of vitality, your career moves toward executive responsibility, institutional trust, and compounding respect.",
+        "remedies": f"• Practice morning Pranayama to align physical breath with mental vitality.\n• Strengthen Lagna lord through disciplined daily routines and ethical integrity.\n• Apply natural botanical scents or sandalwood to pulse points."
     }
 
+# ==============================================================================
+# TARA BALA COMPATIBILITY ENGINE
+# ==============================================================================
 def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
     offset = (partner_star_idx - user_star_idx) % 9
     tara_name, icon, quality = NAVTARA_NAMES[offset]
@@ -1114,7 +1159,7 @@ def render_page_about():
     """)
 
 # ==============================================================================
-# TAB 2: USER PROFILE
+# TAB 2: USER PROFILE (EXPANDED WITH RICH CHARACTERISTICS)
 # ==============================================================================
 def render_page_profile():
     global u_lat, u_lon
@@ -1199,9 +1244,10 @@ def render_page_profile():
                 st.session_state.edit_mode = True
                 st.rerun()
 
-    n_info = get_nakshatra_traits(chart_info["star_idx"], current_lang)
-    m_info = get_moon_rashi_details(chart_info["moon_rashi_idx"], current_lang)
-    l_info = get_lagna_details(chart_info["lagna_idx"], current_lang)
+    bio_nak = NAKSHATRA_BIO_DATA.get(chart_info["star_idx"], NAKSHATRA_BIO_DATA[2])
+    n_data = get_nakshatra_rich_data(chart_info["star_idx"])
+    m_data = get_rashi_rich_data(chart_info["moon_rashi_idx"])
+    l_data = get_lagna_rich_data(chart_info["lagna_idx"])
     
     moon_parts = chart_info['moon_rashi_name'].split()
     moon_p1 = moon_parts[0] if moon_parts else chart_info['moon_rashi_name']
@@ -1236,59 +1282,113 @@ def render_page_profile():
             </div>
         </div>
 
+        <!-- 1. DEEP DIVE: JANMA NAKSHATRA CHARACTERISTICS -->
         <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.1rem; color:#9a3412; margin-bottom:8px;">
-                ⭐ Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})
+            <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px;">
+                ⭐ 1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})
             </div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:10px; font-size:0.9rem;">
-                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🏛️ Deity:</b> {n_info['deity']}</div>
-                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🔱 Symbol:</b> {n_info['symbol']}</div>
-                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🌳 Tree:</b> {n_info['tree']}</div>
-                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🪐 Lord:</b> {n_info['lord']}</div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:8px; margin-bottom:12px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🏛️ Deity:</b> {bio_nak['deity']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🔱 Symbol:</b> {bio_nak['symbol']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🌳 Sacred Tree:</b> {bio_nak['tree']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🦅 Sacred Bird:</b> {bio_nak['bird']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🦁 Yoni Animal:</b> {bio_nak['animal']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #fed7aa;"><b>🪐 Planetary Lord:</b> {bio_nak['lord']}</div>
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#431407; margin-bottom:8px;">
-                <b>Core Archetype:</b> {n_info['personality']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #fed7aa; margin-bottom:8px;">
+                <b style="color:#9a3412; font-size:0.96rem;">🧠 Core Cognitive & Behavioral Archetype:</b>
+                <div style="font-size:0.92rem; line-height:1.65; color:#431407; margin-top:2px;">{n_data['core']}</div>
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#431407; margin-bottom:8px;">
-                <b>Life Trajectory:</b> {n_info['prediction']}
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px; border:1px solid #bbf7d0;">
+                    <b style="color:#15803d; font-size:0.92rem;">✨ Superpowers & Natural Assets:</b>
+                    <div style="font-size:0.89rem; line-height:1.55; color:#14532d; margin-top:2px;">{n_data['strengths']}</div>
+                </div>
+                <div style="background:#fff1f2; border-radius:10px; padding:10px; border:1px solid #fecdd3;">
+                    <b style="color:#be123c; font-size:0.92rem;">⚠️ Karmic Shadows & Blind Spots:</b>
+                    <div style="font-size:0.89rem; line-height:1.55; color:#881337; margin-top:2px;">{n_data['shadows']}</div>
+                </div>
             </div>
-            <div style="background:#ffffff; border-radius:8px; padding:10px; border-left:4px solid #f97316; font-size:0.92rem; color:#431407;">
-                <b>🪔 Prescribed Remedies:</b><br>{n_info['remedies']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #fed7aa; margin-bottom:8px; font-size:0.91rem; color:#431407;">
+                <b>💼 Peak Vocational & Executive Fields:</b><br>{n_data['careers']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #fed7aa; margin-bottom:8px; font-size:0.91rem; color:#431407;">
+                <b>🔮 Evolutionary Life Path Trajectory:</b><br>{n_data['prediction']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:8px; padding:10px 12px; border-left:4px solid #f97316; font-size:0.91rem; color:#431407;">
+                <b>🪔 Prescribed Vedic Nakshatra Remedies:</b><br>{n_data['remedies']}
             </div>
         </div>
 
+        <!-- 2. DEEP DIVE: MOON RASHI (CHANDRA RASHI) -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.1rem; color:#065f46; margin-bottom:8px;">
-                🌙 Moon Sign: {m_info['name']}
+            <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px;">
+                🌙 2. Moon Sign (Chandra Rashi): {chart_info['moon_rashi_name']}
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#14532d; margin-bottom:8px;">
-                <b>Emotional Mindset:</b> {m_info['profile']}
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #bbf7d0;"><b>🔥 Element:</b> {m_data['element']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #bbf7d0;"><b>🪐 Rashi Sovereign:</b> {m_data['ruler']}</div>
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#14532d; margin-bottom:8px;">
-                <b>Strategic Outlook:</b> {m_info['prediction']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #bbf7d0; margin-bottom:8px; font-size:0.92rem; color:#14532d; line-height:1.6;">
+                <b>🧠 Emotional Mindset & Subconscious Processing:</b><br>{m_data['psychology']}
             </div>
-            <div style="background:#ffffff; border-radius:8px; padding:10px; border-left:4px solid #10b981; font-size:0.92rem; color:#14532d;">
-                <b>🪔 Moon Remedies:</b><br>{m_info['remedies']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #bbf7d0; margin-bottom:8px; font-size:0.92rem; color:#14532d; line-height:1.6;">
+                <b>⚡ Stress Reflexes & Primal Coping Instincts:</b><br>{m_data['instincts']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #bbf7d0; margin-bottom:8px; font-size:0.92rem; color:#14532d; line-height:1.6;">
+                <b>❤️ Interpersonal Blueprint & Relationship Style:</b><br>{m_data['relations']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #bbf7d0; margin-bottom:8px; font-size:0.92rem; color:#14532d; line-height:1.6;">
+                <b>🌿 Bio-Rhythms & Physiological Vitality:</b><br>{m_data['health']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:8px; padding:10px 12px; border-left:4px solid #10b981; font-size:0.91rem; color:#14532d;">
+                <b>🪔 Prescribed Lunar Remedies:</b><br>{m_data['remedies']}
             </div>
         </div>
 
+        <!-- 3. DEEP DIVE: ASCENDANT (LAGNA) CONSTITUTION -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.1rem; color:#5b21b6; margin-bottom:8px;">
-                🌅 Ascendant (Lagna): {l_info['name']} at {chart_info['lagna_deg']}
+            <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px;">
+                🌅 3. Ascendant (Lagna): {chart_info['lagna_name']} at {chart_info['lagna_deg']}
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#3b0764; margin-bottom:8px;">
-                <b>Physical Constitution:</b> {l_info['profile']}
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px; font-size:0.9rem;">
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #ddd6fe;"><b>🌍 Lagna Tattva:</b> {l_data['element']}</div>
+                <div style="background:#ffffff; border-radius:10px; padding:8px 10px; border:1px solid #ddd6fe;"><b>👑 Ascendant Lord:</b> {l_data['lord']}</div>
             </div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#3b0764; margin-bottom:8px;">
-                <b>Executive Direction:</b> {l_info['prediction']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe; margin-bottom:8px; font-size:0.92rem; color:#3b0764; line-height:1.6;">
+                <b>🛡️ Physical Constitution, Vitality & Posture (Prakriti):</b><br>{l_data['constitution']}
             </div>
-            <div style="background:#ffffff; border-radius:8px; padding:10px; border-left:4px solid #8b5cf6; font-size:0.92rem; color:#3b0764;">
-                <b>🪔 Lagna Remedies:</b><br>{l_info['remedies']}
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe; margin-bottom:8px; font-size:0.92rem; color:#3b0764; line-height:1.6;">
+                <b>👔 Outward Persona & Negotiating Presence:</b><br>{l_data['persona']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border:1px solid #ddd6fe; margin-bottom:8px; font-size:0.92rem; color:#3b0764; line-height:1.6;">
+                <b>🚀 Evolutionary Life Arc & Asset Compounding:</b><br>{l_data['life_arc']}
+            </div>
+
+            <div style="background:#ffffff; border-radius:8px; padding:10px 12px; border-left:4px solid #8b5cf6; font-size:0.91rem; color:#3b0764;">
+                <b>🪔 Prescribed Ascendant Remedies:</b><br>{l_data['remedies']}
             </div>
         </div>
     </div>
     """)
 
+    # Tara Bala Widget
     with st.container(border=True):
         st.markdown("**🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)**")
         st.write("Select any counterpart's Janma Nakshatra to evaluate mutual cosmic resonance:")
@@ -1780,11 +1880,12 @@ def render_page_forecast():
     """)
 
 # ==============================================================================
-# ROUTER DISPATCHER
+# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
 # ==============================================================================
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
+    "navtara": render_page_profile,
     "numerology": render_page_numerology,
     "shani": render_page_shani,
     "live": render_page_live,
