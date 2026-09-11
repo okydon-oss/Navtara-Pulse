@@ -177,7 +177,7 @@ TRANSLATIONS = {
         "btn_shani": "🪐 Shani",
         "btn_live": "⚡ Live Prediction",
         "btn_forecast": "🗓️ 7 Days Prediction",
-        "btn_share": "📲 Share App",
+        "btn_mantra": "📿 Mantra Sadhana",
         "edit_details": "✏️ Edit Details",
         "save_details": "💾 Save Profile",
         "cancel": "Cancel",
@@ -207,7 +207,7 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनि पाया",
         "btn_live": "⚡ आज का फल",
         "btn_forecast": "🗓️ 7 दिवसीय फल",
-        "btn_share": "📲 शेयर करें",
+        "btn_mantra": "📿 मंत्र साधना",
         "edit_details": "✏️ विवरण बदलें",
         "save_details": "💾 सुरक्षित करें",
         "cancel": "रद्द करें",
@@ -886,7 +886,6 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
 # ==============================================================================
 # CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
 # ==============================================================================
-# 1. Read directly from client's browser URL state (persists on user's device/bookmark)
 client_params = st.query_params
 
 if "user_profile" not in st.session_state:
@@ -923,6 +922,9 @@ if "selected_transit_idx" not in st.session_state:
 if "japa_count" not in st.session_state:
     st.session_state.japa_count = 0
 
+if "mala_rounds" not in st.session_state:
+    st.session_state.mala_rounds = 0
+
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
@@ -937,8 +939,8 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock
-nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
+# Top Navigation Dock (4 + 3 Grid)
+nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
 with nav_r1_c1:
     p_type = "primary" if st.session_state.current_page == "about" else "secondary"
     if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
@@ -957,23 +959,29 @@ with nav_r1_c3:
         st.session_state.current_page = "numerology"
         st.rerun()
 
-nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
-with nav_r2_c1:
+with nav_r1_c4:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
     if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "shani"
         st.rerun()
 
-with nav_r2_c2:
+nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
+with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
     if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
 
-with nav_r2_c3:
+with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
     if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
+        st.rerun()
+
+with nav_r2_c3:
+    p_type = "primary" if st.session_state.current_page == "mantra" else "secondary"
+    if st.button(t("btn_mantra", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "mantra"
         st.rerun()
 
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
@@ -1276,7 +1284,6 @@ def render_page_profile():
                         "lon": resolved_lon
                     })
                     
-                    # Store on client's device via browser query parameters
                     st.query_params["name"] = new_name.strip()
                     st.query_params["dob"] = new_dob.strftime("%Y-%m-%d")
                     st.query_params["tob"] = final_tob_str
@@ -1285,7 +1292,6 @@ def render_page_profile():
                     st.query_params["lon"] = f"{resolved_lon:.4f}"
 
                     st.session_state.edit_mode = False
-                    # Direct user to the Add to Home Screen onboarding guide
                     st.session_state.current_page = "install_guide"
                     st.rerun()
             
@@ -1347,7 +1353,6 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 1. DEEP DIVE: JANMA NAKSHATRA CHARACTERISTICS -->
         <div style="background:#fffaf0; border-radius:14px; padding:14px; border:1.5px solid #fed7aa; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#9a3412; margin-bottom:8px;">
                 ⭐ 1. Janma Nakshatra: {chart_info['star_name']} (Pada {chart_info['pada']})
@@ -1391,7 +1396,6 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 2. DEEP DIVE: MOON RASHI (CHANDRA RASHI) -->
         <div style="background:#f0fdf4; border-radius:14px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#065f46; margin-bottom:8px;">
                 🌙 2. Moon Sign (Chandra Rashi): {chart_info['moon_rashi_name']}
@@ -1423,7 +1427,6 @@ def render_page_profile():
             </div>
         </div>
 
-        <!-- 3. DEEP DIVE: ASCENDANT (LAGNA) CONSTITUTION -->
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe; margin-bottom:1.15rem;">
             <div style="font-weight:900; font-size:1.15rem; color:#5b21b6; margin-bottom:8px;">
                 🌅 3. Ascendant (Lagna): {chart_info['lagna_name']} at {chart_info['lagna_deg']}
@@ -1453,7 +1456,6 @@ def render_page_profile():
     </div>
     """)
 
-    # Tara Bala Widget
     with st.container(border=True):
         st.markdown("**🤝 Nakshatra Synergy & Compatibility Evaluator (Tara Bala)**")
         st.write("Select any counterpart's Janma Nakshatra to evaluate mutual cosmic resonance:")
@@ -1577,7 +1579,7 @@ def render_page_numerology():
     """)
 
 # ==============================================================================
-# TAB 4: SHANI (DYNAMIC SADE SATI ENGINE)
+# TAB 4: SHANI (DYNAMIC SADE SATI ENGINE - CLEANED UP WITHOUT INLINE COUNTER)
 # ==============================================================================
 def render_page_shani():
     if not has_valid_profile:
@@ -1648,27 +1650,18 @@ def render_page_shani():
         <div style="background:#f5f3ff; border-radius:14px; padding:14px; border:1.5px solid #ddd6fe;">
             <div style="font-weight:900; font-size:1.05rem; color:#5b21b6; margin-bottom:6px;">🪔 Prescribed Remedies for Shani Alignment:</div>
             <div style="font-size:0.93rem; line-height:1.65; color:#3b0764;">
-                • Chant the <b>Shani Beej Mantra</b> 108 times on Saturday twilight facing West.<br>
+                • Recite the <b>Shani Beej Mantra</b> (ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः) 108 times on Saturday twilight facing West.<br>
                 • Recite the <b>Hanuman Chalisa</b> daily to channel inner vitality and protect emotional equilibrium.<br>
-                • Donate mustard oil, black sesame seeds, or blue cloth to laborers or the needy on Saturdays.
+                • Donate mustard oil, black sesame seeds, or dark blankets to laborers or the needy on Saturdays.
             </div>
         </div>
     </div>
     """)
 
-    with st.container(border=True):
-        st.markdown("**📿 Interactive Digital Japa Mala Counter (108 Beads)**")
-        progress_pct = min(1.0, st.session_state.japa_count / 108.0)
-        st.progress(progress_pct, text=f"Count: {st.session_state.japa_count} / 108")
-        c_tap, c_reset = st.columns([2, 1])
-        with c_tap:
-            if st.button("📿 Tap (+1)", type="primary", use_container_width=True):
-                st.session_state.japa_count = (st.session_state.japa_count % 108) + 1
-                st.rerun()
-        with c_reset:
-            if st.button("🔄 Reset", use_container_width=True):
-                st.session_state.japa_count = 0
-                st.rerun()
+    st.write("")
+    if st.button("📿 Open Dedicated Digital Japa Counter", type="primary", use_container_width=True):
+        st.session_state.current_page = "mantra"
+        st.rerun()
 
 # ==============================================================================
 # TAB 5: LIVE PREDICTION
@@ -1945,6 +1938,101 @@ def render_page_forecast():
     """)
 
 # ==============================================================================
+# TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
+# ==============================================================================
+def render_page_mantra():
+    render_html("""
+    <div class="light-card-shani">
+        <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:0.4rem;">
+            📿 Japa Sadhana & Vedic Mantra Sanctuary
+        </div>
+        <div style="font-size:0.93rem; color:#475569; line-height:1.6;">
+            Select a personalized planetary, star, or transit mantra to view its authentic Sanskrit verse, 
+            meaning, and chant with the 108-bead interactive digital Mala counter.
+        </div>
+    </div>
+    """)
+
+    mantra_catalog = {
+        "Maha Mrityunjaya Mantra (Supreme Protection)": {
+            "sanskrit": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥",
+            "translit": "Om Tryambakam Yajamahe Sugandhim Pushti-Vardhanam |\nUrvarukamiva Bandhanan-Mrityor-Mukshiya Maamritat ||",
+            "meaning": "We meditate on the Three-Eyed Lord Shiva, who permeates and nourishes all beings. May He liberate us from the bonds of fear and death into immortality.",
+            "rules": "• Best chanted at dawn or dusk facing East or North.\n• Use a Rudraksha Mala.\n• Pacifies severe transit friction (Vipat, Vadha) and shields cellular vitality."
+        },
+        "Shani Beej Mantra (Saturn Pacification)": {
+            "sanskrit": "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥",
+            "translit": "Om Praam Preem Proum Sah Shanaishcharaya Namah ||",
+            "meaning": "Salutations to Lord Saturn, the dispenser of karmic justice. Pacifies delays, chronic exhaustion, and aligns personal discipline during Sade Sati / Dhaiya.",
+            "rules": "• Best chanted at twilight facing West on Saturdays.\n• Use a dark Rudraksha or black tourmaline mala.\n• Sit on an indigo or wool asana."
+        },
+        "Gayatri Mantra (Solar Illumination)": {
+            "sanskrit": "ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्॥",
+            "translit": "Om Bhur Bhuvah Swah Tat Savitur Varenyam Bhargo Devasya Dheemahi Dhiyo Yo Nah Prachodayat ||",
+            "meaning": "We meditate upon the supreme divine brilliance of the Sun who illuminates the inner cosmos. May that divine light awaken and inspire our intellect.",
+            "rules": "• Best chanted during Brahma Muhurta or at sunrise facing East.\n• Use a Tulsi or Sandalwood Mala.\n• Enhances mental clarity, vitality, and cellular healing."
+        },
+        "Vishnu Sahasranama Shloka (Aura Shield)": {
+            "sanskrit": "ॐ नमो भगवते वासुदेवाय॥",
+            "translit": "Om Namo Bhagavate Vasudevaya ||",
+            "meaning": "Salutations to the Supreme Preserver of the Cosmos who dwells within all living hearts.",
+            "rules": "• Chant in the morning facing East.\n• Harmonizes favorable transits (Sampat, Sadhana, Ati-Mitra).\n• Brings peace to the home and liquid capital stability."
+        }
+    }
+
+    if has_valid_profile:
+        bio_nak = NAKSHATRA_BIO_DATA.get(chart_info["star_idx"], NAKSHATRA_BIO_DATA[2])
+        deity_name = bio_nak["deity"].split()[0]
+        nak_key = f"Janma Nakshatra Mantra ({chart_info['star_name']})"
+        mantra_catalog[nak_key] = {
+            "sanskrit": f"ॐ {deity_name} नमः॥",
+            "translit": f"Om {deity_name} Namah ||",
+            "meaning": f"Directly harmonizes the natal electromagnetic bio-frequency of your birth star governed by {bio_nak['deity']}.",
+            "rules": f"• Chant 11, 27, or 108 times daily in the morning.\n• Protects and waters the sacred Nakshatra tree ({bio_nak['tree']}).\n• Enhances natural intuition and executive luck."
+        }
+
+    selected_mantra = st.selectbox("Select Mantra to Chant:", options=list(mantra_catalog.keys()))
+    m_info = mantra_catalog[selected_mantra]
+
+    render_html(f"""
+    <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:14px; padding:16px; margin:14px 0; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
+        <div style="font-size:1.35rem; font-weight:900; color:#1e1b4b; text-align:center; font-family:serif; line-height:1.6; white-space:pre-line;">
+            {m_info['sanskrit']}
+        </div>
+        <div style="font-size:0.93rem; color:#6d28d9; text-align:center; font-style:italic; margin-top:8px; line-height:1.5; white-space:pre-line;">
+            {m_info['translit']}
+        </div>
+        <hr style="margin:12px 0; border:none; border-top:1px solid #ede9fe;">
+        <div style="font-size:0.92rem; color:#334155; line-height:1.65;">
+            <b>📜 Meaning:</b> {m_info['meaning']}<br><br>
+            <b>🧘 Sadhana Guidelines:</b><br>{m_info['rules'].replace(chr(10), '<br>')}
+        </div>
+    </div>
+    """)
+
+    # Interactive 108-Bead Mala Counter
+    with st.container(border=True):
+        st.markdown(f"### 📿 Digital Mala: **{st.session_state.japa_count} / 108** Beads")
+        progress_val = min(1.0, st.session_state.japa_count / 108.0)
+        st.progress(progress_val, text=f"Mala Progress: {int(progress_val * 100)}% | Completed Malas: {st.session_state.mala_rounds}")
+
+        col_tap, col_reset = st.columns([2, 1])
+        with col_tap:
+            if st.button("📿 Tap Bead (+1)", type="primary", use_container_width=True):
+                st.session_state.japa_count += 1
+                if st.session_state.japa_count >= 108:
+                    st.session_state.japa_count = 0
+                    st.session_state.mala_rounds += 1
+                    st.balloons()
+                    st.success("🎉 Om Shanti! You have completed 1 full Mala (108 Chants). May the vibration bring peace and protection!")
+                st.rerun()
+        with col_reset:
+            if st.button("🔄 Reset Counter", use_container_width=True):
+                st.session_state.japa_count = 0
+                st.session_state.mala_rounds = 0
+                st.rerun()
+
+# ==============================================================================
 # ROUTER DISPATCHER: RENDER THE SELECTED PAGE
 # ==============================================================================
 PAGES = {
@@ -1954,6 +2042,7 @@ PAGES = {
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
+    "mantra": render_page_mantra,
     "install_guide": render_page_install_guide,
 }
 
