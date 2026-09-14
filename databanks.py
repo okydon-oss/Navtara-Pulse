@@ -1,3 +1,4 @@
+import streamlit as st
 # databanks.py - Exhaustive Dictionaries & Encyclopedias
 
 NAKSHATRAS = [
