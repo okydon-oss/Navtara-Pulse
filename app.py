@@ -22,41 +22,8 @@ except Exception:
     HAS_SWISSEPH = False
 
 # Import data banks from databanks.py
-from databanks import (
-    NAKSHATRAS,
-    RASHIS,
-    NAVTARA_NAMES,
-    SHANI_VAHANS,
-    CHALDEAN_MAP,
-    NUM_PLANET_NAMES,
-    CITY_COORDINATES,
-    NAKSHATRA_BIO_DATA,
-    NAKSHATRA_RICH_PROFILES,
-    RASHI_RICH_PROFILES,
-    LAGNA_RICH_PROFILES,
-    SHANI_PAYA_ENCYCLOPEDIA,
-    SADE_SATI_PHASE_ENCYCLOPEDIA,
-    DHAIYA_ENCYCLOPEDIA,
-    NAVAGRAHA_BEEJ_MANTRAS,
-    NAKSHATRA_BEEJ_MANTRAS,
-    calculate_birth_chart,
-    calculate_shani_paya,
-    calculate_shani_sadesati_dhaiya,
-    calculate_shani_vahan,
-    calculate_numerology,
-    get_personal_day_vibe,
-    get_numerology_life_domains,
-    get_numerology_avoidance,
-    calculate_daily_muhurtas,
-    get_current_nakshatra_window,
-    get_7_day_moon_transits,
-    get_detailed_day_insights,
-    get_tara_bala_info,
-    resolve_location_name,
-    get_nakshatra_rich_data,
-    get_rashi_rich_data,
-    get_lagna_rich_data
-)
+import databanks as db
+from databanks import *
 
 # Configure Streamlit page settings
 st.set_page_config(
