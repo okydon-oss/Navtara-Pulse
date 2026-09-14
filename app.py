@@ -5,18 +5,42 @@ import json
 import os
 import math
 
+# Geocoding engine imports
 try:
     from geopy.geocoders import Nominatim
+    from geopy.exc import GeocoderTimedOut, GeocoderServiceError
     HAS_GEOPY = True
 except ImportError:
     HAS_GEOPY = False
 
+# Swiss Ephemeris imports
 try:
     import swisseph as swe
     HAS_SWISSEPH = True
     swe.set_sid_mode(swe.SIDM_LAHIRI)
 except Exception:
     HAS_SWISSEPH = False
+
+# Import data banks from databanks.py
+from databanks import (
+    NAKSHATRAS,
+    RASHIS,
+    NAVTARA_NAMES,
+    SHANI_VAHANS,
+    CHALDEAN_MAP,
+    NUM_PLANET_NAMES,
+    CITY_COORDINATES,
+    NAKSHATRA_BIO_DATA,
+    NAKSHATRA_RICH_PROFILES,
+    RASHI_RICH_PROFILES,
+    LAGNA_RICH_PROFILES,
+    SHANI_PAYA_ENCYCLOPEDIA,
+    SADE_SATI_PHASE_ENCYCLOPEDIA,
+    DHAIYA_ENCYCLOPEDIA,
+    get_nakshatra_rich_data,
+    get_rashi_rich_data,
+    get_lagna_rich_data
+)
 
 # Configure Streamlit page settings
 st.set_page_config(
@@ -106,67 +130,6 @@ render_html("""
 </style>
 """)
 
-NAKSHATRAS = [
-    "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
-    "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
-    "Hasta", "Chitra", "Swati", "Vishakha", "Anuradha", "Jyeshtha",
-    "Mula", "Purva Ashadha", "Uttara Ashadha", "Shravana", "Dhanishta", "Shatabhisha",
-    "Purva Bhadrapada", "Uttara Bhadrapada", "Revati"
-]
-
-RASHIS = [
-    "Mesha (Aries)", "Vrishabha (Taurus)", "Mithuna (Gemini)", "Karka (Cancer)",
-    "Simha (Leo)", "Kanya (Virgo)", "Tula (Libra)", "Vrishchika (Scorpio)",
-    "Dhanu (Sagittarius)", "Makara (Capricorn)", "Kumbha (Aquarius)", "Meena (Pisces)"
-]
-
-NAVTARA_NAMES = [
-    ("Janma (Birth/Identity)", "🌱", "Sensitive & Foundational"),
-    ("Sampat (Wealth/Gain)", "🟢", "Highly Auspicious & Material Abundance"),
-    ("Vipat (Adversity/Friction)", "🔴", "Caution & Resistance"),
-    ("Kshema (Well-being/Comfort)", "🟢", "Peace, Protection & Sustenance"),
-    ("Pratyari (Obstacles/Delays)", "🔴", "High Resistance & Delays"),
-    ("Sadhana (Accomplishment)", "🟢", "Success, Discipline & Mastery"),
-    ("Vadha (Destruction/Loss)", "🔴", "Heavy Friction & Caution"),
-    ("Mitra (Friendship/Allies)", "🟢", "Cordiality & Cooperative Harmony"),
-    ("Ati-Mitra (Supreme Alliance)", "🟢🟢", "Supreme Synergy & Deep Expansion")
-]
-
-SHANI_VAHANS = {
-    1: {"name": "Gaja (Elephant / हस्ती)", "type": "Highly Auspicious (अति शुभ)", "speed": "Dignified & Steady", "desc": "Guaranteed wealth expansion, societal respect, sound health, and enduring peace."},
-    2: {"name": "Ashwa (Horse / अश्व)", "type": "Progressive & Dynamic (शुभ)", "speed": "Rapid & Victorious", "desc": "Brisk progress, victory in competitive undertakings, and sudden career momentum."},
-    3: {"name": "Simha (Lion / सिंह)", "type": "Victorious & Authoritative (शुभ)", "speed": "Commanding & Decisive", "desc": "Dominance over competitors, professional promotion, and clear leadership recognition."},
-    4: {"name": "Gardabha (Donkey / गर्दभ)", "type": "Demanding & Heavy (कठिन)", "speed": "Slow & Laborious", "desc": "Heavy labor, delayed recognition, and testing of patient endurance."},
-    5: {"name": "Kukkuta (Rooster / कुक्कुट)", "type": "Restless & Mixed (मिश्रित)", "speed": "Impulsive & Alert", "desc": "Sudden squabbles, mental restlessness, and unnecessary emotional volatility."},
-    6: {"name": "Shvana (Dog / श्वान)", "type": "Vigilant & Challenging (संघर्षमय)", "speed": "Guarded & Suspicious", "desc": "Heightened anxiety, false accusations, and risk of misunderstandings."},
-    7: {"name": "Jambuka (Jackal / जम्बुक)", "type": "Difficult & Testing (कठिन)", "speed": "Hesitant & Cautious", "desc": "Unexpected financial leaks, health dips, and domestic disharmony."},
-    8: {"name": "Kaka (Crow / काक)", "type": "High Friction (अशुभ)", "speed": "Disruptive & Harsh", "desc": "Mental distress, family strife, and high risk of wasted expenditure."},
-    9: {"name": "Mayura (Peacock / मयूर)", "type": "Auspicious & Graceful (शुभ)", "speed": "Harmonious & Joyful", "desc": "Artistic success, mental serenity, sudden fortune, and creative joy."}
-}
-
-CHALDEAN_MAP = {
-    'A': 1, 'I': 1, 'J': 1, 'Q': 1, 'Y': 1,
-    'B': 2, 'K': 2, 'R': 2,
-    'C': 3, 'G': 3, 'L': 3, 'S': 3,
-    'D': 4, 'M': 4, 'T': 4,
-    'E': 5, 'H': 5, 'N': 5, 'X': 5,
-    'U': 6, 'V': 6, 'W': 6,
-    'O': 7, 'Z': 7,
-    'F': 8, 'P': 8
-}
-
-NUM_PLANET_NAMES = {
-    1: {"en": "Sun (Surya / सूर्य)", "hi": "सूर्य (Sun)"},
-    2: {"en": "Moon (Chandra / चन्द्र)", "hi": "चन्द्र (Moon)"},
-    3: {"en": "Jupiter (Brihaspati / गुरु)", "hi": "गुरु (Jupiter)"},
-    4: {"en": "Rahu (North Node / राहु)", "hi": "राहु (Rahu)"},
-    5: {"en": "Mercury (Budha / बुध)", "hi": "बुध (Mercury)"},
-    6: {"en": "Venus (Shukra / शुक्र)", "hi": "शुक्र (Venus)"},
-    7: {"en": "Ketu (South Node / केतु)", "hi": "केतु (Ketu)"},
-    8: {"en": "Saturn (Shani / शनि)", "hi": "शनि (Saturn)"},
-    9: {"en": "Mars (Mangal / मंगल)", "hi": "मंगल (Mars)"}
-}
-
 TRANSLATIONS = {
     "en": {
         "app_title": "✨ Navtara Pulse",
@@ -233,646 +196,172 @@ TRANSLATIONS = {
 def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
-CITY_COORDINATES = {
-    "Delhi / New Delhi, India": (28.6139, 77.2090),
-    "Mumbai, Maharashtra, India": (19.0760, 72.8777),
-    "Chhatrapati Sambhajinagar (Aurangabad), Maharashtra, India": (19.8762, 75.3433),
-    "Pune, Maharashtra, India": (18.5204, 73.8567),
-    "Nagpur, Maharashtra, India": (21.1458, 79.0882),
-    "Bengaluru, Karnataka, India": (12.9716, 77.5946),
-    "Hyderabad, Telangana, India": (17.3850, 78.4867),
-    "Chennai, Tamil Nadu, India": (13.0827, 80.2707),
-    "Kolkata, West Bengal, India": (22.5726, 88.3639),
-    "Ahmedabad, Gujarat, India": (23.0225, 72.5714),
-    "Surat, Gujarat, India": (21.1702, 72.8311),
-    "Jaipur, Rajasthan, India": (26.9124, 75.7873),
-    "Lucknow, Uttar Pradesh, India": (26.8467, 80.9462),
-    "Varanasi, Uttar Pradesh, India": (25.3176, 82.9739),
-    "Patna, Bihar, India": (25.5941, 85.1376),
-    "Bhopal, Madhya Pradesh, India": (23.2599, 77.4126),
-    "Indore, Madhya Pradesh, India": (22.7196, 75.8577),
-    "Chandigarh, India": (30.7333, 76.7794),
-    "Dubai, UAE": (25.2048, 55.2708),
-    "London, UK": (51.5074, -0.1278),
-    "New York, USA": (40.7128, -74.0060),
-    "San Francisco, USA": (37.7749, -122.4194),
-    "Singapore": (1.3521, 103.8198),
-    "Toronto, Canada": (43.6532, -79.3832)
-}
+# DYNAMIC LOCATION RESOLVER (Handles ANY city, town, village or direct coordinates)
+def resolve_location_name(place_query: str):
+    if not place_query or not place_query.strip():
+        return 28.6139, 77.2090, "New Delhi, India"
+    
+    clean_q = place_query.strip()
+    
+    # 1. Direct Decimal Coordinates Check (e.g. "19.8762, 75.3433")
+    if "," in clean_q:
+        parts = clean_q.split(",")
+        if len(parts) == 2:
+            try:
+                lat = float(parts[0].strip())
+                lon = float(parts[1].strip())
+                if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
+                    return lat, lon, clean_q
+            except ValueError:
+                pass
 
-NAKSHATRA_BIO_DATA = {
-    1: {"deity": "Ashwini Kumaras (Celestial Healers)", "symbol": "Horse's Head", "tree": "Kuchila / Strychnine (विषमुष्टी)", "bird": "Shikra / Wild Hawk", "animal": "Horse (Ashwa / अश्व)", "lord": "Ketu"},
-    2: {"deity": "Lord Yama (Dharma & Cosmic Justice)", "symbol": "Yoni / Creative Triangle", "tree": "Amla / Indian Gooseberry (धात्री)", "bird": "Crow (काक)", "animal": "Elephant (Gaja / गज)", "lord": "Venus (Shukra)"},
-    3: {"deity": "Agni (God of Fire & Transformation)", "symbol": "Razor / Flame / Knife", "tree": "Gular / Cluster Fig (उदुम्बर)", "bird": "Peacock (मयूर)", "animal": "Sheep / Ram (मेष)", "lord": "Sun (Surya)"},
-    4: {"deity": "Prajapati / Lord Brahma (Creator)", "symbol": "Chariot / Cart / Temple", "tree": "Jamun / Black Plum (जम्बू)", "bird": "Owl (उलूक)", "animal": "Serpent (Sarpa / सर्प)", "lord": "Moon (Chandra)"},
-    5: {"deity": "Soma (God of Nectar & Vitality)", "symbol": "Deer's Head", "tree": "Khair / Acacia Catechu (खदिर)", "bird": "Batar / Francolin", "animal": "Serpent (Sarpa / सर्प)", "lord": "Mars (Mangal)"},
-    6: {"deity": "Rudra (Storm & Destructive Transformation)", "symbol": "Teardrop / Diamond / Jewel", "tree": "Agarwood / Krishna Agaru (अगरु)", "bird": "Andal / Red-wattled Lapwing", "animal": "Dog (Shwana / श्वान)", "lord": "Rahu"},
-    7: {"deity": "Aditi (Cosmic Mother of Gods)", "symbol": "Bow and Quiver of Arrows", "tree": "Vamsha / Sacred Bamboo (वंश)", "bird": "Swan (Hamsa / हंस)", "animal": "Cat (Marjara / मार्जार)", "lord": "Jupiter (Guru)"},
-    8: {"deity": "Brihaspati (Guru of the Devatas)", "symbol": "Cow's Udder / Lotus / Wheel", "tree": "Peepal / Sacred Fig (अश्वत्थ)", "bird": "Sea Crow / जलकाक", "animal": "Goat / Sheep (Aja / अज)", "lord": "Saturn (Shani)"},
-    9: {"deity": "Nagas (Divine Serpent Guardians)", "symbol": "Coiled Serpent", "tree": "Nagkeshar / Ashoka (नागकेशर)", "bird": "Small Owl (उलूक)", "animal": "Cat (Marjara / मार्जार)", "lord": "Mercury (Budha)"},
-    10: {"deity": "Pitris (Sacred Ancestors & Lineage)", "symbol": "Royal Throne / Palanquin", "tree": "Banyan / Bargad (वटवृक्ष)", "bird": "Male Eagle (चील)", "animal": "Rat (Mushaka / मूषक)", "lord": "Ketu"},
-    11: {"deity": "Bhaga (God of Fortune & Prosperity)", "symbol": "Front Legs of Couch / Hammock", "tree": "Palasa / Flame of Forest (पलाश)", "bird": "Falcon (शिशुक)", "animal": "Female Rat (मूषक)", "lord": "Venus (Shukra)"},
-    12: {"deity": "Aryaman (God of Honor, Vows & Truth)", "symbol": "Back Legs of Couch / Bed", "tree": "Plaksha / Rudraksha (प्लक्ष)", "bird": "Beetle / Crow", "animal": "Bull / Cow (वृषभ)", "lord": "Sun (Surya)"},
-    13: {"deity": "Savitur (Solar Awakening & Energy)", "symbol": "Open Hand / Palm Blessing", "tree": "Chameli / Wild Jasmine (चमेली)", "bird": "Vulture / Hawk", "animal": "Female Buffalo (महिषी)", "lord": "Moon (Chandra)"},
-    14: {"deity": "Vishwakarma (Divine Cosmic Architect)", "symbol": "Bright Pearl / Polished Gem", "tree": "Bilva / Bael Patra (बिल्व)", "bird": "Woodpecker (काष्ठकूट)", "animal": "Female Tiger (व्याघ्र)", "lord": "Mars (Mangal)"},
-    15: {"deity": "Vayu (God of Cosmic Wind & Breath)", "symbol": "Young Sprout swaying in Wind / Coral", "tree": "Arjuna (अर्जुन वृक्ष)", "bird": "Pigeon / Sparrow (कपोत)", "animal": "Male Buffalo (महिष)", "lord": "Rahu"},
-    16: {"deity": "Indragni (Alliance of Power & Fire)", "symbol": "Triumphal Arch / Potter's Wheel", "tree": "Wood Apple / Kaith (कपित्थ)", "bird": "Red Falcon (श्येन)", "animal": "Male Tiger (व्याघ्र)", "lord": "Jupiter (Guru)"},
-    17: {"deity": "Mitra (God of Friendship & Devotion)", "symbol": "Staff / Lotus / Arc of Victory", "tree": "Bakula / Maulsari (बकुल)", "bird": "Nightingale / Peacock", "animal": "Female Deer (मृग)", "lord": "Saturn (Shani)"},
-    18: {"deity": "Indra (Supreme King of Heaven)", "symbol": "Round Talisman / Royal Umbrella", "tree": "Semal / Silk Cotton (शाल्मली)", "bird": "Brahminy Kite (गरुड)", "animal": "Male Deer (मृग)", "lord": "Mercury (Budha)"},
-    19: {"deity": "Nirriti (Goddess of Root Realities)", "symbol": "Tied Bundle of Roots / Elephant Goad", "tree": "Sal / Sarjaka (शाल वृक्ष)", "bird": "Red Vulture (गीध)", "animal": "Male Dog (श्वान)", "lord": "Ketu"},
-    20: {"deity": "Apah (Divine Waters of Invincibility)", "symbol": "Winnowing Basket / Fan", "tree": "Ashoka / Rattan (अशोक)", "bird": "Francolin / Hawk", "animal": "Male Monkey (वानर)", "lord": "Venus (Shukra)"},
-    21: {"deity": "Vishwadevas (Universal Cosmic Laws)", "symbol": "Elephant's Tusk / Small Cot", "tree": "Jackfruit / Phanas (पनस)", "bird": "Stork / सारस", "animal": "Male Mongoose (नकुल)", "lord": "Sun (Surya)"},
-    22: {"deity": "Lord Vishnu (Cosmic Preserver)", "symbol": "Three Footprints / Ear of Listening", "tree": "Aak / Rui / Calotropis (मदार)", "bird": "Francolin / Kapinjala", "animal": "Female Monkey (वानर)", "lord": "Moon (Chandra)"},
-    23: {"deity": "Eight Vasus (Elemental Energy Lords)", "symbol": "Mridangam / Drum / Flute", "tree": "Shami / Khejri (शमी वृक्ष)", "bird": "Golden Bee / Peacock", "animal": "Female Lion (सिंह)", "lord": "Mars (Mangal)"},
-    24: {"deity": "Varuna (God of Cosmic Oceans & Truth)", "symbol": "Hundred Healers / Empty Circle", "tree": "Kadamba (कदम्ब)", "bird": "Raven / Koel (काक)", "animal": "Female Horse (अश्व)", "lord": "Rahu"},
-    25: {"deity": "Aja Ekapada (One-Footed Cosmic Fire)", "symbol": "Two Front Legs of Bed / Crossed Swords", "tree": "Mango / Neem (आम्र/निम्ब)", "bird": "Avocet / Peacock", "animal": "Male Lion (सिंह)", "lord": "Jupiter (Guru)"},
-    26: {"deity": "Ahirbudhnya (Serpent of Deep Depths)", "symbol": "Two Back Legs of Bed / Serpent in Water", "tree": "Neem / Pithari (निम्ब)", "bird": "Kotwal / Rainbird", "animal": "Female Cow (गौ)", "lord": "Saturn (Shani)"},
-    27: {"deity": "Pushan (Nourisher of Safe Journeys)", "symbol": "Pair of Fish / Small Drum", "tree": "Mahua (मधूक)", "bird": "Demoiselle Crane / Sparrow", "animal": "Female Elephant (हस्तिनी)", "lord": "Mercury (Budha)"}
-}
+    # 2. Fast Offline Cache Check
+    for name, coords in CITY_COORDINATES.items():
+        if clean_q.lower() in name.lower() or any(part.strip().lower() in name.lower() for part in clean_q.split(',')):
+            return coords[0], coords[1], name
 
-# ALL 27 NAKSHATRAS EXPLICITLY DEFINED
-NAKSHATRA_RICH_PROFILES = {
-    1: {
-        "core": "Pioneering initiator, rapid problem solver, intuitive healer, and swift executive.",
-        "strengths": "Instant crisis responsiveness, fearless courage to break new ground, charismatic optimism, and high metabolic recovery speed.",
-        "shadows": "Restlessness, impulsiveness, leaving half-finished projects when adrenaline wanes, and impatience with slower teammates.",
-        "careers": "Emergency response, surgical/medical leadership, technological startups, aviation, high-speed project turnaround.",
-        "prediction": "Dynamic early rise, with structural tests around age 28-30 leading to lasting executive distinction and institutional authority.",
-        "remedies": "• Chant Om Ashwibhyam Namah 11 times every morning.\n• Feed green fodder to horses or cows on Tuesdays.\n• Plant and nurture a Strychnine (Kuchila) tree."
-    },
-    2: {
-        "core": "Enduring moral resilience, deep magnetic charisma, uncompromising principles, and capacity to thrive under immense pressure.",
-        "strengths": "Unshakeable loyalty, profound ability to manage high-stakes turnarounds, emotional fearlessness, and calm authority during restructuring.",
-        "shadows": "All-or-nothing emotional intensity, stubborn resistance to compromise, holding emotional grudges, and taking on extreme burdens alone.",
-        "careers": "Executive management, heavy industry, judicial leadership, forensic investigations, asset management, and creative transformation.",
-        "prediction": "Major life transformations every 7-9 years. Obstacles faced in early career evolve into permanent asset ownership and executive authority in mature years.",
-        "remedies": "• Recite the Maha Mrityunjaya Mantra 11 times daily.\n• Water an Amla tree regularly.\n• Feed stray dogs or crows on Tuesdays and Fridays to balance ancestral weight."
-    },
-    3: {
-        "core": "Transformative intellect, razor-sharp discernment, and relentless pursuit of factual truth.",
-        "strengths": "Uncompromising analytical clarity, piercing through superficial pretense, formidable debate skills, and courageous technical leadership.",
-        "shadows": "Sharp or caustic speech during anger, hyper-critical perfectionism, and internal friction from suppressed irritation.",
-        "careers": "Defense, metallurgy, software engineering, investigative journalism, precision manufacturing, and corporate auditing.",
-        "prediction": "Early disciplined labor lays the foundation for formidable command and senior leadership in mid-to-late life.",
-        "remedies": "• Offer water mixed with red sandalwood to Surya Dev.\n• Recite the Gayatri Mantra 24 times daily.\n• Nurture a Cluster Fig (Gular) tree."
-    },
-    4: {
-        "core": "Creative charm, material refinement, persistent focus on asset compounding, and magnetic aesthetic taste.",
-        "strengths": "Exceptional patience, capacity to cultivate tangible wealth, refined persuasive speech, and unwavering loyalty in long-term relationships.",
-        "shadows": "Possessiveness, reluctance to adapt to sudden disruptions, and over-indulgence in sensory comfort.",
-        "careers": "Luxury commodities, architecture, finance, agriculture, performing arts, and hospitality leadership.",
-        "prediction": "Continuous compounding of assets across life, peaking in major material prosperity and domestic fulfillment after age 32.",
-        "remedies": "• Offer raw milk on a Shiva Lingam on Mondays.\n• Water a Jamun tree regularly.\n• Drink clean water from a silver cup."
-    },
-    5: {
-        "core": "Perpetual curiosity, versatile communicative intelligence, analytical agility, and restless exploratory spirit.",
-        "strengths": "Brilliant research instincts, mental flexibility, networking ease, and ability to balance multiple complex projects.",
-        "shadows": "Over-thinking, chronic second-guessing, mental restlessness, and susceptibility to sensory distractions.",
-        "careers": "Telecommunications, market research, journalism, travel and logistics, software architecture, and advisory.",
-        "prediction": "Dynamic exploratory phases during youth consolidate into senior consulting and strategic advisory roles by mid-career.",
-        "remedies": "• Chant Om Somaya Namah 11 times on Wednesdays.\n• Water an Acacia Catechu (Khair) tree.\n• Donate green lentils or green clothing to students."
-    },
-    6: {
-        "core": "Storm-like intellectual intensity, emotional depth, transformative breakthrough power, and crisis navigation.",
-        "strengths": "Piercing through illusions, fearlessness during organizational crises, deep technological curiosity, and resilience.",
-        "shadows": "Cynicism, destructive emotional outbursts, holding onto deep-seated grief, and creating self-imposed friction.",
-        "careers": "Advanced technology, cybersecurity, data science, environmental engineering, psychotherapy, and investigative analysis.",
-        "prediction": "Restructuring life crises forge exceptional wisdom, leading to radical breakthroughs and intellectual sovereignty in mature years.",
-        "remedies": "• Chant Om Namah Shivaya 108 times at twilight.\n• Water an Agarwood tree.\n• Feed stray animals or birds on Saturdays."
-    },
-    7: {
-        "core": "Benevolent wisdom, profound restorative resilience, pedagogical leadership, and philosophical balance.",
-        "strengths": "Capacity to bounce back from any setback, inspiring optimism in teams, deep ethical grounding, and generous mentorship.",
-        "shadows": "Over-idealism, taking on others' emotional problems, and hesitation to take tough disciplinary decisions.",
-        "careers": "Higher education, jurisprudence, civil administration, counseling, publishing, and spiritual philanthropy.",
-        "prediction": "Steady, compounding reputation. Life brings multiple opportunities for renewal, leading to lasting prestige and ancestral honor.",
-        "remedies": "• Chant Om Brihaspataye Namah 19 times on Thursdays.\n• Water a sacred Bamboo tree.\n• Donate yellow chickpeas or turmeric to elders."
-    },
-    8: {
-        "core": "Nourishing discipline, institutional loyalty, deep patience, and unshakeable ethical backbone.",
-        "strengths": "Organizational stamina, ability to support large ecosystems, supreme reliability, and grounded crisis stewardship.",
-        "shadows": "Rigid traditionalism, self-righteousness, and stubborn resistance to new methods.",
-        "careers": "Public administration, institutional governance, social welfare, core manufacturing, banking, and executive mentorship.",
-        "prediction": "Gradual, unstoppable ascent. The golden period begins after age 36, establishing permanent societal respect.",
-        "remedies": "• Water a sacred Peepal tree on Saturdays without touching it.\n• Recite the Shani Beej Mantra 21 times.\n• Feed whole-wheat bread to crows."
-    },
-    9: {
-        "core": "Hypnotic psychological insight, strategic shrewdness, deep esoteric intuition, and tactical mastery.",
-        "strengths": "Ability to read unspoken intentions, razor-sharp intellect, independence, and formidable protective instincts.",
-        "shadows": "Chronic suspicion, secretive behavior, venomous speech when betrayed, and emotional isolation.",
-        "careers": "Diplomacy, strategic intelligence, corporate defense, pharmacology, psychoanalysis, and contract negotiation.",
-        "prediction": "Early testing in interpersonal trusts evolves into supreme strategic acumen and mastery over complex systems.",
-        "remedies": "• Offer milk and water to Lord Shiva on Mondays.\n• Water a Nagkeshar tree.\n• Maintain strict ethical honesty in speech."
-    },
-    10: {
-        "core": "Ancestral authority, regal dignity, traditional pride, and executive commanding presence.",
-        "strengths": "Natural leadership charisma, noble principles, respect for legacy and lineage, and protective stewardship of teams.",
-        "shadows": "Ego sensitivity, resentment of subordinate feedback, and burden of high familial expectations.",
-        "careers": "Corporate governance, politics, legacy business stewardship, heritage conservation, and senior civil service.",
-        "prediction": "Strong generational blessings. Life brings executive authority and enduring family honor in mature years.",
-        "remedies": "• Perform Pitru Tarpana or offer clean water facing South.\n• Water a sacred Banyan (Bargad) tree.\n• Donate black sesame seeds on Amavasya."
-    },
-    11: {
-        "core": "Charismatic magnetism, social elegance, creative luxury orientation, and pursuit of prosperity.",
-        "strengths": "Diplomatic warmth, natural aesthetic eye, relaxed confidence, and ability to manifest wealth and alliances.",
-        "shadows": "Procrastination, indulgence in leisure, avoidance of harsh confrontational realities, and vanity.",
-        "careers": "Creative direction, media production, luxury brand management, public relations, and high-end brokerage.",
-        "prediction": "Fortunate social alliances and creative projects bring compounding financial comfort and celebrated status.",
-        "remedies": "• Chant Om Shukraya Namah 16 times on Fridays.\n• Water a Palasa (Flame of the Forest) tree.\n• Donate white sweets or milk to the needy."
-    },
-    12: {
-        "core": "Nobility of character, contractual fidelity, patronage of truth, and unyielding dependability.",
-        "strengths": "Uncompromising integrity, strong alliance building, societal respect, and structured philanthropy.",
-        "shadows": "Rigid insistence on social protocols, codependency in partnerships, and intolerance of informal behavior.",
-        "careers": "Judiciary, corporate alliances, international trade contracts, governmental administration, and auditing.",
-        "prediction": "Ascent into senior governance and institutional stewardship, marked by universal trust and civic honors.",
-        "remedies": "• Offer water mixed with kumkum to the morning Sun.\n• Water a Plaksha tree.\n• Feed red cows or bulls on Sundays."
-    },
-    13: {
-        "core": "Dexterous problem solver, commercial acumen, detailed analytical eye, and humorous intellect.",
-        "strengths": "Meticulous craftsmanship, tactical agility, high hand-brain coordination, and commercial wit.",
-        "shadows": "Nervous anxiety, over-critical tendencies, mood swings, and occasional manipulative cleverness under pressure.",
-        "careers": "Accounting, engineering precision, data architecture, trade brokerage, manufacturing quality control, and writing.",
-        "prediction": "Rapid career progression through technical skill and commercial brilliance, leading to financial independence.",
-        "remedies": "• Chant the Gayatri Mantra 24 times at sunrise.\n• Water a Chameli (Jasmine) plant daily.\n• Keep speech clean and honor maternal figures."
-    },
-    14: {
-        "core": "Architectural genius, vibrant charisma, sparkling aesthetic ambition, and mechanical insight.",
-        "strengths": "Exceptional visual imagination, eye for proportion and design, charismatic presentation, and inventive drive.",
-        "shadows": "Superficial vanity, restlessness, argumentative streak when creative vision is questioned, and financial extravagance.",
-        "careers": "Architecture, civil infrastructure, automotive design, diamond/gem trading, fashion design, and branding.",
-        "prediction": "Pioneering creative or technical creations gain widespread recognition, establishing lasting assets.",
-        "remedies": "• Recite the Hanuman Chalisa on Tuesdays.\n• Water a Bilva (Bael Patra) tree.\n• Keep a clean red handkerchief in your pocket."
-    },
-    15: {
-        "core": "Independent visionary, diplomatic agility, trade adaptability, and freedom-loving momentum.",
-        "strengths": "Global perspective, exceptional networking, quick commercial instinct, and flexible adaptability to change.",
-        "shadows": "Commitment hesitation, spreading energy too thin, and unpredictability in long-term partnerships.",
-        "careers": "International commerce, aviation, software consulting, import-export, travel management, and media relations.",
-        "prediction": "Major expansion through cross-border connections and innovative commercial systems, compounding wealth after age 30.",
-        "remedies": "• Chant Rahu Beej Mantra 18 times at twilight on Saturdays.\n• Water an Arjuna tree.\n• Donate black blankets or mustard oil to the needy."
-    },
-    16: {
-        "core": "Unstoppable ambition, dual energies of alliance and fire, competitive tenacity, and goal focus.",
-        "strengths": "Relentless perseverance, formidable debate power, strategic alliance-building, and victory over adversaries.",
-        "shadows": "Envy of competitors, burning bridges when goals shift, and exhaustion from ceaseless striving.",
-        "careers": "Executive leadership, litigation, corporate acquisitions, industrial operations, and political strategy.",
-        "prediction": "Late blooming triumph. Challenges faced in early career transform into undeniable executive authority in mature life.",
-        "remedies": "• Chant Om Indragni Namah 11 times in the morning.\n• Water a Kaith (Wood Apple) tree.\n• Avoid interpersonal ego disputes and practice celebrating others' wins."
-    },
-    17: {
-        "core": "Diplomatic loyalty, devotional warmth, alliance-building grace, and calm endurance under pressure.",
-        "strengths": "Unshakeable friendship, organizational diplomacy, international appeal, and ability to unite divided groups.",
-        "shadows": "Suppressing emotional hurt, vulnerability to being taken advantage of by selfish partners, and dietary neglect.",
-        "careers": "Diplomacy, human resources, organizational development, international relations, corporate counseling, and music.",
-        "prediction": "Long-standing loyal partnerships yield massive dividends. Mature years are blessed with peace, travel, and stable wealth.",
-        "remedies": "• Light a mustard-oil lamp under a Peepal tree on Saturdays.\n• Water a Bakula tree.\n• Maintain truthful, authentic relationships."
-    },
-    18: {
-        "core": "Commanding sovereignty, protective courage, senior executive stature, and fierce defensive instinct.",
-        "strengths": "Natural executive poise, protective leadership over large teams, administrative capability, and battle-tested fortitude.",
-        "shadows": "Authoritarian temper, isolation at the top, hypersensitivity to disrespect, and stubborn pride.",
-        "careers": "Chief executive management, military/police command, corporate turnaround leadership, crisis administration.",
-        "prediction": "Rapid ascension into high-responsibility executive offices. Demands humble listening to maintain long-term authority.",
-        "remedies": "• Recite Vishnu Sahasranama on Wednesdays.\n• Water a Silk Cotton (Semal) tree.\n• Practice active, patient listening with subordinates."
-    },
-    19: {
-        "core": "Root-seeking truth inquiry, disillusionment with pretense, transformative grit, and revolutionary insight.",
-        "strengths": "Fearless examination of root causes, unmatched investigation, philosophical depth, and total self-reinvention.",
-        "shadows": "Destructive anger, self-sabotaging cynicism, and emotional volatility when foundations feel shaky.",
-        "careers": "Root-cause engineering, medical research, forensic pathology, mining, spiritual philosophy, and strategic intelligence.",
-        "prediction": "Radical rebirth after early life trials. Reaches supreme spiritual and mental self-mastery in mid-to-late life.",
-        "remedies": "• Chant Om Ketave Namah 17 times after sunset.\n• Water a Sal tree.\n• Donate multi-colored or brown blankets to the underprivileged."
-    },
-    20: {
-        "core": "Invincible optimism, emotional purity, unstoppable perseverance, and magnetic victory drive.",
-        "strengths": "Refusal to accept defeat, inspiring charisma, emotional intelligence, and high creative imagination.",
-        "shadows": "Over-promising, stubborn refusal to admit errors, and emotional extravagance.",
-        "careers": "Maritime industry, creative writing, corporate entertainment, legal advocacy, and large infrastructure projects.",
-        "prediction": "Steadily rising career trajectory that achieves celebrated public triumphs and enduring liquid wealth.",
-        "remedies": "• Chant Shri Suktam on Friday mornings.\n• Water an Ashoka tree.\n• Donate pure cow ghee to a temple."
-    },
-    21: {
-        "core": "Universal integrity, quiet dignity, adherence to permanent cosmic laws, and institutional trustworthiness.",
-        "strengths": "Universal respect, unassailable ethics, steady methodical climbing, and calming executive presence.",
-        "shadows": "Excessive seriousness, melancholy under stress, and taking on the burdens of the entire organization.",
-        "careers": "High judiciary, public auditing, institutional architecture, regulatory oversight, and research administration.",
-        "prediction": "Flawless, permanent reputation. Gains senior statesman-like stature and generational respect.",
-        "remedies": "• Recite Aditya Hridaya Stotra on Sundays.\n• Water a Jackfruit (Phanas) tree.\n• Honor elder mentors and uphold truthfulness in speech."
-    },
-    22: {
-        "core": "Scholarly listening acumen, tradition preservation, high learning capacity, and public counsel grace.",
-        "strengths": "Exceptional oral communication, deep erudition, encyclopedic memory, and natural advisory gift.",
-        "shadows": "Susceptibility to gossip, rigid adherence to verbal forms, and cognitive fatigue from information overload.",
-        "careers": "Education, corporate counsel, media broadcasting, audio engineering, linguistics, and strategic consulting.",
-        "prediction": "High intellectual distinction. Life brings continuous learning and high advisory stature in civic or corporate spheres.",
-        "remedies": "• Chant Om Namo Bhagavate Vasudevaya 108 times daily.\n• Water an Aak (Calotropis) plant.\n• Maintain strict truthfulness in daily conversation."
-    },
-    23: {
-        "core": "Elemental rhythm, musical and martial agility, monumental resource mobilization, and wealth mastery.",
-        "strengths": "Superb sense of timing, athletic physical coordination, capacity to mobilize large capital, and victory in competition.",
-        "shadows": "Greed for recognition, harsh bluntness, and restlessness when confined to repetitive routines.",
-        "careers": "Real estate development, financial trading, mining, percussion music, athletics, and industrial engineering.",
-        "prediction": "Monumental capital compounding. Becomes the undisputed pillar of wealth and resource management in family and career.",
-        "remedies": "• Recite Hanuman or Kartikeya Stotra on Tuesdays.\n• Water a Shami (Khejri) tree.\n• Feed whole-wheat bread to stray animals."
-    },
-    24: {
-        "core": "Scientific curiosity, investigative veil-piercing intuition, philosophical detachment, and healing mastery.",
-        "strengths": "Unconventional intellect, deep research breakthrough ability, medical intuition, and technological foresight.",
-        "shadows": "Emotional alienation, cynicism, extreme solitude, and communication aloofness.",
-        "careers": "Advanced medical technology, pharmacology, astronomy, esoteric research, telecommunications, and epidemiology.",
-        "prediction": "Unlocks hidden scientific or commercial breakthroughs, gaining global recognition for original contributions.",
-        "remedies": "• Chant Om Varunaya Namah 11 times facing North.\n• Water a Kadamba tree.\n• Keep a pure solid silver square in your pocket."
-    },
-    25: {
-        "core": "Fiery ascetic determination, visionary reformist drive, immense mental force, and radical independence.",
-        "strengths": "Absolute commitment to transformative visions, penetrating eloquence, courage to challenge dogmas, and intense focus.",
-        "shadows": "Extreme mood swings, radical intolerance of mediocrity, and physical exhaustion from obsessive exertion.",
-        "careers": "Revolutionary technology, high-stakes crisis leadership, metallurgy, criminal law, and social transformation.",
-        "prediction": "Early tumultuous phases evolve into commanding visionary authority, leaving an indelible imprint on the field.",
-        "remedies": "• Chant the Rudra Gayatri Mantra 11 times at sunrise.\n• Water a Neem or Mango tree.\n• Practice intermittent fasting or clean eating on Thursdays."
-    },
-    26: {
-        "core": "Serpentine wisdom of cosmic depths, calm benevolence, meditative stamina, and unassailable peace.",
-        "strengths": "Profound emotional containment, meditative stillness, deep philosophical guidance, and generational foresight.",
-        "shadows": "Extreme inertia when unmotivated, social withdrawal, and reluctance to take aggressive physical action.",
-        "careers": "Long-term asset custody, marine research, psychotherapy, charitable foundation stewardship, and philosophy.",
-        "prediction": "Peaceful, compounding life trajectory. Reaches deep spiritual serenity and establishes permanent generational wealth.",
-        "remedies": "• Chant Om Namah Shivaya 108 times facing East.\n• Water a sacred Neem tree.\n• Feed black cows with green grass on Saturdays."
-    },
-    27: {
-        "core": "Nourishing grace, safe guidance of journeys, serene artistic completion, and universal goodwill.",
-        "strengths": "Empathy, refined aesthetic and musical talent, traveler's luck, and gentle protective leadership.",
-        "shadows": "Over-sensitivity, financial naivety, taking on others' debts, and difficulty setting firm operational boundaries.",
-        "careers": "International travel and diplomacy, creative arts, animal welfare, maritime trade, and pediatric medicine.",
-        "prediction": "Safe navigation through life's complex currents, concluding in high cultural honor, international respect, and serene fulfillment.",
-        "remedies": "• Chant Budha Beej Mantra 19 times on Wednesdays.\n• Water a Mahua tree.\n• Donate educational books or green fruits to underprivileged children."
+    # 3. Dynamic Global Search via OpenStreetMap (Nominatim)
+    if HAS_GEOPY:
+        try:
+            geolocator = Nominatim(user_agent="navtara_pulse_dynamic_geocoder", timeout=6)
+            loc = geolocator.geocode(clean_q, language="en")
+            if loc:
+                return float(loc.latitude), float(loc.longitude), loc.address
+        except Exception:
+            pass
+
+    # Safe emergency fallback
+    return 28.6139, 77.2090, clean_q
+
+def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
+    offset = (partner_star_idx - user_star_idx) % 9
+    tara_name, icon, quality = NAVTARA_NAMES[offset]
+    is_allied = offset in [1, 3, 5, 7, 8]
+    is_friction = offset in [2, 4, 6]
+    
+    if is_allied:
+        relationship_tone = "High Harmonic Resonance (Constructive Growth & Mutual Trust)"
+        advice = "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance."
+    elif is_friction:
+        relationship_tone = "Testing & High Friction (Demands Clear Boundaries & Patience)"
+        advice = "Differences in communication tempo or expectations can trigger misunderstandings. Ensure all commitments are formally written."
+    else:
+        relationship_tone = "Mirror / Foundational Synergy (Intense Alignment & Reflective Growth)"
+        advice = "High mutual identification. Both individuals share foundational biorhythms; great for long-term loyalty if ego boundaries remain healthy."
+
+    return {
+        "tara_name": tara_name,
+        "icon": icon,
+        "quality": quality,
+        "is_allied": is_allied,
+        "is_friction": is_friction,
+        "relationship_tone": relationship_tone,
+        "advice": advice
     }
-}
 
-def get_nakshatra_rich_data(star_idx: int):
-    return NAKSHATRA_RICH_PROFILES.get(star_idx, NAKSHATRA_RICH_PROFILES[2])
+def get_julian_day(utc_dt: datetime.datetime) -> float:
+    y = utc_dt.year
+    m = utc_dt.month
+    d = utc_dt.day + (utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0) / 24.0
+    if m <= 2:
+        y -= 1
+        m += 12
+    a = math.floor(y / 100)
+    b = 2 - a + math.floor(a / 4)
+    return math.floor(365.25 * (y + 4716)) + math.floor(30.6001 * (m + 1)) + d + b - 1524.5
 
-# ALL 12 MOON SIGNS EXPLICITLY DEFINED
-RASHI_RICH_PROFILES = {
-    0: {
-        "element": "Fire (Agni Tattva)",
-        "ruler": "Mars (Mangal)",
-        "psychology": "Bold, direct, and action-oriented. Mind works like a high-voltage engine that thrives on challenges rather than routine comfort.",
-        "instincts": "Fast emotional recovery, instant decision-making reflexes, and zero tolerance for bureaucratic delays. Needs physical outlets to dissipate stress.",
-        "relations": "Fiercely protective, passionate, and open. Expects total honesty and can be impatient with passive-aggressive behavior.",
-        "health": "Prone to excess metabolic heat (Pitta), headaches, or restless sleep when physical energy is underutilized. Thrives on vigorous daily exercise.",
-        "outlook": "Natural pioneer. Bestows courage to build independent ventures and break industry conventions.",
-        "remedies": "• Offer water with red sandalwood to the morning Sun.\n• Recite Hanuman Chalisa on Tuesdays.\n• Drink water from a pure silver cup to soothe lunar impulses."
-    },
-    1: {
-        "element": "Earth (Prithvi Tattva)",
-        "ruler": "Venus (Shukra)",
-        "psychology": "Deliberate, grounded, and emotionally stable. Prioritizes enduring security, comfort, and sensory beauty.",
-        "instincts": "Methodical contemplation before committing. Unshakeable perseverance that outlasts temporary storms.",
-        "relations": "Deeply loyal, affectionate, and protective. Takes time to trust, but once committed, remains permanent.",
-        "health": "Strong constitutional stamina; watch for sluggish metabolism (Kapha) and throat/thyroid care.",
-        "outlook": "Master of compound growth, accumulating tangible assets and establishing permanent domestic comfort.",
-        "remedies": "• Recite Shri Suktam on Fridays.\n• Apply natural sandalwood attar.\n• Donate white sweets or curd to the needy on Fridays."
-    },
-    2: {
-        "element": "Air (Vayu Tattva)",
-        "ruler": "Mercury (Budha)",
-        "psychology": "Versatile communicative agility, multi-channel intellect, and insatiable curiosity.",
-        "instincts": "Processes emotions through intellectual analysis and dialogue. Highly adaptable in shifting environments.",
-        "relations": "Engaging, conversational, and mentally stimulating. Needs intellectual parity in close partnerships.",
-        "health": "Sensitive nervous system; susceptible to mental restlessness and shallow breathing. Needs daily meditation.",
-        "outlook": "Thrives in media, commerce, information networks, and high-speed multi-disciplinary ventures.",
-        "remedies": "• Chant Vishnu Sahasranama on Wednesdays.\n• Water a Tulsi plant daily.\n• Feed green fodder to cows."
-    },
-    3: {
-        "element": "Water (Jala Tattva)",
-        "ruler": "Moon (Chandra)",
-        "psychology": "Deep emotional empathy, maternal protectiveness, profound subconscious intuition, and rhythmic tenacity.",
-        "instincts": "Intuitive antennae sense unspoken atmospheric shifts instantly. Highly protective of loved ones.",
-        "relations": "Fiercely nurturing, affectionate, and sentimental. Requires emotional safety and genuine loyalty.",
-        "health": "Subject to fluid balance shifts and digestive sensitivity under emotional stress. Hydration is vital.",
-        "outlook": "Commands public trust, excels in managing organizations through emotional intelligence and legacy assets.",
-        "remedies": "• Offer raw milk on a Shiva Lingam on Mondays.\n• Respect mother figures.\n• Drink water from a silver cup."
-    },
-    4: {
-        "element": "Fire (Agni Tattva)",
-        "ruler": "Sun (Surya)",
-        "psychology": "Regal dignity, magnanimous generosity, natural executive pride, and commanding emotional presence.",
-        "instincts": "Responds with noble authority. Needs admiration and respect; deeply hurt by petty disrespect.",
-        "relations": "Devoted, warm-hearted, and protective leader in family and team matters.",
-        "health": "High vitality, strong heart rate; must manage blood pressure and avoid over-heating.",
-        "outlook": "Attains senior governance, public standing, and institutional authority through charismatic leadership.",
-        "remedies": "• Recite Aditya Hridaya Stotra at sunrise.\n• Offer water in a copper vessel to Sun.\n• Honor father figures and mentors."
-    },
-    5: {
-        "element": "Earth (Prithvi Tattva)",
-        "ruler": "Mercury (Budha)",
-        "psychology": "Analytical precision, structured discernment, service-oriented mindset, and continuous optimization.",
-        "instincts": "Emotional calm achieved through practical problem-solving and structured order.",
-        "relations": "Thoughtful, dependable, and quietly supportive. Shows love through practical acts of care.",
-        "health": "Sensitive digestive tract and gut health. Requires clean nutrition and regular meal hours.",
-        "outlook": "Mastery over complex operational systems, corporate auditing, engineering, and quality excellence.",
-        "remedies": "• Chant Budha Beej Mantra on Wednesdays.\n• Donate stationery or books to students.\n• Practice 10 minutes of daily mindfulness."
-    },
-    6: {
-        "element": "Air (Vayu Tattva)",
-        "ruler": "Venus (Shukra)",
-        "psychology": "Diplomatic equilibrium, refined justice, social harmony, and architectural aesthetic balance.",
-        "instincts": "Naturally balances competing perspectives. Dislikes crude conflict and seeks elegant arbitration.",
-        "relations": "Charming, accommodating, and fair-minded. Thrives in partnership and shared accomplishments.",
-        "health": "Kidney and lower back balance; needs pure hydration and avoidance of toxic emotional environments.",
-        "outlook": "Success in legal, commercial alliances, luxury commodities, and institutional negotiation.",
-        "remedies": "• Worship Goddess Lakshmi on Fridays.\n• Wear clean, pressed pastel attire.\n• Maintain strict fairness in all business contracts."
-    },
-    7: {
-        "element": "Water (Jala Tattva)",
-        "ruler": "Mars (Mangal)",
-        "psychology": "Penetrating psychological depth, intense emotional stamina, and unyielding transformative grit.",
-        "instincts": "Hyper-vigilant radar. Pierces straight through superficial facades; calm in emergencies.",
-        "relations": "Intensely loyal and private. Expects absolute devotion and never forgets a breach of trust.",
-        "health": "Strong recovery power; guard against chronic stress accumulation and reproductive/colon health.",
-        "outlook": "Mastery in strategic turnaround, crisis operations, deep investigations, and private wealth building.",
-        "remedies": "• Chant Kartikeya or Shiva Mantras on Tuesdays.\n• Donate jaggery and roasted chickpeas.\n• Guard against holding grudges."
-    },
-    8: {
-        "element": "Fire (Agni Tattva)",
-        "ruler": "Jupiter (Guru)",
-        "psychology": "Expansive philosophical vision, legal and moral integrity, optimism, and inspiring pedagogical drive.",
-        "instincts": "Interprets setbacks as educational milestones. Thrives on exploration, truth, and freedom.",
-        "relations": "Generous, honest, and jovial. Values intellectual companionship and mutual independence.",
-        "health": "Active metabolism; needs liver support, regular physical workouts, and avoidance of rich foods.",
-        "outlook": "High institutional respect, foreign linkages, legal distinction, and enduring reputational prestige.",
-        "remedies": "• Chant Guru Mantra on Thursdays.\n• Apply turmeric or yellow sandalwood tilak on forehead.\n• Water a Peepal tree on Thursdays."
-    },
-    9: {
-        "element": "Earth (Prithvi Tattva)",
-        "ruler": "Saturn (Shani)",
-        "psychology": "Tactical patience, monumental organizational grit, sobriety, and long-range pragmatic climbing.",
-        "instincts": "Emotions are contained and controlled. Evaluates decisions through duty, legacy, and long-term durability.",
-        "relations": "Extremely dependable, solemn, and protective. Expresses care through providing material foundations.",
-        "health": "Joints, knees, and bone health; requires consistent warm hydration and physical movement.",
-        "outlook": "Sovereign executive leadership, permanent asset foundations, and lasting mature authority.",
-        "remedies": "• Light a mustard-oil lamp under a Peepal tree on Saturdays.\n• Recite Hanuman Chalisa daily.\n• Respect and tip service workers."
-    },
-    10: {
-        "element": "Air (Vayu Tattva)",
-        "ruler": "Saturn (Shani)",
-        "psychology": "Universal visionary ideals, scientific detachment, systems reformation, and egalitarian ethics.",
-        "instincts": "Processes emotions with objective intellectual perspective. Values humanity over individual ego.",
-        "relations": "Friendly, loyal, and broad-minded. Respects personal space and avoids possessive clinginess.",
-        "health": "Circulatory system and nervous energy; needs restful sleep away from digital screens.",
-        "outlook": "Pioneering technological breakthroughs, social systems reform, and original non-linear enterprise.",
-        "remedies": "• Chant Shani Gayatri Mantra on Saturdays.\n• Donate black sesame or oil.\n• Keep electronic workspaces free of tangled cables."
-    },
-    11: {
-        "element": "Water (Jala Tattva)",
-        "ruler": "Jupiter (Guru)",
-        "psychology": "Oceanic subconscious intuition, compassionate wisdom, creative transcendence, and profound emotional depth.",
-        "instincts": "Absorbs ambient environmental emotions like a sponge. Exceptional gut instinct that foresees outcomes long before analytical models detect them.",
-        "relations": "Deeply devoted, empathetic, and romantic. Needs quiet emotional sanctuary and mutual respect without harsh critical cynicism.",
-        "health": "Sensitive lymphatic system and fluid balance (Kapha-Vata balance). Vulnerable to psychosomatic fatigue; requires grounding routines and clean hydration.",
-        "outlook": "Unmatched creative imagination and spiritual wisdom. Excels in multi-disciplinary advisory, consulting, and cross-border initiatives.",
-        "remedies": "• Chant Om Namo Bhagavate Vasudevaya 108 times on Thursdays.\n• Feed whole wheat dough balls to fish or water birds on Thursdays.\n• Practice 10 minutes of silent meditation at twilight."
+def get_approx_lahiri_ayanamsa(jd: float) -> float:
+    t_val = (jd - 2451545.0) / 36525.0
+    return 23.85848 + 1.396042 * t_val + 0.000308 * (t_val ** 2)
+
+def calculate_sidereal_ascendant(utc_dt: datetime.datetime, lat: float, lon: float) -> float:
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            ayanamsa = swe.get_ayanamsa_ut(jd)
+            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
+            return float((ascmc[0] - ayanamsa) % 360.0)
+        except Exception:
+            pass
+
+    t_val = (jd - 2451545.0) / 36525.0
+    gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t_val**2) - (t_val**3) / 38710000.0) % 360.0
+    lst = (gmst + lon) % 360.0
+    eps = 23.439291 - 0.0130042 * t_val
+    
+    eps_rad = math.radians(eps)
+    lat_rad = math.radians(lat)
+    lst_rad = math.radians(lst)
+    
+    y = math.cos(lst_rad)
+    x = - (math.sin(lst_rad) * math.cos(eps_rad) + math.tan(lat_rad) * math.sin(eps_rad))
+    tropical_asc = math.degrees(math.atan2(y, x)) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_asc - ayanamsa) % 360.0)
+
+def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
+    if utc_dt.tzinfo is not None:
+        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            res = swe.calc_ut(jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            res_val = res[0] if isinstance(res, (tuple, list)) else res
+            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+            return float(lon % 360.0)
+        except Exception:
+            try:
+                res = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
+                res_val = res[0] if isinstance(res, (tuple, list)) else res
+                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+                return float(lon % 360.0)
+            except Exception:
+                pass
+
+    d = jd - 2451545.0
+    moon_mean_lon = (218.316 + 13.176396 * d) % 360.0
+    sun_mean_lon = (280.466 + 0.9856474 * d) % 360.0
+    sun_mean_anom = math.radians((357.528 + 0.9856003 * d) % 360.0)
+    moon_mean_anom = math.radians((134.963 + 13.064993 * d) % 360.0)
+    
+    evec = 1.274 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon) - moon_mean_anom)
+    eq_center = 6.289 * math.sin(moon_mean_anom)
+    var = 0.658 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon))
+    tropical_moon = (moon_mean_lon + eq_center + evec + var) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_moon - ayanamsa) % 360.0)
+
+def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lon: float):
+    ist_dt = datetime.datetime.combine(dob, tob)
+    utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
+    
+    moon_lon = get_sidereal_moon_longitude(utc_dt)
+    star_span = 360.0 / 27.0
+    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
+    rem_deg = moon_lon % star_span
+    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
+    moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
+
+    lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
+    lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
+
+    return {
+        "star_idx": star_idx,
+        "star_name": NAKSHATRAS[star_idx - 1],
+        "pada": pada,
+        "moon_lon": moon_lon,
+        "moon_rashi_idx": moon_rashi_idx,
+        "moon_rashi_name": RASHIS[moon_rashi_idx],
+        "lagna_lon": lagna_lon,
+        "lagna_deg": f"{int(lagna_lon % 30)}° {int(((lagna_lon % 30) % 1) * 60)}'",
+        "lagna_idx": lagna_idx,
+        "lagna_name": RASHIS[lagna_idx]
     }
-}
-
-def get_rashi_rich_data(rashi_idx: int):
-    return RASHI_RICH_PROFILES.get(rashi_idx, RASHI_RICH_PROFILES[0])
-
-# ALL 12 LAGNAS (ASCENDANTS) EXPLICITLY DEFINED
-LAGNA_RICH_PROFILES = {
-    0: {
-        "element": "Fire (Agni Tattva)",
-        "lord": "Mars (Mangal)",
-        "constitution": "High Pitta metabolic intensity, athletic constitution, energetic posture, and physical resilience.",
-        "persona": "Direct, confident, bold executive poise, and quick initiative in crisis.",
-        "life_arc": "Pioneering entrepreneurship, rapid leadership breakthroughs, and triumph through direct personal courage.",
-        "remedies": "• Offer water with red sandalwood to Surya Dev.\n• Recite Hanuman Chalisa daily.\n• Engage in structured physical conditioning."
-    },
-    1: {
-        "element": "Earth (Prithvi Tattva)",
-        "lord": "Venus (Shukra)",
-        "constitution": "Solid, robust physical stamina, calm facial symmetry, deep voice, and resilient physical health.",
-        "persona": "Composed, patient, immovable dignity, and diplomatic aesthetic grace in negotiation.",
-        "life_arc": "Compounding permanent tangible wealth, real estate dominion, and enduring executive longevity.",
-        "remedies": "• Apply pure white sandalwood paste.\n• Recite Shri Suktam on Fridays.\n• Respect women and keep clean surroundings."
-    },
-    2: {
-        "element": "Air (Vayu Tattva)",
-        "lord": "Mercury (Budha)",
-        "constitution": "Quick reflexes, expressive carriage, youthful demeanor, and high metabolic speed.",
-        "persona": "Articulate, witty, adaptable communicator, and versatile multi-channel strategist.",
-        "life_arc": "Commercial triumphs, intellectual distinction, and influence in media, trade, and advisory.",
-        "remedies": "• Chant Vishnu Sahasranama on Wednesdays.\n• Water a Tulsi plant daily.\n• Practice measured, clear speech."
-    },
-    3: {
-        "element": "Water (Jala Tattva)",
-        "lord": "Moon (Chandra)",
-        "constitution": "Gentle, receptive demeanor, sensitive lymphatic and digestive system, and rhythmic stamina.",
-        "persona": "Empathetic, nurturing executive presence with sharp intuitive radar.",
-        "life_arc": "Command over public institutions, communal trust, and compounding generational assets.",
-        "remedies": "• Offer clean water to a Shiva Lingam on Mondays.\n• Respect maternal elders.\n• Drink water from a pure silver cup."
-    },
-    4: {
-        "element": "Fire (Agni Tattva)",
-        "lord": "Sun (Surya)",
-        "constitution": "Broad chest, regal posture, radiant vitality, strong heart, and commanding demeanor.",
-        "persona": "Natural sovereignty, magnanimous leadership, and uncompromising executive dignity.",
-        "life_arc": "Administrative authority, prominent public standing, and honors in high governance.",
-        "remedies": "• Perform Surya Namaskar at sunrise.\n• Offer water in a copper vessel to Sun.\n• Cultivate magnanimity in leadership."
-    },
-    5: {
-        "element": "Earth (Prithvi Tattva)",
-        "lord": "Mercury (Budha)",
-        "constitution": "Clean, structured carriage, precise fine-motor dexterity, and sensitive digestive constitution.",
-        "persona": "Analytical precision, clean structured communication, and meticulously prepared poise.",
-        "life_arc": "Mastery over complex systems, organizational architecture, and financial auditing.",
-        "remedies": "• Chant Budha Beej Mantra on Wednesdays.\n• Maintain a clean workspace.\n• Practice evening pranayama."
-    },
-    6: {
-        "element": "Air (Vayu Tattva)",
-        "lord": "Venus (Shukra)",
-        "constitution": "Balanced Vata-Kapha constitution. Refined aesthetic posture, balanced symmetry, and magnetic social poise.",
-        "persona": "Diplomatic composure, natural arbiter of justice, graceful in high-stakes negotiations, and calm under public pressure.",
-        "life_arc": "Ascendant lord Shukra guides the life toward institutional balance, legal and commercial distinction, high societal networks, and luxury asset compounding.",
-        "remedies": "• Apply pure white sandalwood paste or natural attar on wrists before important meetings.\n• Worship Goddess Lakshmi or recite Shri Suktam on Fridays.\n• Maintain clean, clutter-free surroundings and pristine personal elegance."
-    },
-    7: {
-        "element": "Water (Jala Tattva)",
-        "lord": "Mars (Mangal)",
-        "constitution": "High Pitta-Kapha metabolic intensity. Powerful stamina, penetrating gaze, and immense physical and mental recovery power.",
-        "persona": "Mysterious reserve, authoritative quiet resolve, intense self-command, and zero fear in navigating high-stakes crises.",
-        "life_arc": "Life moves through profound evolutionary transformations. Early challenges forge an impenetrable executive fortress, granting control over complex resources in mature years.",
-        "remedies": "• Recite the Hanuman Chalisa or Kartikeya Stotra on Tuesdays.\n• Maintain strict ethical transparency in all agreements.\n• Practice grounding breathwork (Nadi Shodhana) to channel internal fire."
-    },
-    8: {
-        "element": "Fire (Agni Tattva)",
-        "lord": "Jupiter (Guru)",
-        "constitution": "Tall visionary posture, benevolent athletic build, strong liver, and dignified presence.",
-        "persona": "Inspiring optimism, scholarly presence, moral integrity, and natural mentorship grace.",
-        "life_arc": "Senior institutional leadership, global travel, judicial authority, and profound societal respect.",
-        "remedies": "• Apply yellow sandalwood tilak on forehead.\n• Chant Guru Mantra on Thursdays.\n• Support educational causes."
-    },
-    9: {
-        "element": "Earth (Prithvi Tattva)",
-        "lord": "Saturn (Shani)",
-        "constitution": "Austere constitution, steady bone and joint stamina, dignified mature presence.",
-        "persona": "Sober pragmatic presence, disciplined reserve, unshakeable reliability, and executive gravity.",
-        "life_arc": "Permanent institutional foundations, administrative sovereignty, and compound authority.",
-        "remedies": "• Light a mustard-oil lamp under Peepal on Saturdays.\n• Treat blue-collar workers with respect.\n• Maintain patient long-term planning."
-    },
-    10: {
-        "element": "Air (Vayu Tattva)",
-        "lord": "Saturn (Shani)",
-        "constitution": "Cerebral poise, progressive demeanor, nervous system sensitivity, and open physical posture.",
-        "persona": "Egalitarian visionary, scientific detachment, reformist courage, and intellectual independence.",
-        "life_arc": "Pioneering technological breakthroughs, social systems reform, and original enterprise.",
-        "remedies": "• Chant Shani Gayatri Mantra on Saturdays.\n• Keep workspace uncluttered.\n• Donate to humanitarian causes."
-    },
-    11: {
-        "element": "Water (Jala Tattva)",
-        "lord": "Jupiter (Guru)",
-        "constitution": "Gentle compassionate gaze, intuitive artistic sensibility, fluid balance, and calm demeanor.",
-        "persona": "Philosophical calm, profound empathy, reflective listening, and transcendent perspective.",
-        "life_arc": "Spiritual tranquility, cross-border achievements, creative distinction, and mature peace.",
-        "remedies": "• Chant Om Namo Bhagavate Vasudevaya on Thursdays.\n• Practice 15 minutes of quiet meditation.\n• Feed fish with whole wheat dough."
-    }
-}
-
-def get_lagna_rich_data(lagna_idx: int):
-    return LAGNA_RICH_PROFILES.get(lagna_idx, LAGNA_RICH_PROFILES[6])
-
-# ==============================================================================
-# EXHAUSTIVE SHANI PAYA ENCYCLOPEDIA (DOMAINS: HEALTH, WEALTH, FAMILY, LOAN, PARTNER, LUCK, CAREER)
-# ==============================================================================
-SHANI_PAYA_ENCYCLOPEDIA = {
-    "Silver": {
-        "title": "🥈 Rajat Paya (Silver Feet / चाँदी का पाया)",
-        "grade": "Supreme Auspiciousness (अति शुभ फलदायी)",
-        "tone": "Divine Cushion, Financial Liquidity & Reputational Growth",
-        "houses": "2nd, 5th, or 9th house from natal Moon",
-        "health": "Robust physical vitality, restful sleep patterns, strong immunity, and quick recuperation from minor illnesses.",
-        "wealth": "Exceptional capital expansion, stabilization of liquid cash flow, recovery of long-pending debts, and lucrative property compounding.",
-        "family": "Harmonious domestic environment, supportive spouse, celebration of auspicious family events, and peace with children.",
-        "loan": "Seamless debt clearance, easy approvals for restructuring loans at lower interest rates, and immunity against heavy liabilities.",
-        "partner": "Highly cooperative business partners and devoted life partner; commercial agreements flow smoothly with mutual trust.",
-        "luck": "Favorable wind in long-term ventures, unexpected windfall gains, and strong alignment of mentors and destiny.",
-        "career": "Steady executive advancement, elevation in institutional rank, favorable rapport with senior leadership, and public recognition.",
-        "protocol": "Wear a solid pure silver square or ring on the little finger, offer raw cow's milk mixed with water on a Shiva Lingam on Mondays."
-    },
-    "Copper": {
-        "title": "🥉 Tamra Paya (Copper Feet / तांबे का पाया)",
-        "grade": "Favorable & Productive (शुभ फलदायी)",
-        "tone": "Laborious Progress, Competitive Mastery & Sustained Effort",
-        "houses": "3rd, 7th, or 10th house from natal Moon",
-        "health": "Good stamina driven by focused effort; watch out for elevated metabolic heat (Pitta) and muscular tension from overwork.",
-        "wealth": "Wealth grows steadily through direct exertion, disciplined commercial ventures, and enterprise expansion rather than lottery windfalls.",
-        "family": "Supportive domestic sphere where hard work is appreciated; requires conscious time-allocation to prevent work-life imbalance.",
-        "loan": "Loans are successfully utilized for productive asset creation (e.g., machinery or real estate) with reliable repayment streams.",
-        "partner": "Business partnerships thrive through shared ambition and grit; spouse acts as a strong operational sounding board.",
-        "luck": "Luck favors the diligent. Persistence through competitive hurdles unlocks major triumphs.",
-        "career": "Dominance over competitors, successful project turnarounds, expansion of client networks, and triumph in challenging negotiations.",
-        "protocol": "Drink water stored overnight in a pure copper vessel, donate jaggery and roasted chickpeas on Tuesdays, maintain strict truthfulness."
-    },
-    "Gold": {
-        "title": "🥇 Swarna Paya (Gold Feet / सोने का पाया)",
-        "grade": "Testing & Demanding (कठिन एवं संघर्षमय)",
-        "tone": "Ego Restructuring, Expense Spikes & Need for Extreme Prudence",
-        "houses": "1st, 6th, or 11th house from natal Moon",
-        "health": "Nervous exhaustion, occasional sleep disruption, and sensitivity to stress; requires strict adherence to restorative sleep and breathwork.",
-        "wealth": "Unforeseen expenses, family commitments consuming cash reserves, and slow returns on speculative ventures. Demands strict budgetary austerity.",
-        "family": "Ego clashes or communication friction with relatives; requires active listening and emotional humility to maintain peace.",
-        "loan": "Avoid taking new unsecured loans or lending money to peers. Refinance existing liabilities with caution.",
-        "partner": "Partnerships undergo stress due to ego friction or misaligned expectations. Keep all agreements transparent and documented.",
-        "luck": "Luck requires careful navigation; avoid unhedged shortcuts or speculative gambling.",
-        "career": "Ego disputes with seniors or partners, misunderstandings regarding credit, and heightened professional scrutiny.",
-        "protocol": "Avoid excessive yellow gold jewelry; wear clean silver; donate yellow lentils or turmeric to temple priests on Thursdays; cultivate humility."
-    },
-    "Iron": {
-        "title": "🪙 Loha Paya (Iron Feet / लोहे का पाया)",
-        "grade": "Heavy Crucible & High Friction (अति कठिन / संघर्षमय)",
-        "tone": "Karmic Weight, Heavy Responsibilities & Constitutional Testing",
-        "houses": "4th, 8th, or 12th house from natal Moon",
-        "health": "Prone to joint stiffness, lower back vulnerability, and sluggish digestion. Demands regular walking, clean diet, and early bedtime.",
-        "wealth": "Sudden financial leaks, legal or administrative hurdles, and stalled asset liquidity. Strictly avoid leveraged bets or lending money.",
-        "family": "Heavy family responsibilities testing your patience; domestic harmony requires conscious emotional restraint and quiet tolerance.",
-        "loan": "High risk of debt entanglement if living beyond means. Strict moratorium on new liabilities is mandatory.",
-        "partner": "Business and personal partners may face external pressures; maintain clear boundaries and avoid joint financial risks.",
-        "luck": "Testing phase where destiny rewards patient endurance rather than aggressive gambles.",
-        "career": "Strenuous workloads, organizational restructuring, delays in promotions, and demanding subordinate management.",
-        "protocol": "Light a mustard-oil lamp under a sacred Peepal tree every Saturday evening; feed black dogs or crows; donate iron items or black sesame."
-    }
-}
-
-# ==============================================================================
-# EXHAUSTIVE SADE SATI & DHAIYA MATRIX (DOMAINS: HEALTH, WEALTH, FAMILY, LOAN, PARTNER, LUCK, CAREER)
-# ==============================================================================
-SADE_SATI_PHASE_ENCYCLOPEDIA = {
-    1: {
-        "phase_name": "Phase 1: Rising Phase (Aarohi Charana / 12th House Transit)",
-        "focus": "Subconscious Cleansing, Isolation, Expense Spikes & Detachment",
-        "health": "Sleep fragmentation, eye strain, joint fatigue in feet/ankles, and vulnerability to psychosomatic stress.",
-        "wealth": "High unbudgeted expenditures, investments in foreign affairs or healthcare, and necessity to plug financial leaks. Not favorable for speculative risks.",
-        "family": "Temporary physical separation from family due to travel or relocation; emotional introspection may cause temporary distance.",
-        "loan": "Potential outflow for settling past obligations or medical/travel expenses. Avoid taking fresh unhedged credit.",
-        "partner": "Partners may be absorbed in their own challenges; maintain transparent dialogue to prevent miscommunication.",
-        "luck": "External luck is muted in favor of inner spiritual and psychological preparation.",
-        "career": "Relocation, foreign assignments, working behind the scenes, or navigating corporate restructuring. Recognition may feel delayed despite intense efforts.",
-        "remedy": "Recite Maha Mrityunjaya Mantra 108 times at twilight; donate dark blankets to homeless individuals; avoid major financial commitments during late night hours."
-    },
-    2: {
-        "phase_name": "Phase 2: Peak Janma Shani (Core Transit / 1st House Over Natal Moon)",
-        "focus": "Identity Rebirth, Character Crucible, Physical Endurance & Leadership",
-        "health": "Demands strict physical discipline, spinal and joint care, adequate hydration, and emotional containment to prevent burnout.",
-        "wealth": "Cash flow requires meticulous cash-reserve management. Assets are restructured into solid, unshakeable foundations rather than liquid luxuries.",
-        "family": "Testing phase for domestic harmony; patience and ego surrender prevent domestic friction from escalating.",
-        "loan": "Strictly avoid speculative loans or signing surety for others. Manage existing debt conservatively.",
-        "partner": "Intense testing ground for marital and business partnerships. Mutual commitment is forged through shared adversity.",
-        "luck": "Destiny places heavy responsibilities on your shoulders; rewards come strictly through unyielding integrity.",
-        "career": "Massive increase in executive responsibilities. You become the reliable pillar managing crises, yet must endure high scrutiny and professional solitude.",
-        "remedy": "Chant Shani Beej Mantra 108 times on Saturdays; offer water with blue flowers to Lord Shiva; treat factory workers and subordinates with deep respect."
-    },
-    3: {
-        "phase_name": "Phase 3: Setting Phase (Avarohi Charana / 2nd House Transit)",
-        "focus": "Asset Consolidation, Speech Discipline, Family Healing & Permanent Rewards",
-        "health": "Teeth, throat, vocal cord, and dietary adjustments. Restoring nutritional balance and cellular vitality.",
-        "wealth": "Recovery of financial momentum, accumulation of permanent tangible wealth, stabilization of family estates, and steady cash-flow turnaround.",
-        "family": "Reconciliation, celebration of family milestones, and peaceful domestic bonding.",
-        "loan": "Debts are steadily paid off, leaving you with clean balance sheets and strengthened creditworthiness.",
-        "partner": "Business and life partners bring renewed stability, shared financial planning, and mutual growth.",
-        "luck": "Cosmic headwinds turn into favorable tailwinds as past efforts begin to bear tangible fruit.",
-        "career": "Consolidation of executive authority, reaping the enduring benefits of hard labor endured during Phase 1 & 2, and achieving long-term respect.",
-        "remedy": "Practice strict honesty and avoid harsh speech; drink water from a silver cup; donate whole black urad dal and mustard oil on Saturdays."
-    }
-}
-
-DHAIYA_ENCYCLOPEDIA = {
-    4: {
-        "name": "Kantaka Shani (4th House Dhaiya / Ardhashtama Shani)",
-        "focus": "Domestic Equilibrium, Property Challenges & Work-Life Balance",
-        "health": "Chest, respiratory, and heart-rate balance under domestic or work pressure.",
-        "wealth": "Focus on property maintenance expenses and consolidating real estate holdings.",
-        "family": "Emotional friction at home, restlessness regarding living arrangements, and attention needed toward maternal health.",
-        "loan": "Manage property-related mortgages or home loans with prudent budgeting.",
-        "partner": "Domestic stress can spill into partnership dynamics; practice conscious patience.",
-        "luck": "Shifts focus from external expansion to securing foundational base and home front.",
-        "career": "Strenuous workplace politics, change of department or relocation, and balancing heavy domestic needs with professional demands.",
-        "remedy": "Serve and respect your mother; light a mustard-oil lamp under a Peepal tree on Saturdays; keep living space clean and clutter-free."
-    },
-    8: {
-        "name": "Ashtama Shani (8th House Dhaiya / High Friction)",
-        "focus": "Deep Transformation, Crisis Mitigation, Health Vigilance & Karmic Debts",
-        "health": "Avoid fatigue, check chronic symptoms, and maintain daily walking discipline.",
-        "wealth": "Avoid unhedged market leverage, speculative schemes, and unsecured loans.",
-        "family": "Elevated vulnerability to stress; keep family communications transparent and calm.",
-        "loan": "High caution required against sudden financial commitments or guarantor obligations.",
-        "partner": "Unforeseen partner issues require calm mediation and legal/financial prudence.",
-        "luck": "Testing cycle requiring spiritual introspection and risk minimization.",
-        "career": "Unexpected obstacles in career progression, legal or tax audits, and necessity for absolute transparency in business contracts.",
-        "remedy": "Recite Hanuman Chalisa twice daily; avoid risky driving late at night; strictly abstain from speculative financial gambling."
-    }
-}
 
 def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
     house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
@@ -895,7 +384,6 @@ def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> 
         "status": ency["grade"],
         "tone": ency["tone"],
         "houses": ency["houses"],
-        "psychology": ency["psychology"],
         "health": ency["health"],
         "wealth": ency["wealth"],
         "family": ency["family"],
@@ -904,7 +392,7 @@ def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> 
         "luck": ency["luck"],
         "career": ency["career"],
         "protocol": ency["protocol"],
-        "desc": f"Saturn is currently transiting the {house_diff}th house relative to your {m_name} Moon, arriving on {metal} Feet ({ency['title'].split('(')[1].split('/')[0].strip()}).",
+        "desc": f"Saturn is currently transiting the {house_diff}th house relative to your {m_name} Moon, arriving on {metal} Feet.",
         "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
     }
 
@@ -930,9 +418,8 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
-            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon. Prompts deep restructuring of personal priorities, elimination of wasteful financial habits, and subconscious purification.",
+            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon.",
             "dates": "Active Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": True, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -951,9 +438,8 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
-            "impact": f"Saturn transits directly over your natal Moon in {m_name} (Janma Shani). This is the supreme crucible of character, requiring physical stamina, ego dissolution, leadership responsibility, and unwavering moral grounding.",
+            "impact": f"Saturn transits directly over your natal Moon in {m_name} (Janma Shani). Character crucible and endurance test.",
             "dates": "Active Peak Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": False, "phase_2_active": True, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -972,9 +458,8 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
-            "impact": f"Saturn transits the 2nd house from your {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. As Sade Sati draws toward conclusion, hard lessons solidify into permanent wealth consolidation, stabilized speech, and generational assets.",
+            "impact": f"Saturn transits the 2nd house from your {m_name} Moon. Financial recovery and asset consolidation phase.",
             "dates": "Active Concluding Phase (29 March 2025 – 23 February 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": True,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -987,15 +472,14 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "phase_num": 4,
             "focus": dh_info["focus"],
             "health": dh_info["health"],
-            "wealth": "Focus on property maintenance and real estate asset consolidation.",
+            "wealth": dh_info["wealth"],
             "family": dh_info["family"],
-            "loan": "Manage property-related mortgages or home loans with prudent budgeting.",
+            "loan": dh_info["loan"],
             "partner": dh_info["partner"],
-            "luck": "Shifts focus from external expansion to securing foundational base and home front.",
+            "luck": dh_info["luck"],
             "career": dh_info["career"],
-            "mental": dh_info["mental"],
             "remedy": dh_info["remedy"],
-            "impact": f"Saturn transits your 4th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Focus on home stability, vehicle care, maternal health, and inner peace.",
+            "impact": f"Saturn transits your 4th house from {m_name} Moon.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -1008,15 +492,14 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "phase_num": 8,
             "focus": dh_info["focus"],
             "health": dh_info["health"],
-            "wealth": "Avoid unhedged market leverage, speculative schemes, and unsecured loans.",
+            "wealth": dh_info["wealth"],
             "family": dh_info["family"],
-            "loan": "High caution required against sudden financial commitments or guarantor obligations.",
+            "loan": dh_info["loan"],
             "partner": dh_info["partner"],
-            "luck": "Testing cycle requiring spiritual introspection and risk minimization.",
+            "luck": dh_info["luck"],
             "career": dh_info["career"],
-            "mental": dh_info["mental"],
             "remedy": dh_info["remedy"],
-            "impact": f"Saturn transits your 8th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Demands disciplined health habits, careful driving, transparent financial ethics, and spiritual introspection.",
+            "impact": f"Saturn transits your 8th house from {m_name} Moon.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -1034,9 +517,8 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": "Stable partnership dynamics.",
             "luck": "Favorable planetary support.",
             "career": "Constructive career growth with minimal Saturnic friction.",
-            "mental": "Mental clarity is high; favorable for launching new enterprises.",
             "remedy": "Continue daily prayers and ethical business practices.",
-            "impact": f"Saturn is currently in Pisces ({RASHIS[saturn_transit_rashi_idx].split()[0]}), placing it in an auspicious or neutral {((saturn_transit_rashi_idx - moon_rashi_idx) % 12) + 1}th house relative to your {m_name} Moon.",
+            "impact": f"Saturn is currently in Pisces, placing it in an auspicious or neutral house relative to your {m_name} Moon.",
             "dates": "No Current Friction Cycle",
             "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
             "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
@@ -1507,42 +989,6 @@ def render_page_about():
             Unlike conventional astrology apps that rely on generic sun signs or flat 24-hour sunrise assumptions, <b>Navtara Pulse</b> incorporates the <b>Moshier Swiss Ephemeris</b> (pyswisseph) with true topocentric Chitrapaksha Lahiri Ayanamsa. Ingress and egress timestamps are calculated down to the exact second for your geographical horizon.
         </div>
     </div>
-
-    <div class="light-card-num">
-        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:0.75rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.4rem;">
-            🎯 How Navtara Pulse Empowers You in Daily Life
-        </div>
-        
-        <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:0.5rem;">
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #059669;">
-                <b style="color:#065f46; font-size:1rem;">💼 Strategic Career & Business Execution:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Never schedule critical client pitches, salary reviews, or investor meetings blind. Aligning major professional leaps with your <b>Sadhana (Accomplishment)</b> or <b>Ati-Mitra (Supreme Alliance)</b> days drastically increases closing velocity and reduces friction.
-                </span>
-            </div>
-            
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #10b981;">
-                <b style="color:#065f46; font-size:1rem;">💰 Financial Preservation & Capital Timing:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Shield yourself from impulsive capital deployment. Executing asset purchases during <b>Sampat (Wealth)</b> days supports long-term appreciation, while strictly holding back on <b>Vipat (Friction)</b> and <b>Vadha (Loss)</b> days prevents unforced financial errors.
-                </span>
-            </div>
-
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #14b8a6;">
-                <b style="color:#065f46; font-size:1rem;">❤️ Emotional Composure & Relationship Harmony:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Knowing when you or your partner are traversing high-sensitivity transit days allows you to practice proactive patience, avoid unnecessary arguments, and cultivate deeper empathy.
-                </span>
-            </div>
-
-            <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #bbf7d0; border-left:5px solid #0d9488;">
-                <b style="color:#065f46; font-size:1rem;">🌿 Bio-Energy Shielding & Burnout Prevention:</b><br>
-                <span style="font-size:0.93rem; color:#1e293b; line-height:1.6;">
-                    Pace your vital energy. Schedule intensive athletic workouts on high-vitality days and prioritize meditation, restorative sleep, and grounding breathwork when biological resistance peaks.
-                </span>
-            </div>
-        </div>
-    </div>
     """)
 
     app_url = "https://navtara-pulse.streamlit.app"
@@ -1581,11 +1027,6 @@ def render_page_about():
                 </div>
             </a>
         </div>
-
-        <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1px solid #fed7aa; text-align:center;">
-            <div style="font-size:0.88rem; color:#9a3412; font-weight:800;">Direct Web App Link:</div>
-            <div style="font-size:1.05rem; font-weight:900; color:#431407; margin-top:2px;"><b>{app_url}</b></div>
-        </div>
     </div>
     """)
 
@@ -1623,7 +1064,7 @@ def render_page_profile():
                 init_ampm = "PM" if (tob_parsed and tob_parsed.hour >= 12) else "AM"
                 in_ampm = st.selectbox("AM / PM", options=["AM", "PM"], index=1 if init_ampm == "PM" else 0)
 
-            new_city_query = st.text_input(t("city_label", current_lang), value=prof.get("city", ""), placeholder="e.g. Delhi, Mumbai, Pune, London, New York")
+            new_city_query = st.text_input(t("city_label", current_lang), value=prof.get("city", ""), placeholder="e.g. Panvel, Aurangabad, Mumbai, London, New York")
 
             c_save, c_canc = st.columns([2, 1])
             with c_save:
@@ -1642,7 +1083,9 @@ def render_page_profile():
                         hr_24 += 12
                     final_tob_str = f"{hr_24:02d}:{in_minute:02d}"
 
-                    resolved_lat, resolved_lon = resolve_location_name(new_city_query)
+                    # DYNAMIC GEOCODING SEARCH
+                    with st.spinner("Searching coordinates for your location..."):
+                        resolved_lat, resolved_lon, resolved_name = resolve_location_name(new_city_query)
 
                     st.session_state.user_profile.update({
                         "name": new_name.strip(),
@@ -1653,12 +1096,14 @@ def render_page_profile():
                         "lon": resolved_lon
                     })
                     
-                    st.query_params["name"] = new_name.strip()
-                    st.query_params["dob"] = new_dob.strftime("%Y-%m-%d")
-                    st.query_params["tob"] = final_tob_str
-                    st.query_params["city"] = new_city_query.strip()
-                    st.query_params["lat"] = f"{resolved_lat:.4f}"
-                    st.query_params["lon"] = f"{resolved_lon:.4f}"
+                    st.query_params.update({
+                        "name": new_name.strip(),
+                        "dob": new_dob.strftime("%Y-%m-%d"),
+                        "tob": final_tob_str,
+                        "city": new_city_query.strip(),
+                        "lat": f"{resolved_lat:.4f}",
+                        "lon": f"{resolved_lon:.4f}"
+                    })
 
                     st.session_state.edit_mode = False
                     st.session_state.current_page = "install_guide"
@@ -1947,7 +1392,7 @@ def render_page_numerology():
     """)
 
 # ==============================================================================
-# TAB 4: SHANI & SADE SATI (EXHAUSTIVE LIFE-DOMAIN BREAKDOWN)
+# TAB 4: SHANI & SADE SATI (EXHAUSTIVE 7-DOMAIN MATRIX)
 # ==============================================================================
 def render_page_shani():
     if not has_valid_profile:
@@ -2023,7 +1468,7 @@ def render_page_shani():
                 <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#7c2d12; border-left:4px solid #f97316;">
                     <b>🌿 1. Health & Vitality Impact:</b><br>{shani_sadesati_data['health']}
                 </div>
-                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #10b981; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
                     <b>💰 2. Wealth & Cash Flow Dynamics:</b><br>{shani_sadesati_data['wealth']}
                 </div>
                 <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#3b0764; border-left:4px solid #8b5cf6;">
