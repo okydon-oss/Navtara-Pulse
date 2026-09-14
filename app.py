@@ -1829,28 +1829,23 @@ def render_page_forecast():
 def render_page_mantra():
     render_html("""
     <div class="light-card-shani">
-        <div style="font-weight:900; font-size:1.3rem; color:#5b21b6; margin-bottom:0.4rem;">
+        <div style="font-weight:900; font-size:1.35rem; color:#5b21b6; margin-bottom:0.4rem;">
             📿 Japa Sadhana & Vedic Mantra Sanctuary
         </div>
-        <div style="font-size:0.93rem; color:#475569; line-height:1.6;">
-            Select a personalized planetary, star, or transit mantra to view its authentic Sanskrit verse, 
-            meaning, and chant with the 108-bead interactive digital Mala counter.
+        <div style="font-size:0.95rem; color:#475569; line-height:1.6;">
+            Select from Supreme Classical Mantras, the 9 Navagraha Planetary Beej Mantras, 
+            or your personalized Birth Nakshatra Beej Mantra to chant with the 108-bead digital Mala counter.
         </div>
     </div>
     """)
 
-    mantra_catalog = {
+    # 1. Base Classical Protection Mantras
+    classical_mantras = {
         "Maha Mrityunjaya Mantra (Supreme Protection)": {
             "sanskrit": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥",
             "translit": "Om Tryambakam Yajamahe Sugandhim Pushti-Vardhanam |\nUrvarukamiva Bandhanan-Mrityor-Mukshiya Maamritat ||",
             "meaning": "We meditate on the Three-Eyed Lord Shiva, who permeates and nourishes all beings. May He liberate us from the bonds of fear and death into immortality.",
             "rules": "• Best chanted at dawn or dusk facing East or North.\n• Use a Rudraksha Mala.\n• Pacifies severe transit friction (Vipat, Vadha) and shields cellular vitality."
-        },
-        "Shani Beej Mantra (Saturn Pacification)": {
-            "sanskrit": "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥",
-            "translit": "Om Praam Preem Proum Sah Shanaishcharaya Namah ||",
-            "meaning": "Salutations to Lord Saturn, the dispenser of karmic justice. Pacifies delays, chronic exhaustion, and aligns personal discipline during Sade Sati / Dhaiya.",
-            "rules": "• Best chanted at twilight facing West on Saturdays.\n• Use a dark Rudraksha or black tourmaline mala.\n• Sit on an indigo or wool asana."
         },
         "Gayatri Mantra (Solar Illumination)": {
             "sanskrit": "ॐ भूर्भुवः स्वः तत्सवितुर्वरेण्यं भर्गो देवस्य धीमहि धियो यो नः प्रचोदयात्॥",
@@ -1866,30 +1861,44 @@ def render_page_mantra():
         }
     }
 
-    if has_valid_profile:
-        bio_nak = NAKSHATRA_BIO_DATA.get(chart_info["star_idx"], NAKSHATRA_BIO_DATA[2])
-        deity_name = bio_nak["deity"].split()[0]
-        nak_key = f"Janma Nakshatra Mantra ({chart_info['star_name']})"
-        mantra_catalog[nak_key] = {
-            "sanskrit": f"ॐ {deity_name} नमः॥",
-            "translit": f"Om {deity_name} Namah ||",
-            "meaning": f"Directly harmonizes the natal electromagnetic bio-frequency of your birth star governed by {bio_nak['deity']}.",
-            "rules": f"• Chant 11, 27, or 108 times daily in the morning.\n• Protects and waters the sacred Nakshatra tree ({bio_nak['tree']}).\n• Enhances natural intuition and executive luck."
-        }
+    category = st.radio(
+        "**Select Mantra Category:**",
+        options=["Classical & Protection", "9 Navagraha Beej Mantras", "27 Nakshatra Beej Mantras"],
+        horizontal=True
+    )
 
-    selected_mantra = st.selectbox("Select Mantra to Chant:", options=list(mantra_catalog.keys()))
-    m_info = mantra_catalog[selected_mantra]
+    if category == "Classical & Protection":
+        mantra_choice = st.selectbox("Choose Classical Mantra:", list(classical_mantras.keys()))
+        m_info = classical_mantras[mantra_choice]
+    elif category == "9 Navagraha Beej Mantras":
+        from databanks import NAVAGRAHA_BEEJ_MANTRAS
+        mantra_choice = st.selectbox("Choose Planetary Beej Mantra:", list(NAVAGRAHA_BEEJ_MANTRAS.keys()))
+        m_info = NAVAGRAHA_BEEJ_MANTRAS[mantra_choice]
+    else:
+        from databanks import NAKSHATRA_BEEJ_MANTRAS
+        nak_options = {idx: data["name"] for idx, data in NAKSHATRA_BEEJ_MANTRAS.items()}
+        
+        # Pre-select user's Janma Nakshatra if chart is loaded
+        default_idx = (chart_info["star_idx"] - 1) if chart_info else 0
+        selected_star_idx = st.selectbox(
+            "Choose Nakshatra Beej Mantra:",
+            options=list(nak_options.keys()),
+            format_func=lambda x: nak_options[x],
+            index=default_idx
+        )
+        m_info = NAKSHATRA_BEEJ_MANTRAS[selected_star_idx]
 
+    # Render Card
     render_html(f"""
-    <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:14px; padding:16px; margin:14px 0; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
-        <div style="font-size:1.35rem; font-weight:900; color:#1e1b4b; text-align:center; font-family:serif; line-height:1.6; white-space:pre-line;">
+    <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:14px; padding:18px; margin:14px 0; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
+        <div style="font-size:1.4rem; font-weight:900; color:#1e1b4b; text-align:center; font-family:serif; line-height:1.6; white-space:pre-line;">
             {m_info['sanskrit']}
         </div>
-        <div style="font-size:0.93rem; color:#6d28d9; text-align:center; font-style:italic; margin-top:8px; line-height:1.5; white-space:pre-line;">
+        <div style="font-size:0.95rem; color:#6d28d9; text-align:center; font-style:italic; margin-top:8px; line-height:1.5; white-space:pre-line;">
             {m_info['translit']}
         </div>
-        <hr style="margin:12px 0; border:none; border-top:1px solid #ede9fe;">
-        <div style="font-size:0.92rem; color:#334155; line-height:1.65;">
+        <hr style="margin:14px 0; border:none; border-top:1px solid #ede9fe;">
+        <div style="font-size:0.93rem; color:#334155; line-height:1.7;">
             <b>📜 Meaning:</b> {m_info['meaning']}<br><br>
             <b>🧘 Sadhana Guidelines:</b><br>{m_info['rules'].replace(chr(10), '<br>')}
         </div>
@@ -1910,7 +1919,7 @@ def render_page_mantra():
                     st.session_state.japa_count = 0
                     st.session_state.mala_rounds += 1
                     st.balloons()
-                    st.success("🎉 Om Shanti! You have completed 1 full Mala (108 Chants). May the vibration bring peace and protection!")
+                    st.success("🎉 Om Shanti! You completed 1 full Mala (108 Chants). May the vibration bring peace and protection!")
                 st.rerun()
         with col_reset:
             if st.button("🔄 Reset Counter", use_container_width=True):
