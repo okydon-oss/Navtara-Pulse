@@ -694,3 +694,303 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
         "remedy_action": remedy_action
     }
 
+
+# ==============================================================================
+# 9 NAVAGRAHA BEEJ MANTRAS
+# ==============================================================================
+NAVAGRAHA_BEEJ_MANTRAS = {
+    "Surya (Sun / सूर्य) Beej Mantra": {
+        "sanskrit": "ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः॥",
+        "translit": "Om Hraam Hreem Hroum Sah Suryaya Namah ||",
+        "count": 7000,
+        "deity": "Surya Bhagwan",
+        "meaning": "Salutations to the supreme solar intelligence that illuminates consciousness, activates vitality, and dispels darkness.",
+        "rules": "• Best chanted at sunrise facing East.\n• Auspicious day: Sunday (रविवार).\n• Mala: Ruby (Manikya) or Red Sandalwood.\n• Bestows: Authority, vitality, heart health, leadership, and soul power."
+    },
+    "Chandra (Moon / चन्द्र) Beej Mantra": {
+        "sanskrit": "ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः॥",
+        "translit": "Om Shraam Shreem Shroum Sah Chandramase Namah ||",
+        "count": 11000,
+        "deity": "Chandra Deva",
+        "meaning": "Salutations to the cooling lunar frequency that governs the mind, emotions, and subtle biological fluids.",
+        "rules": "• Best chanted in the evening or twilight facing North-West.\n• Auspicious day: Monday (सोमवार).\n• Mala: White Pearl (Moti) or Sphatik.\n• Bestows: Emotional tranquility, mental composure, hormonal balance, and intuitive clarity."
+    },
+    "Mangal (Mars / मंगल) Beej Mantra": {
+        "sanskrit": "ॐ क्रां क्रीं क्रौं सः भौमाय नमः॥",
+        "translit": "Om Kraam Kreem Kroum Sah Bhaumaya Namah ||",
+        "count": 10000,
+        "deity": "Mangal Deva / Kartikeya",
+        "meaning": "Salutations to the fiery celestial warrior that ignites courage, stamina, and decisive action.",
+        "rules": "• Best chanted at sunrise facing South.\n• Auspicious day: Tuesday (मंगलवार).\n• Mala: Red Coral (Moonga) or Raktachandan.\n• Bestows: Physical stamina, property gains, courage against opposition, and metabolic fire."
+    },
+    "Budha (Mercury / बुध) Beej Mantra": {
+        "sanskrit": "ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः॥",
+        "translit": "Om Braam Breem Broum Sah Budhaya Namah ||",
+        "count": 9000,
+        "deity": "Budha Deva / Lord Vishnu",
+        "meaning": "Salutations to the deity of discerning intellect, verbal eloquence, and commercial agility.",
+        "rules": "• Best chanted in the morning facing North.\n• Auspicious day: Wednesday (बुधवार).\n• Mala: Emerald (Panna) or Green Jade / Tulsi.\n• Bestows: Sharp intellect, articulate speech, business acumen, and nervous system harmony."
+    },
+    "Guru (Jupiter / गुरु) Beej Mantra": {
+        "sanskrit": "ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः॥",
+        "translit": "Om Graam Greem Groum Sah Gurave Namah ||",
+        "count": 19000,
+        "deity": "Brihaspati / Lord Brahma",
+        "meaning": "Salutations to the supreme guru of the gods, the dispenser of divine wisdom, dharma, and expansion.",
+        "rules": "• Best chanted in the morning facing North-East.\n• Auspicious day: Thursday (गुरुवार).\n• Mala: Yellow Topaz or Haldi (Turmeric) Mala.\n• Bestows: Wisdom, spiritual growth, financial prosperity, progeny blessings, and honor."
+    },
+    "Shukra (Venus / शुक्र) Beej Mantra": {
+        "sanskrit": "ॐ द्रां द्रीं द्रौं सः शुक्राय नमः॥",
+        "translit": "Om Draam Dreem Droum Sah Shukraya Namah ||",
+        "count": 16000,
+        "deity": "Shukracharya / Goddess Lakshmi",
+        "meaning": "Salutations to the lord of creative beauty, refinement, material abundance, and restorative energy.",
+        "rules": "• Best chanted at sunrise facing South-East.\n• Auspicious day: Friday (शुक्रवार).\n• Mala: Sphatik (Quartz) or White Sandalwood.\n• Bestows: Marital harmony, creative brilliance, luxury asset acquisition, and reproductive health."
+    },
+    "Shani (Saturn / शनि) Beej Mantra": {
+        "sanskrit": "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः॥",
+        "translit": "Om Praam Preem Proum Sah Shanaishcharaya Namah ||",
+        "count": 23000,
+        "deity": "Shani Deva / Lord Shiva",
+        "meaning": "Salutations to the lord of karma, perseverance, and endurance who dispenses justice and destroys illusions.",
+        "rules": "• Best chanted at twilight or dusk facing West.\n• Auspicious day: Saturday (शनिवार).\n• Mala: Dark Rudraksha or Black Tourmaline.\n• Bestows: Pacification of Sade Sati & Dhaiya, resilience, structural career stability, and longevity."
+    },
+    "Rahu (North Node / राहु) Beej Mantra": {
+        "sanskrit": "ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः॥",
+        "translit": "Om Bhraam Bhreem Bhroum Sah Rahave Namah ||",
+        "count": 18000,
+        "deity": "Rahu Deva / Goddess Durga",
+        "meaning": "Salutations to the shadow catalyst that pierces through worldly illusions and material breakthroughs.",
+        "rules": "• Best chanted at twilight or night facing South-West.\n• Auspicious day: Saturday (शनिवार).\n• Mala: Dark Gomedh or Rudraksha.\n• Bestows: Relief from chronic anxiety, sudden fortune, protection against deception, and foreign success."
+    },
+    "Ketu (South Node / केतु) Beej Mantra": {
+        "sanskrit": "ॐ स्रां स्रीं स्रौं सः केतवे नमः॥",
+        "translit": "Om Sraam Sreem Sroum Sah Ketave Namah ||",
+        "count": 17000,
+        "deity": "Ketu Deva / Lord Ganesha",
+        "meaning": "Salutations to the divine liberator who grants spiritual insight, detachment, and occult wisdom.",
+        "rules": "• Best chanted at dawn or late night facing North-West.\n• Auspicious day: Tuesday (मंगलवार).\n• Mala: Cat's Eye (Lehsuniya) or Ashva Mala.\n• Bestows: Spiritual liberation (Moksha), intuitive discernment, and relief from occult disturbances."
+    }
+}
+
+# ==============================================================================
+# 27 NAKSHATRA CLASSICAL VEDIC BEEJ MANTRAS
+# ==============================================================================
+NAKSHATRA_BEEJ_MANTRAS = {
+    1: {
+        "name": "Ashwini (अश्विनी)",
+        "sanskrit": "ॐ अश्विनीकुमाराभ्यां नमः॥ ॐ अं अश्विनीभ्यां नमः॥",
+        "translit": "Om Ashwini-Kumarabhyam Namah || Om Am Ashwinibhyam Namah ||",
+        "deity": "Ashwini Kumaras (Celestial Physicians)",
+        "meaning": "Salutations to the divine celestial twins who restore health, speed, and vital pranic energy.",
+        "rules": "• Chant facing East in the morning.\n• Auspicious day: Tuesday.\n• Pacifies: Nervous restlessness, head congestion, and impatience."
+    },
+    2: {
+        "name": "Bharani (भरणी)",
+        "sanskrit": "ॐ यमाय नमः॥ ॐ इं भरणीभ्यां नमः॥",
+        "translit": "Om Yamaya Namah || Om Im Bharanibhyam Namah ||",
+        "deity": "Lord Yama (Dharmaraja)",
+        "meaning": "Salutations to the lord of cosmic law and truth who guides the soul through trials and transformations.",
+        "rules": "• Chant facing South or East at dusk.\n• Auspicious day: Tuesday / Friday.\n• Pacifies: Emotional burden, subconscious fear, and ancestral weight."
+    },
+    3: {
+        "name": "Krittika (कृत्तिका)",
+        "sanskrit": "ॐ अग्नये नमः॥ ॐ उं कृत्तिकाभ्यां नमः॥",
+        "translit": "Om Agnaye Namah || Om Um Krittikabhyam Namah ||",
+        "deity": "Agni Deva (God of Fire)",
+        "meaning": "Salutations to the sacred fire that digests impurities, sharpens intellect, and reveals absolute truth.",
+        "rules": "• Chant at sunrise facing East.\n• Auspicious day: Sunday.\n• Pacifies: Excess metabolic heat (Pitta), irritability, and hyper-criticism."
+    },
+    4: {
+        "name": "Rohini (रोहिणी)",
+        "sanskrit": "ॐ प्रजापतये नमः॥ ॐ ऋं रोहिणीभ्यां नमः॥",
+        "translit": "Om Prajapataye Namah || Om Rim Rohinibhyam Namah ||",
+        "deity": "Lord Brahma / Prajapati",
+        "meaning": "Salutations to the lord of cosmic creation, fertility, material prosperity, and aesthetic grace.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Monday / Friday.\n• Pacifies: Over-indulgence, stubborn possessiveness, and fluid imbalances."
+    },
+    5: {
+        "name": "Mrigashira (मृगशिरा)",
+        "sanskrit": "ॐ सोमाय नमः॥ ॐ ऌं मृगशिरसे नमः॥",
+        "translit": "Om Somaya Namah || Om Lrim Mrigashirase Namah ||",
+        "deity": "Soma Deva (Nectar of Immortality)",
+        "meaning": "Salutations to the deity of nectar who bestows youthful vitality, curiosity, and research acumen.",
+        "rules": "• Chant facing North in the morning.\n• Auspicious day: Tuesday / Wednesday.\n• Pacifies: Mental dispersion, wavering choices, and chronic second-guessing."
+    },
+    6: {
+        "name": "Ardra (आर्द्रा)",
+        "sanskrit": "ॐ रुद्राय नमः॥ ॐ एं आर्द्राभ्यां नमः॥",
+        "translit": "Om Rudraya Namah || Om Aem Ardrabhyam Namah ||",
+        "deity": "Rudra (Transformative Storm Lord)",
+        "meaning": "Salutations to Lord Rudra who dissolves attachments and grants deep breakthrough wisdom.",
+        "rules": "• Chant at twilight facing North.\n• Auspicious day: Saturday.\n• Pacifies: Emotional storm, grief, cynicism, and cognitive friction."
+    },
+    7: {
+        "name": "Punarvasu (पुनर्वसु)",
+        "sanskrit": "ॐ अदितये नमः॥ ॐ ऐं पुनर्वसवे नमः॥",
+        "translit": "Om Aditaye Namah || Om Aiem Punarvasave Namah ||",
+        "deity": "Aditi (Cosmic Mother of Devatas)",
+        "meaning": "Salutations to the cosmic mother who provides boundless protection, renewal, and recovery.",
+        "rules": "• Chant in the morning facing North-East.\n• Auspicious day: Thursday.\n• Pacifies: Boundary dissolution, lack of focus, and repeated setbacks."
+    },
+    8: {
+        "name": "Pushya (पुष्य)",
+        "sanskrit": "ॐ बृहस्पतये नमः॥ ॐ ओं पुष्येभ्यो नमः॥",
+        "translit": "Om Brihaspataye Namah || Om Om Pushyebhyo Namah ||",
+        "deity": "Brihaspati (Guru of Devatas)",
+        "meaning": "Salutations to the most auspicious star that nourishes virtue, institutional stability, and spiritual wisdom.",
+        "rules": "• Chant at sunrise facing East.\n• Auspicious day: Thursday / Saturday.\n• Pacifies: Rigid orthodoxy, stubborn resistance, and ethical fatigue."
+    },
+    9: {
+        "name": "Ashlesha (आश्लेषा)",
+        "sanskrit": "ॐ सर्पेभ्यो नमः॥ ॐ औं आश्लेषाभ्यां नमः॥",
+        "translit": "Om Sarpebhyo Namah || Om Oum Ashleshabhyam Namah ||",
+        "deity": "Nagas (Divine Serpent Guardians)",
+        "meaning": "Salutations to the primordial serpent energies that awaken occult discernment and strategic power.",
+        "rules": "• Chant in the evening facing North.\n• Auspicious day: Wednesday / Monday.\n• Pacifies: Suspicion, toxic relationships, and digestive lethargy."
+    },
+    10: {
+        "name": "Magha (मघा)",
+        "sanskrit": "ॐ पितृभ्यो नमः॥ ॐ अं मघाभ्यां नमः॥",
+        "translit": "Om Pitribhyo Namah || Om Am Maghabhyam Namah ||",
+        "deity": "Pitris (Ancestral Guardians)",
+        "meaning": "Salutations to the ancestral beings who bestow lineage honor, sovereign authority, and protection.",
+        "rules": "• Chant facing South at noon or Amavasya.\n• Auspicious day: Sunday.\n• Pacifies: Family lineage strife, pride, and ego fragility."
+    },
+    11: {
+        "name": "Purva Phalguni (पूर्वाफाल्गुनी)",
+        "sanskrit": "ॐ भगाय नमः॥ ॐ आं पूर्वाफाल्गुनीभ्यां नमः॥",
+        "translit": "Om Bhagaya Namah || Om Aam Purva-Phalgunibhyam Namah ||",
+        "deity": "Bhaga (God of Fortune & Prosperity)",
+        "meaning": "Salutations to the dispenser of marital happiness, artistic refinement, and luxury assets.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Friday.\n• Pacifies: Laziness, sensual indulgence, and delayed financial momentum."
+    },
+    12: {
+        "name": "Uttara Phalguni (उत्तराफाल्गुनी)",
+        "sanskrit": "ॐ अर्यम्णे नमः॥ ॐ इं उत्तराफाल्गुनीभ्यां नमः॥",
+        "translit": "Om Aryamne Namah || Om Im Uttara-Phalgunibhyam Namah ||",
+        "deity": "Aryaman (God of Honor & Alliances)",
+        "meaning": "Salutations to the divine upholder of vows, legal integrity, enduring alliances, and institutional leadership.",
+        "rules": "• Chant at sunrise facing East.\n• Auspicious day: Sunday.\n• Pacifies: Codependency, relational rigidity, and stress from public duty."
+    },
+    13: {
+        "name": "Hasta (हस्त)",
+        "sanskrit": "ॐ सवित्रे नमः॥ ॐ ईं हस्ताय नमः॥",
+        "translit": "Om Savitre Namah || Om Eem Hastaya Namah ||",
+        "deity": "Savitur (Solar Awakening & Energy)",
+        "meaning": "Salutations to the solar initiator who awakens manual precision, craftsmanship, and manifesting power.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Monday.\n• Pacifies: Nervous tension, deceptive instincts, and analytical burnout."
+    },
+    14: {
+        "name": "Chitra (चित्रा)",
+        "sanskrit": "ॐ विश्वकर्मणे नमः॥ ॐ उं चित्राभ्यां नमः॥",
+        "translit": "Om Vishwakarmane Namah || Om Um Chitrabhyam Namah ||",
+        "deity": "Vishwakarma (Divine Cosmic Architect)",
+        "meaning": "Salutations to the cosmic artisan who bestows engineering precision, structural creativity, and radiant charisma.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Tuesday.\n• Pacifies: Vanity, aesthetic restlessness, and interpersonal friction."
+    },
+    15: {
+        "name": "Swati (स्वाती)",
+        "sanskrit": "ॐ वायवे नमः॥ ॐ ऊं स्वातये नमः॥",
+        "translit": "Om Vayave Namah || Om Oom Swataye Namah ||",
+        "deity": "Vayu Deva (Cosmic Breath & Prana)",
+        "meaning": "Salutations to the life breath that provides agility, trade independence, and freedom of movement.",
+        "rules": "• Chant at dawn facing North-West.\n• Auspicious day: Saturday / Wednesday.\n• Pacifies: High Vata restlessness, scattered commitments, and loneliness."
+    },
+    16: {
+        "name": "Vishakha (विशाखा)",
+        "sanskrit": "ॐ इन्द्राग्निभ्यां नमः॥ ॐ ऋं विशाखाभ्यां नमः॥",
+        "translit": "Om Indragnibhyam Namah || Om Rim Vishakhabhyam Namah ||",
+        "deity": "Indra & Agni (Power & Sacred Flame)",
+        "meaning": "Salutations to the twin deities of concentrated purpose, relentless drive, and ultimate triumph.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Thursday.\n• Pacifies: Envy, obsessive ambition, and burnout from endless striving."
+    },
+    17: {
+        "name": "Anuradha (अनुराधा)",
+        "sanskrit": "ॐ मित्राय नमः॥ ॐ ॠं अनुराधाभ्यां नमः॥",
+        "translit": "Om Mitraya Namah || Om Rreem Anuradhabhyam Namah ||",
+        "deity": "Mitra (God of Compassion & Devotion)",
+        "meaning": "Salutations to the deity of friendship, foreign connections, alliance-building, and organizational harmony.",
+        "rules": "• Chant at twilight facing West.\n• Auspicious day: Saturday.\n• Pacifies: Emotional suppression, feeling unappreciated, and isolation."
+    },
+    18: {
+        "name": "Jyeshtha (ज्येष्ठा)",
+        "sanskrit": "ॐ इन्द्राय नमः॥ ॐ ऌं ज्येष्ठेभ्यो नमः॥",
+        "translit": "Om Indraya Namah || Om Lrim Jyeshthebhyo Namah ||",
+        "deity": "Indra (Supreme King of Heaven)",
+        "meaning": "Salutations to the king of gods who bestows executive authority, protective courage, and senior leadership.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Wednesday.\n• Pacifies: Authoritarian impulses, defensive insecurity, and isolation at the top."
+    },
+    19: {
+        "name": "Mula (मूल)",
+        "sanskrit": "ॐ निर्ऋतये नमः॥ ॐ ॡं मूलाय नमः॥",
+        "translit": "Om Nirritaye Namah || Om Lreem Mulaya Namah ||",
+        "deity": "Nirriti (Goddess of Root Realities)",
+        "meaning": "Salutations to the cosmic force that uproots illusions and reveals foundational spiritual truths.",
+        "rules": "• Chant at twilight facing South-West.\n• Auspicious day: Tuesday / Saturday.\n• Pacifies: Self-sabotage, destructive anger, and deep-rooted instability."
+    },
+    20: {
+        "name": "Purva Ashadha (पूर्वाषाढ़ा)",
+        "sanskrit": "ॐ अद्भ्यो नमः॥ ॐ एं पूर्वाषाढाभ्यां नमः॥",
+        "translit": "Om Adbhyo Namah || Om Aem Purva-Ashadhabhyam Namah ||",
+        "deity": "Apah (Divine Waters of Invincibility)",
+        "meaning": "Salutations to the sacred waters of victory, continuous purification, and unconquerable faith.",
+        "rules": "• Chant in the morning facing North.\n• Auspicious day: Friday.\n• Pacifies: Over-promising, stubbornness, and lack of tactical flexibility."
+    },
+    21: {
+        "name": "Uttara Ashadha (उत्तराषाढ़ा)",
+        "sanskrit": "ॐ विश्वेभ्यो देवेभ्यो नमः॥ ॐ ऐं उत्तराषाढाभ्यां नमः॥",
+        "translit": "Om Vishwebhyo Devebhyo Namah || Om Aiem Uttara-Ashadhabhyam Namah ||",
+        "deity": "Vishwadevas (Universal Cosmic Laws)",
+        "meaning": "Salutations to universal cosmic principles that ensure enduring victory through dharma and integrity.",
+        "rules": "• Chant at sunrise facing East.\n• Auspicious day: Sunday.\n• Pacifies: Melancholy, excessive solemnity, and taking on organizational burdens alone."
+    },
+    22: {
+        "name": "Shravana (श्रवण)",
+        "sanskrit": "ॐ विष्णवे नमः॥ ॐ ओं श्रवणाय नमः॥",
+        "translit": "Om Vishnave Namah || Om Om Shravanaya Namah ||",
+        "deity": "Lord Vishnu (Cosmic Preserver)",
+        "meaning": "Salutations to Lord Vishnu who preserves universal harmony, deep listening, and intellectual mastery.",
+        "rules": "• Chant in the morning facing East.\n• Auspicious day: Monday / Thursday.\n• Pacifies: Information overload, gossip susceptibility, and mental fatigue."
+    },
+    23: {
+        "name": "Dhanishta (धनिष्ठा)",
+        "sanskrit": "ॐ वसुभ्यो नमः॥ ॐ औं धनिष्ठेभ्यो नमः॥",
+        "translit": "Om Vasubhyo Namah || Om Oum Dhanishthebhyo Namah ||",
+        "deity": "Eight Vasus (Elemental Energy Lords)",
+        "meaning": "Salutations to the elemental lords of wealth, rhythm, martial stamina, and resource mobilization.",
+        "rules": "• Chant in the morning facing South.\n• Auspicious day: Tuesday.\n• Pacifies: Greed for recognition, harsh speech, and restlessness."
+    },
+    24: {
+        "name": "Shatabhisha (शतभिषा)",
+        "sanskrit": "ॐ वरुणाय नमः॥ ॐ अं शतभिषजे नमः॥",
+        "translit": "Om Varunaya Namah || Om Am Shatabhishaje Namah ||",
+        "deity": "Varuna Deva (Cosmic Oceans & Thousand Healers)",
+        "meaning": "Salutations to the lord of cosmic truth who unlocks profound scientific, medical, and esoteric healing.",
+        "rules": "• Chant at dusk facing North.\n• Auspicious day: Saturday.\n• Pacifies: Emotional alienation, severe cynicism, and chronic health vulnerabilities."
+    },
+    25: {
+        "name": "Purva Bhadrapada (पूर्वभाद्रपदा)",
+        "sanskrit": "ॐ अजैकपदे नमः॥ ॐ आं पूर्वभाद्रपदाभ्यां नमः॥",
+        "translit": "Om Ajaikapadaye Namah || Om Aam Purva-Bhadrapadabhyam Namah ||",
+        "deity": "Aja Ekapada (One-Footed Cosmic Fire)",
+        "meaning": "Salutations to the ascetic fire of transformation, reformist zeal, and visionary breakthroughs.",
+        "rules": "• Chant at sunrise facing East.\n• Auspicious day: Thursday.\n• Pacifies: Extreme mood swings, radical intolerance, and burnout."
+    },
+    26: {
+        "name": "Uttara Bhadrapada (उत्तरभाद्रपदा)",
+        "sanskrit": "ॐ अहिर्बुध्न्याय नमः॥ ॐ इं उत्तरभाद्रपदाभ्यां नमः॥",
+        "translit": "Om Ahirbudhnyaya Namah || Om Im Uttara-Bhadrapadabhyam Namah ||",
+        "deity": "Ahirbudhnya (Serpent of Deep Ocean Depths)",
+        "meaning": "Salutations to the serpent of cosmic depths who bestows unassailable peace, wisdom, and emotional stillness.",
+        "rules": "• Chant in the evening facing North or East.\n• Auspicious day: Saturday.\n• Pacifies: Deep lethargy, social withdrawal, and fear of action."
+    },
+    27: {
+        "name": "Revati (रेवती)",
+        "sanskrit": "ॐ पूष्णे नमः॥ ॐ ईं रेवतीभ्यां नमः॥",
+        "translit": "Om Pushne Namah || Om Eem Revatibhyam Namah ||",
+        "deity": "Pushan (Nourisher of Safe Journeys)",
+        "meaning": "Salutations to the divine shepherd who nourishes all beings, protects travelers, and completes cosmic cycles in grace.",
+        "rules": "• Chant in the morning facing North-East.\n• Auspicious day: Wednesday.\n• Pacifies: Over-sensitivity, financial boundary issues, and disorientation."
+    }
+}
