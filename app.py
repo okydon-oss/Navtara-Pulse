@@ -1805,6 +1805,108 @@ def render_page_forecast():
     </div>
     """)
 
+
+# ==============================================================================
+# TAB: MONTHLY PREDICTION (CURRENT & NEXT MONTH)
+# ==============================================================================
+def render_page_monthly():
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
+    lagna_name = chart_info["lagna_name"]
+    lagna_idx = chart_info["lagna_idx"]
+
+    render_html(f"""
+    <div class="light-card-profile" style="margin-bottom:1rem;">
+        <div style="font-weight:900; font-size:1.3rem; color:#9a3412; margin-bottom:0.3rem;">
+            📅 Lagna-Based Monthly Horoscope & Life Matrix
+        </div>
+        <div style="font-size:0.94rem; color:#475569;">
+            Precision 12-Bhava predictive analysis for <b>{lagna_name}</b> ({chart_info['lagna_deg']}).
+        </div>
+    </div>
+    """)
+
+    month_choice = st.radio(
+        "**Select Forecast Month:**",
+        options=["Current Month (September 2026)", "Next Month (October 2026)"],
+        horizontal=True
+    )
+    is_next = "October" in month_choice
+
+    pred = db.get_monthly_lagna_prediction(lagna_idx, is_next_month=is_next)
+
+    render_html(f"""
+    <div class="auth-hero-box" style="margin-bottom:1.2rem;">
+        <div style="font-size:0.85rem; color:#b45309; font-weight:800; text-transform:uppercase;">ASTROLOGICAL CLIMATE • {pred['month_name'].upper()}</div>
+        <div style="font-size:1.05rem; font-weight:900; color:#92400e; margin-top:4px;">
+            {pred['highlight']}
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:1.2rem;">
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fed7aa; border-left:5px solid #f97316;">
+            <b style="color:#9a3412; font-size:0.98rem;">🧘 1. Self & Vitality (Body, Physique, Energy):</b>
+            <div style="font-size:0.92rem; color:#431407; margin-top:3px; line-height:1.6;">{pred['self']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bbf7d0; border-left:5px solid #10b981;">
+            <b style="color:#065f46; font-size:0.98rem;">👨‍👩‍👦 2. Family & Accumulated Wealth:</b>
+            <div style="font-size:0.92rem; color:#14532d; margin-top:3px; line-height:1.6;">{pred['family']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd; border-left:5px solid #0284c7;">
+            <b style="color:#0369a1; font-size:0.98rem;">✈️ 3. Travels (Short Journeys & Enterprise):</b>
+            <div style="font-size:0.92rem; color:#0c4a6e; margin-top:3px; line-height:1.6;">{pred['travels']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fed7aa; border-left:5px solid #ea580c;">
+            <b style="color:#9a3412; font-size:0.98rem;">🏡 4. Property (Land, Home, Vehicles):</b>
+            <div style="font-size:0.92rem; color:#431407; margin-top:3px; line-height:1.6;">{pred['property']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fde68a; border-left:5px solid #f59e0b;">
+            <b style="color:#b45309; font-size:0.98rem;">📚 5. Children & Higher Study (Intellect):</b>
+            <div style="font-size:0.92rem; color:#78350f; margin-top:3px; line-height:1.6;">{pred['study']} | <b>Children:</b> {pred['child']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #e11d48;">
+            <b style="color:#9f1239; font-size:0.98rem;">📉 6. Loans & Health Defense (Debts, Immunity):</b>
+            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['loan']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #ddd6fe; border-left:5px solid #8b5cf6;">
+            <b style="color:#5b21b6; font-size:0.98rem;">💍 7. Spouse & Business Partnerships:</b>
+            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;"><b>Spouse:</b> {pred['spouse']} | <b>Partnerships:</b> {pred['partnership']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #be123c;">
+            <b style="color:#9f1239; font-size:0.98rem;">🔬 8. Research & Sudden Shifts (Accidents Caution):</b>
+            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;"><b>Research:</b> {pred['research']} | <b>Accidents/Safety:</b> {pred['accidents']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fde68a; border-left:5px solid #d97706;">
+            <b style="color:#92400e; font-size:0.98rem;">🍀 9. Luck & Dharma (Mentors & Fortune):</b>
+            <div style="font-size:0.92rem; color:#78350f; margin-top:3px; line-height:1.6;">{pred['luck']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd; border-left:5px solid #0284c7;">
+            <b style="color:#0369a1; font-size:0.98rem;">💼 10. Career & Executive Stature (Job, Business):</b>
+            <div style="font-size:0.92rem; color:#0c4a6e; margin-top:3px; line-height:1.6;">{pred['career']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bbf7d0; border-left:5px solid #059669;">
+            <b style="color:#065f46; font-size:0.98rem;">💰 11. Gains & Inflows (Net Profit & Networks):</b>
+            <div style="font-size:0.92rem; color:#14532d; margin-top:3px; line-height:1.6;">{pred['gains']}</div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #ddd6fe; border-left:5px solid #6d28d9;">
+            <b style="color:#5b21b6; font-size:0.98rem;">🌐 12. Expenditure & Foreign Linkages (Settlements):</b>
+            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;"><b>Expenditure:</b> {pred['expenditure']} | <b>Foreign:</b> {pred['foreign']}</div>
+        </div>
+    </div>
+    """)
 # ==============================================================================
 # TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
 # ==============================================================================
@@ -1919,6 +2021,7 @@ PAGES = {
     "shani": render_page_shani,
     "live": render_page_live,
     "forecast": render_page_forecast,
+    "monthly": render_page_monthly,
     "mantra": render_page_mantra,
     "install_guide": render_page_install_guide,
 }
