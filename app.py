@@ -40,6 +40,8 @@ from databanks import (
     get_nakshatra_rich_data,
     get_rashi_rich_data,
     get_lagna_rich_data
+    NAVAGRAHA_BEEJ_MANTRAS,
+    NAKSHATRA_BEEJ_MANTRAS
 )
 
 # Configure Streamlit page settings
