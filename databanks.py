@@ -694,6 +694,3 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
         "remedy_action": remedy_action
     }
 
-# ==============================================================================
-# CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
-# ==============================================================================
