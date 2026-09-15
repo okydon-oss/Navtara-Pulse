@@ -1390,64 +1390,79 @@ def render_page_dasha():
 
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
-    dasha_data = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist, chart_info['lagna_idx'])
+    
+    dasha_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
+    md_item = dasha_levels[0]
+    ad_item = dasha_levels[1]
+    
+    # Calculate next Antardasha and Mahadasha for the upcoming card
+    next_ad_target = ad_item['end'] + datetime.timedelta(days=2)
+    next_ad_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_ad_target)
+    next_ad_item = next_ad_levels[1]
 
-    md = dasha_data['md']
-    ad = dasha_data['ad']
-    n_md = dasha_data['next_md']
-    n_ad = dasha_data['next_ad']
+    next_md_target = md_item['end'] + datetime.timedelta(days=2)
+    next_md_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_md_target)
+    next_md_item = next_md_levels[0]
+
+    briefing = db.generate_dasha_executive_briefing(chart_info['lagna_idx'], md_item['lord'], ad_item['lord'])
 
     render_html(f"""
     <div style="margin-bottom:1.5rem;">
         <div style="font-weight:900; font-size:1.35rem; color:#1e293b;">{t('dasha_page_title', current_lang)}</div>
         <div style="font-size:0.95rem; color:#475569; margin-top:4px;">
-            {t('dasha_page_subtitle', current_lang)} (${chart_info['lagna_name']} Ascendant)
+            {t('dasha_page_subtitle', current_lang)} ({chart_info['lagna_name']} Ascendant)
         </div>
     </div>
 
-    <!-- MAHADASHA CARD -->
-    <div style="background:#f0fdf4; border-radius:14px; padding:18px; border:1.5px solid #bbf7d0; border-left:6px solid #16a34a; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <b style="color:#14532d; font-size:1.15rem;">Mahadasha: {md['lord'].upper()}</b>
-            <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 10px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
+    <!-- ACTIVE TIMELINE CARDS WITH EMBEDDED PREDICTIONS -->
+    <div style="display:grid; grid-template-columns: 1fr; gap:16px; margin-bottom:1.5rem;">
+        
+        <!-- MAHADASHA CARD -->
+        <div style="background:#f0fdf4; border-radius:14px; padding:18px; border:1px solid #bbf7d0; border-left:6px solid #16a34a; box-shadow:0 3px 10px rgba(0,0,0,0.02);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <b style="color:#14532d; font-size:1.15rem;">🟩 Mahadasha: {md_item['lord'].upper()}</b>
+                <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
+            </div>
+            <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:10px;">
+                ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
+            </div>
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:12px 14px; border-radius:10px; border:1px solid #dcfce7;">
+                <b>{briefing['md_title']}</b><br><br>
+                {briefing['md_text']}
+            </div>
         </div>
-        <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:10px;">
-            ⏱️ {md['start'].strftime('%b %d, %Y')} — {md['end'].strftime('%b %d, %Y')}
-        </div>
-        <div style="font-size:0.95rem; line-height:1.7; color:#1e293b;">
-            {md['desc']}
+
+        <!-- ANTARDASHA CARD -->
+        <div style="background:#eff6ff; border-radius:14px; padding:18px; border:1px solid #bfdbfe; border-left:6px solid #2563eb; box-shadow:0 3px 10px rgba(0,0,0,0.02);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <b style="color:#1e3a8a; font-size:1.15rem;">🟦 Antardasha: {ad_item['lord'].upper()}</b>
+                <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
+            </div>
+            <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:10px;">
+                ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
+            </div>
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:12px 14px; border-radius:10px; border:1px solid #dbeafe;">
+                <b>{briefing['ad_title']}</b><br><br>
+                {briefing['ad_text']}
+            </div>
         </div>
     </div>
 
-    <!-- ANTARDASHA CARD -->
-    <div style="background:#eff6ff; border-radius:14px; padding:18px; border:1.5px solid #bfdbfe; border-left:6px solid #2563eb; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <b style="color:#1e3a8a; font-size:1.15rem;">Antardasha: {ad['lord'].upper()}</b>
-            <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 10px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
-        </div>
-        <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:10px;">
-            ⏱️ {ad['start'].strftime('%b %d, %Y')} — {ad['end'].strftime('%b %d, %Y')}
-        </div>
-        <div style="font-size:0.95rem; line-height:1.7; color:#1e293b;">
-            {ad['desc']}
-        </div>
-    </div>
-
-    <!-- NEXT TRANSITIONS CARD -->
-    <div style="background:#f8fafc; border-radius:14px; padding:18px; border:1.5px solid #cbd5e1; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
-        <div style="font-weight:900; font-size:1.15rem; color:#0f172a; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+    <!-- UPCOMING TRANSITIONS CARD -->
+    <div style="background:#ffffff; border-radius:14px; padding:16px; border:1.5px solid #cbd5e1; box-shadow:0 3px 10px rgba(0,0,0,0.02);">
+        <div style="font-weight:900; font-size:1.1rem; color:#0f172a; margin-bottom:10px; border-bottom:1.5px solid #f1f5f9; padding-bottom:6px;">
             ⏳ Upcoming Planetary Transitions
         </div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.93rem; color:#334155;">
-            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #e2e8f0;">
-                <b style="color:#16a34a;">Next Mahadasha:</b><br>
-                <b>{n_md['lord'].upper()}</b><br>
-                <span style="font-size:0.84rem; color:#64748b;">{n_md['start'].strftime('%b %d, %Y')} — {n_md['end'].strftime('%b %d, %Y')}</span>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:0.9rem;">
+            <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                <b style="color:#0369a1;">Next Mahadasha:</b><br>
+                <div style="font-weight:900; color:#0f172a; font-size:1rem; margin:2px 0;">{next_md_item['lord'].upper()}</div>
+                <span style="font-size:0.82rem; color:#64748b;">Starts {next_md_item['start'].strftime('%b %d, %Y')}</span>
             </div>
-            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #e2e8f0;">
-                <b style="color:#2563eb;">Next Antardasha:</b><br>
-                <b>{n_ad['lord'].upper()}</b><br>
-                <span style="font-size:0.84rem; color:#64748b;">{n_ad['start'].strftime('%b %d, %Y')} — {n_ad['end'].strftime('%b %d, %Y')}</span>
+            <div style="background:#f8fafc; border-radius:10px; padding:10px; border:1px solid #e2e8f0;">
+                <b style="color:#0369a1;">Next Antardasha:</b><br>
+                <div style="font-weight:900; color:#0f172a; font-size:1rem; margin:2px 0;">{next_ad_item['lord'].upper()}</div>
+                <span style="font-size:0.82rem; color:#64748b;">Starts {next_ad_item['start'].strftime('%b %d, %Y')}</span>
             </div>
         </div>
     </div>
