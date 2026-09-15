@@ -1546,6 +1546,7 @@ PAGES = {
     "live": render_page_live,
     "forecast": render_page_forecast,
     "monthly": render_page_monthly,
+    "dasha": render_page_dasha,
     "mantra": render_page_mantra,
     "install_guide": render_page_install_guide,
 }
