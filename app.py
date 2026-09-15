@@ -185,14 +185,14 @@ NAKSHATRA_NAMES_HI = {
 }
 
 RASHI_NAMES_HI = {
-    "Mesha": "मेष (Aries)", "Vrishabha": "वृषभ (Taurus)", "Mithuna": "मिथुन (Gemini)",
-    "Karka": "कर्क (Cancer)", "Simha": "सिंह (Leo)", "Kanya": "कन्या (Virgo)",
-    "Tula": "तुला (Libra)", "Vrishchika": "वृश्चिक (Scorpio)", "Dhanu": "धनु (Sagittarius)",
-    "Makara": "मकर (Capricorn)", "Kumbha": "कुंभ (Aquarius)", "Meena": "मीन (Pisces)",
-    "Aries": "मेष (Aries)", "Taurus": "वृषभ (Taurus)", "Gemini": "मिथुन (Gemini)",
-    "Cancer": "कर्क (Cancer)", "Leo": "सिंह (Leo)", "Virgo": "कन्या (Virgo)",
-    "Libra": "तुला (Libra)", "Scorpio": "वृश्चिक (Scorpio)", "Sagittarius": "धनु (Sagittarius)",
-    "Capricorn": "मकर (Capricorn)", "Aquarius": "कुंभ (Aquarius)", "Pisces": "मीन (Pisces)"
+    "Mesha": "मेष", "Vrishabha": "वृषभ", "Mithuna": "मिथुन",
+    "Karka": "कर्क", "Simha": "सिंह", "Kanya": "कन्या",
+    "Tula": "तुला", "Vrishchika": "वृश्चिक", "Dhanu": "धनु",
+    "Makara": "मकर", "Kumbha": "कुंभ", "Meena": "मीन",
+    "Aries": "मेष", "Taurus": "वृषभ", "Gemini": "मिथुन",
+    "Cancer": "कर्क", "Leo": "सिंह", "Virgo": "कन्या",
+    "Libra": "तुला", "Scorpio": "वृश्चिक", "Sagittarius": "धनु",
+    "Capricorn": "मकर", "Aquarius": "कुंभ", "Pisces": "मीन"
 }
 
 NUMERO_DESCRIPTIONS = {
@@ -205,6 +205,12 @@ NUMERO_DESCRIPTIONS = {
     7: {"title_en": "Analyst & Deep Thinker (Ketu)", "title_hi": "गहन अनुसंधानकर्ता एवं तत्वज्ञानी (केतु प्रभाव)"},
     8: {"title_en": "Executive & Authority Builder (Saturn)", "title_hi": "कर्मनिष्ठ एवं न्यायप्रिय प्रबंधक (शनि प्रभाव)"},
     9: {"title_en": "Humanitarian & Courageous Pioneer (Mars)", "title_hi": "साहसी एवं लोकमंगल अग्रदूत (मंगल प्रभाव)"}
+}
+
+TARA_NAMES_HI = {
+    "Janma": "जन्म तारा", "Sampat": "सम्पत तारा", "Vipat": "विपत तारा",
+    "Kshema": "क्षेम तारा", "Pratyak": "प्रत्यक तारा", "Sadhana": "साधना तारा",
+    "Naidhana": "निधन तारा", "Mitra": "मित्र तारा", "Ati-Mitra": "अति-मित्र तारा"
 }
 
 # ==============================================================================
@@ -632,18 +638,19 @@ def render_page_profile():
     m_data = get_rashi_rich_data(chart_info["moon_rashi_idx"])
     l_data = get_lagna_rich_data(chart_info["lagna_idx"])
     
+    # Safely extract Moon and Lagna sign components
+    moon_parts = chart_info['moon_rashi_name'].split()
+    moon_p1 = moon_parts[0] if moon_parts else chart_info['moon_rashi_name']
+    moon_p2 = moon_parts[-1] if len(moon_parts) > 1 else ""
+
+    lagna_parts = chart_info['lagna_name'].split()
+    lagna_p1 = lagna_parts[0] if lagna_parts else chart_info['lagna_name']
+
     # Localized Names
     raw_nak = chart_info.get('star_name', 'Ashwini')
     disp_nak = NAKSHATRA_NAMES_HI.get(raw_nak, raw_nak) if is_hi else raw_nak
-
-    raw_rashi = chart_info.get('moon_rashi_name', 'Mesha')
-    rashi_key = raw_rashi.split()[0] if raw_rashi else "Mesha"
-    disp_rashi = RASHI_NAMES_HI.get(rashi_key, raw_rashi) if is_hi else raw_rashi
-
-    raw_lagna = chart_info.get('lagna_name', 'Mesha')
-    lagna_key = raw_lagna.split()[0] if raw_lagna else "Mesha"
-    disp_lagna = RASHI_NAMES_HI.get(lagna_key, raw_lagna) if is_hi else raw_lagna
-
+    disp_rashi = RASHI_NAMES_HI.get(moon_p1, moon_p1) if is_hi else moon_p1
+    disp_lagna = RASHI_NAMES_HI.get(lagna_p1, lagna_p1) if is_hi else lagna_p1
     disp_pada = f"चरण {chart_info['pada']}" if is_hi else f"Pada {chart_info['pada']}"
 
     # Localized Section Titles
@@ -823,7 +830,6 @@ def render_page_profile():
     with st.container(border=True):
         st.markdown(lbl_tara_title)
         
-        # Display localized star options if in Hindi, mapping cleanly to indices
         if is_hi:
             star_display_options = [f"{NAKSHATRA_NAMES_HI.get(s, s)} ({s})" for s in NAKSHATRAS]
             partner_star_sel = st.selectbox(lbl_select_star, options=star_display_options, index=0)
@@ -853,6 +859,7 @@ def render_page_profile():
             </div>
         </div>
         """)
+
 # ==============================================================================
 # TAB 3: NUMEROLOGY
 # ==============================================================================
@@ -1382,7 +1389,6 @@ def render_page_forecast():
     </div>
     """)
 
-
 # ==============================================================================
 # TAB 7: MONTHLY HOROSCOPE (DYNAMIC GOCHAR ENGINE)
 # ==============================================================================
@@ -1496,7 +1502,6 @@ def render_page_monthly():
     </div>
     """)
 
-
 # ==============================================================================
 # TAB 8: VIMSHOTTARI DASHA (OPTION 3: NATIVE HYBRID TOKEN TEMPLATE ENGINE)
 # ==============================================================================
@@ -1536,7 +1541,6 @@ NATURAL_FRIENDSHIPS = {
     "Ketu": {"friends": ["Mars", "Venus", "Jupiter"], "neutrals": ["Mercury", "Saturn"], "enemies": ["Sun", "Moon", "Rahu"]}
 }
 
-# Lagna-specific functional roles and gemstone safety profiles
 LAGNA_AFFILIATION_MAP = {
     0: {
         "Sun": {"role_en": "5th Lord (Trine)", "role_hi": "पंचमेश (त्रिकोण भाव अधिपति)", "gem_safe": True, "gem_en": "Ruby (Manikya)", "gem_hi": "माणिक्य (Ruby)"},
@@ -1729,7 +1733,6 @@ REMEDIAL_PROTOCOLS = {
     }
 }
 
-# Universal Archetypal Forecasts (English & Authentic Classical Hindi)
 DASHA_DETAILED_FORECASTS = {
     "Sun": {
         "md_en": "The Mahadasha of the Sun establishes a monumental multi-year epoch focused on sovereign authority, organizational leadership, and executive consolidation. Under this solar cycle, passive execution gives way to direct administrative accountability. You are compelled to step into roles demanding executive decision-making, visibility before key authorities, and clear ethical alignment. In career domains, this era rewards institutional compliance, transparent capital management, and decisive leadership. Financial growth stems from steady, structured advancement rather than hasty speculation. On a psychological level, it develops resolute confidence but cautions against egoic friction with peers or superiors. Health requires monitoring bodily heat, cardiovascular stamina, and eye wellness through balanced discipline.",
@@ -1895,7 +1898,6 @@ def local_calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, tar
         
     current_md_lord = DASHA_SEQ[md_idx]
     
-    # Sub-periods (Antardasha)
     curr_ad_st = md_start
     active_ad = ("Ketu", md_years, md_start, md_end)
     for i in range(9):
@@ -1923,12 +1925,10 @@ def render_page_dasha():
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
     
-    # Calculate live dasha levels
     dasha_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
     md_item = dasha_levels[0]
     ad_item = dasha_levels[1]
     
-    # Next Transitions
     next_ad_target = ad_item['end'] + datetime.timedelta(days=2)
     next_ad_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_ad_target)
     next_ad_item = next_ad_levels[1]
@@ -1945,7 +1945,6 @@ def render_page_dasha():
         lagna_idx, md_item['lord'], ad_item['lord'], is_hi
     )
 
-    # Pull Detailed Forecasts
     md_forecast_obj = DASHA_DETAILED_FORECASTS.get(md_item['lord'], DASHA_DETAILED_FORECASTS["Jupiter"])
     ad_forecast_obj = DASHA_DETAILED_FORECASTS.get(ad_item['lord'], DASHA_DETAILED_FORECASTS["Saturn"])
     
@@ -1955,13 +1954,11 @@ def render_page_dasha():
     md_rem_text = format_remedial_protocol(md_item['lord'], md_aff, is_hi)
     ad_rem_text = format_remedial_protocol(ad_item['lord'], ad_aff, is_hi)
 
-    # Planetary Names localized
     md_disp_name = PLANET_NAMES_HI[md_item['lord']] if is_hi else md_item['lord'].upper()
     ad_disp_name = PLANET_NAMES_HI[ad_item['lord']] if is_hi else ad_item['lord'].upper()
     next_md_disp = PLANET_NAMES_HI[next_md_item['lord']] if is_hi else next_md_item['lord'].upper()
     next_ad_disp = PLANET_NAMES_HI[next_ad_item['lord']] if is_hi else next_ad_item['lord'].upper()
 
-    # Labels
     lbl_md_card = "🟩 वर्तमान महादशा" if is_hi else "🟩 Active Mahadasha"
     lbl_ad_card = "🟦 वर्तमान अंतर्दशा" if is_hi else "🟦 Active Antardasha"
     lbl_rel_header = "🪐 लग्न के साथ संबंध:" if is_hi else "🪐 Planetary Relationship with Your Lagna:"
@@ -1996,18 +1993,15 @@ def render_page_dasha():
                 ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
             </div>
 
-            <!-- Lagna Relationship Highlight -->
             <div style="background:#dcfce7; border-radius:10px; padding:12px 14px; border:1px solid #bbf7d0; margin-bottom:12px; font-size:0.93rem; color:#14532d; line-height:1.6;">
                 <b>{lbl_rel_header}</b><br>{md_lagna_rel}
             </div>
 
-            <!-- In-Depth Comprehensive Prediction -->
             <div style="font-size:0.95rem; color:#1e293b; line-height:1.75; background:#ffffff; padding:16px 18px; border-radius:10px; border:1px solid #dcfce7; margin-bottom:12px;">
                 <b style="color:#15803d; font-size:1.02rem;">{lbl_md_fc_header}</b><br><br>
                 {md_pred_text}
             </div>
 
-            <!-- Filtered Remedial Protocol -->
             <div style="font-size:0.92rem; color:#14532d; line-height:1.65; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #86efac;">
                 <b style="color:#166534; font-size:0.98rem;">{lbl_rem_header}</b><br><br>
                 {md_rem_text}
@@ -2024,20 +2018,17 @@ def render_page_dasha():
                 ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
             </div>
 
-            <!-- Interlocking Relationship Statements -->
             <div style="background:#dbeafe; border-radius:10px; padding:12px 14px; border:1px solid #bfdbfe; margin-bottom:12px; font-size:0.93rem; color:#1e3a8a; line-height:1.6;">
                 <b>{lbl_ad_rel_header}</b><br>
                 • {ad_lagna_rel}<br>
                 • {ad_md_rel}
             </div>
 
-            <!-- In-Depth Focused Prediction -->
             <div style="font-size:0.95rem; color:#1e293b; line-height:1.75; background:#ffffff; padding:16px 18px; border-radius:10px; border:1px solid #dbeafe; margin-bottom:12px;">
                 <b style="color:#1d4ed8; font-size:1.02rem;">{lbl_ad_fc_header}</b><br><br>
                 {ad_pred_text}
             </div>
 
-            <!-- Filtered Sub-Period Remedial Protocol -->
             <div style="font-size:0.92rem; color:#1e3a8a; line-height:1.65; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #93c5fd;">
                 <b style="color:#1e40af; font-size:0.98rem;">{lbl_ad_rem_header}</b><br><br>
                 {ad_rem_text}
@@ -2064,9 +2055,9 @@ def render_page_dasha():
         </div>
     </div>
     """)
-    
+
 # ==============================================================================
-# TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
+# TAB 9: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
 # ==============================================================================
 def render_page_mantra():
     render_html("""
@@ -2081,7 +2072,6 @@ def render_page_mantra():
     </div>
     """)
 
-    # 1. Base Classical Protection Mantras
     classical_mantras = {
         "Maha Mrityunjaya Mantra (Supreme Protection)": {
             "sanskrit": "ॐ त्र्यम्बकं यजामहे सुगन्धिं पुष्टिवर्धनम्।\nउर्वारुकमिव बन्धनान्मृत्योर्मुक्षीय मामृतात्॥",
@@ -2117,8 +2107,6 @@ def render_page_mantra():
         m_info = NAVAGRAHA_BEEJ_MANTRAS[mantra_choice]
     else:
         nak_options = {idx: data["name"] for idx, data in NAKSHATRA_BEEJ_MANTRAS.items()}
-        
-        # Pre-select user's Janma Nakshatra if chart is loaded
         default_idx = (chart_info["star_idx"] - 1) if chart_info else 0
         selected_star_idx = st.selectbox(
             "Choose Nakshatra Beej Mantra:",
@@ -2128,7 +2116,6 @@ def render_page_mantra():
         )
         m_info = NAKSHATRA_BEEJ_MANTRAS[selected_star_idx]
 
-    # Render Card
     render_html(f"""
     <div style="background:#ffffff; border:1.5px solid #ddd6fe; border-radius:14px; padding:18px; margin:14px 0; box-shadow:0 3px 12px rgba(139,92,246,0.06);">
         <div style="font-size:1.4rem; font-weight:900; color:#1e1b4b; text-align:center; font-family:serif; line-height:1.6; white-space:pre-line;">
@@ -2145,7 +2132,6 @@ def render_page_mantra():
     </div>
     """)
 
-    # Interactive 108-Bead Mala Counter
     with st.container(border=True):
         st.markdown(f"### 📿 Digital Mala: **{st.session_state.japa_count} / 108** Beads")
         progress_val = min(1.0, st.session_state.japa_count / 108.0)
