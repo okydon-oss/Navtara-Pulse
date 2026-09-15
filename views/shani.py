@@ -1,33 +1,9 @@
-# views/shani.py - Dedicated Shani, Paya & Sade Sati View with Full Hindi & English Support
+# views/shani.py - Dedicated Shani, Paya & Sade Sati View with Complete Hindi & English Content
 import streamlit as st
 
 def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
-
-# Hindi Translation Dictionaries for Shani and Sade Sati Data
-SHANI_HI_MAP = {
-    "Swarna Paya": "स्वर्ण पाया (Gold Paya)",
-    "Roupya Paya": "रौप्य पाया (Silver Paya)",
-    "Loha Paya": "लोह पाया (Iron Paya)",
-    "Tamra Paya": "ताम्र पाया (Copper Paya)",
-    "Very Challenging": "अति संवेदनशील / संघर्षपूर्ण",
-    "Favorable / Balanced": "अनुकूल एवं संतुलित",
-    "Demanding & Strategic": "परिश्रम एवं रणनीति प्रधान",
-    "Saturn in Pisces (Meena)": "मीन राशि में शनि गोचर",
-    "Active Transit Paya for Your": "आपकी चन्द्र राशि हेतु वर्तमान गोचर पाया:",
-    "Active Window": "सक्रिय समयावधि",
-    "Core Focus": "मुख्य कर्मक्षेत्र",
-    "Complete 7.5-Year Sade Sati Evolutionary Blueprint for": "चन्द्र राशि हेतु 7.5-वर्षीय शनि साढ़े साती का संपूर्ण चक्र:",
-    "Phase 1: Rising Phase": "प्रथम चरण: उदय काल (द्वादश भाव गोचर)",
-    "Phase 2: Peak Janma Shani": "द्वितीय चरण: शिखर काल (जन्मांग चन्द्र पर शनि)",
-    "Phase 3: Setting Phase": "तृतीय चरण: अस्त काल (द्वितीय भाव गोचर)",
-    "Core Dynamic": "मूल प्रभाव",
-    "Financial & Career": "आर्थिक एवं कार्यक्षेत्र",
-    "Karmic Mastery": "कर्मिक संतुलन एवं सीख",
-    "Prescribed Remedies for Planetary Neutralization": "🪐 ग्रह शांति एवं शमन हेतु निर्धारित वैदिक उपाय:",
-    "Open Dedicated Digital Japa Counter": "📿 डिजिटल जप माला काउंटर खोलें"
-}
 
 def render_page_shani():
     if not st.session_state.get("has_valid_profile", False):
@@ -67,25 +43,28 @@ def render_page_shani():
     p2_active_tag = '<span style="font-size:0.82rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW (PEAK)</span>' if shani_sadesati_data.get('phase_2_active') else ''
     p3_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data.get('phase_3_active') else ''
 
-    # Localized text translations
-    paya_name = shani_paya_data.get('paya', '')
+    raw_paya = shani_paya_data.get('paya', '')
     if is_hi:
-        if "Swarna" in paya_name or "Gold" in paya_name: paya_display = "स्वर्ण पाया (Gold Paya — अत्यधिक संघर्ष व परिश्रम)"
-        elif "Roupya" in paya_name or "Silver" in paya_name: paya_display = "रौप्य पाया (Silver Paya — मध्यम फलदायक व शुभ)"
-        elif "Tamra" in paya_name or "Copper" in paya_name: paya_display = "ताम्र पाया (Copper Paya — प्रगति एवं आर्थिक लाभ)"
-        else: paya_display = "लोह पाया (Iron Paya — कड़ा संघर्ष व अनुशासन)"
+        if "Swarna" in raw_paya or "Gold" in raw_paya:
+            paya_display = "स्वर्ण पाया (Gold Paya — अत्यधिक परिश्रम व मानसिक संघर्ष)"
+        elif "Roupya" in raw_paya or "Silver" in raw_paya:
+            paya_display = "रौप्य पाया (Silver Paya — मध्यम फलदायक, सुख व सफलता)"
+        elif "Tamra" in raw_paya or "Copper" in raw_paya:
+            paya_display = "ताम्र पाया (Copper Paya — प्रगति, आय वृद्धि एवं विजय)"
+        else:
+            paya_display = "लोह पाया (Iron Paya — कड़ा संघर्ष, अनुशासन व परीक्षा)"
     else:
-        paya_display = paya_name
+        paya_display = raw_paya
 
     main_title = "🪐 शनि पाया एवं साढ़े साती संपूर्ण जीवन-क्षेत्र मैट्रिक्स" if is_hi else "🪐 Shani Paya & Sade Sati Exhaustive Life-Domain Matrix"
     saturn_transit = "मीन राशि में शनि गोचर" if is_hi else "Saturn in Pisces (Meena)"
     active_paya_lbl = f"आपकी {m_name.upper()} चन्द्र राशि हेतु वर्तमान गोचर पाया:" if is_hi else f"ACTIVE TRANSIT PAYA FOR YOUR {m_name.upper()} MOON"
     
-    status_grade = shani_paya_data.get('status', '')
+    raw_status = shani_paya_data.get('status', '')
     if is_hi:
-        status_grade_disp = "संघर्षपूर्ण एवं संवेदनशील" if "Challenging" in status_grade else "संतुलित एवं रणनीतिक"
+        status_grade = "संघर्षपूर्ण एवं संवेदनशील" if "Challenging" in raw_status else "संतुलित एवं रणनीतिक"
     else:
-        status_grade_disp = status_grade
+        status_grade = raw_status
 
     tone_disp = shani_paya_data.get('tone', '')
     timeline_disp = shani_paya_data.get('timeline', '')
@@ -93,7 +72,27 @@ def render_page_shani():
     houses_disp = shani_paya_data.get('houses', '')
 
     sadesati_title = f"⚖️ {m_name} चन्द्र राशि हेतु सक्रिय साढ़े साती / ढैय्या जीवन-क्षेत्र विश्लेषण" if is_hi else f"⚖️ Active Sade Sati / Dhaiya Life-Domain Breakdown for {m_name} Moon"
-    
+
+    # Bilingual SHANI PAYA data blocks
+    paya_health = "शारीरिक थकान, जोड़ों में दर्द और अत्यधिक कार्यभार के कारण ऊर्जा में उतार-चढ़ाव।" if is_hi else shani_paya_data.get('health', '')
+    paya_wealth = "वित्तीय मामलों में अत्यधिक सावधानी बरतें; सट्टेबाजी या जोखिम भरे निवेश से बचें।" if is_hi else shani_paya_data.get('wealth', '')
+    paya_family = "घरेलू जिम्मेदारियां बढ़ेंगी; परिजनों के साथ धैर्य और सौम्य संवाद बनाए रखें।" if is_hi else shani_paya_data.get('family', '')
+    paya_loan = "नए कर्ज लेने से बचें और पुराने ऋणों को समय पर चुकाने की योजना बनाएं।" if is_hi else shani_paya_data.get('loan', '')
+    paya_partner = "व्यापारिक साझेदारियों में पारदर्शिता रखें और किसी पर भी आँख मूंदकर भरोसा न करें।" if is_hi else shani_paya_data.get('partner', '')
+    paya_luck = "भाग्य के भरोसे न बैठकर अपने पुरुषार्थ और निरंतर मेहनत पर भरोसा रखें।" if is_hi else shani_paya_data.get('luck', '')
+    paya_career = "कार्यालय में उच्चाधिकारियों से सामंजस्य रखें; वरिष्ठों की सलाह आपके हित में होगी।" if is_hi else shani_paya_data.get('career', '')
+    paya_protocol = "नियमित शनि बीज मंत्र का जप करें और शनिवार को तेल अथवा अन्न का दान करें।" if is_hi else shani_paya_data.get('protocol', '')
+
+    # Bilingual SADE SATI / DHAIYA data blocks
+    ss_health = "मानसिक तनाव से बचने के लिए योग, ध्यान और पर्याप्त नींद को प्राथमिकता दें।" if is_hi else shani_sadesati_data.get('health', '')
+    ss_wealth = "वित्तीय अनुशासन अपनाएं, अनावश्यक खर्चों पर लगाम लगाएं और बचत को प्राथमिकता दें।" if is_hi else shani_sadesati_data.get('wealth', '')
+    ss_family = "परिवार के साथ समय बिताएं; छोटी-मोटी बातों को तूल न दें।" if is_hi else shani_sadesati_data.get('family', '')
+    ss_loan = "क्रेडिट कार्ड या भारी लोन के जाल में फंसने से बचें।" if is_hi else shani_sadesati_data.get('loan', '')
+    ss_partner = "साझेदारी के व्यापार में कानूनी समझौतों को लिखित रूप में स्पष्ट रखें।" if is_hi else shani_sadesati_data.get('partner', '')
+    ss_luck = "धीमी प्रगति से निराश न हों; यह काल आपको दीर्घकालिक सफलता के लिए मजबूत बना रहा है।" if is_hi else shani_sadesati_data.get('luck', '')
+    ss_career = "धीरज रखें, शॉर्टकट से बचें और अपने काम में पूर्ण ईमानदारी बरतें।" if is_hi else shani_sadesati_data.get('career', '')
+    ss_remedy = "शनिवार को पीपल के वृक्ष के नीचे सरसों के तेल का दीपक जलाएं और हनुमान चालीसा पढ़ें।" if is_hi else shani_sadesati_data.get('remedy', '')
+
     render_html(f"""
     <div class="light-card-shani">
         <div style="font-weight:900; font-size:1.35rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -105,7 +104,7 @@ def render_page_shani():
         <div style="background:#f5f3ff; border-radius:14px; padding:16px; border:1.5px solid #e9d5ff; margin-bottom:1.25rem;">
             <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">{active_paya_lbl}</div>
             <div style="font-size:1.45rem; font-weight:900; color:#5b21b6; margin:4px 0;">{paya_display}</div>
-            <div style="font-size:0.98rem; color:#7c3aed; font-weight:800;">{"स्तर" if is_hi else "Grade"}: {status_grade_disp} | {"ऊर्जा" if is_hi else "Dynamic"}: {tone_disp}</div>
+            <div style="font-size:0.98rem; color:#7c3aed; font-weight:800;">{"स्तर" if is_hi else "Grade"}: {status_grade} | {"ऊर्जा" if is_hi else "Dynamic"}: {tone_disp}</div>
             <div style="font-size:0.92rem; color:#475569; margin-top:3px;"><b>{"सक्रिय समयावधि" if is_hi else "Active Timeline"}:</b> {timeline_disp}</div>
             
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #ddd6fe; margin-top:12px; font-size:0.93rem; color:#3b0764; line-height:1.7;">
@@ -115,28 +114,28 @@ def render_page_shani():
 
             <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-top:12px;">
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #f97316; font-size:0.91rem; color:#7c2d12; line-height:1.6;">
-                    <b>🌿 1. {"स्वास्थ्य एवं प्राण ऊर्जा प्रभाव" if is_hi else "Health & Vitality Impact"}:</b><br>{shani_paya_data.get('health', '')}
+                    <b>🌿 1. {"स्वास्थ्य एवं प्राण ऊर्जा प्रभाव" if is_hi else "Health & Vitality Impact"}:</b><br>{paya_health}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #10b981; font-size:0.91rem; color:#14532d; line-height:1.6;">
-                    <b>💰 2. {"धन संचय एवं नकदी प्रवाह" if is_hi else "Wealth & Cash Flow Dynamics"}:</b><br>{shani_paya_data.get('wealth', '')}
+                    <b>💰 2. {"धन संचय एवं नकदी प्रवाह" if is_hi else "Wealth & Cash Flow Dynamics"}:</b><br>{paya_wealth}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #8b5cf6; font-size:0.91rem; color:#3b0764; line-height:1.6;">
-                    <b>👨‍👩‍👧‍👦 3. {"पारिवारिक एवं घरेलू सामंजस्य" if is_hi else "Family & Domestic Harmony"}:</b><br>{shani_paya_data.get('family', '')}
+                    <b>👨‍👩‍👧‍👦 3. {"पारिवारिक एवं घरेलू सामंजस्य" if is_hi else "Family & Domestic Harmony"}:</b><br>{paya_family}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #e11d48; font-size:0.91rem; color:#881337; line-height:1.6;">
-                    <b>📉 4. {"ऋण एवं देनदारियों का प्रबंधन" if is_hi else "Loans & Liabilities Management"}:</b><br>{shani_paya_data.get('loan', '')}
+                    <b>📉 4. {"ऋण एवं देनदारियों का प्रबंधन" if is_hi else "Loans & Liabilities Management"}:</b><br>{paya_loan}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #065f46; font-size:0.91rem; color:#065f46; line-height:1.6;">
-                    <b>🤝 5. {"व्यापारिक साझेदारियाँ व अनुबंध" if is_hi else "Partnerships & Business Alliances"}:</b><br>{shani_paya_data.get('partner', '')}
+                    <b>🤝 5. {"व्यापारिक साझेदारियाँ व अनुबंध" if is_hi else "Partnerships & Business Alliances"}:</b><br>{paya_partner}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #d97706; font-size:0.91rem; color:#78350f; line-height:1.6;">
-                    <b>🍀 6. {"भाग्य एवं अवसर संरेखण" if is_hi else "Luck & Destiny Alignment"}:</b><br>{shani_paya_data.get('luck', '')}
+                    <b>🍀 6. {"भाग्य एवं अवसर संरेखण" if is_hi else "Luck & Destiny Alignment"}:</b><br>{paya_luck}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #0284c7; font-size:0.91rem; color:#0369a1; line-height:1.6;">
-                    <b>💼 7. {"कर्मक्षेत्र, अधिकार एवं प्रतिष्ठा" if is_hi else "Career, Authority & Executive Standing"}:</b><br>{shani_paya_data.get('career', '')}
+                    <b>💼 7. {"कर्मक्षेत्र, अधिकार एवं प्रतिष्ठा" if is_hi else "Career, Authority & Executive Standing"}:</b><br>{paya_career}
                 </div>
                 <div style="background:#ffffff; border-radius:10px; padding:12px; border-left:4px solid #475569; font-size:0.91rem; color:#0f172a; line-height:1.6;">
-                    <b>🪔 8. {"लक्षित तत्वीय उपाय एवं सावधानियाँ" if is_hi else "Targeted Elemental Countermeasures"}:</b><br>{shani_paya_data.get('protocol', '')}
+                    <b>🪔 8. {"लक्षित तत्वीय उपाय एवं सावधानियाँ" if is_hi else "Targeted Elemental Countermeasures"}:</b><br>{paya_protocol}
                 </div>
             </div>
         </div>
@@ -156,28 +155,28 @@ def render_page_shani():
 
             <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:14px;">
                 <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#7c2d12; border-left:4px solid #f97316;">
-                    <b>🌿 1. {"स्वास्थ्य प्रभाव" if is_hi else "Health & Vitality Impact"}:</b><br>{shani_sadesati_data.get('health', '')}
+                    <b>🌿 1. {"स्वास्थ्य प्रभाव" if is_hi else "Health & Vitality Impact"}:</b><br>{ss_health}
                 </div>
                 <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
-                    <b>💰 2. {"धन एवं नकदी प्रवाह" if is_hi else "Wealth Dynamics"}:</b><br>{shani_sadesati_data.get('wealth', '')}
+                    <b>💰 2. {"धन एवं नकदी प्रवाह" if is_hi else "Wealth Dynamics"}:</b><br>{ss_wealth}
                 </div>
                 <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#3b0764; border-left:4px solid #8b5cf6;">
-                    <b>👨‍👩‍👧‍👦 3. {"परिवार व गृहस्थी" if is_hi else "Family Harmony"}:</b><br>{shani_sadesati_data.get('family', '')}
+                    <b>👨‍👩‍👧‍👦 3. {"परिवार व गृहस्थी" if is_hi else "Family Harmony"}:</b><br>{ss_family}
                 </div>
                 <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#881337; border-left:4px solid #e11d48;">
-                    <b>📉 4. {"ऋण व देयताएं" if is_hi else "Loans & Liabilities"}:</b><br>{shani_sadesati_data.get('loan', '')}
+                    <b>📉 4. {"ऋण व देयताएं" if is_hi else "Loans & Liabilities"}:</b><br>{ss_loan}
                 </div>
                 <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#065f46;">
-                    <b>🤝 5. {"साझेदारियाँ" if is_hi else "Partnerships"}:</b><br>{shani_sadesati_data.get('partner', '')}
+                    <b>🤝 5. {"साझेदारियाँ" if is_hi else "Partnerships"}:</b><br>{ss_partner}
                 </div>
                 <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#78350f;">
-                    <b>🍀 6. {"भाग्य संरेखण" if is_hi else "Destiny Alignment"}:</b><br>{shani_sadesati_data.get('luck', '')}
+                    <b>🍀 6. {"भाग्य संरेखण" if is_hi else "Destiny Alignment"}:</b><br>{ss_luck}
                 </div>
                 <div style="background:#f0f9ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#0369a1;">
-                    <b>💼 7. {"करियर व प्रतिष्ठा" if is_hi else "Career Standing"}:</b><br>{shani_sadesati_data.get('career', '')}
+                    <b>💼 7. {"करियर व प्रतिष्ठा" if is_hi else "Career Standing"}:</b><br>{ss_career}
                 </div>
                 <div style="background:#f8fafc; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#0f172a;">
-                    <b>🪔 8. {"उपाय प्रोटोकॉल" if is_hi else "Remedial Protocol"}:</b><br>{shani_sadesati_data.get('remedy', '')}
+                    <b>🪔 8. {"उपाय प्रोटोकॉल" if is_hi else "Remedial Protocol"}:</b><br>{ss_remedy}
                 </div>
             </div>
 
