@@ -70,19 +70,17 @@ def render_page_shani():
     tone_disp = shani_paya_data.get('tone', '')
     timeline_disp = shani_paya_data.get('timeline', '')
     
-    # Fully localized classical foundation text with exact house numbers
     houses_raw = shani_paya_data.get('houses', '2nd')
     if is_hi:
-        # Translate house strings like "12th", "1st", "2nd" to Hindi
         h_map = {"12th": "द्वादश (12वें)", "1st": "प्रथम (पहले)", "2nd": "द्वितीय (दूसरे)"}
         h_trans = h_map.get(houses_raw, houses_raw)
         desc_disp = f"वर्तमान में शनि आपकी जन्मकालीन चन्द्र राशि से {h_trans} भाव में गोचर कर रहे हैं। यह स्थिति आपके जीवन में दीर्घकालिक अनुशासन, पेशेवर पुनर्गठन और कर्मिक संतुलन की मांग करती है।"
     else:
-        desc_disp = f"Saturn is currently transiting the {houses_raw} house relative to your {m_name} Moon, bringing structural discipline, operational audits, and karmic recalibration."
+        desc_disp = shani_paya_data.get('desc', f"Saturn is currently transiting the {houses_raw} house relative to your {m_name} Moon, bringing structural discipline, operational audits, and karmic recalibration.")
 
     sadesati_title = f"⚖️ {m_name} चन्द्र राशि हेतु सक्रिय साढ़े साती / ढैय्या जीवन-क्षेत्र विश्लेषण" if is_hi else f"⚖️ Active Sade Sati / Dhaiya Life-Domain Breakdown for {m_name} Moon"
 
-    # Fully localized Paya domain impacts
+    # Localized Paya domain impacts
     if is_hi:
         paya_health = "शारीरिक थकान, जोड़ों में दर्द और अत्यधिक कार्यभार के कारण ऊर्जा स्तर में उतार-चढ़ाव संभव है।"
         paya_wealth = "वित्तीय मामलों में अत्यधिक सावधानी बरतें; सट्टेबाजी, जोखिम भरे निवेश या उधार देने से बचें।"
@@ -102,7 +100,7 @@ def render_page_shani():
         paya_career = shani_paya_data.get('career', '')
         paya_protocol = shani_paya_data.get('protocol', '')
 
-    # Fully localized Sade Sati / Dhaiya domain impacts
+    # Localized Sade Sati domain impacts
     if is_hi:
         ss_health = "मानसिक तनाव व थकान से बचने के लिए योग, ध्यान और पर्याप्त विश्राम को अपनी दिनचर्या में शामिल करें।"
         ss_wealth = "वित्तीय अनुशासन अपनाएं, अनावश्यक खर्चों पर लगाम लगाएं और दीर्घकालिक संपत्तियों में सुरक्षित निवेश करें।"
@@ -126,11 +124,12 @@ def render_page_shani():
     r1st = shani_sadesati_data.get('rashi_1st', '1st')
     r2nd = shani_sadesati_data.get('rashi_2nd', '2nd')
 
-    # Phase 1, 2, 3 dynamic localized subtitles
+    # Phase 1, 2, 3 dynamic localized subtitles and bullet points
     if is_hi:
         p1_title = f"प्रथम चरण: उदय काल (शनि {r12} राशि / चन्द्र से 12वें भाव में)"
         p2_title = f"द्वितीय चरण: शिखर काल (शनि {r1st} राशि / जन्म चन्द्र के ऊपर)"
         p3_title = f"तृतीय चरण: अस्त काल (शनि {r2nd} राशि / चन्द्र से दूसरे भाव में)"
+        
         p1_dyn = "मानसिक पुनर्गठन, अंतर्मुखता, और व्यय नियंत्रण का काल।"
         p1_fin = "यात्राओं, निवेश या स्वास्थ्य संबंधी खर्चों में वृद्धि; कार्य पर्दे के पीछे से होते हैं।"
         p1_kar = "पुरानी मानसिक बाधाओं को छोड़कर भविष्य के लिए मानसिक रूप से तैयार होना।"
@@ -142,10 +141,21 @@ def render_page_shani():
         p3_dyn = "मानसिक दबाव में कमी, अर्जित ज्ञान का स्थिरीकरण और पारिवारिक सौहार्द की बहाली।"
         p3_fin = "धन लाभ, संपत्ति की प्राप्ति, वाणी में संयम और विलंबित मान्यता (delayed recognition) की प्राप्ति।"
         p3_kar = "पूर्व संघर्षों के अनुभवों को ठोस सफलता और दीर्घकालिक सुरक्षा में बदलना।"
+
+        ss_status_title = shani_sadesati_data.get('status_title', '')
+        if "Sade Sati" in ss_status_title:
+            ss_status_display = ss_status_title.replace("Active Sade Sati", "सक्रिय शनि साढ़े साती").replace("Phase", "चरण").replace("Peak", "शिखर")
+        else:
+            ss_status_display = ss_status_title.replace("Active Saturn Dhaiya", "सक्रिय शनि ढैय्या")
+        
+        ss_dates = shani_sadesati_data.get('dates', '')
+        ss_focus = "अवचेतन शोधन, एकांत, खर्चों में वृद्धि और अलगाव" if "Subconscious" in shani_sadesati_data.get('focus', '') else shani_sadesati_data.get('focus', '')
+        ss_impact_text = "शनि वर्तमान में आपकी चन्द्र राशि से मीन राशि में 12वें भाव में गोचर कर रहे हैं। यह व्यक्तिगत प्राथमिकताओं के गहरे पुनर्गठन, व्यर्थ वित्तीय आदतों के त्याग और मानसिक शुद्धि को प्रेरित करता है।" if "transits your 12th house" in shani_sadesati_data.get('impact', '') else shani_sadesati_data.get('impact', '')
     else:
         p1_title = f"Phase 1: Rising Phase (Saturn in {r12} / 12th from Moon)"
         p2_title = f"Phase 2: Peak Janma Shani (Saturn in {r1st} / Over Natal Moon)"
         p3_title = f"Phase 3: Setting Phase (Saturn in {r2nd} / 2nd from Moon)"
+        
         p1_dyn = "Subconscious restructuring, elimination of toxic habits, and mental detachment."
         p1_fin = "Spikes in expenses related to travel, relocation, or healthcare; work happens behind the scenes."
         p1_kar = "Shedding psychological baggage and preparing for the core transit."
@@ -157,6 +167,11 @@ def render_page_shani():
         p3_dyn = "Lifting of psychological pressure, consolidation of hard-won wisdom, and stabilizing family harmony."
         p3_fin = "Wealth recovery, acquisition of durable assets, disciplined speech, and delayed recognition."
         p3_kar = "Transforming lessons into lasting institutional stability and financial security."
+
+        ss_status_display = shani_sadesati_data.get('status_title', '')
+        ss_dates = shani_sadesati_data.get('dates', '')
+        ss_focus = shani_sadesati_data.get('focus', '')
+        ss_impact_text = shani_sadesati_data.get('impact', '')
 
     render_html(f"""
     <div class="light-card-shani">
@@ -212,9 +227,9 @@ def render_page_shani():
             </div>
             
             <div style="background:{'#fef2f2' if shani_sadesati_data.get('phase_2_active') else '#f5f3ff'}; border-radius:12px; padding:14px; border-left:5px solid {'#ef4444' if shani_sadesati_data.get('phase_2_active') else '#9333ea'}; margin-bottom:14px;">
-                <b style="color:{'#991b1b' if shani_sadesati_data.get('phase_2_active') else '#5b21b6'}; font-size:1.1rem;">{shani_sadesati_data.get('status_title', '')}</b>
-                <div style="font-size:0.92rem; color:#64748b; margin:3px 0 8px 0;"><b>{"सक्रिय समयावधि" if is_hi else "Active Window"}:</b> {shani_sadesati_data.get('dates', '')} | <b>{"मुख्य फोकस" if is_hi else "Core Focus"}:</b> {shani_sadesati_data.get('focus', '')}</div>
-                <div style="font-size:0.95rem; line-height:1.7; color:#334155;">{shani_sadesati_data.get('impact', '')}</div>
+                <b style="color:{'#991b1b' if shani_sadesati_data.get('phase_2_active') else '#5b21b6'}; font-size:1.1rem;">{ss_status_display}</b>
+                <div style="font-size:0.92rem; color:#64748b; margin:3px 0 8px 0;"><b>{"सक्रिय समयावधि" if is_hi else "Active Window"}:</b> {ss_dates} | <b>{"मुख्य फोकस" if is_hi else "Core Focus"}:</b> {ss_focus}</div>
+                <div style="font-size:0.95rem; line-height:1.7; color:#334155;">{ss_impact_text}</div>
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-bottom:14px;">
