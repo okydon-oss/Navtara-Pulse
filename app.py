@@ -706,7 +706,7 @@ def render_page_profile():
             <div style="background:#fff7ed; border-radius:12px; padding:12px; border:1.5px solid #ffedd5;">
                 <div style="font-size:0.82rem; color:#c2410c; font-weight:800; text-transform:uppercase;">{t('moon_rashi_label', current_lang)}</div>
                 <div style="font-size:1.3rem; font-weight:900; color:#9a3412; margin:2px 0;">{disp_rashi}</div>
-                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{chart_info['moon_deg']}</div>
+                <div style="font-size:0.88rem; color:#ea580c; font-weight:700;">{moon_p2}</div>
             </div>
         </div>
 
