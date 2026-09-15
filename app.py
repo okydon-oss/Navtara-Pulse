@@ -13,6 +13,7 @@ from views.numerology import render_page_numerology
 from views.shani import render_page_shani
 from views.live import render_page_live
 from views.forecast import render_page_forecast
+from views.monthly import render_page_monthly
 from views.dasha import render_page_dasha
 
 # ==============================================================================
@@ -279,12 +280,8 @@ else:
 # ==============================================================================
 # ROUTER DISPATCHER
 # ==============================================================================
-def render_page_monthly():
-    if not has_valid_profile: return
-    st.write("Monthly view loading...")
-
 def render_page_mantra():
-    st.write("Mantra view loading...")
+    st.session_state.current_page = "mantra"
 
 PAGES = {
     "about": render_page_about,
@@ -295,7 +292,7 @@ PAGES = {
     "forecast": render_page_forecast,
     "monthly": render_page_monthly,
     "dasha": render_page_dasha,
-    "mantra": render_page_mantra,
+    "mantra": lambda: st.write("Mantra view loading..."),
 }
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
