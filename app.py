@@ -799,17 +799,17 @@ with nav_r1_c4:
 nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
 with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
-    if st.button("⚡ Live Pulse", type=p_type, use_container_width=True):
+    if st.button("⚡ Daily Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
 with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
-    if st.button("🗓️ 7 Days", type=p_type, use_container_width=True):
+    if st.button("🗓️ Weekly Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
         st.rerun()
 with nav_r2_c3:
     p_type = "primary" if st.session_state.current_page == "monthly" else "secondary"
-    if st.button("📅 Monthly", type=p_type, use_container_width=True):
+    if st.button("📅 Monthly Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "monthly"
         st.rerun()
 with nav_r2_c4:
@@ -817,6 +817,8 @@ with nav_r2_c4:
     if st.button("📿 Mantra", type=p_type, use_container_width=True):
         st.session_state.current_page = "mantra"
         st.rerun()
+        
+
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
 has_valid_profile = bool(prof.get("name") and prof.get("dob") and prof.get("tob"))
