@@ -70,13 +70,15 @@ def render_page_shani():
     tone_disp = shani_paya_data.get('tone', '')
     timeline_disp = shani_paya_data.get('timeline', '')
     
-    # Fully localized classical foundation text
+    # Fully localized classical foundation text with exact house numbers
+    houses_raw = shani_paya_data.get('houses', '2nd')
     if is_hi:
-        desc_disp = f"वर्तमान में शनि मीन राशि (आपकी चन्द्र राशि से {shani_paya_data.get('houses', 'संबंधित')} भाव) में गोचर कर रहे हैं। यह स्थिति आपके जीवन में दीर्घकालिक अनुशासन, पेशेवर पुनर्गठन और कर्मिक संतुलन की मांग करती है।"
-        houses_disp = shani_paya_data.get('houses', '')
+        # Translate house strings like "12th", "1st", "2nd" to Hindi
+        h_map = {"12th": "द्वादश (12वें)", "1st": "प्रथम (पहले)", "2nd": "द्वितीय (दूसरे)"}
+        h_trans = h_map.get(houses_raw, houses_raw)
+        desc_disp = f"वर्तमान में शनि आपकी जन्मकालीन चन्द्र राशि से {h_trans} भाव में गोचर कर रहे हैं। यह स्थिति आपके जीवन में दीर्घकालिक अनुशासन, पेशेवर पुनर्गठन और कर्मिक संतुलन की मांग करती है।"
     else:
-        desc_disp = shani_paya_data.get('desc', '')
-        houses_disp = shani_paya_data.get('houses', '')
+        desc_disp = f"Saturn is currently transiting the {houses_raw} house relative to your {m_name} Moon, bringing structural discipline, operational audits, and karmic recalibration."
 
     sadesati_title = f"⚖️ {m_name} चन्द्र राशि हेतु सक्रिय साढ़े साती / ढैय्या जीवन-क्षेत्र विश्लेषण" if is_hi else f"⚖️ Active Sade Sati / Dhaiya Life-Domain Breakdown for {m_name} Moon"
 
@@ -124,6 +126,38 @@ def render_page_shani():
     r1st = shani_sadesati_data.get('rashi_1st', '1st')
     r2nd = shani_sadesati_data.get('rashi_2nd', '2nd')
 
+    # Phase 1, 2, 3 dynamic localized subtitles
+    if is_hi:
+        p1_title = f"प्रथम चरण: उदय काल (शनि {r12} राशि / चन्द्र से 12वें भाव में)"
+        p2_title = f"द्वितीय चरण: शिखर काल (शनि {r1st} राशि / जन्म चन्द्र के ऊपर)"
+        p3_title = f"तृतीय चरण: अस्त काल (शनि {r2nd} राशि / चन्द्र से दूसरे भाव में)"
+        p1_dyn = "मानसिक पुनर्गठन, अंतर्मुखता, और व्यय नियंत्रण का काल।"
+        p1_fin = "यात्राओं, निवेश या स्वास्थ्य संबंधी खर्चों में वृद्धि; कार्य पर्दे के पीछे से होते हैं।"
+        p1_kar = "पुरानी मानसिक बाधाओं को छोड़कर भविष्य के लिए मानसिक रूप से तैयार होना।"
+        
+        p2_dyn = "चरित्र एवं सहनशक्ति की कड़ी परीक्षा। अहंकार का शमन एवं आत्म-सत्य की खोज।"
+        p2_fin = "कार्यभार की अधिकता, महत्वपूर्ण निर्णयों का दबाव और नेतृत्व संबंधी एकाग्रता।"
+        p2_kar = "भावनात्मक दृढ़ता, शारीरिक अनुशासन और परिपक्वता का विकास।"
+
+        p3_dyn = "मानसिक दबाव में कमी, अर्जित ज्ञान का स्थिरीकरण और पारिवारिक सौहार्द की बहाली।"
+        p3_fin = "धन लाभ, संपत्ति की प्राप्ति, वाणी में संयम और विलंबित मान्यता (delayed recognition) की प्राप्ति।"
+        p3_kar = "पूर्व संघर्षों के अनुभवों को ठोस सफलता और दीर्घकालिक सुरक्षा में बदलना।"
+    else:
+        p1_title = f"Phase 1: Rising Phase (Saturn in {r12} / 12th from Moon)"
+        p2_title = f"Phase 2: Peak Janma Shani (Saturn in {r1st} / Over Natal Moon)"
+        p3_title = f"Phase 3: Setting Phase (Saturn in {r2nd} / 2nd from Moon)"
+        p1_dyn = "Subconscious restructuring, elimination of toxic habits, and mental detachment."
+        p1_fin = "Spikes in expenses related to travel, relocation, or healthcare; work happens behind the scenes."
+        p1_kar = "Shedding psychological baggage and preparing for the core transit."
+
+        p2_dyn = "Crucible of character and endurance. Dissolves false pride and tests emotional truth."
+        p2_fin = "Maximum administrative burden, heavy decision-making stress, and executive solitude."
+        p2_kar = "Cultivating emotional resilience, physical discipline, and enduring maturity."
+
+        p3_dyn = "Lifting of psychological pressure, consolidation of hard-won wisdom, and stabilizing family harmony."
+        p3_fin = "Wealth recovery, acquisition of durable assets, disciplined speech, and delayed recognition."
+        p3_kar = "Transforming lessons into lasting institutional stability and financial security."
+
     render_html(f"""
     <div class="light-card-shani">
         <div style="font-weight:900; font-size:1.35rem; color:#5b21b6; margin-bottom:1rem; border-bottom:2px solid #ddd6fe; padding-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;">
@@ -139,8 +173,7 @@ def render_page_shani():
             <div style="font-size:0.92rem; color:#475569; margin-top:3px;"><b>{"सक्रिय समयावधि" if is_hi else "Active Timeline"}:</b> {timeline_disp}</div>
             
             <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1px solid #ddd6fe; margin-top:12px; font-size:0.93rem; color:#3b0764; line-height:1.7;">
-                <b>🏛️ {"शास्त्रीय आधार" if is_hi else "Classical Foundation"}:</b> {desc_disp}<br>
-                <b>🧭 {"सक्रिय भाव धुरी" if is_hi else "Operating Houses"}:</b> शनि आपकी जन्मकालीन चन्द्र राशि से {houses_disp} भावों को सक्रिय कर रहे हैं।
+                <b>🏛️ {"शास्त्रीय आधार" if is_hi else "Classical Foundation"}:</b> {desc_disp}
             </div>
 
             <div style="display:grid; grid-template-columns: 1fr; gap:10px; margin-top:12px;">
@@ -217,37 +250,37 @@ def render_page_shani():
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #a855f7; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#5b21b6; font-size:0.96rem;">{"प्रथम चरण: उदय काल (द्वादश भाव गोचर)" if is_hi else f"Phase 1: Rising Phase (Saturn in {r12} / 12th from Moon)"}</b>
+                    <b style="color:#5b21b6; font-size:0.96rem;">{p1_title}</b>
                     {p1_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {"मानसिक पुनर्गठन, अंतर्मुखता, और व्यय नियंत्रण का काल।" if is_hi else "Subconscious restructuring, elimination of toxic habits, and mental detachment."}<br>
-                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {"यात्राओं, निवेश या स्वास्थ्य संबंधी खर्चों में वृद्धि; कार्य पर्दे के पीछे से होते हैं।" if is_hi else "Spikes in expenses related to travel, relocation, or healthcare; work happens behind the scenes."}<br>
-                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {"पुरानी मानसिक बाधाओं को छोड़कर भविष्य के लिए मानसिक रूप से तैयार होना।" if is_hi else "Shedding psychological baggage and preparing for the core transit."}
+                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {p1_dyn}<br>
+                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {p1_fin}<br>
+                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {p1_kar}
                 </div>
             </div>
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #ef4444; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#991b1b; font-size:0.96rem;">{"द्वितीय चरण: शिखर काल (जन्मांग चन्द्र पर शनि)" if is_hi else f"Phase 2: Peak Janma Shani (Saturn in {r1st} / Over Natal Moon)"}</b>
+                    <b style="color:#991b1b; font-size:0.96rem;">{p2_title}</b>
                     {p2_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {"चरित्र एवं सहनशक्ति की कड़ी परीक्षा। अहंकार का शमन एवं आत्म-सत्य की खोज।" if is_hi else "Crucible of character and endurance. Dissolves false pride and tests emotional truth."}<br>
-                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {"कार्यभार की अधिकता, महत्वपूर्ण निर्णयों का दबाव और नेतृत्व संबंधी एकाग्रता।" if is_hi else "Maximum administrative burden, heavy decision-making stress, and executive solitude."}<br>
-                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {"भावनात्मक दृढ़ता, शारीरिक अनुशासन और परिपक्वता का विकास।" if is_hi else "Cultivating emotional resilience, physical discipline, and enduring maturity."}
+                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {p2_dyn}<br>
+                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {p2_fin}<br>
+                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {p2_kar}
                 </div>
             </div>
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #10b981; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#065f46; font-size:0.96rem;">{"तृतीय चरण: अस्त काल (द्वितीय भाव गोचर)" if is_hi else f"Phase 3: Setting Phase (Saturn in {r2nd} / 2nd from Moon)"}</b>
+                    <b style="color:#065f46; font-size:0.96rem;">{p3_title}</b>
                     {p3_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {"मानसिक दबाव में कमी, अर्जित ज्ञान का स्थिरीकरण और पारिवारिक सौहार्द की बहाली।" if is_hi else "Lifting of psychological pressure, consolidation of hard-won wisdom, and stabilizing family harmony."}<br>
-                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {"धन लाभ, संपत्ति की प्राप्ति, वाणी में संयम और delayed recognition की प्राप्ति।" if is_hi else "Wealth recovery, acquisition of durable assets, disciplined speech, and delayed recognition."}<br>
-                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {"पूर्व संघर्षों के अनुभवों को ठोस सफलता और दीर्घकालिक सुरक्षा में बदलना।" if is_hi else "Transforming lessons into lasting institutional stability and financial security."}
+                    • <b>{"मूल प्रभाव" if is_hi else "Core Dynamic"}:</b> {p3_dyn}<br>
+                    • <b>{"आर्थिक एवं करियर" if is_hi else "Financial & Career"}:</b> {p3_fin}<br>
+                    • <b>{"कर्मिक सीख" if is_hi else "Karmic Mastery"}:</b> {p3_kar}
                 </div>
             </div>
         </div>
