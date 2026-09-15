@@ -1335,3 +1335,141 @@ NAKSHATRA_BEEJ_MANTRAS = {
         "rules": "• Chant in the morning facing North-East.\n• Auspicious day: Wednesday.\n• Pacifies: Over-sensitivity, financial boundary issues, and disorientation."
     }
 }
+# ==============================================================================
+# VIMSHOTTARI DASHA (PLANETARY TIMELINE) ENGINE - ASTROSAGE ACCURATE
+# ==============================================================================
+DASHA_SEQUENCE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+DASHA_YEARS = {
+    "Ketu": 7.0, "Venus": 20.0, "Sun": 6.0, "Moon": 10.0, "Mars": 7.0, 
+    "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
+}
+
+DASHA_PREDICTIONS = {
+    "Sun": {
+        "MD": "You are currently in the 6-year major era of the Sun. This overarching period is highly focused on ego-development, authority, father figures, and carving out your executive stature. It brings themes of leadership, vital energy, and establishing personal sovereignty, often through tests of confidence.",
+        "AD": "During this sub-chapter of the Sun, the overarching Dasha energy is illuminated. Expect increased visibility, potential clashes with authority, and a focus on career advancement and vital health.",
+        "PD": "For these few months, the Sun's energy highlights administrative tasks, sudden sparks of confidence, and interactions with superiors or government.",
+        "SD": "Your leadership traits and personal pride briefly take center stage in daily interactions.",
+        "PrD": "Days of executive focus and vitality."
+    },
+    "Moon": {
+        "MD": "You are navigating the 10-year major era of the Moon. This foundational period emphasizes emotional intelligence, maternal bonds, property, and public reception. It is a characteristically fluid time of intuition and building a nurturing environment.",
+        "AD": "In this Moon sub-period, emotional connections and public life are brought into focus. Flexibility, travel, and attention to home life or mother are required.",
+        "PD": "Over these few months, the Moon dictates a need for emotional safety, bringing brief shifts in mood or residential focus.",
+        "SD": "A brief span of high emotional sensitivity, receptivity, and focus on domestic or dietary comfort.",
+        "PrD": "Days of intuitive shifts and emotional fluidity."
+    },
+    "Mars": {
+        "MD": "You are executing the 7-year major era of Mars. This is an intensely dynamic, fast-paced period dictating courage, real-estate matters, athletic stamina, and confrontation. It is the time to build independence, tackle debts or competitors aggressively, and channel immense physical energy.",
+        "AD": "During this Mars sub-chapter, energetic drive accelerates. Expect high ambition, property-related activities, and a need to guard against impatience or heated arguments.",
+        "PD": "For the next few months, Mars commands urgent action, brief conflicts, or swift decision-making to resolve pressing matters.",
+        "SD": "A fast-paced window demanding physical exertion, courage, and quick reflexes to handle immediate tasks.",
+        "PrD": "Hours of sharp energy, haste, and decisive execution."
+    },
+    "Rahu": {
+        "MD": "You are in the 18-year major era of Rahu. This overarching period is a powerful, unorthodox, and often chaotic chapter of material obsession, foreign connections, and sudden ascents. It breaks boundaries and pushes you into unknown territories, bringing huge worldly ambitions alongside psychological tests.",
+        "AD": "In this Rahu sub-period, unexpected events and foreign influences surface. It triggers high material ambition and unorthodox problem-solving, though illusion and confusion must be managed.",
+        "PD": "Over these months, Rahu brings sudden shifts, brief infatuations with new ideas, and unusual technological or foreign engagements.",
+        "SD": "A brief period of unconventional thoughts, sudden disruptions, or out-of-the-box ideas.",
+        "PrD": "Moments of unexpected twists and rapid thoughts."
+    },
+    "Jupiter": {
+        "MD": "You are journeying through the 16-year major era of Jupiter. This golden period dictates expansion, financial compounding, institutional wisdom, and progeny. It is a phase of spiritual growth, aligning with higher dharma, meeting mentors, and generating long-lasting, dignified prosperity.",
+        "AD": "During this Jupiter sub-chapter, optimism and steady growth manifest. Favorable for wealth consolidation, higher learning, and receiving grace or mentorship.",
+        "PD": "For the next few months, Jupiter provides a protective shield, encouraging financial planning, educational milestones, and ethical decisions.",
+        "SD": "A window of hope, philosophical insight, and minor financial or spiritual blessings.",
+        "PrD": "Days of optimism, calm wisdom, and gentle grace."
+    },
+    "Saturn": {
+        "MD": "You are traversing the 19-year major era of Saturn. This is a profound karmic chapter focused on reality-checks, structural discipline, hard labor, and enduring foundations. It delays immediate gratification to forge permanent success, demanding patience, humility, and organizational grit.",
+        "AD": "In this Saturn sub-period, the overarching energy is grounded. Focus shifts to structural discipline, career endurance, and delayed but permanent rewards.",
+        "PD": "Over these months, Saturn requires meticulous organization, managing heavy workloads, and strictly avoiding shortcuts.",
+        "SD": "A brief span of high fatigue, heavy responsibilities, or a need for strict boundary-setting.",
+        "PrD": "Hours demanding absolute patience and silent endurance."
+    },
+    "Mercury": {
+        "MD": "You are in the 17-year major era of Mercury. This is a highly stimulating, cerebral period dictating commercial expansion, analytical mastery, mass communication, and versatility. It heavily favors trade, media, data synthesis, and intellectual networking.",
+        "AD": "During this Mercury sub-chapter, intellect and commerce are activated. Expect a surge in communication, paperwork, trade negotiations, and mental agility.",
+        "PD": "For the next few months, Mercury demands analytical precision. Expect high communication, short travels, and rapid data processing.",
+        "SD": "A brief window of intense multitasking, answering correspondence, and sharp logical deduction.",
+        "PrD": "Days of fast communication, calculation, and active mind."
+    },
+    "Ketu": {
+        "MD": "You are navigating the 7-year major era of Ketu. This overarching period acts as a spiritual crucible, dissolving superficial material attachments and focusing on liberation, esoteric research, and past-life karma. It brings sudden closures and demands profound inner surrender.",
+        "AD": "In this Ketu sub-period, a strong urge for detachment arises. Material plans may face sudden shifts, requiring you to pivot inward toward spiritual or esoteric pursuits.",
+        "PD": "Over these months, Ketu brings introspective isolation, letting go of old habits, and flashes of intense intuitive insight.",
+        "SD": "A brief span of deep spiritual longing, fatigue with the mundane, or sudden intuitive hits.",
+        "PrD": "Moments of profound silence and mystical insight."
+    },
+    "Venus": {
+        "MD": "You are experiencing the 20-year major era of Venus. This expansive chapter is the peak period for acquiring luxuries, forming deep romantic or marital alliances, and refining aesthetics. It governs wealth realization, comforts, artistic achievements, and diplomatic harmony.",
+        "AD": "During this Venus sub-chapter, relationship dynamics and financial comforts blossom. Favorable for artistic projects, romantic commitments, and vehicle/home upgrades.",
+        "PD": "For the next few months, Venus highlights diplomatic harmony, material purchases, and enjoying social or aesthetic pleasures.",
+        "SD": "Diplomatic harmony, luxury, and relationship matters take a brief spotlight.",
+        "PrD": "Days of charm, aesthetic joy, and smooth social flow."
+    }
+}
+
+def add_years_to_datetime(dt: datetime.datetime, years: float) -> datetime.datetime:
+    days = years * 365.2425
+    return dt + datetime.timedelta(days=days)
+
+def get_dasha_sub_periods_proportional(lord: str, total_years: float, base_start: datetime.datetime):
+    start_idx = DASHA_SEQUENCE.index(lord)
+    subs = []
+    curr_st = base_start
+    for i in range(9):
+        sub_lord = DASHA_SEQUENCE[(start_idx + i) % 9]
+        sub_years = (total_years * DASHA_YEARS[sub_lord]) / 120.0
+        sub_ed = add_years_to_datetime(curr_st, sub_years)
+        subs.append((sub_lord, sub_years, curr_st, sub_ed))
+        curr_st = sub_ed
+    return subs
+
+def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt: datetime.datetime):
+    star_span = 360.0 / 27.0
+    star_idx = int(moon_lon / star_span)
+    start_lord_idx = star_idx % 9
+    
+    nakshatra_start_lon = star_idx * star_span
+    elapsed_deg = moon_lon - nakshatra_start_lon
+    fraction_elapsed = elapsed_deg / star_span
+    fraction_left = max(0.0, min(1.0, 1.0 - fraction_elapsed))
+    
+    start_lord = DASHA_SEQUENCE[start_lord_idx]
+    full_start_years = DASHA_YEARS[start_lord]
+    balance_years = full_start_years * fraction_left
+    
+    md_idx = start_lord_idx
+    md_start = birth_dt
+    md_years = balance_years
+    md_end = add_years_to_datetime(md_start, md_years)
+    
+    while target_dt > md_end:
+        md_start = md_end
+        md_idx = (md_idx + 1) % 9
+        current_lord = DASHA_SEQUENCE[md_idx]
+        md_years = DASHA_YEARS[current_lord]
+        md_end = add_years_to_datetime(md_start, md_years)
+        
+    current_md_lord = DASHA_SEQUENCE[md_idx]
+    
+    def find_active_sub_level(lord, total_yrs, st_dt, tgt):
+        subs = get_dasha_sub_periods_proportional(lord, total_yrs, st_dt)
+        for slord, syrs, s_st, s_ed in subs:
+            if s_st <= tgt <= s_ed:
+                return slord, syrs, s_st, s_ed
+        return subs[-1][0], subs[-1][1], subs[-1][2], subs[-1][3]
+
+    ad_lord, ad_yrs, ad_start, ad_end = find_active_sub_level(current_md_lord, md_years, md_start, target_dt)
+    pd_lord, pd_yrs, pd_start, pd_end = find_active_sub_level(ad_lord, ad_yrs, ad_start, target_dt)
+    sd_lord, sd_yrs, sd_start, sd_end = find_active_sub_level(pd_lord, pd_yrs, pd_start, target_dt)
+    prd_lord, prd_yrs, prd_start, prd_end = find_active_sub_level(sd_lord, sd_yrs, sd_start, target_dt)
+    
+    return [
+        {"level": "Mahadasha (Major Era)", "lord": current_md_lord, "start": md_start, "end": md_end, "key": "MD"},
+        {"level": "Antardasha (Sub-Period)", "lord": ad_lord, "start": ad_start, "end": ad_end, "key": "AD"},
+        {"level": "Pratyantar Dasha", "lord": pd_lord, "start": pd_start, "end": pd_end, "key": "PD"},
+        {"level": "Sookshma Dasha", "lord": sd_lord, "start": sd_start, "end": sd_end, "key": "SD"},
+        {"level": "Pran Dasha", "lord": prd_lord, "start": prd_start, "end": prd_end, "key": "PrD"},
+    ]
