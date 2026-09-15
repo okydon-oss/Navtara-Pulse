@@ -225,8 +225,8 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock (4 + 4 Grid)
-nav_r1_c1, nav_r1_c2, nav_r1_c3, nav_r1_c4 = st.columns(4)
+# Top Navigation Dock (3x3 Grid)
+nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
 with nav_r1_c1:
     p_type = "primary" if st.session_state.current_page == "about" else "secondary"
     if st.button("✨ About App", type=p_type, use_container_width=True):
@@ -242,38 +242,41 @@ with nav_r1_c3:
     if st.button("🔢 Numerology", type=p_type, use_container_width=True):
         st.session_state.current_page = "numerology"
         st.rerun()
-with nav_r1_c4:
+
+nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
+with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
     if st.button("🪐 Shani", type=p_type, use_container_width=True):
         st.session_state.current_page = "shani"
         st.rerun()
-
-nav_r2_c1, nav_r2_c2, nav_r2_c3, nav_r2_c4 = st.columns(4)
-with nav_r2_c1:
+with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
     if st.button("⚡ Daily Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
-with nav_r2_c2:
+with nav_r2_c3:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
     if st.button("🗓️ Weekly Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
         st.rerun()
-with nav_r2_c3:
+
+nav_r3_c1, nav_r3_c2, nav_r3_c3 = st.columns(3)
+with nav_r3_c1:
     p_type = "primary" if st.session_state.current_page == "monthly" else "secondary"
     if st.button("📅 Monthly Horoscope", type=p_type, use_container_width=True):
         st.session_state.current_page = "monthly"
         st.rerun()
-with nav_r2_c4:
+with nav_r3_c2:
+    p_type = "primary" if st.session_state.current_page == "dasha" else "secondary"
+    if st.button(t("btn_dasha", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "dasha"
+        st.rerun()
+with nav_r3_c3:
     p_type = "primary" if st.session_state.current_page == "mantra" else "secondary"
     if st.button("📿 Mantra", type=p_type, use_container_width=True):
         st.session_state.current_page = "mantra"
         st.rerun()
- with nav_r3_c2:
-    p_type = "primary" if st.session_state.current_page == "dasha" else "secondary"
-    if st.button(t("btn_dasha", current_lang), type=p_type, use_container_width=True):
-        st.session_state.current_page = "dasha"
-        st.rerun()       
+        
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
 has_valid_profile = bool(prof.get("name") and prof.get("dob") and prof.get("tob"))
