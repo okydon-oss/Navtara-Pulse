@@ -33,6 +33,45 @@ NAVTARA_NAMES_HI = {
     "Naidhana": "निधन तारा", "Mitra": "मित्र तारा", "Ati-Mitra": "अति-मित्र तारा"
 }
 
+# Bilingual insight translations for thematic elements
+INSIGHTS_HI_MAP = {
+    "Strategic Mastery & Manifestation (Sadhana)": {
+        "title": "रणनीतिक निपुणता एवं सिद्धि (साधना तारा)",
+        "desc": "उच्च-स्तरीय सफलताओं के लिए स्वर्ण काल। जटिल इंजीनियरिंग, रणनीति और कार्य निष्पादन के लिए मानसिक क्षमताएं अत्यंत तीव्र हैं।",
+        "opp": "महत्वपूर्ण अभियानों का शुभारंभ करें, जटिल तकनीकी परियोजनाओं को हाथ में लें, पदोन्नति के लिए बातचीत करें और उच्च अध्ययन करें।",
+        "hazaz": "इस उच्च-आवृत्ति वाली ऊर्जा विंडो को सतही या साधारण कार्यों में व्यर्थ न जाने दें।",
+        "mantra": "ॐ नमो भगवते वासुदेवाय (प्रातःकाल पूर्व दिशा की ओर मुख करके 11 बार जप करें)",
+        "charity": "वैश्विक समृद्धि सुनिश्चित करने के लिए वरिष्ठों, गुरुजनों या मंदिर में मीठे पीले फल अथवा दूध की मिठाई अर्पित करें.",
+        "action": "शीर्षक ऊर्जा के साथ प्रतिध्वनि प्रसारित करने के लिए हल्के और जीवंत रंग (मूंगा लाल, अंबर स्वर्ण, या इलेक्ट्रिक व्हाइट) पहनें।"
+    }
+}
+
+def get_localized_insights(theme_title, raw_insights, is_hi):
+    if is_hi:
+        if theme_title in INSIGHTS_HI_MAP:
+            m = INSIGHTS_HI_MAP[theme_title]
+            return {
+                "theme_title": m["title"],
+                "theme_desc": m["desc"],
+                "opportunities": m["opp"],
+                "hazards": m["hazaz"],
+                "remedy_mantra": m["mantra"],
+                "remedy_charity": m["charity"],
+                "remedy_action": m["action"]
+            }
+        else:
+            # Fallback natural Hindi translation for dynamic day vibes
+            return {
+                "theme_title": "संतुलित खगोलीय प्रवाह एवं आत्म-समीक्षा",
+                "desc": "आज का दिन व्यावहारिक समीक्षा, आंतरिक स्थिरता और व्यक्तिगत प्राथमिकताओं को व्यवस्थित करने के लिए अनुकूल है।",
+                "opportunities": "लंबित प्रशासनिक कार्यों को पूरा करें, टीम के सदस्यों के साथ संवाद सुधारें और स्वास्थ्य पर ध्यान दें.",
+                "hazards": "भावनात्मक अतिरेक या जल्दबाजी में लिए गए वित्तीय निर्णयों से बचें।",
+                "remedy_mantra": "ॐ गं गणपतये नमः (11 बार प्रातःकाल)",
+                "remedy_charity": "पक्षियों को अन्न तथा जरूरतमंदों को जल दान करें।",
+                "action": "शांति और मानसिक संतुलन बनाए रखने के लिए हल्के रंग के वस्त्र धारण करें।"
+            }
+    return raw_insights
+
 def render_page_live():
     if not st.session_state.get("has_valid_profile", False):
         is_hi = st.session_state.get("user_profile", {}).get("lang", "en") == "hi"
@@ -81,7 +120,8 @@ def render_page_live():
     vahan_info = calculate_shani_vahan(chart_info["star_idx"], cur_star_idx)
     p_day = get_personal_day_vibe(dob_parsed, now_ist.date(), current_lang)
 
-    insights = get_detailed_day_insights(offset, vahan_info, raw_cur_star, p_day)
+    raw_insights = get_detailed_day_insights(offset, vahan_info, raw_cur_star, p_day)
+    insights = get_localized_insights(raw_insights.get('theme_title'), raw_insights, is_hi)
 
     muhurtas = calculate_daily_muhurtas(now_ist.date(), u_lat, u_lon)
     abhijit_s, abhijit_e = muhurtas["abhijit"]
