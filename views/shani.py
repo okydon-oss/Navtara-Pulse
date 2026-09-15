@@ -1,4 +1,4 @@
-# views/shani.py - Dedicated Shani, Paya & Sade Sati View with Complete Hindi & English Content
+# views/shani.py - Dedicated Shani, Paya & Sade Sati View with Complete Bilingual Support
 import streamlit as st
 
 def render_html(html_string: str):
@@ -39,9 +39,10 @@ def render_page_shani():
 
     m_name = chart_info.get('moon_rashi_name', 'Mesha').split()[0]
     
-    p1_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data.get('phase_1_active') else ''
-    p2_active_tag = '<span style="font-size:0.82rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW (PEAK)</span>' if shani_sadesati_data.get('phase_2_active') else ''
-    p3_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data.get('phase_3_active') else ''
+    # Active badges
+    p1_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">सक्रिय (ACTIVE)</span>' if is_hi and shani_sadesati_data.get('phase_1_active') else ('<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data.get('phase_1_active') else '')
+    p2_active_tag = '<span style="font-size:0.82rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:800;">सक्रिय - शिखर (PEAK)</span>' if is_hi and shani_sadesati_data.get('phase_2_active') else ('<span style="font-size:0.82rem; background:#fee2e2; color:#b91c1c; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW (PEAK)</span>' if shani_sadesati_data.get('phase_2_active') else '')
+    p3_active_tag = '<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">सक्रिय (ACTIVE)</span>' if is_hi and shani_sadesati_data.get('phase_3_active') else ('<span style="font-size:0.82rem; background:#ede9fe; color:#6d28d9; padding:2px 8px; border-radius:12px; font-weight:800;">ACTIVE NOW</span>' if shani_sadesati_data.get('phase_3_active') else '')
 
     raw_paya = shani_paya_data.get('paya', '')
     if is_hi:
@@ -68,30 +69,60 @@ def render_page_shani():
 
     tone_disp = shani_paya_data.get('tone', '')
     timeline_disp = shani_paya_data.get('timeline', '')
-    desc_disp = shani_paya_data.get('desc', '')
-    houses_disp = shani_paya_data.get('houses', '')
+    
+    # Fully localized classical foundation text
+    if is_hi:
+        desc_disp = f"वर्तमान में शनि मीन राशि (आपकी चन्द्र राशि से {shani_paya_data.get('houses', 'संबंधित')} भाव) में गोचर कर रहे हैं। यह स्थिति आपके जीवन में दीर्घकालिक अनुशासन, पेशेवर पुनर्गठन और कर्मिक संतुलन की मांग करती है।"
+        houses_disp = shani_paya_data.get('houses', '')
+    else:
+        desc_disp = shani_paya_data.get('desc', '')
+        houses_disp = shani_paya_data.get('houses', '')
 
     sadesati_title = f"⚖️ {m_name} चन्द्र राशि हेतु सक्रिय साढ़े साती / ढैय्या जीवन-क्षेत्र विश्लेषण" if is_hi else f"⚖️ Active Sade Sati / Dhaiya Life-Domain Breakdown for {m_name} Moon"
 
-    # Bilingual SHANI PAYA data blocks
-    paya_health = "शारीरिक थकान, जोड़ों में दर्द और अत्यधिक कार्यभार के कारण ऊर्जा में उतार-चढ़ाव।" if is_hi else shani_paya_data.get('health', '')
-    paya_wealth = "वित्तीय मामलों में अत्यधिक सावधानी बरतें; सट्टेबाजी या जोखिम भरे निवेश से बचें।" if is_hi else shani_paya_data.get('wealth', '')
-    paya_family = "घरेलू जिम्मेदारियां बढ़ेंगी; परिजनों के साथ धैर्य और सौम्य संवाद बनाए रखें।" if is_hi else shani_paya_data.get('family', '')
-    paya_loan = "नए कर्ज लेने से बचें और पुराने ऋणों को समय पर चुकाने की योजना बनाएं।" if is_hi else shani_paya_data.get('loan', '')
-    paya_partner = "व्यापारिक साझेदारियों में पारदर्शिता रखें और किसी पर भी आँख मूंदकर भरोसा न करें।" if is_hi else shani_paya_data.get('partner', '')
-    paya_luck = "भाग्य के भरोसे न बैठकर अपने पुरुषार्थ और निरंतर मेहनत पर भरोसा रखें।" if is_hi else shani_paya_data.get('luck', '')
-    paya_career = "कार्यालय में उच्चाधिकारियों से सामंजस्य रखें; वरिष्ठों की सलाह आपके हित में होगी।" if is_hi else shani_paya_data.get('career', '')
-    paya_protocol = "नियमित शनि बीज मंत्र का जप करें और शनिवार को तेल अथवा अन्न का दान करें।" if is_hi else shani_paya_data.get('protocol', '')
+    # Fully localized Paya domain impacts
+    if is_hi:
+        paya_health = "शारीरिक थकान, जोड़ों में दर्द और अत्यधिक कार्यभार के कारण ऊर्जा स्तर में उतार-चढ़ाव संभव है।"
+        paya_wealth = "वित्तीय मामलों में अत्यधिक सावधानी बरतें; सट्टेबाजी, जोखिम भरे निवेश या उधार देने से बचें।"
+        paya_family = "घरेलू जिम्मेदारियां बढ़ेंगी; परिजनों के साथ धैर्य और सौम्य संवाद बनाए रखना श्रेष्ठ रहेगा।"
+        paya_loan = "नए कर्ज लेने से बचें और पूर्व के ऋणों को समय पर चुकाने की व्यावहारिक योजना बनाएं।"
+        paya_partner = "व्यापारिक साझेदारियों में पारदर्शिता रखें और किसी पर भी आँख मूंदकर भरोसा न करें।"
+        paya_luck = "भाग्य के भरोसे न बैठकर अपने पुरुषार्थ और निरंतर अनुशासन पर पूर्ण विश्वास रखें।"
+        paya_career = "कार्यालय में उच्चाधिकारियों से सामंजस्य रखें; वरिष्ठों व अनुभवी सलाहकारों का मार्गदर्शन आपके हित में रहेगा।"
+        paya_protocol = "नियमित शनि बीज मंत्र का जप करें और शनिवार को काले तिल, सरसों का तेल अथवा वस्त्र का दान करें।"
+    else:
+        paya_health = shani_paya_data.get('health', '')
+        paya_wealth = shani_paya_data.get('wealth', '')
+        paya_family = shani_paya_data.get('family', '')
+        paya_loan = shani_paya_data.get('loan', '')
+        paya_partner = shani_paya_data.get('partner', '')
+        paya_luck = shani_paya_data.get('luck', '')
+        paya_career = shani_paya_data.get('career', '')
+        paya_protocol = shani_paya_data.get('protocol', '')
 
-    # Bilingual SADE SATI / DHAIYA data blocks
-    ss_health = "मानसिक तनाव से बचने के लिए योग, ध्यान और पर्याप्त नींद को प्राथमिकता दें।" if is_hi else shani_sadesati_data.get('health', '')
-    ss_wealth = "वित्तीय अनुशासन अपनाएं, अनावश्यक खर्चों पर लगाम लगाएं और बचत को प्राथमिकता दें।" if is_hi else shani_sadesati_data.get('wealth', '')
-    ss_family = "परिवार के साथ समय बिताएं; छोटी-मोटी बातों को तूल न दें।" if is_hi else shani_sadesati_data.get('family', '')
-    ss_loan = "क्रेडिट कार्ड या भारी लोन के जाल में फंसने से बचें।" if is_hi else shani_sadesati_data.get('loan', '')
-    ss_partner = "साझेदारी के व्यापार में कानूनी समझौतों को लिखित रूप में स्पष्ट रखें।" if is_hi else shani_sadesati_data.get('partner', '')
-    ss_luck = "धीमी प्रगति से निराश न हों; यह काल आपको दीर्घकालिक सफलता के लिए मजबूत बना रहा है।" if is_hi else shani_sadesati_data.get('luck', '')
-    ss_career = "धीरज रखें, शॉर्टकट से बचें और अपने काम में पूर्ण ईमानदारी बरतें।" if is_hi else shani_sadesati_data.get('career', '')
-    ss_remedy = "शनिवार को पीपल के वृक्ष के नीचे सरसों के तेल का दीपक जलाएं और हनुमान चालीसा पढ़ें।" if is_hi else shani_sadesati_data.get('remedy', '')
+    # Fully localized Sade Sati / Dhaiya domain impacts
+    if is_hi:
+        ss_health = "मानसिक तनाव व थकान से बचने के लिए योग, ध्यान और पर्याप्त विश्राम को अपनी दिनचर्या में शामिल करें।"
+        ss_wealth = "वित्तीय अनुशासन अपनाएं, अनावश्यक खर्चों पर लगाम लगाएं और दीर्घकालिक संपत्तियों में सुरक्षित निवेश करें।"
+        ss_family = "परिवार के साथ गुणवत्तापूर्ण समय बिताएं; घरेलू मामलों में अहंकार के टकराव से बचें।"
+        ss_loan = "क्रेडिट कार्ड या भारी ब्याज वाले ऋणों के जाल में फंसने से पूरी तरह सतर्क रहें।"
+        ss_partner = "व्यापारिक साझेदारियों में सभी कानूनी शर्तों और समझौतों को लिखित रूप में स्पष्ट रखें।"
+        ss_luck = "प्रगति की धीमी गति से निराश न हों; यह काल आपके व्यक्तित्व को दीर्घकालिक सफलता के लिए परिपक्व कर रहा है।"
+        ss_career = "धैर्य बनाए रखें, शॉर्टकट से बचें और अपने कार्य में उच्च कोटि की गुणवत्ता व ईमानदारी बरतें।"
+        ss_remedy = "शनिवार की संध्या को पीपल के वृक्ष के नीचे सरसों के तेल का दीपक प्रज्वलित करें और हनुमान चालीसा का पाठ करें।"
+    else:
+        ss_health = shani_sadesati_data.get('health', '')
+        ss_wealth = shani_sadesati_data.get('wealth', '')
+        ss_family = shani_sadesati_data.get('family', '')
+        ss_loan = shani_sadesati_data.get('loan', '')
+        ss_partner = shani_sadesati_data.get('partner', '')
+        ss_luck = shani_sadesati_data.get('luck', '')
+        ss_career = shani_sadesati_data.get('career', '')
+        ss_remedy = shani_sadesati_data.get('remedy', '')
+
+    r12 = shani_sadesati_data.get('rashi_12th', '12th')
+    r1st = shani_sadesati_data.get('rashi_1st', '1st')
+    r2nd = shani_sadesati_data.get('rashi_2nd', '2nd')
 
     render_html(f"""
     <div class="light-card-shani">
@@ -186,7 +217,7 @@ def render_page_shani():
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #a855f7; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#5b21b6; font-size:0.96rem;">{"प्रथम चरण: उदय काल (द्वादश भाव गोचर)" if is_hi else f"Phase 1: Rising Phase (Saturn in {shani_sadesati_data.get('rashi_12th', '')} / 12th from Moon)"}</b>
+                    <b style="color:#5b21b6; font-size:0.96rem;">{"प्रथम चरण: उदय काल (द्वादश भाव गोचर)" if is_hi else f"Phase 1: Rising Phase (Saturn in {r12} / 12th from Moon)"}</b>
                     {p1_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
@@ -198,7 +229,7 @@ def render_page_shani():
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #ef4444; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#991b1b; font-size:0.96rem;">{"द्वितीय चरण: शिखर काल (जन्मांग चन्द्र पर शनि)" if is_hi else f"Phase 2: Peak Janma Shani (Saturn in {shani_sadesati_data.get('rashi_1st', '')} / Over Natal Moon)"}</b>
+                    <b style="color:#991b1b; font-size:0.96rem;">{"द्वितीय चरण: शिखर काल (जन्मांग चन्द्र पर शनि)" if is_hi else f"Phase 2: Peak Janma Shani (Saturn in {r1st} / Over Natal Moon)"}</b>
                     {p2_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
@@ -210,7 +241,7 @@ def render_page_shani():
 
             <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #10b981; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#065f46; font-size:0.96rem;">{"तृतीय चरण: अस्त काल (द्वितीय भाव गोचर)" if is_hi else f"Phase 3: Setting Phase (Saturn in {shani_sadesati_data.get('rashi_2nd', '')} / 2nd from Moon)"}</b>
+                    <b style="color:#065f46; font-size:0.96rem;">{"तृतीय चरण: अस्त काल (द्वितीय भाव गोचर)" if is_hi else f"Phase 3: Setting Phase (Saturn in {r2nd} / 2nd from Moon)"}</b>
                     {p3_active_tag}
                 </div>
                 <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
