@@ -1381,7 +1381,7 @@ def render_page_monthly():
 
 
 # ==============================================================================
-# TAB 8: VIMSHOTTARI DASHA (SELF-CONTAINED ENGINE & EXECUTIVE TIMELINE)
+# TAB 8: VIMSHOTTARI DASHA (IN-DEPTH EXECUTIVE TIMELINE & RELATIONSHIP ENGINE)
 # ==============================================================================
 DASHA_SEQ = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 DASHA_YRS = {
@@ -1389,77 +1389,337 @@ DASHA_YRS = {
     "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
 }
 
-LAGNA_NATURE_MAP = {
-    0: {"Sun": "5th Lord (Intellect & Authority)", "Moon": "4th Lord (Property & Domestic Peace)", "Mars": "Lagna & 8th Lord (Vitality & Sudden Shifts)", "Mercury": "3rd & 6th Lord (Enterprise & Management)", "Jupiter": "9th & 12th Lord (Fortune & Foreign Outflows)", "Venus": "2nd & 7th Lord (Wealth & Contracts)", "Saturn": "10th & 11th Lord (Career Authority & Gains)", "Rahu": "Material Catalyst", "Ketu": "Spiritual Catalyst"},
-    1: {"Sun": "4th Lord (Assets & Inner Stability)", "Moon": "3rd Lord (Enterprise & Short Journeys)", "Mars": "7th & 12th Lord (Partnerships & Foreign Outflows)", "Mercury": "2nd & 5th Lord (Liquid Wealth & Intellect)", "Jupiter": "8th & 11th Lord (Transformations & Network Gains)", "Venus": "Lagna & 6th Lord (Vitality & Defense)", "Saturn": "9th & 10th Lord (Supreme Yogakaraka - Career & Fortune)", "Rahu": "Ambition Catalyst", "Ketu": "Introspective Catalyst"},
-    2: {"Sun": "3rd Lord (Enterprise & Courage)", "Moon": "2nd Lord (Accumulated Wealth)", "Mars": "6th & 11th Lord (Liabilities & Network Gains)", "Mercury": "Lagna & 4th Lord (Personal Identity & Assets)", "Jupiter": "7th & 10th Lord (Career & Business Alliances)", "Venus": "5th & 12th Lord (Strategy & Outflows)", "Saturn": "8th & 9th Lord (Transformation & Destiny)", "Rahu": "Career Breakthrough Catalyst", "Ketu": "Analytical Catalyst"},
-    3: {"Sun": "2nd Lord (Wealth & Speech)", "Moon": "Lagna Lord (Personal Vitality & Identity)", "Mars": "5th & 10th Lord (Supreme Yogakaraka - Executive Power)", "Mercury": "3rd & 12th Lord (Communications & Foreign Linkages)", "Jupiter": "6th & 9th Lord (Health Defense & Higher Fortune)", "Venus": "4th & 11th Lord (Real Estate & Gains)", "Saturn": "7th & 8th Lord (Partnerships & Deep Restructuring)", "Rahu": "Expansion Catalyst", "Ketu": "Solitude Catalyst"},
-    4: {"Sun": "Lagna Lord (Sovereignty & Health)", "Moon": "12th Lord (Background Strategy & Foreign Affairs)", "Mars": "4th & 9th Lord (Supreme Yogakaraka - Assets & Luck)", "Mercury": "2nd & 11th Lord (Liquid Wealth & Inflows)", "Jupiter": "5th & 8th Lord (Intellect & Sudden Research)", "Venus": "3rd & 10th Lord (Enterprise & Public Stature)", "Saturn": "6th & 7th Lord (Competitors & Contracts)", "Rahu": "Scale & Ambition Catalyst", "Ketu": "Detachment Catalyst"},
-    5: {"Sun": "12th Lord (Global Linkages & Expenses)", "Moon": "11th Lord (Network Profits & Goals)", "Mars": "3rd & 8th Lord (Courage & Sudden Research)", "Mercury": "Lagna & 10th Lord (Intellectual Stature & Career)", "Jupiter": "4th & 7th Lord (Domestic Assets & Partnerships)", "Venus": "2nd & 9th Lord (Wealth & Destiny)", "Saturn": "5th & 6th Lord (Strategy & Overcoming Resistance)", "Rahu": "Tech & Innovation Catalyst", "Ketu": "Audit Catalyst"},
-    6: {"Sun": "11th Lord (Corporate Networks & Inflows)", "Moon": "10th Lord (Career Stature & Executive Presence)", "Mars": "2nd & 7th Lord (Wealth & Commercial Contracts)", "Mercury": "9th & 12th Lord (Higher Fortune & Overseas Matters)", "Jupiter": "3rd & 6th Lord (Enterprise & Operational Management)", "Venus": "Lagna & 8th Lord (Vitality & Transformations)", "Saturn": "4th & 5th Lord (Supreme Yogakaraka - Real Estate & Intellect)", "Rahu": "Foreign & Media Catalyst", "Ketu": "Esoteric Catalyst"},
-    7: {"Sun": "10th Lord (Executive Authority & Stature)", "Moon": "9th Lord (Fortune & Mentorship)", "Mars": "Lagna & 6th Lord (Physical Drive & Overcoming Obstacles)", "Mercury": "8th & 11th Lord (Forensic Research & Network Yields)", "Jupiter": "2nd & 5th Lord (Wealth & Strategic Intelligence)", "Venus": "7th & 12th Lord (Partnerships & Overseas Linkages)", "Saturn": "3rd & 4th Lord (Courage & Real Estate)", "Rahu": "Breakthrough Catalyst", "Ketu": "Inner Cleansing Catalyst"},
-    8: {"Sun": "9th Lord (Higher Dharma & Fortune)", "Moon": "8th Lord (Sudden Shifts & Depth)", "Mars": "5th & 12th Lord (Intellect & Foreign Outflows)", "Mercury": "7th & 10th Lord (Business Alliances & Career Stature)", "Jupiter": "Lagna & 4th Lord (Vitality, Wisdom & Real Estate)", "Venus": "6th & 11th Lord (Service & Liquid Gains)", "Saturn": "2nd & 3rd Lord (Wealth Accumulation & Enterprise)", "Rahu": "Material Expansion Catalyst", "Ketu": "Philosophical Catalyst"},
-    9: {"Sun": "8th Lord (Transformation & Confidential Matters)", "Moon": "7th Lord (Marital & Commercial Alliances)", "Mars": "4th & 11th Lord (Property Assets & Network Gains)", "Mercury": "6th & 9th Lord (Management & Higher Luck)", "Jupiter": "3rd & 12th Lord (Short Journeys & Foreign Linkages)", "Venus": "5th & 10th Lord (Supreme Yogakaraka - Creative Authority & Stature)", "Saturn": "Lagna & 2nd Lord (Personal Sovereignty & Wealth Accumulation)", "Rahu": "Sudden Elevation Catalyst", "Ketu": "Mastery Catalyst"},
-    10: {"Sun": "7th Lord (Public Visibility & Contracts)", "Moon": "6th Lord (Health Defense & Competitors)", "Mars": "3rd & 10th Lord (Enterprise & Executive Authority)", "Mercury": "5th & 8th Lord (Intellect & Technical Research)", "Jupiter": "2nd & 11th Lord (Wealth Accumulation & Liquid Inflows)", "Venus": "4th & 9th Lord (Supreme Yogakaraka - Assets & Higher Fortune)", "Saturn": "Lagna & 12th Lord (Self-Identity & Global Linkages)", "Rahu": "Innovation Catalyst", "Ketu": "Reformation Catalyst"},
-    11: {"Sun": "6th Lord (Overcoming Competition & Operational Hurdles)", "Moon": "5th Lord (Intellect & Creative Strategy)", "Mars": "2nd & 9th Lord (Wealth & Divine Fortune)", "Mercury": "4th & 7th Lord (Real Estate & Commercial Alliances)", "Jupiter": "Lagna & 10th Lord (Personal Sovereignty & Career Stature)", "Venus": "3rd & 8th Lord (Enterprise & Sudden Transitions)", "Saturn": "11th & 12th Lord (Network Profits & Foreign Matters)", "Rahu": "Unconventional Gains Catalyst", "Ketu": "Mystical Catalyst"}
+LAGNA_LORDS = {
+    0: "Mars", 1: "Venus", 2: "Mercury", 3: "Moon",
+    4: "Sun", 5: "Mercury", 6: "Venus", 7: "Mars",
+    8: "Jupiter", 9: "Saturn", 10: "Saturn", 11: "Jupiter"
 }
 
-DASHA_PREDICTIONS_INLINE = {
-    "Sun": {
-        "title": "Sun (Surya) Era - Authority, Vitality & Executive Command",
-        "details": "Elevates your public visibility, leadership responsibilities, and rapport with decision-makers. Strengthens core confidence and physical vitality.",
-        "cautions": "Guard against ego-driven reactions, impatience with collaborators, and elevated metabolic heat (Pitta).",
-        "remedies": "• Gemstone: Ruby (Manikya) in gold on ring finger after trial.\n• Beej Mantra: ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः (11 times daily).\n• Deity Worship: Offer pure water in a copper vessel to morning Surya Dev.\n• Fasting: Observe fasts on Sundays."
+NATURAL_FRIENDSHIPS = {
+    "Sun": {"friends": ["Moon", "Mars", "Jupiter"], "neutrals": ["Mercury"], "enemies": ["Venus", "Saturn", "Rahu", "Ketu"]},
+    "Moon": {"friends": ["Sun", "Mercury"], "neutrals": ["Mars", "Jupiter", "Venus", "Saturn"], "enemies": ["Rahu", "Ketu"]},
+    "Mars": {"friends": ["Sun", "Moon", "Jupiter"], "neutrals": ["Venus", "Saturn"], "enemies": ["Mercury", "Rahu", "Ketu"]},
+    "Mercury": {"friends": ["Sun", "Venus"], "neutrals": ["Mars", "Jupiter", "Saturn"], "enemies": ["Moon", "Rahu", "Ketu"]},
+    "Jupiter": {"friends": ["Sun", "Moon", "Mars"], "neutrals": ["Saturn"], "enemies": ["Mercury", "Venus", "Rahu", "Ketu"]},
+    "Venus": {"friends": ["Mercury", "Saturn", "Rahu", "Ketu"], "neutrals": ["Mars", "Jupiter"], "enemies": ["Sun", "Moon"]},
+    "Saturn": {"friends": ["Mercury", "Venus", "Rahu"], "neutrals": ["Jupiter"], "enemies": ["Sun", "Moon", "Mars", "Ketu"]},
+    "Rahu": {"friends": ["Venus", "Saturn", "Mercury"], "neutrals": ["Jupiter"], "enemies": ["Sun", "Moon", "Mars", "Ketu"]},
+    "Ketu": {"friends": ["Mars", "Venus", "Jupiter"], "neutrals": ["Mercury", "Saturn"], "enemies": ["Sun", "Moon", "Rahu"]}
+}
+
+# Lagna-specific functional beneficence and gemstone eligibility
+LAGNA_AFFILIATION_MAP = {
+    0: { # Mesha
+        "Sun": {"role": "5th Lord (Trine)", "type": "Functional Benefic", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "4th Lord (Kendra)", "type": "Functional Benefic", "gem_safe": True, "gem": "Natural Pearl (Moti)"},
+        "Mars": {"role": "Lagna & 8th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "3rd & 6th Lord", "type": "Functional Malefic (Dusthana Ruler)", "gem_safe": False},
+        "Jupiter": {"role": "9th & 12th Lord", "type": "Functional Benefic (Dharma Lord)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "2nd & 7th Lord", "type": "Maraka Lord", "gem_safe": False},
+        "Saturn": {"role": "10th & 11th Lord", "type": "Neutral to Malefic", "gem_safe": False},
+        "Rahu": {"role": "Upachaya Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Moksha Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Moon": {
-        "title": "Moon (Chandra) Era - Mind, Emotion & Public Resonance",
-        "details": "A period focused on emotional clarity, domestic foundations, real estate decisions, and public interactions. Intuition and social adaptability peak.",
-        "cautions": "Avoid over-sensitivity, erratic mood fluctuations, and reactive domestic choices.",
-        "remedies": "• Gemstone: Natural Pearl (Moti) or Moonstone in silver on little finger.\n• Beej Mantra: ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः (11 times daily).\n• Deity Worship: Offer raw milk or water on Shiva Lingam on Mondays.\n• Fasting: Observe fasts on Mondays or Purnima."
+    1: { # Vrishabha
+        "Sun": {"role": "4th Lord (Kendra)", "type": "Functional Benefic", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "3rd Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Mars": {"role": "7th & 12th Lord", "type": "Maraka & Dusthana Lord", "gem_safe": False},
+        "Mercury": {"role": "2nd & 5th Lord", "type": "Functional Benefic (Dhana & Trikona Lord)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "8th & 11th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Venus": {"role": "Lagna & 6th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "9th & 10th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Material Catalyst", "type": "Benefic Co-Ruler", "gem_safe": False},
+        "Ketu": {"role": "Moksha Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Mars": {
-        "title": "Mars (Mangal) Era - Courage, Real Estate & Direct Action",
-        "details": "Drives physical stamina, asset ownership, competitive triumphs, and bold technical initiatives. Favors decisive execution.",
-        "cautions": "Strictly avoid impulsiveness, confrontational speech, and signing unvetted property deeds.",
-        "remedies": "• Gemstone: Red Coral (Moonga) in copper or gold on ring finger.\n• Beej Mantra: ॐ क्रां क्रीं क्रौं सः भौमाय नमः (11 times daily).\n• Deity Worship: Recite Hanuman Chalisa daily.\n• Fasting: Observe fasts on Tuesdays."
+    2: { # Mithuna
+        "Sun": {"role": "3rd Lord", "type": "Neutral", "gem_safe": False},
+        "Moon": {"role": "2nd Lord", "type": "Maraka (Neutral)", "gem_safe": False},
+        "Mars": {"role": "6th & 11th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Mercury": {"role": "Lagna & 4th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "7th & 10th Lord", "type": "Kendradhipati Dosha", "gem_safe": False},
+        "Venus": {"role": "5th & 12th Lord", "type": "Functional Benefic", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "8th & 9th Lord", "type": "Functional Benefic (9th Trine)", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Material Catalyst", "type": "Temporal Benefic", "gem_safe": False},
+        "Ketu": {"role": "Analytical Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Rahu": {
-        "title": "Rahu Era - Ambition, Foreign Linkages & Unorthodox Breakthroughs",
-        "details": "Brings material ambition, rapid technological scaling, foreign linkages, and unexpected leaps. Breaks conventional stagnation.",
-        "cautions": "Beware of speculative gambling, get-rich-quick shortcuts, and unnecessary anxiety.",
-        "remedies": "• Gemstone: Hessonite (Gomedh) in silver.\n• Beej Mantra: ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः (11 times daily).\n• Deity Worship: Worship Goddess Durga or Lord Bhairava.\n• Charity: Feed stray dogs or donate dark grains on Saturdays."
+    3: { # Karka
+        "Sun": {"role": "2nd Lord", "type": "Functional Benefic (Wealth)", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "Lagna Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Natural Pearl (Moti)"},
+        "Mars": {"role": "5th & 10th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "3rd & 12th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Jupiter": {"role": "6th & 9th Lord", "type": "Functional Benefic (9th Dominant)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "4th & 11th Lord", "type": "Badhaka / Functional Malefic", "gem_safe": False},
+        "Saturn": {"role": "7th & 8th Lord", "type": "Maraka & Dusthana Lord", "gem_safe": False},
+        "Rahu": {"role": "Expansion Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Intuition Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Jupiter": {
-        "title": "Jupiter (Guru) Era - Wisdom, Financial Compounding & Stature",
-        "details": "A golden phase for wealth accumulation, institutional prestige, higher guidance, and mentorship. Brings lasting structural expansion.",
-        "cautions": "Avoid complacency, unvetted optimistic commitments, and liver/dietary excesses.",
-        "remedies": "• Gemstone: Yellow Sapphire (Pukhraj) in gold on index finger.\n• Beej Mantra: ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः (19 times daily).\n• Deity Worship: Worship Lord Vishnu; water Peepal tree on Thursdays.\n• Fasting: Observe fasts on Thursdays."
+    4: { # Simha
+        "Sun": {"role": "Lagna Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "12th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Mars": {"role": "4th & 9th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "2nd & 11th Lord", "type": "Dhana Lord (Wealth)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "5th & 8th Lord", "type": "Functional Benefic (5th Trine)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "3rd & 10th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Saturn": {"role": "6th & 7th Lord", "type": "Maraka & Dusthana Lord", "gem_safe": False},
+        "Rahu": {"role": "Scale Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Detachment Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Saturn": {
-        "title": "Saturn (Shani) Era - Karmic Structure, Endurance & Permanent Legacy",
-        "details": "Builds long-term enterprise through discipline, procedural rigor, patience, and organizational grit. Delays immediate comfort to forge lasting security.",
-        "cautions": "Avoid cutting corners, harsh speech, and physical exhaustion impacting joints or lower back.",
-        "remedies": "• Gemstone: Blue Sapphire (Neelam) after trial, or Amethyst in silver.\n• Beej Mantra: ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः (11 times daily).\n• Deity Worship: Light mustard oil lamp under Peepal on Saturdays.\n• Charity: Donate black sesame or mustard oil to laborers on Saturdays."
+    5: { # Kanya
+        "Sun": {"role": "12th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Moon": {"role": "11th Lord", "type": "Neutral to Malefic", "gem_safe": False},
+        "Mars": {"role": "3rd & 8th Lord", "type": "Severe Malefic", "gem_safe": False},
+        "Mercury": {"role": "Lagna & 10th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "4th & 7th Lord", "type": "Kendradhipati Dosha", "gem_safe": False},
+        "Venus": {"role": "2nd & 9th Lord", "type": "Functional Benefic (Fortune)", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "5th & 6th Lord", "type": "Functional Benefic (5th Trine)", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Innovation Catalyst", "type": "Temporal Benefic", "gem_safe": False},
+        "Ketu": {"role": "Audit Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Mercury": {
-        "title": "Mercury (Budha) Era - Intellect, Trade & Analytical Precision",
-        "details": "Favors commercial growth, contract executions, analytical research, verbal clarity, and media/communication projects.",
-        "cautions": "Guard against nervous fatigue, over-analyzing operational margins, and ambiguous correspondence.",
-        "remedies": "• Gemstone: Emerald (Panna) in gold or bronze on little finger.\n• Beej Mantra: ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः (11 times daily).\n• Deity Worship: Recite Vishnu Sahasranama or worship Goddess Saraswati.\n• Charity: Feed green spinach to cows on Wednesdays."
+    6: { # Tula
+        "Sun": {"role": "11th Lord", "type": "Badhaka (Functional Malefic)", "gem_safe": False},
+        "Moon": {"role": "10th Lord", "type": "Functional Benefic", "gem_safe": True, "gem": "Natural Pearl (Moti)"},
+        "Mars": {"role": "2nd & 7th Lord", "type": "Maraka Lord", "gem_safe": False},
+        "Mercury": {"role": "9th & 12th Lord", "type": "Functional Benefic (9th Trine)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "3rd & 6th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Venus": {"role": "Lagna & 8th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "4th & 5th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Visibility Catalyst", "type": "Temporal Benefic", "gem_safe": False},
+        "Ketu": {"role": "Esoteric Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Ketu": {
-        "title": "Ketu Era - Deep Research, Inner Mastery & Detachment",
-        "details": "Channels focus toward forensic analysis, root-cause investigation, spiritual autonomy, and letting go of stagnant attachments.",
-        "cautions": "Avoid isolation, vague contractual agreements, and sudden erratic operational pivots.",
-        "remedies": "• Gemstone: Cat's Eye (Lehsuniya) in silver.\n• Beej Mantra: ॐ स्रां स्रीं स्रौं सः केतवे नमः (11 times daily).\n• Deity Worship: Worship Lord Ganesha.\n• Charity: Donate blankets to the needy or feed stray animals."
+    7: { # Vrishchika
+        "Sun": {"role": "10th Lord", "type": "Functional Benefic (Career)", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "9th Lord", "type": "Functional Benefic (Fortune)", "gem_safe": True, "gem": "Natural Pearl (Moti)"},
+        "Mars": {"role": "Lagna & 6th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "8th & 11th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Jupiter": {"role": "2nd & 5th Lord", "type": "Dhana & Trikona Benefic", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "7th & 12th Lord", "type": "Maraka & Dusthana Lord", "gem_safe": False},
+        "Saturn": {"role": "3rd & 4th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Rahu": {"role": "Breakthrough Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Psychological Catalyst", "type": "Detachment Force", "gem_safe": False}
     },
-    "Venus": {
-        "title": "Venus (Shukra) Era - Luxury, Harmonious Alliances & Material Refinement",
-        "details": "Governs wealth realization, vehicle and home upgrades, diplomatic negotiation ease, and rewarding domestic relationships.",
-        "cautions": "Guard against financial vanity, lavish overspending, and interpersonal codependency.",
-        "remedies": "• Gemstone: Diamond (Heera) or White Zircon in silver or gold.\n• Beej Mantra: ॐ द्रां द्रीं द्रौं सः शुक्राय नमः (16 times daily).\n• Deity Worship: Worship Goddess Lakshmi.\n• Charity: Donate white sweets, milk, or camphor on Fridays."
+    8: { # Dhanu
+        "Sun": {"role": "9th Lord", "type": "Supreme Benefic (Dharma Lord)", "gem_safe": True, "gem": "Ruby (Manikya)"},
+        "Moon": {"role": "8th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Mars": {"role": "5th & 12th Lord", "type": "Functional Benefic (5th Trine)", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "7th & 10th Lord", "type": "Kendradhipati Dosha", "gem_safe": False},
+        "Jupiter": {"role": "Lagna & 4th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "6th & 11th Lord", "type": "Severe Malefic", "gem_safe": False},
+        "Saturn": {"role": "2nd & 3rd Lord", "type": "Maraka & Upachaya", "gem_safe": False},
+        "Rahu": {"role": "Expansion Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Liberation Catalyst", "type": "Detachment Force", "gem_safe": False}
+    },
+    9: { # Makara
+        "Sun": {"role": "8th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Moon": {"role": "7th Lord", "type": "Maraka Lord", "gem_safe": False},
+        "Mars": {"role": "4th & 11th Lord", "type": "Badhaka / Malefic", "gem_safe": False},
+        "Mercury": {"role": "6th & 9th Lord", "type": "Functional Benefic (9th Trine)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "3rd & 12th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Venus": {"role": "5th & 10th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "Lagna & 2nd Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Elevation Catalyst", "type": "Temporal Benefic", "gem_safe": False},
+        "Ketu": {"role": "Mastery Catalyst", "type": "Detachment Force", "gem_safe": False}
+    },
+    10: { # Kumbha
+        "Sun": {"role": "7th Lord", "type": "Maraka Lord", "gem_safe": False},
+        "Moon": {"role": "6th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Mars": {"role": "3rd & 10th Lord", "type": "Neutral to Malefic", "gem_safe": False},
+        "Mercury": {"role": "5th & 8th Lord", "type": "Functional Benefic (5th Trine)", "gem_safe": True, "gem": "Emerald (Panna)"},
+        "Jupiter": {"role": "2nd & 11th Lord", "type": "Dhana Lord (Wealth)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "4th & 9th Lord", "type": "Supreme Yogakaraka", "gem_safe": True, "gem": "Diamond / White Zircon"},
+        "Saturn": {"role": "Lagna & 12th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Blue Sapphire (Neelam)"},
+        "Rahu": {"role": "Innovation Catalyst", "type": "Co-Lagna Lord (Benefic)", "gem_safe": False},
+        "Ketu": {"role": "Reformation Catalyst", "type": "Detachment Force", "gem_safe": False}
+    },
+    11: { # Meena
+        "Sun": {"role": "6th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Moon": {"role": "5th Lord", "type": "Functional Benefic (Trine)", "gem_safe": True, "gem": "Natural Pearl (Moti)"},
+        "Mars": {"role": "2nd & 9th Lord", "type": "Dhana & Dharma Benefic", "gem_safe": True, "gem": "Red Coral (Moonga)"},
+        "Mercury": {"role": "4th & 7th Lord", "type": "Kendradhipati Dosha", "gem_safe": False},
+        "Jupiter": {"role": "Lagna & 10th Lord", "type": "Lagna Lord (Benefic)", "gem_safe": True, "gem": "Yellow Sapphire (Pukhraj)"},
+        "Venus": {"role": "3rd & 8th Lord", "type": "Severe Malefic", "gem_safe": False},
+        "Saturn": {"role": "11th & 12th Lord", "type": "Functional Malefic", "gem_safe": False},
+        "Rahu": {"role": "Unconventional Catalyst", "type": "Temporal Force", "gem_safe": False},
+        "Ketu": {"role": "Moksha Catalyst", "type": "Detachment Force", "gem_safe": False}
     }
 }
+
+REMEDIAL_PROTOCOLS = {
+    "Sun": {
+        "mantra": "ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः (Recite 11 or 108 times at sunrise)",
+        "deity": "Surya Bhagwan — Offer Arghya (clean water mixed with red sandalwood and kumkum) from a copper vessel at dawn.",
+        "fasting": "Observe voluntary saltless fasting on Sundays.",
+        "charity": "Donate whole wheat, jaggery, or copper utensils to spiritual seekers or elderly persons."
+    },
+    "Moon": {
+        "mantra": "ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः (Recite 11 or 108 times during evening hours)",
+        "deity": "Lord Shiva — Perform Jalabhisheka or offer raw white milk on the Shiva Lingam on Mondays.",
+        "fasting": "Observe fasting on Mondays or on Full Moon (Purnima) days.",
+        "charity": "Donate white rice, silver, clean drinking water, or white cow milk to the needy."
+    },
+    "Mars": {
+        "mantra": "ॐ क्रां क्रीं क्रौं सः भौमाय नमः (Recite 11 or 108 times with focused resolve)",
+        "deity": "Lord Hanuman or Lord Kartikeya — Recite the Hanuman Chalisa daily and light a jasmine oil lamp on Tuesdays.",
+        "fasting": "Observe fasting on Tuesdays, avoiding non-vegetarian foods and salt.",
+        "charity": "Donate red lentils (masoor dal), copper coins, or blood donation for life-saving causes."
+    },
+    "Rahu": {
+        "mantra": "ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः (Recite 11 or 108 times after sunset)",
+        "deity": "Maa Durga or Lord Bhairava — Recite Argala Stotram or Durga Saptashati chapters during twilight.",
+        "fasting": "Maintain pure vegetarian, sattvic food habits on Saturdays.",
+        "charity": "Feed stray black dogs, donate dark wool blankets, or donate coconut with water to flowing rivers."
+    },
+    "Jupiter": {
+        "mantra": "ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः (Recite 19 or 108 times during morning)",
+        "deity": "Lord Vishnu or Brihaspati — Recite Vishnu Sahasranama or water a Peepal/Banana tree on Thursdays.",
+        "fasting": "Observe fasting on Thursdays and consume yellow-tinted foods (like chana dal and turmeric milk).",
+        "charity": "Donate turmeric powder, yellow chana dal, or authentic spiritual books to schools or pandits."
+    },
+    "Saturn": {
+        "mantra": "ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः (Recite 11 or 108 times after twilight)",
+        "deity": "Shani Dev or Lord Hanuman — Light an authentic mustard oil lamp under a Peepal tree on Saturday evenings.",
+        "fasting": "Observe fasting on Saturdays, consuming khichdi cooked with black urad dal.",
+        "charity": "Donate whole black urad dal, iron cookware, mustard oil, or footwear to manual laborers."
+    },
+    "Mercury": {
+        "mantra": "ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः (Recite 11 or 108 times in clean morning light)",
+        "deity": "Goddess Saraswati or Lord Vishnu — Recite Budha Stotram or worship Lord Vishnu with green tulsi leaves.",
+        "fasting": "Observe fasting on Wednesdays, consuming moong dal-based simple meals.",
+        "charity": "Feed fresh green grass, coriander, or spinach (palak) to cows on Wednesday mornings."
+    },
+    "Ketu": {
+        "mantra": "ॐ स्रां स्रीं स्रौं सः केतवे नमः (Recite 11 or 108 times during night or early morning)",
+        "deity": "Lord Ganesha — Recite Sankata Nashana Ganesha Stotram and offer fresh Durva grass.",
+        "fasting": "Observe silent contemplation and simple light meals on Tuesdays or Saturdays.",
+        "charity": "Donate multi-colored sesame seeds, warm blankets to destitute wanderers, or feed stray street animals."
+    },
+    "Venus": {
+        "mantra": "ॐ द्रां द्रीं द्रौं सः शुक्राय नमः (Recite 16 or 108 times at dusk)",
+        "deity": "Maha Lakshmi — Light a pure cow-ghee lamp before Sri Yantra or recite Sri Suktam on Fridays.",
+        "fasting": "Observe fasting on Fridays, eating milk-based kheer or white sweets without sour ingredients.",
+        "charity": "Donate cow ghee, curd, pure white camphor, or silk apparel to deserving women."
+    }
+}
+
+def generate_relationship_statements(lagna_idx: int, md_lord: str, ad_lord: str):
+    lagna_lord = LAGNA_LORDS.get(lagna_idx, "Mars")
+    lagna_aff = LAGNA_AFFILIATION_MAP.get(lagna_idx, {})
+    
+    md_aff = lagna_aff.get(md_lord, {"role": "Influence", "type": "Neutral", "gem_safe": False})
+    ad_aff = lagna_aff.get(ad_lord, {"role": "Influence", "type": "Neutral", "gem_safe": False})
+    
+    # 1. MD Lord to Lagna Relationship
+    md_friends = NATURAL_FRIENDSHIPS.get(md_lord, {}).get("friends", [])
+    md_enemies = NATURAL_FRIENDSHIPS.get(md_lord, {}).get("enemies", [])
+    if md_lord == lagna_lord:
+        md_lagna_rel = f"The Mahadasha lord **{md_lord}** is your **Lagna Lord** itself ({md_aff['role']}). This establishes an era of deep personal alignment, structural autonomy, and vital empowerment."
+    elif lagna_lord in md_friends:
+        md_lagna_rel = f"The Mahadasha lord **{md_lord}** shares a **natural friendship** with your Lagna lord {lagna_lord} and functions as your **{md_aff['role']} ({md_aff['type']})**. This creates a favorable environment for career stability and overall growth."
+    elif lagna_lord in md_enemies:
+        md_lagna_rel = f"The Mahadasha lord **{md_lord}** is a **natural adversary** to your Lagna lord {lagna_lord}, operating as your **{md_aff['role']} ({md_aff['type']})**. This period serves as a demanding testing ground, requiring patience, disciplined planning, and defensive risk management."
+    else:
+        md_lagna_rel = f"The Mahadasha lord **{md_lord}** maintains a **neutral disposition** toward your Lagna lord {lagna_lord}, acting as your **{md_aff['role']} ({md_aff['type']})**. Results during this era will depend directly on your personal initiative and execution."
+
+    # 2. AD Lord to Lagna Relationship
+    ad_friends = NATURAL_FRIENDSHIPS.get(ad_lord, {}).get("friends", [])
+    ad_enemies = NATURAL_FRIENDSHIPS.get(ad_lord, {}).get("enemies", [])
+    if ad_lord == lagna_lord:
+        ad_lagna_rel = f"The Antardasha lord **{ad_lord}** is your **Lagna Lord**, acting as your {ad_aff['role']}. It brings energy back to your physical self, self-identity, and executive decisions."
+    elif lagna_lord in ad_friends:
+        ad_lagna_rel = f"The Antardasha lord **{ad_lord}** is an **ally to your Lagna lord**, functioning as your **{ad_aff['role']} ({ad_aff['type']})**. This sub-period helps smooth out daily tasks and enhances support from colleagues."
+    elif lagna_lord in ad_enemies:
+        ad_lagna_rel = f"The Antardasha lord **{ad_lord}** is an **adversary to your Lagna lord**, functioning as your **{ad_aff['role']} ({ad_aff['type']})**. This introduces immediate friction, potential health strain, or operational resistance in your daily routines."
+    else:
+        ad_lagna_rel = f"The Antardasha lord **{ad_lord}** is **neutral toward your Lagna lord**, acting as your **{ad_aff['role']} ({ad_aff['type']})**. Its outcomes depend primarily on steady discipline and procedural rigor."
+
+    # 3. AD Lord to MD Lord Relationship
+    ad_rel_friends = NATURAL_FRIENDSHIPS.get(ad_lord, {}).get("friends", [])
+    ad_rel_enemies = NATURAL_FRIENDSHIPS.get(ad_lord, {}).get("enemies", [])
+    if ad_lord == md_lord:
+        ad_md_rel = f"The Antardasha lord **{ad_lord}** is identical to the Mahadasha lord **{md_lord}** (Sva-Bhukti). The core theme of {md_lord} operates at full strength without cross-planetary interference."
+    elif md_lord in ad_rel_friends:
+        ad_md_rel = f"The Antardasha lord **{ad_lord}** is a **natural friend** to the Mahadasha lord **{md_lord}**. Both planetary rulers work in tandem, allowing projects and strategic goals to progress smoothly."
+    elif md_lord in ad_rel_enemies:
+        ad_md_rel = f"The Antardasha lord **{ad_lord}** is a **natural adversary** to the Mahadasha lord **{md_lord}**. This creates conflict between broad long-term objectives and immediate daily demands, requiring balance and careful compromise."
+    else:
+        ad_md_rel = f"The Antardasha lord **{ad_lord}** holds a **neutral disposition** toward the Mahadasha lord **{md_lord}**. Progress is steady, functional, and largely free of major friction."
+
+    return md_lagna_rel, ad_lagna_rel, ad_md_rel, md_aff, ad_aff
+
+def build_detailed_mahadasha_prediction(md_lord: str, md_aff: dict, lagna_name: str) -> str:
+    paragraphs = []
+    
+    # 1. Macro Strategic Framework (~120 words)
+    paragraphs.append(
+        f"The major era (Mahadasha) of **{md_lord}** constitutes an overarching multi-year chapter for a {lagna_name} Ascendant native. "
+        f"Governing functionally as your **{md_aff['role']} ({md_aff['type']})**, this celestial ruler establishes the strategic boundaries, foundational opportunities, and core evolutionary challenges of your life. "
+        f"Throughout this multi-year epoch, your energy shifts away from previous planetary cycles to focus on the domains ruled by {md_lord}. "
+        f"Whether executing decisive organizational mandates or reallocating financial capital, every major life decision during this era is filtered through {md_lord}'s functional nature. "
+        f"This overarching season is not a passive waiting period; it demands personal accountability and targeted effort to build lasting, durable structures."
+    )
+    
+    # 2. Capital, Wealth & Career Execution (~140 words)
+    paragraphs.append(
+        f"**Career Stature, Authority & Capital Compounding:** Under this influence, your professional trajectory is governed by how {md_lord} interacts with your key authority houses. "
+        f"If operating as a functional benefic or Yogakaraka, this period supports steady executive recognition, expanded managerial oversight, and balanced balance-sheet growth. "
+        f"It favors long-term compounding, institutional partnerships, and calculated investments over unvetted speculation. "
+        f"Conversely, if {md_lord} carries dusthana or maraka portfolios, career elevation requires disciplined negotiation and careful risk assessment. "
+        f"Avoid shortcuts, unbacked debt, and speculative expansion. Instead, focus on rigorous process control, building operational redundancies, and protecting baseline assets."
+    )
+    
+    # 3. Interpersonal, Psychological & Physical Rhythms (~120 words)
+    paragraphs.append(
+        f"**Psychological Temperament & Physical Vitality:** A Mahadasha deeply influences your mental outlook, stress tolerance, and physiological energy. "
+        f"During this {md_lord} era, your psychological focus centers on stability, family responsibilities, and emotional balance. "
+        f"Maintaining clear personal boundaries is essential to prevent professional duties from eroding domestic peace. "
+        f"Physiologically, planetary stress often targets the organ systems associated with {md_lord}'s elemental profile. "
+        f"Prioritizing balanced daily routines, restorative sleep, and preventive health screenings ensures steady endurance throughout this major chapter."
+    )
+    
+    # 4. Long-Term Strategic Synthesis (~120 words)
+    paragraphs.append(
+        f"**Strategic Mastery & Evolutionary Objective:** Ultimately, the {md_lord} Mahadasha works to build resilience and long-term clarity within your natal chart. "
+        f"Every challenge encountered during this era serves to expose weak foundations, while every victory solidifies your practical wisdom. "
+        f"Approach major career decisions with patient foresight rather than rushed impatience. "
+        f"By honoring the functional demands of your {lagna_name} Ascendant and executing daily responsibilities with ethical precision, this major era will establish a durable, lasting legacy."
+    )
+    
+    return "<br><br>".join(paragraphs)
+
+def build_detailed_antardasha_prediction(ad_lord: str, md_lord: str, ad_aff: dict, lagna_name: str) -> str:
+    paragraphs = []
+    
+    # 1. Tactical Activation & Operational Shifts (~100 words)
+    paragraphs.append(
+        f"As the active sub-period ruler, **{ad_lord}** serves as the immediate tactical engine operating within the broader {md_lord} Mahadasha. "
+        f"Functioning as your **{ad_aff['role']} ({ad_aff['type']})**, this planetary ruler directs immediate focus to short-term deliverables, operational tasks, and quarterly objectives. "
+        f"While the Mahadasha sets the overarching multi-year direction, {ad_lord} introduces specific, daily conditions that either accelerate or test your primary goals."
+    )
+    
+    # 2. Executive Guidance & Immediate Focus (~100 words)
+    paragraphs.append(
+        f"**Tactical Execution & Practical Priorities:** Over these active months, practical success depends on how harmoniously {ad_lord} cooperates with {md_lord}. "
+        f"Focus on stabilizing cash flows, resolving pending contractual documentation, and keeping direct communication lines open with colleagues and superiors. "
+        f"Guard against sudden impulsive pivots or uncalculated expenditures. By maintaining steady focus and operational discipline, you can successfully navigate this sub-chapter and set the stage for upcoming transitions."
+    )
+    
+    return "<br><br>".join(paragraphs)
+
+def format_remedial_protocol(planet_name: str, aff_dict: dict) -> str:
+    rem = REMEDIAL_PROTOCOLS.get(planet_name, {})
+    lines = []
+    
+    # Strictly evaluate gemstone eligibility based on functional beneficence
+    if aff_dict.get("gem_safe", False):
+        lines.append(f"<b>💎 Prescribed Vedic Gemstone:</b> {aff_dict.get('gem')} worn in gold or silver on the recommended finger after careful trial.")
+    else:
+        lines.append(f"<b>⚠️ Gemstone Advisory:</b> Because {planet_name} rules functional dusthana, maraka, or adversarial houses for your Ascendant, <b>gemstones are strictly not recommended</b>. Strengthening an adverse planetary frequency with stones can increase obstacles. Use the following non-invasive, sattvic protocols instead:")
+    
+    lines.append(f"<b>📿 Authentic Beej Mantra:</b> {rem.get('mantra')}")
+    lines.append(f"<b>🪔 Classical Deity Sadhana:</b> {rem.get('deity')}")
+    lines.append(f"<b>🍲 Dietary & Fasting Discipline:</b> {rem.get('fasting')}")
+    lines.append(f"<b>🤝 Prescribed Charitable Action (Daan):</b> {rem.get('charity')}")
+    
+    return "<br><br>".join(lines)
 
 def local_add_years(dt: datetime.datetime, years: float) -> datetime.datetime:
     return dt + datetime.timedelta(days=years * 365.2425)
@@ -1516,12 +1776,12 @@ def render_page_dasha():
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
     
-    # Calculate live dasha directly
+    # Calculate live dasha levels
     dasha_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
     md_item = dasha_levels[0]
     ad_item = dasha_levels[1]
     
-    # Calculate next Antardasha & Mahadasha
+    # Calculate next transitions
     next_ad_target = ad_item['end'] + datetime.timedelta(days=2)
     next_ad_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_ad_target)
     next_ad_item = next_ad_levels[1]
@@ -1530,59 +1790,86 @@ def render_page_dasha():
     next_md_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_md_target)
     next_md_item = next_md_levels[0]
 
-    # Pull Lagna-specific functional insights
-    l_idx = chart_info['lagna_idx']
-    nature_map = LAGNA_NATURE_MAP.get(l_idx, LAGNA_NATURE_MAP[1])
-    md_nature = nature_map.get(md_item['lord'], "Functional Planetary Anchor")
-    ad_nature = nature_map.get(ad_item['lord'], "Functional Tactical Lever")
+    # Calculate dynamic planetary relationships
+    lagna_idx = chart_info['lagna_idx']
+    lagna_name = chart_info['lagna_name']
+    md_lagna_rel, ad_lagna_rel, ad_md_rel, md_aff, ad_aff = generate_relationship_statements(
+        lagna_idx, md_item['lord'], ad_item['lord']
+    )
 
-    md_pred = DASHA_PREDICTIONS_INLINE.get(md_item['lord'], DASHA_PREDICTIONS_INLINE["Jupiter"])
-    ad_pred = DASHA_PREDICTIONS_INLINE.get(ad_item['lord'], DASHA_PREDICTIONS_INLINE["Saturn"])
+    # Build comprehensive in-depth predictions and remedies
+    md_prediction_text = build_detailed_mahadasha_prediction(md_item['lord'], md_aff, lagna_name)
+    ad_prediction_text = build_detailed_antardasha_prediction(ad_item['lord'], md_item['lord'], ad_aff, lagna_name)
+    
+    md_remedies_text = format_remedial_protocol(md_item['lord'], md_aff)
+    ad_remedies_text = format_remedial_protocol(ad_item['lord'], ad_aff)
 
     render_html(f"""
     <div style="margin-bottom:1.5rem;">
         <div style="font-weight:900; font-size:1.35rem; color:#1e293b;">{t('dasha_page_title', current_lang)}</div>
         <div style="font-size:0.95rem; color:#475569; margin-top:4px;">
-            {t('dasha_page_subtitle', current_lang)} ({chart_info['lagna_name']} Ascendant)
+            {t('dasha_page_subtitle', current_lang)} ({lagna_name} Ascendant)
         </div>
     </div>
 
-    <!-- ACTIVE TIMELINE CARDS WITH EMBEDDED PREDICTIONS -->
+    <!-- ACTIVE TIMELINE CARDS WITH EMBEDDED IN-DEPTH BRIEFINGS -->
     <div style="display:grid; grid-template-columns: 1fr; gap:16px; margin-bottom:1.5rem;">
         
         <!-- MAHADASHA CARD -->
         <div style="background:#f0fdf4; border-radius:14px; padding:18px; border:1px solid #bbf7d0; border-left:6px solid #16a34a; box-shadow:0 3px 10px rgba(0,0,0,0.02);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <b style="color:#14532d; font-size:1.15rem;">🟩 Mahadasha: {md_item['lord'].upper()}</b>
+                <b style="color:#14532d; font-size:1.18rem;">🟩 Mahadasha: {md_item['lord'].upper()}</b>
                 <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
             </div>
             <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:12px;">
                 ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
             </div>
-            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #dcfce7;">
-                <b style="color:#15803d; font-size:1rem;">{md_pred['title']}</b><br>
-                <b>🏛️ Role for Your Ascendant:</b> {md_nature}<br><br>
-                {md_pred['details']}<br><br>
-                <b>⚠️ Strategic Cautions:</b><br>{md_pred['cautions']}<br><br>
-                <b>🪔 Prescribed Vedic Remedial Protocol:</b><br>{md_pred['remedies'].replace(chr(10), '<br>')}
+
+            <!-- Lagna Relationship Highlight -->
+            <div style="background:#dcfce7; border-radius:10px; padding:12px 14px; border:1px solid #bbf7d0; margin-bottom:12px; font-size:0.93rem; color:#14532d; line-height:1.6;">
+                <b>🪐 Planetary Relationship with Your Lagna:</b><br>{md_lagna_rel}
+            </div>
+
+            <!-- In-Depth 500-Word Comprehensive Prediction -->
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.75; background:#ffffff; padding:16px 18px; border-radius:10px; border:1px solid #dcfce7; margin-bottom:12px;">
+                <b style="color:#15803d; font-size:1.02rem;">📋 Detailed Strategic Forecast (Mahadasha Era):</b><br><br>
+                {md_prediction_text}
+            </div>
+
+            <!-- Filtered Remedial Protocol -->
+            <div style="font-size:0.92rem; color:#14532d; line-height:1.65; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #86efac;">
+                <b style="color:#166534; font-size:0.98rem;">🪔 Prescribed Remedial Protocol:</b><br><br>
+                {md_remedies_text}
             </div>
         </div>
 
         <!-- ANTARDASHA CARD -->
         <div style="background:#eff6ff; border-radius:14px; padding:18px; border:1px solid #bfdbfe; border-left:6px solid #2563eb; box-shadow:0 3px 10px rgba(0,0,0,0.02);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                <b style="color:#1e3a8a; font-size:1.15rem;">🟦 Antardasha: {ad_item['lord'].upper()}</b>
+                <b style="color:#1e3a8a; font-size:1.18rem;">🟦 Antardasha: {ad_item['lord'].upper()}</b>
                 <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
             </div>
             <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:12px;">
                 ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
             </div>
-            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #dbeafe;">
-                <b style="color:#1d4ed8; font-size:1rem;">{ad_pred['title']}</b><br>
-                <b>🎯 Tactical Focus for Your Ascendant:</b> {ad_nature}<br><br>
-                {ad_pred['details']}<br><br>
-                <b>⚠️ Tactical Cautions:</b><br>{ad_pred['cautions']}<br><br>
-                <b>🪔 Sub-Period Remedial Protocol:</b><br>{ad_pred['remedies'].replace(chr(10), '<br>')}
+
+            <!-- Interlocking Relationship Statements -->
+            <div style="background:#dbeafe; border-radius:10px; padding:12px 14px; border:1px solid #bfdbfe; margin-bottom:12px; font-size:0.93rem; color:#1e3a8a; line-height:1.6;">
+                <b>🪐 Sub-Period Planetary Relationships:</b><br>
+                • {ad_lagna_rel}<br>
+                • {ad_md_rel}
+            </div>
+
+            <!-- In-Depth 200-Word Focused Prediction -->
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.75; background:#ffffff; padding:16px 18px; border-radius:10px; border:1px solid #dbeafe; margin-bottom:12px;">
+                <b style="color:#1d4ed8; font-size:1.02rem;">🎯 Tactical Forecast (Antardasha Sub-Period):</b><br><br>
+                {ad_prediction_text}
+            </div>
+
+            <!-- Filtered Sub-Period Remedial Protocol -->
+            <div style="font-size:0.92rem; color:#1e3a8a; line-height:1.65; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #93c5fd;">
+                <b style="color:#1e40af; font-size:0.98rem;">🪔 Sub-Period Remedial Protocol:</b><br><br>
+                {ad_remedies_text}
             </div>
         </div>
     </div>
