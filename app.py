@@ -10,9 +10,14 @@ from databanks import *
 from views.about import render_page_about
 from views.dasha import render_page_dasha
 
-# Configure Streamlit page settings
+# ==============================================================================
+# EARLY LANGUAGE DETECTION & PAGE CONFIG
+# ==============================================================================
+init_lang = st.query_params.get("lang", "en")
+app_page_title = "✨ नवतारा पल्स" if init_lang == "hi" else "✨ Navtara Pulse"
+
 st.set_page_config(
-    page_title="Navtara Pulse",
+    page_title=app_page_title,
     page_icon="✨",
     layout="centered",
     initial_sidebar_state="collapsed"
@@ -98,6 +103,9 @@ render_html("""
 </style>
 """)
 
+# ==============================================================================
+# TRANSLATION DICTIONARY
+# ==============================================================================
 TRANSLATIONS = {
     "en": {
         "app_title": "✨ Navtara Pulse",
@@ -157,7 +165,7 @@ def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
 # ==============================================================================
-# HINDI LOOKUP MAPS
+# HINDI ASTROLOGICAL LOOKUP MAPS
 # ==============================================================================
 NAKSHATRA_NAMES_HI = {
     "Ashwini": "अश्विनी", "Bharani": "भरणी", "Krittika": "कृत्तिका",
@@ -189,7 +197,7 @@ TARA_NAMES_HI = {
 }
 
 # ==============================================================================
-# SESSION STATE & PERSISTENCE
+# CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
 # ==============================================================================
 client_params = st.query_params
 
@@ -233,7 +241,7 @@ if "mala_rounds" not in st.session_state:
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
-# Centered App Header
+# Universal Centered Header on ALL tabs
 render_html(f"""
     <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
         <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:76px; height:76px; border-radius:26px; display:flex; align-items:center; justify-content:center; font-size:2.45rem; box-shadow:0 8px 28px rgba(245,158,11,0.38); margin-bottom:10px;'>
@@ -244,45 +252,45 @@ render_html(f"""
     </div>
 """)
 
-# Top Navigation Dock (3x3 Grid)
+# Top Navigation Dock (3x3 Grid) - Fully Localized Dynamic Titles
 nav_r1_c1, nav_r1_c2, nav_r1_c3 = st.columns(3)
 with nav_r1_c1:
     p_type = "primary" if st.session_state.current_page == "about" else "secondary"
-    if st.button("✨ About App", type=p_type, use_container_width=True):
+    if st.button(t("btn_about", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "about"
         st.rerun()
 with nav_r1_c2:
     p_type = "primary" if st.session_state.current_page == "profile" else "secondary"
-    if st.button("👤 User Profile", type=p_type, use_container_width=True):
+    if st.button(t("btn_user_profile", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "profile"
         st.rerun()
 with nav_r1_c3:
     p_type = "primary" if st.session_state.current_page == "numerology" else "secondary"
-    if st.button("🔢 Numerology", type=p_type, use_container_width=True):
+    if st.button(t("btn_numerology", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "numerology"
         st.rerun()
 
 nav_r2_c1, nav_r2_c2, nav_r2_c3 = st.columns(3)
 with nav_r2_c1:
     p_type = "primary" if st.session_state.current_page == "shani" else "secondary"
-    if st.button("🪐 Shani", type=p_type, use_container_width=True):
+    if st.button(t("btn_shani", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "shani"
         st.rerun()
 with nav_r2_c2:
     p_type = "primary" if st.session_state.current_page == "live" else "secondary"
-    if st.button("⚡ Daily Horoscope", type=p_type, use_container_width=True):
+    if st.button(t("btn_live", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "live"
         st.rerun()
 with nav_r2_c3:
     p_type = "primary" if st.session_state.current_page == "forecast" else "secondary"
-    if st.button("🗓️ Weekly Horoscope", type=p_type, use_container_width=True):
+    if st.button(t("btn_forecast", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "forecast"
         st.rerun()
 
 nav_r3_c1, nav_r3_c2, nav_r3_c3 = st.columns(3)
 with nav_r3_c1:
     p_type = "primary" if st.session_state.current_page == "monthly" else "secondary"
-    if st.button("📅 Monthly Horoscope", type=p_type, use_container_width=True):
+    if st.button(t("btn_monthly", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "monthly"
         st.rerun()
 with nav_r3_c2:
@@ -292,7 +300,7 @@ with nav_r3_c2:
         st.rerun()
 with nav_r3_c3:
     p_type = "primary" if st.session_state.current_page == "mantra" else "secondary"
-    if st.button("📿 Mantra", type=p_type, use_container_width=True):
+    if st.button(t("btn_mantra", current_lang), type=p_type, use_container_width=True):
         st.session_state.current_page = "mantra"
         st.rerun()
         
@@ -351,7 +359,7 @@ def render_profile_setup_prompt():
             st.rerun()
 
 # ==============================================================================
-# POST-SUBMISSION ONBOARDING: ADD TO HOME SCREEN
+# POST-SUBMISSION ONBOARDING SCREEN: ADD TO HOME SCREEN
 # ==============================================================================
 def render_page_install_guide():
     render_html("""
@@ -921,13 +929,13 @@ def render_page_shani():
                 <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
                     <b>💰 2. Wealth & Cash Flow Dynamics:</b><br>{shani_sadesati_data['wealth']}
                 </div>
-                <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; border-left:4px solid #8b5cf6;">
+                <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#3b0764; border-left:4px solid #8b5cf6;">
                     <b>👨‍👩‍👧‍👦 3. Family & Domestic Harmony:</b><br>{shani_sadesati_data['family']}
                 </div>
-                <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
+                <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#881337; border-left:4px solid #e11d48;">
                     <b>📉 4. Loans & Liabilities Management:</b><br>{shani_sadesati_data['loan']}
                 </div>
-                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #065f46; border-left:4px solid #065f46;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #065f46;">
                     <b>🤝 5. Partnerships & Business Alliances:</b><br>{shani_sadesati_data['partner']}
                 </div>
                 <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; border-left:4px solid #d97706;">
@@ -941,7 +949,7 @@ def render_page_shani():
                 </div>
             </div>
 
-            <div style="font-weight:900; font-size:1.05rem; color:#475569; margin:16px 0 8px 0; border-top:1px solid #e9d5ff; padding-top:10px;">
+            <div style="font-weight:900; font-size:1.05rem; color:#475569; margin-16px 0 8px 0; border-top:1px solid #e9d5ff; padding-top:10px;">
                 Complete 7.5-Year Sade Sati Evolutionary Blueprint for {m_name} Moon:
             </div>
 
