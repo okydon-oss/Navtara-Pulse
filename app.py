@@ -9,6 +9,7 @@ from databanks import *
 # Import modular views (Pattern B)
 from views.about import render_page_about
 from views.profile import render_page_profile
+from views.numerology import render_page_numerology
 from views.dasha import render_page_dasha
 
 # ==============================================================================
@@ -120,9 +121,6 @@ TRANSLATIONS = {
         "btn_monthly": "📅 Monthly Horoscope",
         "btn_dasha": "⏳ Dasha Timeline",
         "btn_mantra": "📿 Mantra Sadhana",
-        "mulank_label": "Mulank (Driver)",
-        "bhagyank_label": "Bhagyank (Destiny)",
-        "namank_label": "Namank (Name Vibration)",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
         "live_pulse_title": "⚡ Today's Live Cosmic Pulse"
     },
@@ -138,9 +136,6 @@ TRANSLATIONS = {
         "btn_monthly": "📅 मासिक राशिफल",
         "btn_dasha": "⏳ दशा समयरेखा",
         "btn_mantra": "📿 मंत्र साधना",
-        "mulank_label": "मूलांक (Driver)",
-        "bhagyank_label": "भाग्यांक (Conductor)",
-        "namank_label": "नामांक (Name Vibration)",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह"
     }
@@ -286,35 +281,15 @@ if has_valid_profile:
     st.session_state["chart_info"] = chart_info
     st.session_state["dob_parsed"] = dob_parsed
     st.session_state["tob_parsed"] = tob_parsed
+    st.session_state["mulank"] = mulank
+    st.session_state["bhagyank"] = bhagyank
+    st.session_state["namank"] = namank
 else:
     dob_parsed, tob_parsed, chart_info = None, None, None
     mulank, bhagyank, namank = None, None, None
     shani_paya_data, shani_sadesati_data = None, None
     u_lat, u_lon = 28.6139, 77.2090
     st.session_state["has_valid_profile"] = False
-
-def render_profile_setup_prompt():
-    is_hi = (current_lang == "hi")
-    prompt_title = "अपनी जन्म पत्रिका प्रोफाइल सेट करें" if is_hi else "Set Up Your Vedic Birth Profile"
-    prompt_desc = "अपना प्रामाणिक <b>जन्म नक्षत्र</b>, <b>लग्न</b>, <b>नवतारा चक्र</b> एवं <b>शनि साढ़े साती</b> की गणना करने के लिए यूज़र प्रोफाइल टैब में अपना जन्म विवरण भरें।" if is_hi else "To calculate your authentic <b>Janma Nakshatra</b>, <b>Ascendant (Lagna)</b>, <b>Navtara cycle</b>, and <b>Shani Sade Sati phase</b>, please enter your birth details in the User Profile tab."
-    btn_lbl = "👉 प्रोफाइल अभी भरें" if is_hi else "👉 Configure Profile Now"
-
-    render_html(f"""
-    <div style="background:#fffbeb; border:2px dashed #f59e0b; border-radius:16px; padding:1.5rem; text-align:center; margin:1.5rem 0;">
-        <div style="font-size:2.2rem; margin-bottom:8px;">👤</div>
-        <div style="font-weight:900; font-size:1.25rem; color:#92400e; margin-bottom:6px;">
-            {prompt_title}
-        </div>
-        <div style="font-size:0.95rem; color:#78350f; max-width:480px; margin:0 auto 1.2rem auto; line-height:1.6;">
-            {prompt_desc}
-        </div>
-    </div>
-    """)
-    _, c_mid, _ = st.columns([1, 2, 1])
-    with c_mid:
-        if st.button(btn_lbl, type="primary", use_container_width=True):
-            st.session_state.current_page = "profile"
-            st.rerun()
 
 # ==============================================================================
 # POST-SUBMISSION ONBOARDING: ADD TO HOME SCREEN
@@ -373,103 +348,6 @@ def render_page_install_guide():
             st.rerun()
 
 # ==============================================================================
-# TAB 3: NUMEROLOGY
-# ==============================================================================
-def render_page_numerology():
-    if not has_valid_profile:
-        render_profile_setup_prompt()
-        return
-
-    num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
-    avoid_data = get_numerology_avoidance(mulank, bhagyank, current_lang)
-    p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
-    p_b_label = NUM_PLANET_NAMES.get(bhagyank, {}).get(current_lang, f"Planet {bhagyank}")
-    p_n_label = NUM_PLANET_NAMES.get(namank, {}).get(current_lang, f"Planet {namank}")
-
-    cautions_html = "".join(f"<li style='margin-bottom:5px;'>{c}</li>" for c in avoid_data['cautions'])
-
-    render_html(f"""
-    <div class="light-card-num">
-        <div style="font-weight:900; font-size:1.25rem; color:#065f46; margin-bottom:1rem; border-bottom:2px solid #bbf7d0; padding-bottom:0.5rem;">
-            <span>🔢 Core Numerology Blueprint</span>
-        </div>
-        
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; text-align:center; margin-bottom:1.15rem;">
-            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('mulank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{mulank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_m_label}</div>
-            </div>
-            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('bhagyank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{bhagyank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_b_label}</div>
-            </div>
-            <div style="background:#f0fdf4; border-radius:12px; padding:12px; border:1.5px solid #dcfce7;">
-                <div style="font-size:0.85rem; color:#047857; font-weight:900;">{t('namank_label', current_lang)}</div>
-                <div style="font-size:1.85rem; font-weight:900; color:#065f46;">{namank}</div>
-                <div style="font-size:0.88rem; color:#059669; font-weight:800;">{p_n_label}</div>
-            </div>
-        </div>
-
-        <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.15rem;">
-            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['career_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['career_desc']}</div>
-            </div>
-            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['wealth_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['wealth_desc']}</div>
-            </div>
-            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #14b8a6;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['rel_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['rel_desc']}</div>
-            </div>
-            <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #0d9488;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['health_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['health_desc']}</div>
-            </div>
-        </div>
-
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:8px;">{num_domains['luck_title']}</div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.95rem; line-height:1.6;">
-                <div><b>✨ Lucky Numbers:</b> {num_domains['lucky_num']}</div>
-                <div><b>⚠️ Caution Numbers:</b> {num_domains['avoid_num']}</div>
-                <div><b>📅 Auspicious Days:</b> {num_domains['lucky_days']}</div>
-                <div><b>🧭 Favorable Direction:</b> {num_domains['lucky_dir']}</div>
-                <div style="grid-column: 1 / -1;"><b>🎨 Energizing Colors:</b> {num_domains['lucky_colors']}</div>
-            </div>
-        </div>
-
-        <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
-                <div><b>🚫 Numbers to Avoid:</b> {avoid_data['avoid_numbers']}</div>
-                <div><b>🎨 Colors to Avoid:</b> {avoid_data['avoid_colors']}</div>
-                <div><b>📅 Unfavorable Days:</b> {avoid_data['avoid_days']}</div>
-                <div><b>🧭 Direction to Avoid:</b> {avoid_data['avoid_directions']}</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
-                <b style="color:#9f1239; font-size:0.95rem;">⚠️ Critical Behavioral & Strategic Don'ts:</b>
-                <ul style="margin:4px 0 0 0; padding-left:1.2rem; font-size:0.92rem; color:#881337; line-height:1.6;">
-                    {cautions_html}
-                </ul>
-            </div>
-        </div>
-
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:6px;">🪔 Numerology Harmony & Grounding Remedies:</div>
-            <div style="font-size:0.94rem; line-height:1.65; color:#14532d;">
-                • <b>Metal Vessel Grounding:</b> Drink water from a pure silver or copper vessel to pacify nervous restlessness and enhance bio-electrical harmony.<br>
-                • <b>Digital & Workspace Bio-Shield:</b> Remove tangled charging cables, broken electronic gadgets, and inactive clocks from your workspace.<br>
-                • <b>Name Resonance (Namank):</b> Use green or blue ink when writing or endorsing important planning documents to harmonize your {namank} name vibration.
-            </div>
-        </div>
-    </div>
-    """)
-
-# ==============================================================================
 # TAB 4: SHANI & SADE SATI
 # ==============================================================================
 def render_page_shani():
@@ -489,7 +367,6 @@ def render_page_shani():
             <span style="font-size:0.85rem; background:#ede9fe; color:#5b21b6; padding:4px 10px; border-radius:20px; font-weight:800;">Saturn in Pisces (Meena)</span>
         </div>
         
-        <!-- SHANI PAYA IN-DEPTH MATRIX -->
         <div style="background:#f5f3ff; border-radius:14px; padding:16px; border:1.5px solid #e9d5ff; margin-bottom:1.25rem;">
             <div style="font-size:0.85rem; color:#6d28d9; font-weight:800; text-transform:uppercase;">ACTIVE TRANSIT PAYA FOR YOUR {m_name.upper()} MOON</div>
             <div style="font-size:1.45rem; font-weight:900; color:#5b21b6; margin:4px 0;">{shani_paya_data['paya']}</div>
@@ -529,7 +406,6 @@ def render_page_shani():
             </div>
         </div>
 
-        <!-- SADE SATI / DHAIYA EXHAUSTIVE MATRIX -->
         <div style="background:#ffffff; border-radius:14px; padding:16px; border:1.5px solid #ddd6fe; margin-bottom:1.25rem;">
             <div style="font-weight:900; font-size:1.2rem; color:#5b21b6; margin-bottom:10px; border-bottom:1px solid #e9d5ff; padding-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
                 <span>⚖️ Active Sade Sati / Dhaiya Life-Domain Breakdown for {m_name} Moon</span>
@@ -555,57 +431,17 @@ def render_page_shani():
                 <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#881337; border-left:4px solid #e11d48;">
                     <b>📉 4. Loans & Liabilities Management:</b><br>{shani_sadesati_data['loan']}
                 </div>
-                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#065f46; border-left:4px solid #065f46;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#065f46;">
                     <b>🤝 5. Partnerships & Business Alliances:</b><br>{shani_sadesati_data['partner']}
                 </div>
-                <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#78350f; border-left:4px solid #d97706;">
+                <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#78350f;">
                     <b>🍀 6. Luck & Destiny Alignment:</b><br>{shani_sadesati_data['luck']}
                 </div>
-                <div style="background:#f0f9ff; border-radius:10px; padding:10px 12px; border-left:4px solid #0284c7;">
+                <div style="background:#f0f9ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#0369a1;">
                     <b>💼 7. Career, Authority & Executive Standing:</b><br>{shani_sadesati_data['career']}
                 </div>
-                <div style="background:#f8fafc; border-radius:10px; padding:10px 12px; border-left:4px solid #475569;">
+                <div style="background:#f8fafc; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#0f172a;">
                     <b>🪔 8. Prescribed Remedial Protocol:</b><br>{shani_sadesati_data['remedy']}
-                </div>
-            </div>
-
-            <div style="font-weight:900; font-size:1.05rem; color:#475569; margin:16px 0 8px 0; border-top:1px solid #e9d5ff; padding-top:10px;">
-                Complete 7.5-Year Sade Sati Evolutionary Blueprint for {m_name} Moon:
-            </div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #a855f7; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#5b21b6; font-size:0.96rem;">Phase 1: Rising Phase (Saturn in {shani_sadesati_data['rashi_12th']} / 12th from Moon)</b>
-                    {p1_active_tag}
-                </div>
-                <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>Core Dynamic:</b> Subconscious restructuring, elimination of toxic habits, and mental detachment.<br>
-                    • <b>Financial & Career:</b> Spikes in expenses related to travel, relocation, or healthcare; work happens behind the scenes.<br>
-                    • <b>Karmic Mastery:</b> Shedding psychological baggage and preparing for the core transit.
-                </div>
-            </div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #ef4444; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#991b1b; font-size:0.96rem;">Phase 2: Peak Janma Shani (Saturn in {shani_sadesati_data['rashi_1st']} / Over Natal Moon)</b>
-                    {p2_active_tag}
-                </div>
-                <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>Core Dynamic:</b> Crucible of character and endurance. Dissolves false pride and tests emotional truth.<br>
-                    • <b>Financial & Career:</b> Maximum administrative burden, heavy decision-making stress, and executive solitude.<br>
-                    • <b>Karmic Mastery:</b> Cultivating emotional resilience, physical discipline, and enduring maturity.
-                </div>
-            </div>
-
-            <div style="background:#faf5ff; border-radius:10px; padding:12px; border-left:4px solid #10b981; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <b style="color:#065f46; font-size:0.96rem;">Phase 3: Setting Phase (Saturn in {shani_sadesati_data['rashi_2nd']} / 2nd from Moon)</b>
-                    {p3_active_tag}
-                </div>
-                <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.6;">
-                    • <b>Core Dynamic:</b> Lifting of psychological pressure, consolidation of hard-won wisdom, and stabilizing family harmony.<br>
-                    • <b>Financial & Career:</b> Wealth recovery, acquisition of durable assets, disciplined speech, and delayed recognition.<br>
-                    • <b>Karmic Mastery:</b> Transforming lessons into lasting institutional stability and financial security.
                 </div>
             </div>
         </div>
@@ -902,7 +738,7 @@ def render_page_forecast():
     """)
 
 # ==============================================================================
-# TAB 7: MONTHLY HOROSCOPE (DYNAMIC GOCHAR ENGINE)
+# TAB 7: MONTHLY HOROSCOPE
 # ==============================================================================
 def render_page_monthly():
     if not has_valid_profile:
@@ -1014,7 +850,7 @@ def render_page_monthly():
     """)
 
 # ==============================================================================
-# TAB 9: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
+# TAB 9: MANTRA SADHANA
 # ==============================================================================
 def render_page_mantra():
     render_html("""
@@ -1111,7 +947,7 @@ def render_page_mantra():
                 st.rerun()
 
 # ==============================================================================
-# ROUTER DISPATCHER: RENDER THE SELECTED PAGE
+# ROUTER DISPATCHER
 # ==============================================================================
 PAGES = {
     "about": render_page_about,
