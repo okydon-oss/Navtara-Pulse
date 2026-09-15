@@ -113,7 +113,6 @@ render_html("""
 TRANSLATIONS = {
     "en": {
         "app_title": "✨ Navtara Pulse",
-        "app_subtitle": "Vedic Nakshatra Rhythm & Cosmic Precision",
         "btn_about": "✨ About App",
         "btn_user_profile": "👤 User Profile",
         "btn_numerology": "🔢 Numerology",
@@ -123,12 +122,9 @@ TRANSLATIONS = {
         "btn_monthly": "📅 Monthly Horoscope",
         "btn_dasha": "⏳ Dasha Timeline",
         "btn_mantra": "📿 Mantra Sadhana",
-        "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
-        "live_pulse_title": "⚡ Today's Live Cosmic Pulse"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
-        "app_subtitle": "वैदिक नक्षत्र गोचर एवं खगोलीय ऊर्जा चक्र",
         "btn_about": "✨ ऐप परिचय",
         "btn_user_profile": "👤 यूज़र प्रोफाइल",
         "btn_numerology": "🔢 अंकशास्त्र",
@@ -138,8 +134,6 @@ TRANSLATIONS = {
         "btn_monthly": "📅 मासिक राशिफल",
         "btn_dasha": "⏳ दशा समयरेखा",
         "btn_mantra": "📿 मंत्र साधना",
-        "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
-        "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह"
     }
 }
 
@@ -188,14 +182,16 @@ if "mala_rounds" not in st.session_state:
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
-# Universal Centered Header
+# Universal Centered Header with your preferred Catchy Tagline
+app_subtitle_text = "कृत्रिम बुद्धि (AI) से परे, आचार्यों के अनुभव की सटीकता" if current_lang == "hi" else "Beyond Artificial Intelligence, the precision of acharyas' experience"
+
 render_html(f"""
     <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
         <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:76px; height:76px; border-radius:26px; display:flex; align-items:center; justify-content:center; font-size:2.45rem; box-shadow:0 8px 28px rgba(245,158,11,0.38); margin-bottom:10px;'>
             ✨
         </div>
         <h1 style='margin:0; font-size:2.15rem; color:#0f172a; font-weight:900; line-height:1.2; text-align:center;'>{t('app_title', current_lang)}</h1>
-        <div style='font-size:1rem; color:#64748b; font-weight:600; margin-top:6px; text-align:center;'>{t('app_subtitle', current_lang)}</div>
+        <div style='font-size:0.95rem; color:#b45309; font-weight:800; margin-top:6px; text-align:center; background:#fffbeb; padding:4px 14px; border-radius:20px; border:1px solid #fde68a;'>{app_subtitle_text}</div>
     </div>
 """)
 
@@ -271,11 +267,24 @@ if has_valid_profile:
     chart_info = calculate_birth_chart(dob_parsed, tob_parsed, u_lat, u_lon)
     mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
 
+    SATURN_TRANSIT_RASHI_IDX = 11  # Saturn in Pisces (Meena)
+    shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+    shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
+
     st.session_state["has_valid_profile"] = True
     st.session_state["chart_info"] = chart_info
     st.session_state["dob_parsed"] = dob_parsed
     st.session_state["tob_parsed"] = tob_parsed
+    st.session_state["mulank"] = mulank
+    st.session_state["bhagyank"] = bhagyank
+    st.session_state["namank"] = namank
+    st.session_state["shani_paya_data"] = shani_paya_data
+    st.session_state["shani_sadesati_data"] = shani_sadesati_data
 else:
+    dob_parsed, tob_parsed, chart_info = None, None, None
+    mulank, bhagyank, namank = None, None, None
+    shani_paya_data, shani_sadesati_data = None, None
+    u_lat, u_lon = 28.6139, 77.2090
     st.session_state["has_valid_profile"] = False
 
 # ==============================================================================
