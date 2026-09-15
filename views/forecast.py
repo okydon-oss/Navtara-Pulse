@@ -1,4 +1,4 @@
-# views/forecast.py - Dedicated 7-Day Moon Transit Forecast View with Complete Bilingual Support
+# views/forecast.py - Dedicated Weekly Horoscope View with Complete Bilingual Support
 import streamlit as st
 import datetime
 from databanks import (
@@ -58,8 +58,8 @@ def get_localized_forecast_insights(theme_title, raw_insights, is_hi):
         else:
             return {
                 "theme_title": "संतुलित खगोलीय प्रवाह एवं आत्म-समीक्षा",
-                "desc": "आज का दिन व्यावहारिक समीक्षा, आंतरिक स्थिरता और व्यक्तिगत प्राथमिकताओं को व्यवस्थित करने के लिए अनुकूल है.",
-                "opportunities": "लंबित प्रशासनिक कार्यों को पूरा करें, टीम के सदस्यों के साथ संवाद सुधारें और स्वास्थ्य पर ध्यान दें.",
+                "desc": "आज का दिन व्यावहारिक समीक्षा, आंतरिक स्थिरता और व्यक्तिगत प्राथमिकताओं को व्यवस्थित करने के लिए अनुकूल है।",
+                "opportunities": "लंबित प्रशासनिक कार्यों को पूरा करें, टीम के सदस्यों के साथ संवाद सुधारें और स्वास्थ्य पर ध्यान दें।",
                 "hazards": "भावनात्मक अतिरेक या जल्दबाजी में लिए गए वित्तीय निर्णयों से बचें।",
                 "remedy_mantra": raw_insights.get("remedy_mantra", ""),
                 "remedy_charity": raw_insights.get("remedy_charity", ""),
