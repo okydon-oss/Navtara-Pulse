@@ -933,7 +933,8 @@ def get_monthly_planetary_positions(utc_dt: datetime.datetime) -> dict:
     return positions
 
 def synthesize_bhava_result(h: int, occupants: list, lord_name: str, lord_house: int, lord_rashi_str: str) -> str:
-    """Synthesizes rich, domain-specific predictions based on occupants and the house lord's transit."""
+    """Synthesizes rich, domain-specific predictions starting with the house lord's transit, then occupants."""
+    
     # 1. Base tone of the house lord placement
     if lord_house in [1, 5, 9]:
         lord_impact = f"strengthens this domain with auspicious creative flow, natural confidence, and favorable expansion"
@@ -964,23 +965,26 @@ def synthesize_bhava_result(h: int, occupants: list, lord_name: str, lord_house:
         12: "Keep unbudgeted expenditures tightly monitored; excellent for foreign trade, visa paperwork, and spiritual introspection."
     }
 
+    # Format House Lord phrase FIRST
+    if h == 1:
+        lord_phrase = f"The Lagna lord {lord_name} is transiting the {get_ordinal(lord_house)} house in {lord_rashi_str}"
+    else:
+        lord_phrase = f"The {get_ordinal(h)} house lord {lord_name} is transiting the {get_ordinal(lord_house)} house in {lord_rashi_str}"
+
+    # Format Occupants phrase SECOND
     if occupants:
         occ_names = ", ".join([PLANET_DISPLAY_NAMES[p] for p in occupants])
         if len(occupants) == 1:
-            occ_phrase = f"{occ_names} is transiting the {get_ordinal(h)} house"
+            occ_phrase = f"and {occ_names} is transiting the {get_ordinal(h)} house"
         else:
-            occ_phrase = f"{occ_names} are transiting the {get_ordinal(h)} house"
+            occ_phrase = f"and {occ_names} are transiting the {get_ordinal(h)} house"
     else:
-        occ_phrase = f"No planet is in the {get_ordinal(h)} house"
-
-    if h == 1:
-        lord_phrase = f"the Lagna lord {lord_name} is transiting the {get_ordinal(lord_house)} house in {lord_rashi_str}"
-    else:
-        lord_phrase = f"the {get_ordinal(h)} house lord {lord_name} is transiting the {get_ordinal(lord_house)} house in {lord_rashi_str}"
+        occ_phrase = f"and no planet is transiting the {get_ordinal(h)} house"
 
     advice = domain_specific_advice.get(h, "Proceed with calculated, structured planning.")
     
-    return f"{occ_phrase} and {lord_phrase}, which {lord_impact}. {advice}"
+    return f"{lord_phrase}, {occ_phrase}, which {lord_impact}. {advice}"
+    
 
 def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime):
     utc_dt = target_dt - datetime.timedelta(hours=5, minutes=30)
