@@ -11,6 +11,7 @@ from views.about import render_page_about
 from views.profile import render_page_profile
 from views.numerology import render_page_numerology
 from views.shani import render_page_shani
+from views.live import render_page_live
 from views.dasha import render_page_dasha
 
 # ==============================================================================
@@ -290,10 +291,6 @@ else:
 # ==============================================================================
 # ROUTER DISPATCHER
 # ==============================================================================
-def render_page_live():
-    if not has_valid_profile: return
-    st.write("Live view loading...")
-
 def render_page_forecast():
     if not has_valid_profile: return
     st.write("Forecast view loading...")
