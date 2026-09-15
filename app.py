@@ -1,27 +1,9 @@
+# app.py - Main Streamlit Application Entry Point
 import streamlit as st
 import datetime
 import urllib.parse
-import json
-import os
-import math
 
-# Geocoding engine imports
-try:
-    from geopy.geocoders import Nominatim
-    from geopy.exc import GeocoderTimedOut, GeocoderServiceError
-    HAS_GEOPY = True
-except ImportError:
-    HAS_GEOPY = False
-
-# Swiss Ephemeris imports
-try:
-    import swisseph as swe
-    HAS_SWISSEPH = True
-    swe.set_sid_mode(swe.SIDM_LAHIRI)
-except Exception:
-    HAS_SWISSEPH = False
-
-# Import data banks from databanks.py
+# Import data banks and calculation routines from databanks.py
 import databanks as db
 from databanks import *
 
@@ -179,544 +161,6 @@ TRANSLATIONS = {
 def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
-# DYNAMIC LOCATION RESOLVER (Handles ANY city, town, village or direct coordinates)
-def resolve_location_name(place_query: str):
-    if not place_query or not place_query.strip():
-        return 28.6139, 77.2090, "New Delhi, India"
-    
-    clean_q = place_query.strip()
-    
-    # 1. Direct Decimal Coordinates Check (e.g. "19.8762, 75.3433")
-    if "," in clean_q:
-        parts = clean_q.split(",")
-        if len(parts) == 2:
-            try:
-                lat = float(parts[0].strip())
-                lon = float(parts[1].strip())
-                if -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0:
-                    return lat, lon, clean_q
-            except ValueError:
-                pass
-
-    # 2. Fast Offline Cache Check
-    for name, coords in CITY_COORDINATES.items():
-        if clean_q.lower() in name.lower() or any(part.strip().lower() in name.lower() for part in clean_q.split(',')):
-            return coords[0], coords[1], name
-
-    # 3. Dynamic Global Search via OpenStreetMap (Nominatim)
-    if HAS_GEOPY:
-        try:
-            geolocator = Nominatim(user_agent="navtara_pulse_dynamic_geocoder", timeout=6)
-            loc = geolocator.geocode(clean_q, language="en")
-            if loc:
-                return float(loc.latitude), float(loc.longitude), loc.address
-        except Exception:
-            pass
-
-    # Safe emergency fallback
-    return 28.6139, 77.2090, clean_q
-
-def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
-    offset = (partner_star_idx - user_star_idx) % 9
-    tara_name, icon, quality = NAVTARA_NAMES[offset]
-    is_allied = offset in [1, 3, 5, 7, 8]
-    is_friction = offset in [2, 4, 6]
-    
-    if is_allied:
-        relationship_tone = "High Harmonic Resonance (Constructive Growth & Mutual Trust)"
-        advice = "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance."
-    elif is_friction:
-        relationship_tone = "Testing & High Friction (Demands Clear Boundaries & Patience)"
-        advice = "Differences in communication tempo or expectations can trigger misunderstandings. Ensure all commitments are formally written."
-    else:
-        relationship_tone = "Mirror / Foundational Synergy (Intense Alignment & Reflective Growth)"
-        advice = "High mutual identification. Both individuals share foundational biorhythms; great for long-term loyalty if ego boundaries remain healthy."
-
-    return {
-        "tara_name": tara_name,
-        "icon": icon,
-        "quality": quality,
-        "is_allied": is_allied,
-        "is_friction": is_friction,
-        "relationship_tone": relationship_tone,
-        "advice": advice
-    }
-
-def get_julian_day(utc_dt: datetime.datetime) -> float:
-    y = utc_dt.year
-    m = utc_dt.month
-    d = utc_dt.day + (utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0) / 24.0
-    if m <= 2:
-        y -= 1
-        m += 12
-    a = math.floor(y / 100)
-    b = 2 - a + math.floor(a / 4)
-    return math.floor(365.25 * (y + 4716)) + math.floor(30.6001 * (m + 1)) + d + b - 1524.5
-
-def get_approx_lahiri_ayanamsa(jd: float) -> float:
-    t_val = (jd - 2451545.0) / 36525.0
-    return 23.85848 + 1.396042 * t_val + 0.000308 * (t_val ** 2)
-
-def calculate_sidereal_ascendant(utc_dt: datetime.datetime, lat: float, lon: float) -> float:
-    jd = get_julian_day(utc_dt)
-    if HAS_SWISSEPH:
-        try:
-            swe.set_sid_mode(swe.SIDM_LAHIRI)
-            ayanamsa = swe.get_ayanamsa_ut(jd)
-            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
-            return float((ascmc[0] - ayanamsa) % 360.0)
-        except Exception:
-            pass
-
-    t_val = (jd - 2451545.0) / 36525.0
-    gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t_val**2) - (t_val**3) / 38710000.0) % 360.0
-    lst = (gmst + lon) % 360.0
-    eps = 23.439291 - 0.0130042 * t_val
-    
-    eps_rad = math.radians(eps)
-    lat_rad = math.radians(lat)
-    lst_rad = math.radians(lst)
-    
-    y = math.cos(lst_rad)
-    x = - (math.sin(lst_rad) * math.cos(eps_rad) + math.tan(lat_rad) * math.sin(eps_rad))
-    tropical_asc = math.degrees(math.atan2(y, x)) % 360.0
-    
-    ayanamsa = get_approx_lahiri_ayanamsa(jd)
-    return float((tropical_asc - ayanamsa) % 360.0)
-
-def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
-    if utc_dt.tzinfo is not None:
-        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-
-    jd = get_julian_day(utc_dt)
-    if HAS_SWISSEPH:
-        try:
-            swe.set_sid_mode(swe.SIDM_LAHIRI)
-            res = swe.calc_ut(jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
-            res_val = res[0] if isinstance(res, (tuple, list)) else res
-            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
-            return float(lon % 360.0)
-        except Exception:
-            try:
-                res = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
-                res_val = res[0] if isinstance(res, (tuple, list)) else res
-                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
-                return float(lon % 360.0)
-            except Exception:
-                pass
-
-    d = jd - 2451545.0
-    moon_mean_lon = (218.316 + 13.176396 * d) % 360.0
-    sun_mean_lon = (280.466 + 0.9856474 * d) % 360.0
-    sun_mean_anom = math.radians((357.528 + 0.9856003 * d) % 360.0)
-    moon_mean_anom = math.radians((134.963 + 13.064993 * d) % 360.0)
-    
-    evec = 1.274 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon) - moon_mean_anom)
-    eq_center = 6.289 * math.sin(moon_mean_anom)
-    var = 0.658 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon))
-    tropical_moon = (moon_mean_lon + eq_center + evec + var) % 360.0
-    
-    ayanamsa = get_approx_lahiri_ayanamsa(jd)
-    return float((tropical_moon - ayanamsa) % 360.0)
-
-def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lon: float):
-    ist_dt = datetime.datetime.combine(dob, tob)
-    utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
-    
-    moon_lon = get_sidereal_moon_longitude(utc_dt)
-    star_span = 360.0 / 27.0
-    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
-    rem_deg = moon_lon % star_span
-    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
-    moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
-
-    lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
-    lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
-
-    return {
-        "star_idx": star_idx,
-        "star_name": NAKSHATRAS[star_idx - 1],
-        "pada": pada,
-        "moon_lon": moon_lon,
-        "moon_rashi_idx": moon_rashi_idx,
-        "moon_rashi_name": RASHIS[moon_rashi_idx],
-        "lagna_lon": lagna_lon,
-        "lagna_deg": f"{int(lagna_lon % 30)}° {int(((lagna_lon % 30) % 1) * 60)}'",
-        "lagna_idx": lagna_idx,
-        "lagna_name": RASHIS[lagna_idx]
-    }
-
-def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
-    m_name = RASHIS[moon_rashi_idx].split()[0]
-    
-    if house_diff in [2, 5, 9]:
-        metal = "Silver"
-    elif house_diff in [3, 7, 10]:
-        metal = "Copper"
-    elif house_diff in [1, 6, 11]:
-        metal = "Gold"
-    else:
-        metal = "Iron"
-
-    ency = SHANI_PAYA_ENCYCLOPEDIA[metal]
-    
-    return {
-        "paya": ency["title"],
-        "metal": metal,
-        "status": ency["grade"],
-        "tone": ency["tone"],
-        "houses": ency["houses"],
-        "health": ency["health"],
-        "wealth": ency["wealth"],
-        "family": ency["family"],
-        "loan": ency["loan"],
-        "partner": ency["partner"],
-        "luck": ency["luck"],
-        "career": ency["career"],
-        "protocol": ency["protocol"],
-        "desc": f"Saturn is currently transiting the {house_diff}th house relative to your {m_name} Moon, arriving on {metal} Feet.",
-        "timeline": "29 March 2025 – 23 February 2028 (Saturn in Pisces / Meena Rashi)"
-    }
-
-def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
-    diff = (saturn_transit_rashi_idx - moon_rashi_idx) % 12
-    m_name = RASHIS[moon_rashi_idx].split()[0]
-
-    rashi_12th = RASHIS[(moon_rashi_idx - 1) % 12].split()[0]
-    rashi_1st = m_name
-    rashi_2nd = RASHIS[(moon_rashi_idx + 1) % 12].split()[0]
-
-    if diff == 11:
-        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[1]
-        return {
-            "active": True,
-            "status_title": p_info["phase_name"],
-            "phase_num": 1,
-            "focus": p_info["focus"],
-            "health": p_info["health"],
-            "wealth": p_info["wealth"],
-            "family": p_info["family"],
-            "loan": p_info["loan"],
-            "partner": p_info["partner"],
-            "luck": p_info["luck"],
-            "career": p_info["career"],
-            "remedy": p_info["remedy"],
-            "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon.",
-            "dates": "Active Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": True, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 0:
-        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[2]
-        return {
-            "active": True,
-            "status_title": p_info["phase_name"],
-            "phase_num": 2,
-            "focus": p_info["focus"],
-            "health": p_info["health"],
-            "wealth": p_info["wealth"],
-            "family": p_info["family"],
-            "loan": p_info["loan"],
-            "partner": p_info["partner"],
-            "luck": p_info["luck"],
-            "career": p_info["career"],
-            "remedy": p_info["remedy"],
-            "impact": f"Saturn transits directly over your natal Moon in {m_name} (Janma Shani). Character crucible and endurance test.",
-            "dates": "Active Peak Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": False, "phase_2_active": True, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 1:
-        p_info = SADE_SATI_PHASE_ENCYCLOPEDIA[3]
-        return {
-            "active": True,
-            "status_title": p_info["phase_name"],
-            "phase_num": 3,
-            "focus": p_info["focus"],
-            "health": p_info["health"],
-            "wealth": p_info["wealth"],
-            "family": p_info["family"],
-            "loan": p_info["loan"],
-            "partner": p_info["partner"],
-            "luck": p_info["luck"],
-            "career": p_info["career"],
-            "remedy": p_info["remedy"],
-            "impact": f"Saturn transits the 2nd house from your {m_name} Moon. Financial recovery and asset consolidation phase.",
-            "dates": "Active Concluding Phase (29 March 2025 – 23 February 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": True,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 3:
-        dh_info = DHAIYA_ENCYCLOPEDIA[4]
-        return {
-            "active": True,
-            "status_title": dh_info["name"],
-            "phase_num": 4,
-            "focus": dh_info["focus"],
-            "health": dh_info["health"],
-            "wealth": dh_info["wealth"],
-            "family": dh_info["family"],
-            "loan": dh_info["loan"],
-            "partner": dh_info["partner"],
-            "luck": dh_info["luck"],
-            "career": dh_info["career"],
-            "remedy": dh_info["remedy"],
-            "impact": f"Saturn transits your 4th house from {m_name} Moon.",
-            "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    elif diff == 7:
-        dh_info = DHAIYA_ENCYCLOPEDIA[8]
-        return {
-            "active": True,
-            "status_title": dh_info["name"],
-            "phase_num": 8,
-            "focus": dh_info["focus"],
-            "health": dh_info["health"],
-            "wealth": dh_info["wealth"],
-            "family": dh_info["family"],
-            "loan": dh_info["loan"],
-            "partner": dh_info["partner"],
-            "luck": dh_info["luck"],
-            "career": dh_info["career"],
-            "remedy": dh_info["remedy"],
-            "impact": f"Saturn transits your 8th house from {m_name} Moon.",
-            "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-    else:
-        return {
-            "active": False,
-            "status_title": "No Active Sade Sati or Dhaiya",
-            "phase_num": 0,
-            "focus": "Unimpeded Progress & Expansion",
-            "health": "Standard biological stamina.",
-            "wealth": "Standard financial liquidity based on active Dasha periods.",
-            "family": "Harmonious domestic relations.",
-            "loan": "Normal credit management.",
-            "partner": "Stable partnership dynamics.",
-            "luck": "Favorable planetary support.",
-            "career": "Constructive career growth with minimal Saturnic friction.",
-            "remedy": "Continue daily prayers and ethical business practices.",
-            "impact": f"Saturn is currently in Pisces, placing it in an auspicious or neutral house relative to your {m_name} Moon.",
-            "dates": "No Current Friction Cycle",
-            "phase_1_active": False, "phase_2_active": False, "phase_3_active": False,
-            "rashi_12th": rashi_12th, "rashi_1st": rashi_1st, "rashi_2nd": rashi_2nd
-        }
-
-def calculate_shani_vahan(birth_star_idx: int, transit_moon_star_idx: int) -> dict:
-    raw_val = (birth_star_idx * 4 + transit_moon_star_idx) % 9
-    rem = 9 if raw_val == 0 else raw_val
-    return SHANI_VAHANS.get(rem, SHANI_VAHANS[9])
-
-def reduce_to_single_digit(num: int) -> int:
-    while num > 9:
-        num = sum(int(ch) for ch in str(num))
-    return num if num > 0 else 9
-
-def calculate_numerology(dob: datetime.date, name: str):
-    mulank = reduce_to_single_digit(dob.day)
-    full_date_sum = dob.day + dob.month + dob.year
-    bhagyank = reduce_to_single_digit(full_date_sum)
-    cleaned_name = "".join(ch for ch in name.upper() if ch.isalpha())
-    namank_val = sum(CHALDEAN_MAP.get(ch, 0) for ch in cleaned_name)
-    namank = reduce_to_single_digit(namank_val) if namank_val > 0 else 1
-    return mulank, bhagyank, namank
-
-def get_personal_day_vibe(dob: datetime.date, target_date: datetime.date, lang: str = "en") -> dict:
-    personal_year = reduce_to_single_digit(dob.day + dob.month + target_date.year)
-    personal_day = reduce_to_single_digit(personal_year + target_date.month + target_date.day)
-    planet_info = NUM_PLANET_NAMES.get(personal_day, {}).get(lang, f"Number {personal_day}")
-    return {
-        "number": personal_day,
-        "planet": planet_info,
-        "desc": f"Personal Day {personal_day} resonates with {planet_info} cosmic frequency."
-    }
-
-def get_numerology_life_domains(mulank: int, bhagyank: int, namank: int, lang: str = "en") -> dict:
-    p_m = NUM_PLANET_NAMES.get(mulank, {}).get(lang, f"Planet {mulank}")
-    p_b = NUM_PLANET_NAMES.get(bhagyank, {}).get(lang, f"Planet {bhagyank}")
-    return {
-        "career_title": "💼 Career Trajectory & Executive Ambition",
-        "career_desc": f"The dynamic synthesis of Driver {mulank} ({p_m}) and Conductor {bhagyank} ({p_b}) creates a powerhouse combination of strategic vision and courageous execution.",
-        "wealth_title": "💰 Wealth Dynamics & Financial Mastery",
-        "wealth_desc": "Your vibrational alignment supports structured compounding and tangible asset security. Avoid volatile speculative gambling.",
-        "rel_title": "❤️ Relationships & Interpersonal Dynamics",
-        "rel_desc": "You value authentic, pretense-free connections. Practicing active listening during critical discussions will keep family and professional bonds deeply harmonious.",
-        "health_title": "🌿 Health, Vitality & Holistic Bio-Rhythms",
-        "health_desc": "You possess strong physical endurance. Balance mental momentum with regular hydration, structured rest, and evening breathwork.",
-        "luck_title": "🍀 Harmonic Lucky Attributes",
-        "lucky_num": f"{mulank}, {bhagyank}, {(mulank + bhagyank) % 9 or 9}",
-        "avoid_num": "2, 8 (Exercise tactful patience)",
-        "lucky_days": "Tuesday, Thursday, and Sunday",
-        "lucky_colors": "Electric Blue, Slate Gray, Rich Amber Gold",
-        "lucky_dir": "South and North-East"
-    }
-
-def get_numerology_avoidance(mulank: int, bhagyank: int, lang: str = "en") -> dict:
-    return {
-        "avoid_title": "⚠️ Cosmic Caution & Avoidance Matrix",
-        "avoid_numbers": "2, 8 (Challenging karmic tests)",
-        "avoid_colors": "Pitch Black, Mud Brown, Dirty Dark Indigo",
-        "avoid_days": "Saturday twilight & Monday late nights (for high-stakes launches)",
-        "avoid_directions": "South-West during rest",
-        "cautions": [
-            "Avoid verbal agreements without clearly documented written contracts.",
-            "Never commit to capital investments or legal deeds during sudden anger or peak haste.",
-            "Strictly avoid speculative options trading and get-rich-quick shortcuts.",
-            "Eliminate tangled electronic cables and broken appliances from your primary workspace.",
-            "Refrain from purchasing iron hardware or heavy scrap on Saturdays."
-        ]
-    }
-
-def calculate_sun_times(date_obj: datetime.date, lat: float, lon: float):
-    day_of_year = date_obj.timetuple().tm_yday
-    decl = 23.45 * math.sin(math.radians((360 / 365) * (day_of_year - 81)))
-    lat_rad = math.radians(lat)
-    decl_rad = math.radians(decl)
-    
-    cos_ha = -math.tan(lat_rad) * math.tan(decl_rad)
-    cos_ha = max(-1.0, min(1.0, cos_ha))
-    ha_deg = math.degrees(math.acos(cos_ha))
-    
-    b = math.radians((360 / 365) * (day_of_year - 81))
-    eot = 9.87 * math.sin(2 * b) - 7.53 * math.cos(b) - 1.5 * math.sin(b)
-    
-    time_corr = 4 * (lon - 82.5) + eot
-    solar_noon_minutes = 720 - time_corr
-    half_day_minutes = (ha_deg / 15.0) * 60.0
-    
-    sr_minutes = solar_noon_minutes - half_day_minutes
-    ss_minutes = solar_noon_minutes + half_day_minutes
-    
-    base_dt = datetime.datetime.combine(date_obj, datetime.time.min)
-    return base_dt + datetime.timedelta(minutes=sr_minutes), base_dt + datetime.timedelta(minutes=ss_minutes)
-
-def calculate_daily_muhurtas(date_obj: datetime.date, lat: float, lon: float):
-    sunrise, sunset = calculate_sun_times(date_obj, lat, lon)
-    day_duration = (sunset - sunrise).total_seconds()
-    
-    muhurta_duration = day_duration / 15.0
-    abhijit_start = sunrise + datetime.timedelta(seconds=7 * muhurta_duration)
-    abhijit_end = sunrise + datetime.timedelta(seconds=8 * muhurta_duration)
-    
-    eighth_part = day_duration / 8.0
-    wday = date_obj.weekday()
-    rahu_parts = {0: 2, 1: 7, 2: 5, 3: 6, 4: 4, 5: 3, 6: 8}
-    yamaganda_parts = {0: 4, 1: 3, 2: 2, 3: 1, 4: 7, 5: 6, 6: 5}
-    
-    r_idx = rahu_parts.get(wday, 6)
-    rahu_start = sunrise + datetime.timedelta(seconds=(r_idx - 1) * eighth_part)
-    rahu_end = sunrise + datetime.timedelta(seconds=r_idx * eighth_part)
-    
-    y_idx = yamaganda_parts.get(wday, 1)
-    yama_start = sunrise + datetime.timedelta(seconds=(y_idx - 1) * eighth_part)
-    yama_end = sunrise + datetime.timedelta(seconds=y_idx * eighth_part)
-    
-    brahma_start = sunrise - datetime.timedelta(minutes=96)
-    brahma_end = sunrise - datetime.timedelta(minutes=48)
-    
-    return {
-        "sunrise": sunrise,
-        "sunset": sunset,
-        "abhijit": (abhijit_start, abhijit_end),
-        "rahu": (rahu_start, rahu_end),
-        "yamaganda": (yama_start, yama_end),
-        "brahma": (brahma_start, brahma_end)
-    }
-
-def get_current_nakshatra_window(target_ist_dt: datetime.datetime):
-    utc_dt = target_ist_dt - datetime.timedelta(hours=5, minutes=30)
-    current_lon = get_sidereal_moon_longitude(utc_dt)
-    span = 360.0 / 27.0
-    star_idx = max(1, min(27, int(current_lon / span) + 1))
-    start_lon = (star_idx - 1) * span
-
-    deg_from_start = (current_lon - start_lon) % span
-    deg_to_end = span - deg_from_start
-
-    hours_since_start = max(0.1, deg_from_start / 0.55)
-    hours_to_end = max(0.1, deg_to_end / 0.55)
-
-    start_dt = target_ist_dt - datetime.timedelta(hours=hours_since_start)
-    end_dt = target_ist_dt + datetime.timedelta(hours=hours_to_end)
-
-    return star_idx, start_dt, end_dt
-
-def get_7_day_moon_transits(start_ist_dt: datetime.datetime, birth_star_idx: int):
-    transits = []
-    curr_t = start_ist_dt
-    for i in range(7):
-        target_t = curr_t + datetime.timedelta(days=i)
-        star_idx, s_time, e_time = get_current_nakshatra_window(target_t)
-        
-        offset = (star_idx - birth_star_idx) % 9
-        nav_name, icon, quality = NAVTARA_NAMES[offset]
-        vahan_rem = (birth_star_idx * 4 + star_idx) % 9
-        vahan_rem = 9 if vahan_rem == 0 else vahan_rem
-        vahan_info = SHANI_VAHANS.get(vahan_rem, SHANI_VAHANS[9])
-        
-        transits.append({
-            "day_num": i + 1,
-            "date": target_t.date(),
-            "date_str": target_t.strftime("%a, %d %b"),
-            "star_idx": star_idx,
-            "star_name": NAKSHATRAS[star_idx - 1],
-            "nav_name": nav_name,
-            "nav_offset": offset,
-            "icon": icon,
-            "quality": quality,
-            "vahan": vahan_info["name"],
-            "vahan_type": vahan_info["type"],
-            "start_str": s_time.strftime("%a, %d %b %I:%M %p"),
-            "end_str": e_time.strftime("%a, %d %b %I:%M %p IST")
-        })
-    return transits
-
-def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: str, p_day: dict):
-    is_positive = offset in [1, 3, 5, 7, 8]
-    is_extreme_friction = offset in [2, 4, 6]
-
-    theme_map = {
-        0: ("Identity Renewal & Foundation (Janma)", "Mind feels intensely sensitive, reflective, and connected to root desires. Vital for self-evaluation rather than high-stakes friction.", "Focus on foundational planning, health diagnostics, routine execution, and self-care.", "Avoid impulsive career shifts, major loans, or initiating confrontational meetings."),
-        1: ("Accelerated Wealth & Liquidity (Sampat)", "High financial synchronicity. Cosmic doors open for asset acquisition, high-ticket proposals, and capital expansion.", "Sign partnership deeds, initiate investments, submit proposals, and collect receivables.", "Avoid complacency; strike while the cosmic window is open."),
-        2: ("Friction Shield & Crisis Deflection (Vipat)", "Elevated environmental resistance. Unforeseen delays, technological glitches, and administrative roadblocks.", "Conduct defensive administrative checks, review error margins, and maintain low profile.", "Strictly avoid speculative bets, aggressive confrontations, or signing irreversible contracts."),
-        3: ("Peace, Health & Structural Security (Kshema)", "Sustaining, healing vibrational flow. Excellent for domestic harmony, property matters, and emotional equilibrium.", "Finalize contracts, purchase durable goods, enjoy family gatherings, and resolve old disputes.", "Avoid over-exhaustion; maintain balanced dietary and rest rhythms."),
-        4: ("Overcoming Roadblocks & Opposition (Pratyari)", "Testing of diplomatic acumen. Hidden opposition, critical auditors, or challenging counterparties may emerge.", "Gather airtight evidence, exercise extreme tactical patience, and listen twice as much as you speak.", "Avoid losing temper in official communications; do not escalate legal friction."),
-        5: ("Strategic Mastery & Manifestation (Sadhana)", "Golden window for high-order accomplishments. Mental faculties are razor sharp for complex engineering, strategy, and execution.", "Launch critical campaigns, undertake complex technical projects, negotiate promotions, and study.", "Do not waste this high-frequency window on superficial trivialities."),
-        6: ("High Friction Zone & Defensive Prudence (Vadha)", "Heaviest energetic friction. Physical vitality and mental stamina feel vulnerable to depletion.", "Keep a minimalist agenda, practice quiet perseverance, and double-check all critical data.", "Do not drive long distances late at night; postpone major financial commitments."),
-        7: ("Cooperative Harmony & Alliance Building (Mitra)", "Pleasurable, cordial cosmic atmosphere. High responsiveness from peers, mentors, and prospective partners.", "Network with key decision-makers, resolve estrangements, host important discussions, and socialize.", "Avoid being overly accommodating; ensure business boundaries remain firm."),
-        8: ("Supreme Synergy & Pinnacle Triumph (Ati-Mitra)", "Peak celestial resonance. The rarest, most fruitful timing window for long-term victories and monumental leaps.", "Pitch high-value clients, launch new business verticals, close major property deals, and celebrate.", "Do not doubt yourself; step forward with unwavering confidence.")
-    }
-
-    theme_title, theme_desc, opportunities, hazards = theme_map.get(offset, theme_map[0])
-
-    if is_positive:
-        remedy_mantra = "ॐ नमो भगवते वासुदेवाय (Om Namo Bhagavate Vasudevaya) - 11 times in morning facing East."
-        remedy_charity = "Offer sweet yellow fruits or milk sweets to elders, mentors, or temples to seal cosmic prosperity."
-        remedy_action = "Wear light, vibrant shades (Coral Red, Amber Gold, or Electric White) to broadcast peak resonance."
-    elif is_extreme_friction:
-        remedy_mantra = "ॐ नमः शिवाय (Om Namah Shivaya) or Maha Mrityunjaya Mantra - 108 times at twilight facing North."
-        remedy_charity = "Feed stray dogs, crows, or donate dark grains/black sesame to pacify planetary friction."
-        remedy_action = "Apply white sandalwood paste to forehead/wrists; maintain 15 minutes of silent mindfulness (Mauna) before sunset."
-    else:
-        remedy_mantra = "ॐ सूर्याय नमः (Om Suryaya Namah) - Offer pure water in a copper vessel to morning Sun."
-        remedy_charity = "Feed green grass or fresh spinach to cows to enhance cellular vitality and grounding."
-        remedy_action = "Drink warm water from a silver cup; strictly abstain from fast food and erratic sleep patterns."
-
-    return {
-        "theme_title": theme_title,
-        "theme_desc": theme_desc,
-        "opportunities": opportunities,
-        "hazards": hazards,
-        "remedy_mantra": remedy_mantra,
-        "remedy_charity": remedy_charity,
-        "remedy_action": remedy_action
-    }
-
 # ==============================================================================
 # CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
 # ==============================================================================
@@ -818,7 +262,6 @@ with nav_r2_c4:
         st.session_state.current_page = "mantra"
         st.rerun()
         
-
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
 has_valid_profile = bool(prof.get("name") and prof.get("dob") and prof.get("tob"))
@@ -1038,16 +481,13 @@ def render_page_profile():
             st.markdown("**Birth Time (Hour, Minute & AM/PM):**")
             t_col1, t_col2, t_col3 = st.columns([1.5, 1.5, 1.5])
             with t_col1:
-                # Default to 12 if no time is provided
                 init_hr = (tob_parsed.hour % 12) if tob_parsed else 12
                 init_hr = 12 if init_hr == 0 else init_hr
                 in_hour = st.selectbox("Hour", options=list(range(1, 13)), index=init_hr - 1)
             with t_col2:
-                # Default to 0 minutes if no time is provided
                 init_min = tob_parsed.minute if tob_parsed else 0
                 in_minute = st.selectbox("Minute", options=list(range(0, 60)), index=init_min)
             with t_col3:
-                # Default to AM if no time is provided
                 init_ampm = "PM" if (tob_parsed and tob_parsed.hour >= 12) else "AM"
                 in_ampm = st.selectbox("AM / PM", options=["AM", "PM"], index=1 if init_ampm == "PM" else 0)
 
@@ -1070,9 +510,9 @@ def render_page_profile():
                         hr_24 += 12
                     final_tob_str = f"{hr_24:02d}:{in_minute:02d}"
 
-                    # DYNAMIC GEOCODING SEARCH
+                    # Note: Using the updated 2-return value correctly referencing databanks.py
                     with st.spinner("Searching coordinates for your location..."):
-                        resolved_lat, resolved_lon, resolved_name = resolve_location_name(new_city_query)
+                        resolved_lat, resolved_lon = resolve_location_name(new_city_query)
 
                     st.session_state.user_profile.update({
                         "name": new_name.strip(),
@@ -1455,7 +895,7 @@ def render_page_shani():
                 <div style="background:#fff7ed; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#7c2d12; border-left:4px solid #f97316;">
                     <b>🌿 1. Health & Vitality Impact:</b><br>{shani_sadesati_data['health']}
                 </div>
-                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #10b981; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#14532d; border-left:4px solid #10b981;">
                     <b>💰 2. Wealth & Cash Flow Dynamics:</b><br>{shani_sadesati_data['wealth']}
                 </div>
                 <div style="background:#faf5ff; border-radius:10px; padding:10px 12px; font-size:0.91rem; color:#3b0764; border-left:4px solid #8b5cf6;">
@@ -1973,11 +1413,9 @@ def render_page_mantra():
         mantra_choice = st.selectbox("Choose Classical Mantra:", list(classical_mantras.keys()))
         m_info = classical_mantras[mantra_choice]
     elif category == "9 Navagraha Beej Mantras":
-        from databanks import NAVAGRAHA_BEEJ_MANTRAS
         mantra_choice = st.selectbox("Choose Planetary Beej Mantra:", list(NAVAGRAHA_BEEJ_MANTRAS.keys()))
         m_info = NAVAGRAHA_BEEJ_MANTRAS[mantra_choice]
     else:
-        from databanks import NAKSHATRA_BEEJ_MANTRAS
         nak_options = {idx: data["name"] for idx, data in NAKSHATRA_BEEJ_MANTRAS.items()}
         
         # Pre-select user's Janma Nakshatra if chart is loaded
