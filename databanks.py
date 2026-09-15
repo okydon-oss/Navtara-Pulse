@@ -1,6 +1,23 @@
-import streamlit as st
-# databanks.py - Exhaustive Dictionaries & Encyclopedias
+# databanks.py - Comprehensive Astronomical, Astrological & Vedic Dictionaries
+import math
+import datetime
 
+try:
+    from geopy.geocoders import Nominatim
+    HAS_GEOPY = True
+except ImportError:
+    HAS_GEOPY = False
+
+try:
+    import swisseph as swe
+    HAS_SWISSEPH = True
+    swe.set_sid_mode(swe.SIDM_LAHIRI)
+except Exception:
+    HAS_SWISSEPH = False
+
+# ==============================================================================
+# CORE ASTROLOGICAL ARRAYS & MAPPINGS
+# ==============================================================================
 NAKSHATRAS = [
     "Ashwini", "Bharani", "Krittika", "Rohini", "Mrigashira", "Ardra",
     "Punarvasu", "Pushya", "Ashlesha", "Magha", "Purva Phalguni", "Uttara Phalguni",
@@ -150,7 +167,7 @@ NAKSHATRA_RICH_PROFILES = {
 }
 
 def get_nakshatra_rich_data(star_idx: int):
-    return NAKSHATRA_PROFILES.get(star_idx, NAKSHATRA_PROFILES[2]) if 'NAKSHATRA_PROFILES' in globals() else NAKSHATRA_RICH_PROFILES.get(star_idx, NAKSHATRA_RICH_PROFILES[1])
+    return NAKSHATRA_RICH_PROFILES.get(star_idx, NAKSHATRA_RICH_PROFILES[2])
 
 RASHI_RICH_PROFILES = {
     0: {"element": "Fire", "ruler": "Mars", "psychology": "Bold, direct, action-oriented.", "instincts": "Fast emotional recovery, instant reflexes.", "relations": "Fiercely protective and open.", "health": "Watch excess Pitta.", "outlook": "Natural pioneer.", "remedies": "• Offer red sandalwood water to Sun."},
@@ -316,6 +333,156 @@ DHAIYA_ENCYCLOPEDIA = {
     }
 }
 
+# ==============================================================================
+# CALCULATION ALGORITHMS & HELPERS
+# ==============================================================================
+def get_tara_bala_info(user_star_idx: int, partner_star_idx: int):
+    offset = (partner_star_idx - user_star_idx) % 9
+    tara_name, icon, quality = NAVTARA_NAMES[offset]
+    is_allied = offset in [1, 3, 5, 7, 8]
+    is_friction = offset in [2, 4, 6]
+    
+    if is_allied:
+        relationship_tone = "High Harmonic Resonance (Constructive Growth & Mutual Trust)"
+        advice = "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance."
+    elif is_friction:
+        relationship_tone = "Testing & High Friction (Demands Clear Boundaries & Patience)"
+        advice = "Differences in communication tempo or expectations can trigger misunderstandings. Ensure all commitments are formally written and expectations calibrated."
+    else:
+        relationship_tone = "Mirror / Foundational Synergy (Intense Alignment & Reflective Growth)"
+        advice = "High mutual identification. Both individuals share foundational biorhythms; great for long-term loyalty if ego boundaries remain healthy."
+
+    return {
+        "tara_name": tara_name,
+        "icon": icon,
+        "quality": quality,
+        "is_allied": is_allied,
+        "is_friction": is_friction,
+        "relationship_tone": relationship_tone,
+        "advice": advice
+    }
+
+def resolve_location_name(place_query: str):
+    if not place_query or not place_query.strip():
+        return 28.6139, 77.2090
+    clean_q = place_query.strip()
+    for name, coords in CITY_COORDINATES.items():
+        if clean_q.lower() in name.lower() or any(part.strip().lower() in name.lower() for part in clean_q.split(',')):
+            return coords[0], coords[1]
+    if HAS_GEOPY:
+        try:
+            geolocator = Nominatim(user_agent="navtara_pulse_app", timeout=4)
+            loc = geolocator.geocode(clean_q)
+            if loc:
+                return float(loc.latitude), float(loc.longitude)
+        except Exception:
+            pass
+    return 28.6139, 77.2090
+
+def get_julian_day(utc_dt: datetime.datetime) -> float:
+    y = utc_dt.year
+    m = utc_dt.month
+    d = utc_dt.day + (utc_dt.hour + utc_dt.minute / 60.0 + utc_dt.second / 3600.0) / 24.0
+    if m <= 2:
+        y -= 1
+        m += 12
+    a = math.floor(y / 100)
+    b = 2 - a + math.floor(a / 4)
+    return math.floor(365.25 * (y + 4716)) + math.floor(30.6001 * (m + 1)) + d + b - 1524.5
+
+def get_approx_lahiri_ayanamsa(jd: float) -> float:
+    t_val = (jd - 2451545.0) / 36525.0
+    return 23.85848 + 1.396042 * t_val + 0.000308 * (t_val ** 2)
+
+def calculate_sidereal_ascendant(utc_dt: datetime.datetime, lat: float, lon: float) -> float:
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            ayanamsa = swe.get_ayanamsa_ut(jd)
+            cusps, ascmc = swe.houses(jd, lat, lon, b'P')
+            return float((ascmc[0] - ayanamsa) % 360.0)
+        except Exception:
+            pass
+
+    t_val = (jd - 2451545.0) / 36525.0
+    gmst = (280.46061837 + 360.98564736629 * (jd - 2451545.0) + 0.000387933 * (t_val**2) - (t_val**3) / 38710000.0) % 360.0
+    lst = (gmst + lon) % 360.0
+    eps = 23.439291 - 0.0130042 * t_val
+    
+    eps_rad = math.radians(eps)
+    lat_rad = math.radians(lat)
+    lst_rad = math.radians(lst)
+    
+    y = math.cos(lst_rad)
+    x = - (math.sin(lst_rad) * math.cos(eps_rad) + math.tan(lat_rad) * math.sin(eps_rad))
+    tropical_asc = math.degrees(math.atan2(y, x)) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_asc - ayanamsa) % 360.0)
+
+def get_sidereal_moon_longitude(utc_dt: datetime.datetime) -> float:
+    if utc_dt.tzinfo is not None:
+        utc_dt = utc_dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+
+    jd = get_julian_day(utc_dt)
+    if HAS_SWISSEPH:
+        try:
+            swe.set_sid_mode(swe.SIDM_LAHIRI)
+            res = swe.calc_ut(jd, swe.MOON, swe.FLG_MOSEPH | swe.FLG_SIDEREAL)
+            res_val = res[0] if isinstance(res, (tuple, list)) else res
+            lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+            return float(lon % 360.0)
+        except Exception:
+            try:
+                res = swe.calc_ut(jd, swe.MOON, swe.FLG_SIDEREAL)
+                res_val = res[0] if isinstance(res, (tuple, list)) else res
+                lon = res_val[0] if isinstance(res_val, (tuple, list)) else res_val
+                return float(lon % 360.0)
+            except Exception:
+                pass
+
+    d = jd - 2451545.0
+    moon_mean_lon = (218.316 + 13.176396 * d) % 360.0
+    sun_mean_lon = (280.466 + 0.9856474 * d) % 360.0
+    sun_mean_anom = math.radians((357.528 + 0.9856003 * d) % 360.0)
+    moon_mean_anom = math.radians((134.963 + 13.064993 * d) % 360.0)
+    
+    evec = 1.274 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon) - moon_mean_anom)
+    eq_center = 6.289 * math.sin(moon_mean_anom)
+    var = 0.658 * math.sin(2 * math.radians(moon_mean_lon - sun_mean_lon))
+    tropical_moon = (moon_mean_lon + eq_center + evec + var) % 360.0
+    
+    ayanamsa = get_approx_lahiri_ayanamsa(jd)
+    return float((tropical_moon - ayanamsa) % 360.0)
+
+def calculate_birth_chart(dob: datetime.date, tob: datetime.time, lat: float, lon: float):
+    ist_dt = datetime.datetime.combine(dob, tob)
+    utc_dt = ist_dt - datetime.timedelta(hours=5, minutes=30)
+    
+    moon_lon = get_sidereal_moon_longitude(utc_dt)
+    star_span = 360.0 / 27.0
+    star_idx = max(1, min(27, int(moon_lon / star_span) + 1))
+    rem_deg = moon_lon % star_span
+    pada = max(1, min(4, int(rem_deg / (star_span / 4.0)) + 1))
+    moon_rashi_idx = max(0, min(11, int(moon_lon / 30.0)))
+
+    lagna_lon = calculate_sidereal_ascendant(utc_dt, lat, lon)
+    lagna_idx = max(0, min(11, int(lagna_lon / 30.0)))
+
+    return {
+        "star_idx": star_idx,
+        "star_name": NAKSHATRAS[star_idx - 1],
+        "pada": pada,
+        "moon_lon": moon_lon,
+        "moon_rashi_idx": moon_rashi_idx,
+        "moon_rashi_name": RASHIS[moon_rashi_idx],
+        "lagna_lon": lagna_lon,
+        "lagna_deg": f"{int(lagna_lon % 30)}° {int(((lagna_lon % 30) % 1) * 60)}'",
+        "lagna_idx": lagna_idx,
+        "lagna_name": RASHIS[lagna_idx]
+    }
+
 def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> dict:
     house_diff = (moon_rashi_idx - saturn_transit_rashi_idx) % 12 + 1
     m_name = RASHIS[moon_rashi_idx].split()[0]
@@ -337,7 +504,6 @@ def calculate_shani_paya(moon_rashi_idx: int, saturn_transit_rashi_idx: int) -> 
         "status": ency["grade"],
         "tone": ency["tone"],
         "houses": ency["houses"],
-        "psychology": ency["psychology"],
         "health": ency["health"],
         "wealth": ency["wealth"],
         "family": ency["family"],
@@ -372,7 +538,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
             "impact": f"Saturn currently transits your 12th house in {RASHIS[saturn_transit_rashi_idx].split()[0]} relative to your {m_name} Moon. Prompts deep restructuring of personal priorities, elimination of wasteful financial habits, and subconscious purification.",
             "dates": "Active Phase (29 March 2025 – 23 February 2028)",
@@ -393,7 +558,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
             "impact": f"Saturn transits directly over your natal Moon in {m_name} (Janma Shani). This is the supreme crucible of character, requiring physical stamina, ego dissolution, leadership responsibility, and unwavering moral grounding.",
             "dates": "Active Peak Phase (29 March 2025 – 23 February 2028)",
@@ -414,7 +578,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": p_info["partner"],
             "luck": p_info["luck"],
             "career": p_info["career"],
-            "mental": p_info["mental"],
             "remedy": p_info["remedy"],
             "impact": f"Saturn transits the 2nd house from your {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. As Sade Sati draws toward conclusion, hard lessons solidify into permanent wealth consolidation, stabilized speech, and generational assets.",
             "dates": "Active Concluding Phase (29 March 2025 – 23 February 2028)",
@@ -435,7 +598,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": dh_info["partner"],
             "luck": "Shifts focus from external expansion to securing foundational base and home front.",
             "career": dh_info["career"],
-            "mental": dh_info["mental"],
             "remedy": dh_info["remedy"],
             "impact": f"Saturn transits your 4th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Focus on home stability, vehicle care, maternal health, and inner peace.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
@@ -456,7 +618,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": dh_info["partner"],
             "luck": "Testing cycle requiring spiritual introspection and risk minimization.",
             "career": dh_info["career"],
-            "mental": dh_info["mental"],
             "remedy": dh_info["remedy"],
             "impact": f"Saturn transits your 8th house from {m_name} Moon in {RASHIS[saturn_transit_rashi_idx].split()[0]}. Demands disciplined health habits, careful driving, transparent financial ethics, and spiritual introspection.",
             "dates": "Active 2.5-Year Dhaiya (2025 – 2028)",
@@ -476,7 +637,6 @@ def calculate_shani_sadesati_dhaiya(moon_rashi_idx: int, saturn_transit_rashi_id
             "partner": "Stable partnership dynamics.",
             "luck": "Favorable planetary support.",
             "career": "Constructive career growth with minimal Saturnic friction.",
-            "mental": "Mental clarity is high; favorable for launching new enterprises.",
             "remedy": "Continue daily prayers and ethical business practices.",
             "impact": f"Saturn is currently in Pisces ({RASHIS[saturn_transit_rashi_idx].split()[0]}), placing it in an auspicious or neutral {((saturn_transit_rashi_idx - moon_rashi_idx) % 12) + 1}th house relative to your {m_name} Moon.",
             "dates": "No Current Friction Cycle",
@@ -770,7 +930,7 @@ def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime)
         h = (r_idx - lagna_idx) % 12 + 1
         house_occupants[h].append(p_name)
         
-    lagna_lord = LAGNA_LORDS[lagna_idx]
+    lagna_lord = LAGNA_LORDS.get(lagna_idx, "Mars")
     ll_house = (positions.get(lagna_lord, lagna_idx) - lagna_idx) % 12 + 1
     
     pred = {}
@@ -788,10 +948,10 @@ def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime)
 
     for dom_key, h_idx in DOMAIN_MAPPING.items():
         base_text = DOMAIN_BASE_TEXTS[dom_key]
-        occupants = house_occupants[h_idx]
+        occupants = house_occupants.get(h_idx, [])
         
         if occupants:
-            traits = " ".join([PLANET_TRAITS[p] for p in occupants])
+            traits = " ".join([PLANET_TRAITS[p] for p in occupants if p in PLANET_TRAITS])
             text = f"{base_text} Transiting {', '.join(occupants)} actively charges this sector: {traits}"
         else:
             text = f"{base_text} With no major planets transiting here this month, this domain operates smoothly under its baseline energy."
@@ -799,7 +959,6 @@ def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime)
         pred[dom_key] = text
         
     return pred
-
 
 # ==============================================================================
 # 9 NAVAGRAHA BEEJ MANTRAS
