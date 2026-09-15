@@ -103,8 +103,10 @@ TRANSLATIONS = {
         "btn_user_profile": "👤 User Profile",
         "btn_numerology": "🔢 Numerology",
         "btn_shani": "🪐 Shani & Sade Sati",
-        "btn_live": "⚡ Live Prediction",
-        "btn_forecast": "🗓️ 7 Days Prediction",
+        "btn_live": "⚡ Daily Horoscope",
+        "btn_forecast": "🗓️ Weekly Horoscope",
+        "btn_monthly": "📅 Monthly Horoscope",
+        "btn_dasha": "⏳ Dasha Timeline",
         "btn_mantra": "📿 Mantra Sadhana",
         "edit_details": "✏️ Edit Details",
         "save_details": "💾 Save Profile",
@@ -124,11 +126,9 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Status",
         "live_pulse_title": "⚡ Today's Live Cosmic Pulse",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
-        "share_title": "📲 Share Navtara Pulse With Friends & Family"
-        "btn_dasha": "⏳ Dasha Timeline",
+        "share_title": "📲 Share Navtara Pulse With Friends & Family",
         "dasha_page_title": "⏳ Vimshottari Dasha: The Cosmic Timeline",
         "dasha_page_subtitle": "Your active planetary periods mathematically calculated down to the exact minute. This represents the overarching 'season' of your life."
-    },
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
@@ -139,6 +139,8 @@ TRANSLATIONS = {
         "btn_shani": "🪐 शनि एवं साढ़े साती",
         "btn_live": "⚡ आज का फल",
         "btn_forecast": "🗓️ 7 दिवसीय फल",
+        "btn_monthly": "📅 मासिक राशिफल",
+        "btn_dasha": "⏳ दशा समयरेखा",
         "btn_mantra": "📿 मंत्र साधना",
         "edit_details": "✏️ विवरण बदलें",
         "save_details": "💾 सुरक्षित करें",
@@ -158,11 +160,9 @@ TRANSLATIONS = {
         "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या स्थिति",
         "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
-        "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें"
-        "btn_dasha": "⏳ दशा समयरेखा",
+        "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें",
         "dasha_page_title": "⏳ विंशोत्तरी दशा: खगोलीय समयरेखा",
         "dasha_page_subtitle": "आपकी वर्तमान सक्रिय ग्रहों की महादशा और अंतरदशा सटीक समय के साथ।"
-    }
     }
 }
 
