@@ -268,24 +268,11 @@ if has_valid_profile:
     chart_info = calculate_birth_chart(dob_parsed, tob_parsed, u_lat, u_lon)
     mulank, bhagyank, namank = calculate_numerology(dob_parsed, prof.get("name", "User"))
 
-    SATURN_TRANSIT_RASHI_IDX = 11  # Saturn in Pisces (Meena)
-    shani_paya_data = calculate_shani_paya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
-    shani_sadesati_data = calculate_shani_sadesati_dhaiya(chart_info["moon_rashi_idx"], SATURN_TRANSIT_RASHI_IDX)
-
     st.session_state["has_valid_profile"] = True
     st.session_state["chart_info"] = chart_info
     st.session_state["dob_parsed"] = dob_parsed
     st.session_state["tob_parsed"] = tob_parsed
-    st.session_state["mulank"] = mulank
-    st.session_state["bhagyank"] = bhagyank
-    st.session_state["namank"] = namank
-    st.session_state["shani_paya_data"] = shani_paya_data
-    st.session_state["shani_sadesati_data"] = shani_sadesati_data
 else:
-    dob_parsed, tob_parsed, chart_info = None, None, None
-    mulank, bhagyank, namank = None, None, None
-    shani_paya_data, shani_sadesati_data = None, None
-    u_lat, u_lon = 28.6139, 77.2090
     st.session_state["has_valid_profile"] = False
 
 # ==============================================================================
