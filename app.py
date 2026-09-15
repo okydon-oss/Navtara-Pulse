@@ -1038,13 +1038,16 @@ def render_page_profile():
             st.markdown("**Birth Time (Hour, Minute & AM/PM):**")
             t_col1, t_col2, t_col3 = st.columns([1.5, 1.5, 1.5])
             with t_col1:
-                init_hr = (tob_parsed.hour % 12) if tob_parsed else 10
+                # Default to 12 if no time is provided
+                init_hr = (tob_parsed.hour % 12) if tob_parsed else 12
                 init_hr = 12 if init_hr == 0 else init_hr
                 in_hour = st.selectbox("Hour", options=list(range(1, 13)), index=init_hr - 1)
             with t_col2:
-                init_min = tob_parsed.minute if tob_parsed else 43
+                # Default to 0 minutes if no time is provided
+                init_min = tob_parsed.minute if tob_parsed else 0
                 in_minute = st.selectbox("Minute", options=list(range(0, 60)), index=init_min)
             with t_col3:
+                # Default to AM if no time is provided
                 init_ampm = "PM" if (tob_parsed and tob_parsed.hour >= 12) else "AM"
                 in_ampm = st.selectbox("AM / PM", options=["AM", "PM"], index=1 if init_ampm == "PM" else 0)
 
