@@ -1811,6 +1811,9 @@ def render_page_forecast():
 # ==============================================================================
 # TAB: MONTHLY PREDICTION (CURRENT & NEXT MONTH)
 # ==============================================================================
+# ==============================================================================
+# TAB: MONTHLY HOROSCOPE (DYNAMIC)
+# ==============================================================================
 def render_page_monthly():
     if not has_valid_profile:
         render_profile_setup_prompt()
@@ -1830,14 +1833,26 @@ def render_page_monthly():
     </div>
     """)
 
+    # --- DYNAMIC CALENDAR LOGIC ---
+    now = datetime.datetime.now()
+    curr_month_str = now.strftime("%B %Y")
+    
+    # Safely calculate the 15th of next month (handling Dec -> Jan rollover)
+    if now.month == 12:
+        next_dt = now.replace(year=now.year + 1, month=1, day=15)
+    else:
+        next_dt = now.replace(month=now.month + 1, day=15)
+    next_month_str = next_dt.strftime("%B %Y")
+
     month_choice = st.radio(
         "**Select Forecast Month:**",
-        options=["Current Month (September 2026)", "Next Month (October 2026)"],
+        options=[f"Current Month ({curr_month_str})", f"Next Month ({next_month_str})"],
         horizontal=True
     )
-    is_next = "October" in month_choice
-
-    pred = db.get_monthly_lagna_prediction(lagna_idx, is_next_month=is_next)
+    
+    target_date = next_dt if "Next Month" in month_choice else now
+    pred = db.get_dynamic_monthly_prediction(lagna_idx, target_date)
+    # ------------------------------
 
     render_html(f"""
     <div class="auth-hero-box" style="margin-bottom:1.2rem;">
@@ -1875,7 +1890,7 @@ def render_page_monthly():
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #e11d48;">
             <b style="color:#9f1239; font-size:0.98rem;">📉 6. Loans & Health Defense (Debts, Immunity):</b>
-            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['loan']}</div>
+            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['loan']} | <b>Health/Accidents:</b> {pred['accidents']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #ddd6fe; border-left:5px solid #8b5cf6;">
@@ -1884,8 +1899,8 @@ def render_page_monthly():
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #be123c;">
-            <b style="color:#9f1239; font-size:0.98rem;">🔬 8. Research & Sudden Shifts (Accidents Caution):</b>
-            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;"><b>Research:</b> {pred['research']} | <b>Accidents/Safety:</b> {pred['accidents']}</div>
+            <b style="color:#9f1239; font-size:0.98rem;">🔬 8. Research & Sudden Shifts:</b>
+            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['research']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fde68a; border-left:5px solid #d97706;">
