@@ -15,6 +15,7 @@ from views.live import render_page_live
 from views.forecast import render_page_forecast
 from views.monthly import render_page_monthly
 from views.dasha import render_page_dasha
+from views.mantra import render_page_mantra
 
 # ==============================================================================
 # EARLY LANGUAGE DETECTION & PAGE CONFIG
@@ -280,9 +281,6 @@ else:
 # ==============================================================================
 # ROUTER DISPATCHER
 # ==============================================================================
-def render_page_mantra():
-    st.session_state.current_page = "mantra"
-
 PAGES = {
     "about": render_page_about,
     "profile": render_page_profile,
@@ -292,7 +290,7 @@ PAGES = {
     "forecast": render_page_forecast,
     "monthly": render_page_monthly,
     "dasha": render_page_dasha,
-    "mantra": lambda: st.write("Mantra view loading..."),
+    "mantra": render_page_mantra,
 }
 
 active_page_func = PAGES.get(st.session_state.current_page, render_page_about)
