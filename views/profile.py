@@ -1,4 +1,4 @@
-# views/profile.py - Dedicated User Profile View with Complete Hindi & English Content
+# views/profile.py - Dedicated User Profile View with Full Hindi & English Support
 import streamlit as st
 import datetime
 from databanks import (
@@ -40,13 +40,29 @@ TARA_NAMES_HI = {
     "Naidhana": "निधन तारा", "Mitra": "मित्र तारा", "Ati-Mitra": "अति-मित्र तारा"
 }
 
+TARA_QUALITY_HI = {
+    "Favorable (Wealth & Expansion)": "अनुकूल (धन एवं विस्तार)",
+    "Favorable (Success & Achievement)": "अनुकूल (सफलता एवं सिद्धि)",
+    "Favorable (Support & Friendship)": "अनुकूल (सहायता एवं मैत्री)",
+    "Supreme Alliance": "परम मित्रवत संबंध (Supreme Alliance)",
+    "Challenging (Friction & Hurdles)": "चुनौतीपूर्ण (संघर्ष एवं अवरोध)",
+    "Severe Obstacles & Caution": "अति संवेदनशील (कठिन बाधाएं व सतर्कता)",
+    "Karmic Test & Restructuring": "कर्मिक परीक्षण एवं आत्म-पुनर्गठन"
+}
+
+TARA_ADVICE_HI = {
+    "Partnership naturally expands capital, strategic execution, and emotional ease. Communication flows with minimal resistance.": "यह ऊर्जा सहकारिता, पूंजी वृद्धि, रणनीतिक निष्पादन और मानसिक संतोष को स्वाभाविक रूप से विस्तार देती है। आपसी संवाद में न्यूनतम अवरोध रहता है।",
+    "Brings supportive momentum, steady progress, and beneficial mentorship alignment.": "यह समय प्रगति, स्थिर गति और योग्य मार्गदर्शकों के सहयोग के लिए अत्यंत शुभ है।",
+    "Introduces friction, unexpected delays, or interpersonal friction. Exercise patience and legal due diligence.": "यह कालखंड मानसिक गतिरोध, अप्रत्याशित विलंब या वैचारिक मतभेद ला सकता है। इस दौरान धैर्य रखें और कानूनी पहलुओं की गहन जांच करें।"
+}
+
 # 27 NAKSHATRA BIO & ATTRIBUTE DATA (BILINGUAL)
 NAKSHATRA_BIO = {
     1: {"deity_en": "Ashwini Kumaras (Divine Healers)", "deity_hi": "अश्विनी कुमार (दिव्य चिकित्सक)", "symbol_en": "Horse's Head", "symbol_hi": "अश्व (घोड़े) का मुख", "tree_en": "Poison Nut (Kuchila)", "tree_hi": "कुचिला", "bird_en": "Wild Eagle", "bird_hi": "गरुड़ / चील", "animal_en": "Male Horse (Ashwa)", "animal_hi": "अश्व (घोड़ा)", "lord_en": "Ketu", "lord_hi": "केतु"},
     2: {"deity_en": "Lord Yama (Dharma & Cosmic Justice)", "deity_hi": "यमराज (धर्म एवं न्याय के अधिपति)", "symbol_en": "Yoni / Creative Triangle", "symbol_hi": "योनि / त्रिकोण", "tree_en": "Amla (Indian Gooseberry)", "tree_hi": "आंवला (धात्री)", "bird_en": "Crow (Kaka)", "bird_hi": "कौआ (काक)", "animal_en": "Male Elephant (Gaja)", "animal_hi": "गज (हाथी)", "lord_en": "Venus", "lord_hi": "शुक्र"},
     3: {"deity_en": "Agni Dev (Fire God)", "deity_hi": "अग्नि देव", "symbol_en": "Razor / Knife / Flame", "symbol_hi": "छुरा / ज्वाला", "tree_en": "Udumbar (Gular)", "tree_hi": "गूलर", "bird_en": "Peacock", "bird_hi": "मयूर (मोर)", "animal_en": "Female Sheep (Mesh)", "animal_hi": "मेष (भेड़)", "lord_en": "Sun", "lord_hi": "सूर्य"},
     4: {"deity_en": "Lord Brahma (Creator)", "deity_hi": "ब्रह्मा जी (सृष्टिकर्ता)", "symbol_en": "Chariot / Temple / Cart", "symbol_hi": "रथ / मंदिर", "tree_en": "Jamun (Blackberry)", "tree_hi": "जामुन", "bird_en": "Owl / Hansa", "bird_hi": "हंस / उल्लू", "animal_en": "Male Serpent", "animal_hi": "सर्प", "lord_en": "Moon", "lord_hi": "चन्द्र"},
-    5: {"deity_en": "Soma (Moon God)", "deity_hi": "सोम (चन्द्र देव)", "symbol_en": "Deer's Head", "symbol_hi": "मृगशीर्ष (हिरण का सिर)", "tree_en": "Khadira (Cutch tree)", "tree_hi": "खैर (खदिर)", "bird_en": "Hen / Cock", "bird_hi": "मुर्गा", "animal_en": "Female Serpent", "animal_hi": "सर्पिणी", "lord_en": "Mars", "lord_hi": "मंगल"},
+    5: {"deity_en": "Soma (Moon God)", "deity_hi": "सोम (चन्द्र देव)", "symbol_en": "Deer's Head", "symbol_hi": "मृगशिर्ष (हिरण का सिर)", "tree_en": "Khadira (Cutch tree)", "tree_hi": "खैर (खदिर)", "bird_en": "Hen / Cock", "bird_hi": "मुर्गा", "animal_en": "Female Serpent", "animal_hi": "सर्पिणी", "lord_en": "Mars", "lord_hi": "मंगल"},
     6: {"deity_en": "Rudra (Storm God / Shiva)", "deity_hi": "रुद्र (भगवान शिव)", "symbol_en": "Teardrop / Diamond", "symbol_hi": "अश्रु बूंद / हीरा", "tree_en": "Agarwood / Krishna Thulasi", "tree_hi": "अगर / कृष्ण तुलसी", "bird_en": "Black Eagle", "bird_hi": "काली चील", "animal_en": "Female Dog (Shwani)", "animal_hi": "श्वान (कुत्ता)", "lord_en": "Rahu", "lord_hi": "राहु"},
     7: {"deity_en": "Aditi (Cosmic Mother)", "deity_hi": "अदिति (देवमाता)", "symbol_en": "Bow and Quiver", "symbol_hi": "धनुष एवं तरकश", "tree_en": "Bamboo (Vamsha)", "tree_hi": "बांस", "bird_en": "Swan", "bird_hi": "हंस", "animal_en": "Female Cat (Marjari)", "animal_hi": "बिल्ली", "lord_en": "Jupiter", "lord_hi": "गुरु"},
     8: {"deity_en": "Brihaspati (Guru)", "deity_hi": "देवगुरु बृहस्पति", "symbol_en": "Flower / Circle / Cow's Udder", "symbol_hi": "कमल पुष्प / चक्र", "tree_en": "Peepal (Ashwattha)", "tree_hi": "पीपल", "bird_en": "Sea Crow", "bird_hi": "जलकाक", "animal_en": "Male Goat (Aja)", "animal_hi": "बकरा", "lord_en": "Saturn", "lord_hi": "शनि"},
@@ -71,9 +87,7 @@ NAKSHATRA_BIO = {
     27: {"deity_en": "Pushan (Nourisher of Travelers)", "deity_hi": "पूषा (यात्रियों के रक्षक व पोषक)", "symbol_en": "Fish Pair Swimming in Sea", "symbol_hi": "मीन युगल (मछलियों का जोड़ा)", "tree_en": "Mahua (Butter Tree)", "tree_hi": "महुआ", "bird_en": "Kestrel", "bird_hi": "कबूतर / चकोर", "animal_en": "Female Elephant (Hathini)", "animal_hi": "हथिनी", "lord_en": "Mercury", "lord_hi": "बुध"}
 }
 
-# COMPLETE BILINGUAL ASTROLOGICAL PREDICTIONS
 PREDICTIONS_DB = {
-    # 2: Bharani
     2: {
         "core_en": "Enduring moral resilience, deep magnetic charisma, uncompromising principles, and strong sense of justice.",
         "core_hi": "अडिग नैतिक दृढ़ता, चुंबकीय आकर्षण, सिद्धांतों से समझौता न करने वाला स्वभाव और न्याय के प्रति गहरी निष्ठा।",
@@ -90,7 +104,6 @@ PREDICTIONS_DB = {
     }
 }
 
-# Fallback generator for other nakshatras to guarantee pure Hindi output
 def get_localized_nak_prediction(star_idx: int, is_hi: bool):
     if star_idx in PREDICTIONS_DB:
         p = PREDICTIONS_DB[star_idx]
@@ -102,8 +115,6 @@ def get_localized_nak_prediction(star_idx: int, is_hi: bool):
             "prediction": p["prediction_hi"] if is_hi else p["prediction_en"],
             "remedies": p["remedies_hi"] if is_hi else p["remedies_en"]
         }
-    
-    # Generic classical fallback
     if is_hi:
         return {
             "core": "गहन एकाग्रता, आत्मसम्मान, बौद्धिक सूक्ष्मता एवं स्वतंत्र निर्णय क्षमता का नैसर्गिक संयोजन।",
@@ -122,7 +133,6 @@ def get_localized_nak_prediction(star_idx: int, is_hi: bool):
         "remedies": "• Recite Janma Nakshatra Gayatri Mantra at dawn.\n• Offer clean water to your Ishta Devata.\n• Donate grains to the needy."
     }
 
-# BILINGUAL MOON SIGN PREDICTIONS
 RASHI_PREDICTIONS = {
     "Mesha": {
         "element_en": "Fire (Agni)", "element_hi": "अग्नि तत्व (Fire)",
@@ -153,7 +163,6 @@ def get_localized_rashi_data(rashi_name: str, is_hi: bool):
         "remedies": data["remedies_hi"] if is_hi else data["remedies_en"]
     }
 
-# BILINGUAL LAGNA PREDICTIONS
 LAGNA_PREDICTIONS = {
     "Mesha": {
         "element_en": "Fire (Agni)", "element_hi": "अग्नि तत्व (Fire)",
@@ -306,7 +315,6 @@ def render_page_profile():
                 st.session_state.edit_mode = True
                 st.rerun()
 
-    # Retrieve attributes and predictions cleanly based on language
     star_idx = chart_info["star_idx"]
     bio_item = NAKSHATRA_BIO.get(star_idx, NAKSHATRA_BIO[2])
     n_data = get_localized_nak_prediction(star_idx, is_hi)
@@ -526,17 +534,20 @@ def render_page_profile():
         box_color = '#15803d' if tara_res['is_allied'] else ('#be123c' if tara_res['is_friction'] else '#0f172a')
         
         disp_tara_name = TARA_NAMES_HI.get(tara_res['tara_name'], tara_res['tara_name']) if is_hi else tara_res['tara_name']
+        disp_quality = TARA_QUALITY_HI.get(tara_res['quality'], tara_res['quality']) if is_hi else tara_res['quality']
+        disp_tone = TARA_QUALITY_HI.get(tara_res['relationship_tone'], TARA_ADVICE_HI.get(tara_res['relationship_tone'], tara_res['relationship_tone'])) if is_hi else tara_res['relationship_tone']
+        disp_advice = TARA_ADVICE_HI.get(tara_res['advice'], tara_res['advice']) if is_hi else tara_res['advice']
 
         render_html(f"""
         <div style="background:{box_bg}; border:1.5px solid {box_border}; border-radius:12px; padding:12px; margin-top:8px;">
             <div style="font-size:1.05rem; font-weight:800; color:{box_color};">
-                {tara_res['icon']} {disp_tara_name} — {tara_res['quality']}
+                {tara_res['icon']} {disp_tara_name} — {disp_quality}
             </div>
             <div style="font-size:0.92rem; font-weight:700; color:#334155; margin-top:4px;">
-                {lbl_dynamic} {tara_res['relationship_tone']}
+                {lbl_dynamic} {disp_tone}
             </div>
             <div style="font-size:0.9rem; color:#475569; margin-top:4px; line-height:1.5;">
-                {tara_res['advice']}
+                {disp_advice}
             </div>
         </div>
         """)
