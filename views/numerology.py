@@ -1,14 +1,80 @@
 # views/numerology.py - Dedicated Numerology View with Full Hindi & English Support
 import streamlit as st
-from databanks import (
-    get_numerology_life_domains,
-    get_numerology_avoidance,
-    NUM_PLANET_NAMES
-)
 
 def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
+
+# Complete Bilingual Numerology Blueprint Dictionary
+NUMEROLOGY_CONTENT = {
+    1: {
+        "planet_en": "Sun (Surya)", "planet_hi": "सूर्य (Surya)",
+        "career_en": "Executive Leadership, Government Administration, Corporate Directorship, Entrepreneurship, Public Relations.",
+        "career_hi": "कार्यकारी नेतृत्व, सरकारी प्रशासन, कॉर्पोरेट निदेशक पद, उद्यमिता और जनसंपर्क।",
+        "wealth_en": "Strong capacity for asset accumulation through independent ventures, real estate, and strategic investments. Avoid speculative gambling.",
+        "wealth_hi": "स्वतंत्र उद्यमों, रियल एस्टेट और रणनीतिक निवेश के माध्यम से धन संचय की मजबूत क्षमता। सट्टेबाजी से दूर रहें।",
+        "rel_en": "Commands natural respect but requires conscious effort to balance authority with collaborative listening at home.",
+        "rel_hi": "प्राकृतिक सम्मान प्राप्त होता है, किंतु घर पर अधिकार और सहयोगात्मक संवाद के बीच संतुलन बनाए रखने के लिए सचेत प्रयास की आवश्यकता है।",
+        "health_en": "Vitality is robust, but watch out for inflammatory conditions, high blood pressure, and eye strain.",
+        "health_hi": "शारीरिक ऊर्जा मजबूत होती है, किंतु पित्त विकार, उच्च रक्तचाप और नेत्र तनाव से सावधान रहें।"
+    },
+    2: {
+        "planet_en": "Moon (Chandra)", "planet_hi": "चन्द्रमा (Chandra)",
+        "career_en": "Diplomacy, Counseling, Hospitality, Fine Arts, Liquid Trading, Healthcare, Human Resources.",
+        "career_hi": "कूटनीति, परामर्श, आतिथ्य सत्कार, ललित कला, तरल पदार्थों का व्यापार, स्वास्थ्य सेवाएं और मानव संसाधन।",
+        "wealth_en": "Fluctuating cash flows requiring disciplined budgeting; gains through partnerships, advisory roles, and public sectors.",
+        "wealth_hi": "अनुशासित बजट की मांग करने वाला उतार-चढ़ाव वाला धन प्रवाह; साझेदारियों, सलाहकार भूमिकाओं और सार्वजनिक क्षेत्रों से लाभ।",
+        "rel_en": "Deeply empathetic and nurturing; highly sensitive to emotional friction from close companions.",
+        "rel_hi": "अत्यंत सहानुभूतिपूर्ण और देखभाल करने वाले; करीबी साथियों के भावनात्मक व्यवहार के प्रति अत्यधिक संवेदनशील।",
+        "health_en": "Prone to mental fatigue, sleep disruption, water-retention, and respiratory sensitivities.",
+        "health_hi": "मानसिक थकान, अनिद्रा, जल संचय (कफ) और श्वास संबंधी संवेदनशीलता की प्रवृत्ति।"
+    },
+    3: {
+        "planet_en": "Jupiter (Guru)", "planet_hi": "बृहस्पति (Guru)",
+        "career_en": "Teaching, Law, Philosophy, Publishing, Financial Consulting, Management, Mentorship.",
+        "career_hi": "अध्यापन, कानून, दर्शनशास्त्र, प्रकाशन, वित्तीय परामर्श, प्रबंधन और मेंटरशिप।",
+        "wealth_en": "Expansive financial luck; steady compound wealth accumulation through education, advisory, and ethical investments.",
+        "wealth_hi": "विस्तृत वित्तीय भाग्य; शिक्षा, परामर्श और नैतिक निवेश के माध्यम से स्थिर चक्रवृद्धि धन संचय।",
+        "rel_en": "Generous and inspiring partner; values intellectual freedom and philosophical alignment in relationships.",
+        "rel_hi": "उदार और प्रेरित करने वाले जीवनसाथी; रिश्तों में बौद्धिक स्वतंत्रता और दार्शनिक मेल को महत्व देते हैं।"
+    },
+    4: {
+        "planet_en": "Rahu / Uranus", "planet_hi": "राहु / यूरेनस",
+        "career_en": "Engineering, Software Architecture, Research & Development, Logistics, Strategic Planning, Data Science.",
+        "career_hi": "इंजीनियरिंग, सॉफ्टवेयर वास्तुकला, अनुसंधान एवं विकास, लॉजिस्टिक्स, रणनीतिक योजना और डेटा विज्ञान।",
+        "wealth_en": "Unconventional wealth spikes; requires meticulous legal paperwork and avoidance of unverified shortcuts.",
+        "wealth_hi": "अपरंपरागत धन लाभ; इसके लिए सूक्ष्म कानूनी कागजी कार्रवाई और असत्यापित शॉर्टकट से बचना आवश्यक है।"
+    },
+    5: {
+        "planet_en": "Mercury (Budha)", "planet_hi": "बुध (Budha)",
+        "career_en": "Media, Commerce, Journalism, Technology, Marketing, Sales, Public Speaking, Translation.",
+        "career_hi": "मीडिया, वाणिज्य, पत्रकारिता, प्रौद्योगिकी, विपणन (मार्केंटिग), बिक्री, सार्वजनिक भाषण और अनुवाद।",
+        "wealth_en": "Agile cash generation across multiple diverse income streams; rewards multi-channel diversification.",
+        "wealth_hi": "कई विविध आय स्रोतों से तेजी से धन अर्जित करना; बहु-चैनल विविधीकरण फायदेमंद रहता है।"
+    },
+    6: {
+        "planet_en": "Venus (Shukra)", "planet_hi": "शुक्र (Shukra)",
+        "career_en": "Luxury Goods, Architecture, Fashion Design, Entertainment, Hospitality, Interior Decor, Finance.",
+        "career_hi": "विलासिता की वस्तुएं, वास्तुकला, फैशन डिजाइन, मनोरंजन, आतिथ्य, इंटीरियर डिजाइन और वित्त।",
+        "wealth_en": "Attracts high-value assets, luxury vehicles, and real estate; prone to generous spending on comfort.",
+        "wealth_hi": "उच्च मूल्य की संपत्ति, लग्जरी वाहन और रियल साइट आकर्षित करते हैं; सुख-सुविधाओं पर खुलकर खर्च करने की प्रवृत्ति होती है।"
+    },
+    7: {
+        "planet_en": "Ketu / Neptune", "planet_hi": "केतु / नेपच्यून",
+        "career_en": "Occult Research, Data Analysis, Writing, Psychology, Scientific Investigation, Auditing, Spirituality.",
+        "career_hi": "गूढ़ अनुसंधान, डेटा विश्लेषण, लेखन, मनोविज्ञान, वैज्ञानिक जांच, ऑडिटिंग और आध्यात्मिकता।"
+    },
+    8: {
+        "planet_en": "Saturn (Shani)", "planet_hi": "शनि (Shani)",
+        "career_en": "Corporate Governance, Heavy Industry, Real Estate, Infrastructure, Judiciary, Banking, Auditing.",
+        "career_hi": "कॉर्पोरेट प्रशासन, भारी उद्योग, रियल एस्टेट, बुनियादी ढांचा, न्यायपालिका, बैंकिंग और ऑडिटिंग।"
+    },
+    9: {
+        "planet_en": "Mars (Mangal)", "planet_hi": "मंगल (Mangal)",
+        "career_en": "Defense Services, Surgery, Engineering, Real Estate Development, Sports, Emergency Operations.",
+        "career_hi": "रक्षा सेवाएं, शल्य चिकित्सा (सर्जरी), इंजीनियरिंग, रियल एस्टेट विकास, खेल और आपातकालीन संचालन।"
+    }
+}
 
 def render_page_numerology():
     if not st.session_state.get("has_valid_profile", False):
@@ -41,18 +107,28 @@ def render_page_numerology():
     bhagyank = st.session_state.get("bhagyank", 1)
     namank = st.session_state.get("namank", 1)
 
-    num_domains = get_numerology_life_domains(mulank, bhagyank, namank, current_lang)
-    avoid_data = get_numerology_avoidance(mulank, bhagyank, current_lang)
-    p_m_label = NUM_PLANET_NAMES.get(mulank, {}).get(current_lang, f"Planet {mulank}")
-    p_b_label = NUM_PLANET_NAMES.get(bhagyank, {}).get(current_lang, f"Planet {bhagyank}")
-    p_n_label = NUM_PLANET_NAMES.get(namank, {}).get(current_lang, f"Planet {namank}")
+    m_data = NUMEROLOGY_CONTENT.get(mulank, NUMEROLOGY_CONTENT[1])
+    b_data = NUMEROLOGY_CONTENT.get(bhagyank, NUMEROLOGY_CONTENT[1])
+    n_data = NUMEROLOGY_CONTENT.get(namank, NUMEROLOGY_CONTENT[1])
 
-    cautions_html = "".join(f"<li style='margin-bottom:5px;'>{c}</li>" for c in avoid_data['cautions'])
+    p_m_label = m_data["planet_hi"] if is_hi else m_data["planet_en"]
+    p_b_label = b_data["planet_hi"] if is_hi else b_data["planet_en"]
+    p_n_label = n_data["planet_hi"] if is_hi else n_data["planet_en"]
 
     card_title = "🔢 मुख्य अंकशास्त्रीय ब्लूप्रिंट" if is_hi else "🔢 Core Numerology Blueprint"
     lbl_mul = "मूलांक (Driver)" if is_hi else "Mulank (Driver)"
     lbl_bhag = "भाग्यांक (Destiny)" if is_hi else "Bhagyank (Destiny)"
     lbl_nam = "नामांक (Name Vibration)" if is_hi else "Namank (Name Vibration)"
+
+    c_title = "💼 अनुकूल आजीविका एवं कार्यक्षेत्र" if is_hi else "💼 Optimal Career & Vocation"
+    w_title = "💰 धन संचय एवं वित्तीय प्रबंधन" if is_hi else "💰 Wealth Accumulation & Financial Management"
+    r_title = "❤️ पारस्परिक संबंध एवं साझेदारी" if is_hi else "❤️ Interpersonal Relations & Partnerships"
+    h_title = "🌿 स्वास्थ्य एवं प्राण ऊर्जा संतुलन" if is_hi else "🌿 Health & Vitality Balance"
+
+    c_desc = m_data["career_hi"] if is_hi else m_data["career_en"]
+    w_desc = b_data["wealth_hi"] if is_hi else b_data["wealth_en"]
+    r_desc = m_data["rel_hi"] if is_hi else m_data["rel_en"]
+    h_desc = m_data["health_hi"] if is_hi else m_data["health_en"]
 
     render_html(f"""
     <div class="light-card-num">
@@ -80,47 +156,20 @@ def render_page_numerology():
 
         <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.15rem;">
             <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #059669;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['career_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['career_desc']}</div>
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{c_title}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{c_desc}</div>
             </div>
             <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #10b981;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['wealth_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['wealth_desc']}</div>
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{w_title}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{w_desc}</div>
             </div>
             <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #14b8a6;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['rel_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['rel_desc']}</div>
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{r_title}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{r_desc}</div>
             </div>
             <div style="background:#ffffff; border-radius:12px; padding:14px; border:1px solid #d1fae5; border-left:5px solid #0d9488;">
-                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{num_domains['health_title']}</div>
-                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{num_domains['health_desc']}</div>
-            </div>
-        </div>
-
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1.5px solid #bbf7d0; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:8px;">{num_domains['luck_title']}</div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.95rem; line-height:1.6;">
-                <div><b>✨ {"शुभ अंक" if is_hi else "Lucky Numbers"}:</b> {num_domains['lucky_num']}</div>
-                <div><b>⚠️ {"सतर्कता अंक" if is_hi else "Caution Numbers"}:</b> {num_domains['avoid_num']}</div>
-                <div><b>📅 {"शुभ दिन" if is_hi else "Auspicious Days"}:</b> {num_domains['lucky_days']}</div>
-                <div><b>🧭 {"अनुकूल दिशा" if is_hi else "Favorable Direction"}:</b> {num_domains['lucky_dir']}</div>
-                <div style="grid-column: 1 / -1;"><b>🎨 {"ऊर्जावान रंग" if is_hi else "Energizing Colors"}:</b> {num_domains['lucky_colors']}</div>
-            </div>
-        </div>
-
-        <div style="background:#fff1f2; border-radius:12px; padding:14px; border:1.5px solid #fecdd3; margin-bottom:1.15rem;">
-            <div style="font-weight:900; font-size:1.08rem; color:#9f1239; margin-bottom:8px;">{avoid_data['avoid_title']}</div>
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px; font-size:0.93rem; line-height:1.6; margin-bottom:10px;">
-                <div><b>🚫 {"बचने योग्य अंक" if is_hi else "Numbers to Avoid"}:</b> {avoid_data['avoid_numbers']}</div>
-                <div><b>🎨 {"बचने योग्य रंग" if is_hi else "Colors to Avoid"}:</b> {avoid_data['avoid_colors']}</div>
-                <div><b>📅 {"प्रतिकूल दिन" if is_hi else "Unfavorable Days"}:</b> {avoid_data['avoid_days']}</div>
-                <div><b>🧭 {"बचने योग्य दिशा" if is_hi else "Direction to Avoid"}:</b> {avoid_data['avoid_directions']}</div>
-            </div>
-            <div style="background:#ffffff; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
-                <b style="color:#9f1239; font-size:0.95rem;">{"⚠️ महत्वपूर्ण रणनीतिक एवं व्यवहारिक सावधानियां:" if is_hi else "⚠️ Critical Behavioral & Strategic Don'ts:"}</b>
-                <ul style="margin:4px 0 0 0; padding-left:1.2rem; font-size:0.92rem; color:#881337; line-height:1.6;">
-                    {cautions_html}
-                </ul>
+                <div style="font-weight:900; font-size:1.05rem; color:#065f46; margin-bottom:5px;">{h_title}</div>
+                <div style="font-size:0.95rem; line-height:1.65; color:#1e293b;">{h_desc}</div>
             </div>
         </div>
 
