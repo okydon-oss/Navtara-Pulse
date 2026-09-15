@@ -1390,72 +1390,69 @@ def render_page_dasha():
 
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
-    dasha_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
-    
-    md_item = dasha_levels[0]
-    ad_item = dasha_levels[1]
-    
-    briefing = db.generate_dasha_executive_briefing(chart_info['lagna_idx'], md_item['lord'], ad_item['lord'])
+    dasha_data = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist, chart_info['lagna_idx'])
+
+    md = dasha_data['md']
+    ad = dasha_data['ad']
+    n_md = dasha_data['next_md']
+    n_ad = dasha_data['next_ad']
 
     render_html(f"""
     <div style="margin-bottom:1.5rem;">
         <div style="font-weight:900; font-size:1.35rem; color:#1e293b;">{t('dasha_page_title', current_lang)}</div>
         <div style="font-size:0.95rem; color:#475569; margin-top:4px;">
-            {t('dasha_page_subtitle', current_lang)}
+            {t('dasha_page_subtitle', current_lang)} (${chart_info['lagna_name']} Ascendant)
         </div>
     </div>
 
-    <!-- ACTIVE TIMELINE CARD -->
-    <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.5rem;">
-        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1px solid #bbf7d0; border-left:6px solid #16a34a;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b style="color:#14532d; font-size:1.05rem;">🟩 Mahadasha (Major Era): {md_item['lord'].upper()}</b>
-                <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
-            </div>
-            <div style="font-size:0.85rem; color:#166534; font-weight:700; margin-top:4px;">
-                ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
-            </div>
+    <!-- MAHADASHA CARD -->
+    <div style="background:#f0fdf4; border-radius:14px; padding:18px; border:1.5px solid #bbf7d0; border-left:6px solid #16a34a; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <b style="color:#14532d; font-size:1.15rem;">Mahadasha: {md['lord'].upper()}</b>
+            <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 10px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
         </div>
-
-        <div style="background:#eff6ff; border-radius:12px; padding:14px; border:1px solid #bfdbfe; border-left:6px solid #2563eb;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <b style="color:#1e3a8a; font-size:1.05rem;">🟦 Antardasha (Sub-Period): {ad_item['lord'].upper()}</b>
-                <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
-            </div>
-            <div style="font-size:0.85rem; color:#1e40af; font-weight:700; margin-top:4px;">
-                ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
-            </div>
+        <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:10px;">
+            ⏱️ {md['start'].strftime('%b %d, %Y')} — {md['end'].strftime('%b %d, %Y')}
+        </div>
+        <div style="font-size:0.95rem; line-height:1.7; color:#1e293b;">
+            {md['desc']}
         </div>
     </div>
 
-    <!-- EXECUTIVE BRIEFING MATRIX -->
-    <div style="background:#ffffff; border-radius:14px; padding:18px; border:1.5px solid #cbd5e1; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
-        <div style="font-weight:900; font-size:1.2rem; color:#0f172a; margin-bottom:12px; border-bottom:2px solid #f1f5f9; padding-bottom:8px;">
-            📋 Executive Briefing for {chart_info['lagna_name']} Ascendant
+    <!-- ANTARDASHA CARD -->
+    <div style="background:#eff6ff; border-radius:14px; padding:18px; border:1.5px solid #bfdbfe; border-left:6px solid #2563eb; margin-bottom:14px; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <b style="color:#1e3a8a; font-size:1.15rem;">Antardasha: {ad['lord'].upper()}</b>
+            <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 10px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
         </div>
-
-        <div style="margin-bottom:12px; font-size:0.95rem; line-height:1.7; color:#334155;">
-            <b>🏛️ Macro Theme (Mahadasha):</b><br>{briefing['macro']}
+        <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:10px;">
+            ⏱️ {ad['start'].strftime('%b %d, %Y')} — {ad['end'].strftime('%b %d, %Y')}
         </div>
-
-        <div style="margin-bottom:12px; font-size:0.95rem; line-height:1.7; color:#334155;">
-            <b>🎯 Tactical Focus (Antardasha):</b><br>{briefing['tactical']}
+        <div style="font-size:0.95rem; line-height:1.7; color:#1e293b;">
+            {ad['desc']}
         </div>
+    </div>
 
-        <div style="background:#f8fafc; border-radius:10px; padding:12px; border:1px solid #e2e8f0; margin-bottom:10px; font-size:0.93rem; line-height:1.6; color:#1e293b;">
-            {briefing['career']}
+    <!-- NEXT TRANSITIONS CARD -->
+    <div style="background:#f8fafc; border-radius:14px; padding:18px; border:1.5px solid #cbd5e1; box-shadow:0 3px 12px rgba(0,0,0,0.02);">
+        <div style="font-weight:900; font-size:1.15rem; color:#0f172a; margin-bottom:10px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+            ⏳ Upcoming Planetary Transitions
         </div>
-
-        <div style="background:#fff1f2; border-radius:10px; padding:12px; border:1px solid #fecdd3; margin-bottom:10px; font-size:0.93rem; line-height:1.6; color:#881337;">
-            {briefing['cautions']}
-        </div>
-
-        <div style="background:#f0fdf4; border-radius:10px; padding:12px; border:1px solid #bbf7d0; font-size:0.93rem; line-height:1.6; color:#14532d;">
-            {briefing['remedy']}
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; font-size:0.93rem; color:#334155;">
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #e2e8f0;">
+                <b style="color:#16a34a;">Next Mahadasha:</b><br>
+                <b>{n_md['lord'].upper()}</b><br>
+                <span style="font-size:0.84rem; color:#64748b;">{n_md['start'].strftime('%b %d, %Y')} — {n_md['end'].strftime('%b %d, %Y')}</span>
+            </div>
+            <div style="background:#ffffff; border-radius:10px; padding:12px; border:1px solid #e2e8f0;">
+                <b style="color:#2563eb;">Next Antardasha:</b><br>
+                <b>{n_ad['lord'].upper()}</b><br>
+                <span style="font-size:0.84rem; color:#64748b;">{n_ad['start'].strftime('%b %d, %Y')} — {n_ad['end'].strftime('%b %d, %Y')}</span>
+            </div>
         </div>
     </div>
     """)
-
+    
 # ==============================================================================
 # TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
 # ==============================================================================
