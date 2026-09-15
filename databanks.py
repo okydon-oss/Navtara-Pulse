@@ -1335,8 +1335,10 @@ NAKSHATRA_BEEJ_MANTRAS = {
         "rules": "• Chant in the morning facing North-East.\n• Auspicious day: Wednesday.\n• Pacifies: Over-sensitivity, financial boundary issues, and disorientation."
     }
 }
+
+
 # ==============================================================================
-# VIMSHOTTARI DASHA (PLANETARY TIMELINE) ENGINE - ASTROSAGE ACCURATE
+# VIMSHOTTARI DASHA (EXECUTIVE BRIEFING) ENGINE
 # ==============================================================================
 DASHA_SEQUENCE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 DASHA_YEARS = {
@@ -1344,71 +1346,165 @@ DASHA_YEARS = {
     "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
 }
 
-DASHA_PREDICTIONS = {
-    "Sun": {
-        "MD": "You are currently in the 6-year major era of the Sun. This overarching period is highly focused on ego-development, authority, father figures, and carving out your executive stature. It brings themes of leadership, vital energy, and establishing personal sovereignty, often through tests of confidence.",
-        "AD": "During this sub-chapter of the Sun, the overarching Dasha energy is illuminated. Expect increased visibility, potential clashes with authority, and a focus on career advancement and vital health.",
-        "PD": "For these few months, the Sun's energy highlights administrative tasks, sudden sparks of confidence, and interactions with superiors or government.",
-        "SD": "Your leadership traits and personal pride briefly take center stage in daily interactions.",
-        "PrD": "Days of executive focus and vitality."
+# Lagna-based functional nature database for Mahadashas
+LAGNA_PLANET_NATURE = {
+    0: { # Mesha (Aries)
+        "Sun": "Yogakaraka & 5th Lord (Intellect, Authority & Speculative Fortune)",
+        "Moon": "4th Lord (Domestic Assets, Property & Emotional Security)",
+        "Mars": "Lagna & 8th Lord (Vitality, Physique & Transformative Crises)",
+        "Mercury": "3rd & 6th Lord (Enterprise, Competitors & Operational Hurdles)",
+        "Jupiter": "9th & 12th Lord (Dharma, Mentorship & Long-Distance Expansion)",
+        "Venus": "2nd & 7th Lord (Wealth, Speech & Commercial Partnerships)",
+        "Saturn": "10th & 11th Lord (Career Stature, Authority & Net Inflows)",
+        "Rahu": "Material Catalyst (Unorthodox Breakthroughs & Foreign Linkages)",
+        "Ketu": "Spiritual Catalyst (Occult Insight & Detachment)"
     },
-    "Moon": {
-        "MD": "You are navigating the 10-year major era of the Moon. This foundational period emphasizes emotional intelligence, maternal bonds, property, and public reception. It is a characteristically fluid time of intuition and building a nurturing environment.",
-        "AD": "In this Moon sub-period, emotional connections and public life are brought into focus. Flexibility, travel, and attention to home life or mother are required.",
-        "PD": "Over these few months, the Moon dictates a need for emotional safety, bringing brief shifts in mood or residential focus.",
-        "SD": "A brief span of high emotional sensitivity, receptivity, and focus on domestic or dietary comfort.",
-        "PrD": "Days of intuitive shifts and emotional fluidity."
+    1: { # Vrishabha (Taurus)
+        "Sun": "4th Lord (Real Estate, Home Infrastructure & Public Trust)",
+        "Moon": "3rd Lord (Courage, Short Travels & Sibling Dynamics)",
+        "Mars": "7th & 12th Lord (Partnerships, Foreign Linkages & Outflows)",
+        "Mercury": "2nd & 5th Lord (Liquid Wealth, Speech & Intellectual Strategy)",
+        "Jupiter": "8th & 11th Lord (Sudden Shifts, Research & Network Gains)",
+        "Venus": "Lagna & 6th Lord (Physical Vitality, Health Defense & Management)",
+        "Saturn": "9th & 10th Lord (Supreme Yogakaraka - Career Sovereignty & Fortune)",
+        "Rahu": "Material Catalyst (Ambition & Network Expansion)",
+        "Ketu": "Spiritual Catalyst (Deep Introspection)"
     },
-    "Mars": {
-        "MD": "You are executing the 7-year major era of Mars. This is an intensely dynamic, fast-paced period dictating courage, real-estate matters, athletic stamina, and confrontation. It is the time to build independence, tackle debts or competitors aggressively, and channel immense physical energy.",
-        "AD": "During this Mars sub-chapter, energetic drive accelerates. Expect high ambition, property-related activities, and a need to guard against impatience or heated arguments.",
-        "PD": "For the next few months, Mars commands urgent action, brief conflicts, or swift decision-making to resolve pressing matters.",
-        "SD": "A fast-paced window demanding physical exertion, courage, and quick reflexes to handle immediate tasks.",
-        "PrD": "Hours of sharp energy, haste, and decisive execution."
+    2: { # Mithuna (Gemini)
+        "Sun": "3rd Lord (Initiative, Communication & Enterprise)",
+        "Moon": "2nd Lord (Accumulated Wealth & Family Assets)",
+        "Mars": "6th & 11th Lord (Liabilities, Competition & Network Profits)",
+        "Mercury": "Lagna & 4th Lord (Intellect, Brand Identity & Real Estate)",
+        "Jupiter": "7th & 10th Lord (Career Authority & Business Alliances)",
+        "Venus": "5th & 12th Lord (Creative Strategy & Foreign Outflows)",
+        "Saturn": "8th & 9th Lord (Transformation & Higher Destiny)",
+        "Rahu": "Material Catalyst (Sudden Career Shifts & Scale)",
+        "Ketu": "Spiritual Catalyst (Analytical Detachment)"
     },
-    "Rahu": {
-        "MD": "You are in the 18-year major era of Rahu. This overarching period is a powerful, unorthodox, and often chaotic chapter of material obsession, foreign connections, and sudden ascents. It breaks boundaries and pushes you into unknown territories, bringing huge worldly ambitions alongside psychological tests.",
-        "AD": "In this Rahu sub-period, unexpected events and foreign influences surface. It triggers high material ambition and unorthodox problem-solving, though illusion and confusion must be managed.",
-        "PD": "Over these months, Rahu brings sudden shifts, brief infatuations with new ideas, and unusual technological or foreign engagements.",
-        "SD": "A brief period of unconventional thoughts, sudden disruptions, or out-of-the-box ideas.",
-        "PrD": "Moments of unexpected twists and rapid thoughts."
+    3: { # Karka (Cancer)
+        "Sun": "2nd Lord (Wealth Accumulation & Speech Control)",
+        "Moon": "Lagna Lord (Personal Identity, Vitality & Public Persona)",
+        "Mars": "5th & 10th Lord (Supreme Yogakaraka - Career Sovereignty & Intellect)",
+        "Mercury": "3rd & 12th Lord (Travel, Documentation & Foreign Linkages)",
+        "Jupiter": "6th & 9th Lord (Service, Health Defense & Higher Fortune)",
+        "Venus": "4th & 11th Lord (Real Estate, Comforts & Liquid Gains)",
+        "Saturn": "7th & 8th Lord (Partnerships & Deep Transformation)",
+        "Rahu": "Material Catalyst (Foreign Expansion & Unorthodox Ventures)",
+        "Ketu": "Spiritual Catalyst (Intuitive Solitude)"
     },
-    "Jupiter": {
-        "MD": "You are journeying through the 16-year major era of Jupiter. This golden period dictates expansion, financial compounding, institutional wisdom, and progeny. It is a phase of spiritual growth, aligning with higher dharma, meeting mentors, and generating long-lasting, dignified prosperity.",
-        "AD": "During this Jupiter sub-chapter, optimism and steady growth manifest. Favorable for wealth consolidation, higher learning, and receiving grace or mentorship.",
-        "PD": "For the next few months, Jupiter provides a protective shield, encouraging financial planning, educational milestones, and ethical decisions.",
-        "SD": "A window of hope, philosophical insight, and minor financial or spiritual blessings.",
-        "PrD": "Days of optimism, calm wisdom, and gentle grace."
+    4: { # Simha (Leo)
+        "Sun": "Lagna Lord (Sovereign Authority, Vitality & Leadership)",
+        "Moon": "12th Lord (Foreign Linkages & Background Strategy)",
+        "Mars": "4th & 9th Lord (Supreme Yogakaraka - Property, Fortune & Ethics)",
+        "Mercury": "2nd & 11th Lord (Liquid Wealth, Savings & Network Inflows)",
+        "Jupiter": "5th & 8th Lord (Intellect, Children & Sudden Transitions)",
+        "Venus": "3rd & 10th Lord (Enterprise, Public Communications & Career)",
+        "Saturn": "6th & 7th Lord (Competitors, Liabilities & Business Alliances)",
+        "Rahu": "Material Catalyst (Massive Ambition & Speculative Scaling)",
+        "Ketu": "Spiritual Catalyst (Detachment from Ego)"
     },
-    "Saturn": {
-        "MD": "You are traversing the 19-year major era of Saturn. This is a profound karmic chapter focused on reality-checks, structural discipline, hard labor, and enduring foundations. It delays immediate gratification to forge permanent success, demanding patience, humility, and organizational grit.",
-        "AD": "In this Saturn sub-period, the overarching energy is grounded. Focus shifts to structural discipline, career endurance, and delayed but permanent rewards.",
-        "PD": "Over these months, Saturn requires meticulous organization, managing heavy workloads, and strictly avoiding shortcuts.",
-        "SD": "A brief span of high fatigue, heavy responsibilities, or a need for strict boundary-setting.",
-        "PrD": "Hours demanding absolute patience and silent endurance."
+    5: { # Kanya (Virgo)
+        "Sun": "12th Lord (Global Linkages & Institutional Expenses)",
+        "Moon": "11th Lord (Network Profits & Long-Term Aspirations)",
+        "Mars": "3rd & 8th Lord (Courage, Technical Research & Sudden Shifts)",
+        "Mercury": "Lagna & 10th Lord (Supreme Career & Intellectual Sovereignty)",
+        "Jupiter": "4th & 7th Lord (Real Estate, Domestic Peace & Partnerships)",
+        "Venus": "2nd & 9th Lord (Wealth Accumulation & Higher Fortune)",
+        "Saturn": "5th & 6th Lord (Strategy, Risk Management & Competitors)",
+        "Rahu": "Material Catalyst (Unorthodox Collaborations & Tech Ventures)",
+        "Ketu": "Spiritual Catalyst (Systemic Audits & Precision)"
     },
-    "Mercury": {
-        "MD": "You are in the 17-year major era of Mercury. This is a highly stimulating, cerebral period dictating commercial expansion, analytical mastery, mass communication, and versatility. It heavily favors trade, media, data synthesis, and intellectual networking.",
-        "AD": "During this Mercury sub-chapter, intellect and commerce are activated. Expect a surge in communication, paperwork, trade negotiations, and mental agility.",
-        "PD": "For the next few months, Mercury demands analytical precision. Expect high communication, short travels, and rapid data processing.",
-        "SD": "A brief window of intense multitasking, answering correspondence, and sharp logical deduction.",
-        "PrD": "Days of fast communication, calculation, and active mind."
+    6: { # Tula (Libra)
+        "Sun": "11th Lord (Corporate Networks & Revenue Inflows)",
+        "Moon": "10th Lord (Career Stature & Public Executive Role)",
+        "Mars": "2nd & 7th Lord (Wealth Generation & Commercial Contracts)",
+        "Mercury": "9th & 12th Lord (Higher Education & Foreign Ventures)",
+        "Jupiter": "3rd & 6th Lord (Communication, Enterprise & Health Defense)",
+        "Venus": "Lagna & 8th Lord (Physical Vitality & Transformative Shifts)",
+        "Saturn": "4th & 5th Lord (Supreme Yogakaraka - Real Estate, Intellect & Assets)",
+        "Rahu": "Material Catalyst (Foreign Scale & Public Visibility)",
+        "Ketu": "Spiritual Catalyst (Esoteric Research)"
     },
-    "Ketu": {
-        "MD": "You are navigating the 7-year major era of Ketu. This overarching period acts as a spiritual crucible, dissolving superficial material attachments and focusing on liberation, esoteric research, and past-life karma. It brings sudden closures and demands profound inner surrender.",
-        "AD": "In this Ketu sub-period, a strong urge for detachment arises. Material plans may face sudden shifts, requiring you to pivot inward toward spiritual or esoteric pursuits.",
-        "PD": "Over these months, Ketu brings introspective isolation, letting go of old habits, and flashes of intense intuitive insight.",
-        "SD": "A brief span of deep spiritual longing, fatigue with the mundane, or sudden intuitive hits.",
-        "PrD": "Moments of profound silence and mystical insight."
+    7: { # Vrishchika (Scorpio)
+        "Sun": "10th Lord (Executive Authority & Career Stature)",
+        "Moon": "9th Lord (Fortune, Mentorship & Long-Distance Journeys)",
+        "Mars": "Lagna & 6th Lord (Physical Drive, Competitors & Liabilities)",
+        "Mercury": "8th & 11th Lord (Research, Audits & Network Profits)",
+        "Jupiter": "2nd & 5th Lord (Wealth, Family Assets & Strategic Intellect)",
+        "Venus": "7th & 12th Lord (Partnerships & Overseas Linkages)",
+        "Saturn": "3rd & 4th Lord (Courage, Real Estate & Domestic Foundations)",
+        "Rahu": "Material Catalyst (Sudden Breakthroughs & Scale)",
+        "Ketu": "Spiritual Catalyst (Deep Psychological Transformation)"
     },
-    "Venus": {
-        "MD": "You are experiencing the 20-year major era of Venus. This expansive chapter is the peak period for acquiring luxuries, forming deep romantic or marital alliances, and refining aesthetics. It governs wealth realization, comforts, artistic achievements, and diplomatic harmony.",
-        "AD": "During this Venus sub-chapter, relationship dynamics and financial comforts blossom. Favorable for artistic projects, romantic commitments, and vehicle/home upgrades.",
-        "PD": "For the next few months, Venus highlights diplomatic harmony, material purchases, and enjoying social or aesthetic pleasures.",
-        "SD": "Diplomatic harmony, luxury, and relationship matters take a brief spotlight.",
-        "PrD": "Days of charm, aesthetic joy, and smooth social flow."
+    8: { # Dhanu (Sagittarius)
+        "Sun": "9th Lord (Higher Dharma, Fortune & Mentors)",
+        "Moon": "8th Lord (Sudden Shifts & Forensic Research)",
+        "Mars": "5th & 12th Lord (Strategy, Children & Foreign Outflows)",
+        "Mercury": "7th & 10th Lord (Business Alliances & Career Executive Role)",
+        "Jupiter": "Lagna & 4th Lord (Personal Vitality, Wisdom & Real Estate)",
+        "Venus": "6th & 11th Lord (Service, Health Management & Liquid Profits)",
+        "Saturn": "2nd & 3rd Lord (Wealth Accumulation & Enterprise)",
+        "Rahu": "Material Catalyst (Unorthodox Wealth & Expansion)",
+        "Ketu": "Spiritual Catalyst (Philosophical Detachment)"
+    },
+    9: { # Makara (Capricorn)
+        "Sun": "8th Lord (Transformation & Confidential Investigations)",
+        "Moon": "7th Lord (Marital & Business Partnerships)",
+        "Mars": "4th & 11th Lord (Property Assets & Network Yields)",
+        "Mercury": "6th & 9th Lord (Competitors, Service & Higher Fortune)",
+        "Jupiter": "3rd & 12th Lord (Enterprise & Foreign Linkages)",
+        "Venus": "5th & 10th Lord (Supreme Yogakaraka - Career, Creative Strategy & Rank)",
+        "Saturn": "Lagna & 2nd Lord (Personal Sovereignty & Wealth Accumulation)",
+        "Rahu": "Material Catalyst (Massive Ambition & Sudden Scale)",
+        "Ketu": "Spiritual Catalyst (Inner Mastery)"
+    },
+    10: { # Kumbha (Aquarius)
+        "Sun": "7th Lord (Public Visibility & Commercial Contracts)",
+        "Moon": "6th Lord (Health Defense, Service & Competitors)",
+        "Mars": "3rd & 10th Lord (Enterprise, Courage & Career Authority)",
+        "Mercury": "5th & 8th Lord (Intellect, Strategy & Research Audits)",
+        "Jupiter": "2nd & 11th Lord (Wealth Generation & Financial Inflows)",
+        "Venus": "4th & 9th Lord (Supreme Yogakaraka - Real Estate, Luxury & Fortune)",
+        "Saturn": "Lagna & 12th Lord (Self-Identity & Foreign Linkages)",
+        "Rahu": "Material Catalyst (Unorthodox Innovation & Scale)",
+        "Ketu": "Spiritual Catalyst (Systemic Reform)"
+    },
+    11: { # Meena (Pisces)
+        "Sun": "6th Lord (Liabilities & Operational Challenges)",
+        "Moon": "5th Lord (Intellect, Strategy & Progeny)",
+        "Mars": "2nd & 9th Lord (Wealth Accumulation & Fortune)",
+        "Mercury": "4th & 7th Lord (Real Estate & Business Partnerships)",
+        "Jupiter": "Lagna & 10th Lord (Personal Sovereignty & Career Stature)",
+        "Venus": "3rd & 8th Lord (Enterprise & Sudden Shifts)",
+        "Saturn": "11th & 12th Lord (Network Profits & Foreign Outflows)",
+        "Rahu": "Material Catalyst (Unconventional Gains)",
+        "Ketu": "Spiritual Catalyst (Mystical Insights)"
     }
 }
+
+def generate_dasha_executive_briefing(lagna_idx: int, md_lord: str, ad_lord: str) -> dict:
+    nature_dict = LAGNA_PLANET_NATURE.get(lagna_idx, {})
+    md_nature = nature_dict.get(md_lord, "Active Planetary Influence")
+    ad_nature = nature_dict.get(ad_lord, "Active Sub-Period Influence")
+
+    # Tailored Executive Briefing synthesis
+    macro_theme = f"Operating under the major era of **{md_lord}**, functioning as your **{md_nature}**. This multi-year chapter sets the grand strategic trajectory of your life, focusing heavily on the structural governance and evolutionary lessons of these specific life domains."
+    
+    tactical_focus = f"Within this macro framework, the active sub-period of **{ad_lord}** (acting as your **{ad_nature}**) serves as the immediate tactical lever. It accelerates, modifies, or introduces targeted friction into your primary Mahadasha objectives."
+
+    career_wealth = f"**Capital & Executive Stature:** This combination directly activates your professional hierarchy. Asset compounding, cash flow management, and decision-making clarity are directly tied to how effectively you leverage the combined energies of {md_lord} and {ad_lord}."
+
+    cautions = f"**Operational & Strategic Risk Areas:** Guard against over-leveraging resources, emotional reactivity during high-stress corporate negotiations, or neglecting foundational rest and health routines."
+
+    remedy = f"**Targeted Grounding Protocol:** Maintain strict contractual transparency, practice early morning mindfulness or physical grounding, and honor the ruling frequencies through consistent ethical execution."
+
+    return {
+        "macro": macro_theme,
+        "tactical": tactical_focus,
+        "career": career_wealth,
+        "cautions": cautions,
+        "remedy": remedy
+    }
 
 def add_years_to_datetime(dt: datetime.datetime, years: float) -> datetime.datetime:
     days = years * 365.2425
@@ -1462,14 +1558,8 @@ def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt
         return subs[-1][0], subs[-1][1], subs[-1][2], subs[-1][3]
 
     ad_lord, ad_yrs, ad_start, ad_end = find_active_sub_level(current_md_lord, md_years, md_start, target_dt)
-    pd_lord, pd_yrs, pd_start, pd_end = find_active_sub_level(ad_lord, ad_yrs, ad_start, target_dt)
-    sd_lord, sd_yrs, sd_start, sd_end = find_active_sub_level(pd_lord, pd_yrs, pd_start, target_dt)
-    prd_lord, prd_yrs, prd_start, prd_end = find_active_sub_level(sd_lord, sd_yrs, sd_start, target_dt)
     
     return [
         {"level": "Mahadasha (Major Era)", "lord": current_md_lord, "start": md_start, "end": md_end, "key": "MD"},
-        {"level": "Antardasha (Sub-Period)", "lord": ad_lord, "start": ad_start, "end": ad_end, "key": "AD"},
-        {"level": "Pratyantar Dasha", "lord": pd_lord, "start": pd_start, "end": pd_end, "key": "PD"},
-        {"level": "Sookshma Dasha", "lord": sd_lord, "start": sd_start, "end": sd_end, "key": "SD"},
-        {"level": "Pran Dasha", "lord": prd_lord, "start": prd_start, "end": prd_end, "key": "PrD"},
+        {"level": "Antardasha (Sub-Period)", "lord": ad_lord, "start": ad_start, "end": ad_end, "key": "AD"}
     ]
