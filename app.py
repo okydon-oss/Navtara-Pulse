@@ -1,4 +1,5 @@
 # app.py - Main Streamlit Application Entry Point
+from views.dasha import render_page_dasha
 import streamlit as st
 import datetime
 import urllib.parse
