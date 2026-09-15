@@ -1338,174 +1338,77 @@ NAKSHATRA_BEEJ_MANTRAS = {
 
 
 # ==============================================================================
-# VIMSHOTTARI DASHA (EXECUTIVE TIMELINE & TRANSITIONS) ENGINE
+# VIMSHOTTARI DASHA PREDICTIONS & REMEDIAL DATABASE
 # ==============================================================================
-DASHA_SEQUENCE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
-DASHA_YEARS = {
-    "Ketu": 7.0, "Venus": 20.0, "Sun": 6.0, "Moon": 10.0, "Mars": 7.0, 
-    "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
-}
-
-LAGNA_PLANET_NATURE = {
-    0: { # Aries
-        "Sun": "5th Lord of Intellect and Authority", "Moon": "4th Lord of Assets and Home",
-        "Mars": "Lagna & 8th Lord of Vitality and Transformation", "Mercury": "3rd & 6th Lord of Enterprise and Hurdles",
-        "Jupiter": "9th & 12th Lord of Fortune and Expansion", "Venus": "2nd & 7th Lord of Wealth and Partnerships",
-        "Saturn": "10th & 11th Lord of Career and Inflows", "Rahu": "Unorthodox Material Catalyst", "Ketu": "Spiritual Catalyst"
+DASHA_PREDICTIONS = {
+    "Sun": {
+        "title": "Sun (Surya) Era - Authority, Vitality & Soul Purpose",
+        "details": "This major era elevates your public visibility, leadership responsibilities, and relationship with authority figures or government bodies. It builds core self-esteem, executive command, and physical vitality.",
+        "cautions": "Guard against ego clashes, impatience with subordinates, and elevated metabolic heat (Pitta).",
+        "remedies": "• Gemstone: Ruby (Manikya) in gold on ring finger after proper evaluation.\n• Beej Mantra: ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः (7,000 chants).\n• Deity Worship: Surya Bhagwan (offer water in copper vessel at sunrise).\n• Fasting: Observe fasts on Sundays."
     },
-    1: { # Taurus
-        "Sun": "4th Lord of Real Estate and Public Trust", "Moon": "3rd Lord of Courage and Initiative",
-        "Mars": "7th & 12th Lord of Partnerships and Outflows", "Mercury": "2nd & 5th Lord of Wealth and Intellect",
-        "Jupiter": "8th & 11th Lord of Research and Gains", "Venus": "Lagna & 6th Lord of Physique and Health Defense",
-        "Saturn": "Supreme Yogakaraka (9th & 10th Lord of Career and Fortune)", "Rahu": "Ambition Catalyst", "Ketu": "Introspective Catalyst"
+    "Moon": {
+        "title": "Moon (Chandra) Era - Mind, Emotion & Public Reception",
+        "details": "A fluid, sensitive chapter focusing on emotional well-being, domestic environment, real estate matters, and public interactions. Your intuition and adaptability are heightened.",
+        "cautions": "Avoid over-sensitivity, mood swings, and emotional fatigue caused by over-absorption of others' stress.",
+        "remedies": "• Gemstone: Natural White Pearl (Moti) or Moonstone in silver.\n• Beej Mantra: ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः (11,000 chants).\n• Deity Worship: Lord Shiva (offer raw milk on Shiva Lingam on Mondays).\n• Fasting: Observe fasts on Mondays or Full Moon (Purnima)."
     },
-    2: { # Gemini
-        "Sun": "3rd Lord of Initiative and Communications", "Moon": "2nd Lord of Accumulated Wealth",
-        "Mars": "6th & 11th Lord of Competition and Profits", "Mercury": "Lagna & 4th Lord of Identity and Assets",
-        "Jupiter": "7th & 10th Lord of Authority and Alliances", "Venus": "5th & 12th Lord of Strategy and Foreign Outflows",
-        "Saturn": "8th & 9th Lord of Transformation and Higher Destiny", "Rahu": "Career Expansion Catalyst", "Ketu": "Analytical Catalyst"
+    "Mars": {
+        "title": "Mars (Mangal) Era - Courage, Real Estate & Action",
+        "details": "An intensely dynamic chapter driving physical stamina, property acquisitions, litigation victories, and bold enterprise. It rewards decisive execution and grit.",
+        "cautions": "Strictly avoid impulsiveness, aggressive confrontations, uncalculated risks, and property disputes.",
+        "remedies": "• Gemstone: Red Coral (Moonga) in gold or copper on ring finger.\n• Beej Mantra: ॐ क्रां क्रीं क्रौं सः भौमाय नमः (10,000 chants).\n• Deity Worship: Lord Kartikeya or Hanuman Chalisa daily.\n• Fasting: Observe fasts on Tuesdays."
     },
-    3: { # Cancer
-        "Sun": "2nd Lord of Wealth and Speech", "Moon": "Lagna Lord of Personal Identity and Vitality",
-        "Mars": "Supreme Yogakaraka (5th & 10th Lord of Career and Intellect)", "Mercury": "3rd & 12th Lord of Travel and Linkages",
-        "Jupiter": "6th & 9th Lord of Service and Fortune", "Venus": "4th & 11th Lord of Comforts and Gains",
-        "Saturn": "7th & 8th Lord of Partnerships and Crises", "Rahu": "Foreign Expansion Catalyst", "Ketu": "Solitary Catalyst"
+    "Rahu": {
+        "title": "Rahu Era - Ambition, Foreign Linkages & Breakthroughs",
+        "details": "A period of massive material ambition, unorthodox scaling, foreign connections, and sudden technological or global breakthroughs. It pushes you past traditional boundaries.",
+        "cautions": "Beware of illusions, short-cuts, unverified speculative schemes, and sudden anxiety.",
+        "remedies": "• Gemstone: Hessonite (Gomedh) in silver or white gold.\n• Beej Mantra: ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः (18,000 chants).\n• Deity Worship: Goddess Durga or Kala Bhairava.\n• Charity: Feed stray dogs or donate dark blankets on Saturdays."
     },
-    4: { # Leo
-        "Sun": "Lagna Lord of Sovereign Authority and Leadership", "Moon": "12th Lord of Background Strategy",
-        "Mars": "Supreme Yogakaraka (4th & 9th Lord of Property and Fortune)", "Mercury": "2nd & 11th Lord of Wealth and Inflows",
-        "Jupiter": "5th & 8th Lord of Intellect and Sudden Shifts", "Venus": "3rd & 10th Lord of Enterprise and Career Stature",
-        "Saturn": "6th & 7th Lord of Competitors and Business Contracts", "Rahu": "Speculative Scaling Catalyst", "Ketu": "Ego-Detachment Catalyst"
+    "Jupiter": {
+        "title": "Jupiter (Guru) Era - Wisdom, Expansion & Compounding Wealth",
+        "details": "A golden era of financial compounding, institutional recognition, higher learning, and spiritual growth. Mentors and fortune align to support long-term stability.",
+        "cautions": "Avoid over-optimism, blind trust in speculative ventures, and complacency.",
+        "remedies": "• Gemstone: Yellow Sapphire (Pukhraj) in gold on index finger.\n• Beej Mantra: ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः (19,000 chants).\n• Deity Worship: Lord Vishnu or Brihaspati (worship Peepal tree on Thursdays).\n• Fasting: Observe fasts on Thursdays (consume yellow items)."
     },
-    5: { # Virgo
-        "Sun": "12th Lord of Global Linkages", "Moon": "11th Lord of Network Profits",
-        "Mars": "3rd & 8th Lord of Research and Crises", "Mercury": "Lagna & 10th Lord of Career and Intellectual Sovereignty",
-        "Jupiter": "4th & 7th Lord of Real Estate and Partnerships", "Venus": "2nd & 9th Lord of Wealth and Higher Dharma",
-        "Saturn": "5th & 6th Lord of Strategy and Risk Management", "Rahu": "Tech & Innovation Catalyst", "Ketu": "Precision Audit Catalyst"
+    "Saturn": {
+        "title": "Saturn (Shani) Era - Karmic Structure, Discipline & Legacy",
+        "details": "A profound karmic chapter focused on hard work, structural reorganization, patience, and building permanent, unshakeable long-term success.",
+        "cautions": "Avoid shortcuts, pessimism, harsh speech, and overexertion leading to joint or bone fatigue.",
+        "remedies": "• Gemstone: Blue Sapphire (Neelam) — *wear only after expert trial* — or Amethyst in silver.\n• Beej Mantra: ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः (23,000 chants).\n• Deity Worship: Lord Shiva or Shani Dev (light mustard oil lamp under Peepal on Saturdays).\n• Charity: Feed crows or donate black sesame/iron on Saturdays."
     },
-    6: { # Libra
-        "Sun": "11th Lord of Revenue Inflows", "Moon": "10th Lord of Executive Stature",
-        "Mars": "2nd & 7th Lord of Wealth Generation and Contracts", "Mercury": "9th & 12th Lord of Fortune and Ventures",
-        "Jupiter": "3rd & 6th Lord of Enterprise and Health Defense", "Venus": "Lagna & 8th Lord of Vitality and Transformation",
-        "Saturn": "Supreme Yogakaraka (4th & 5th Lord of Assets and Intellect)", "Rahu": "Public Visibility Catalyst", "Ketu": "Esoteric Catalyst"
+    "Mercury": {
+        "title": "Mercury (Budha) Era - Intellect, Commerce & Communication",
+        "details": "A highly intellectual, fast-paced period favoring commercial expansion, trade agreements, analytical research, writing, and networking.",
+        "cautions": "Guard against nervous exhaustion, over-analyzing, and verbal misunderstandings.",
+        "remedies": "• Gemstone: Emerald (Panna) in gold on little finger.\n• Beej Mantra: ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः (9,000 chants).\n• Deity Worship: Lord Vishnu or Goddess Saraswati.\n• Charity: Feed green grass or spinach to cows on Wednesdays."
     },
-    7: { # Scorpio
-        "Sun": "10th Lord of Career Authority", "Moon": "9th Lord of Fortune and Mentorship",
-        "Mars": "Lagna & 6th Lord of Physical Drive and Competitors", "Mercury": "8th & 11th Lord of Audits and Profits",
-        "Jupiter": "2nd & 5th Lord of Wealth and Strategy", "Venus": "7th & 12th Lord of Alliances and Outflows",
-        "Saturn": "3rd & 4th Lord of Courage and Real Estate", "Rahu": "Sudden Breakthrough Catalyst", "Ketu": "Deep Transformation Catalyst"
+    "Ketu": {
+        "title": "Ketu Era - Spiritual Liberation, Research & Detachment",
+        "details": "A spiritual crucible focusing on deep research, intuition, letting go of material illusions, and sudden esoteric or technical breakthroughs.",
+        "cautions": "Avoid isolation, erratic mood shifts, and confusion in legal or financial paperwork.",
+        "remedies": "• Gemstone: Cat's Eye (Lehsuniya) in silver or gold.\n• Beej Mantra: ॐ स्रां स्रीं स्रौं सः केतवे नमः (17,000 chants).\n• Deity Worship: Lord Ganesha.\n• Charity: Donate multi-colored blankets or feed stray animals."
     },
-    8: { # Sagittarius
-        "Sun": "9th Lord of Higher Dharma and Fortune", "Moon": "8th Lord of Forensic Research",
-        "Mars": "5th & 12th Lord of Strategy and Foreign Outflows", "Mercury": "7th & 10th Lord of Alliances and Career",
-        "Jupiter": "Lagna & 4th Lord of Vitality, Wisdom and Assets", "Venus": "6th & 11th Lord of Service and Profits",
-        "Saturn": "2nd & 3rd Lord of Savings and Enterprise", "Rahu": "Unorthodox Expansion Catalyst", "Ketu": "Philosophical Catalyst"
-    },
-    9: { # Capricorn
-        "Sun": "8th Lord of Confidential Investigations", "Moon": "7th Lord of Commercial Contracts",
-        "Mars": "4th & 11th Lord of Property and Network Yields", "Mercury": "6th & 9th Lord of Service and Fortune",
-        "Jupiter": "3rd & 12th Lord of Enterprise and Foreign Linkages", "Venus": "Supreme Yogakaraka (5th & 10th Lord of Career and Strategy)",
-        "Saturn": "Lagna & 2nd Lord of Personal Sovereignty and Wealth", "Rahu": "Massive Ambition Catalyst", "Ketu": "Inner Mastery Catalyst"
-    },
-    10: { # Aquarius
-        "Sun": "7th Lord of Public Visibility", "Moon": "6th Lord of Health Defense and Service",
-        "Mars": "3rd & 10th Lord of Enterprise and Career Authority", "Mercury": "5th & 8th Lord of Intellect and Research",
-        "Jupiter": "2nd & 11th Lord of Wealth Generation and Inflows", "Venus": "Supreme Yogakaraka (4th & 9th Lord of Assets and Fortune)",
-        "Saturn": "Lagna & 12th Lord of Self-Identity and Foreign Linkages", "Rahu": "Unorthodox Innovation Catalyst", "Ketu": "Systemic Reform Catalyst"
-    },
-    11: { # Pisces
-        "Sun": "6th Lord of Operational Challenges", "Moon": "5th Lord of Intellect and Progeny",
-        "Mars": "2nd & 9th Lord of Wealth Accumulation and Fortune", "Mercury": "4th & 7th Lord of Real Estate and Partnerships",
-        "Jupiter": "Lagna & 10th Lord of Personal Sovereignty and Career Stature", "Venus": "3rd & 8th Lord of Enterprise and Sudden Shifts",
-        "Saturn": "11th & 12th Lord of Profits and Outflows", "Rahu": "Unconventional Gains Catalyst", "Ketu": "Mystical Insight Catalyst"
+    "Venus": {
+        "title": "Venus (Shukra) Era - Luxury, Relationships & Material Comforts",
+        "details": "An expansive period governing artistic fulfillment, luxury asset acquisition, harmonious partnerships, vehicle upgrades, and deep social joy.",
+        "cautions": "Guard against excessive self-indulgence, extravagance, and vanity.",
+        "remedies": "• Gemstone: Diamond (Heera) or White Sapphire / Zircon in silver or gold.\n• Beej Mantra: ॐ द्रां द्रीं द्रौं सः शुक्राय नमः (16,000 chants).\n• Deity Worship: Goddess Lakshmi.\n• Charity: Donate white sweets or rice to needy women on Fridays."
     }
 }
 
-def add_years_to_datetime(dt: datetime.datetime, years: float) -> datetime.datetime:
-    days = years * 365.2425
-    return dt + datetime.timedelta(days=days)
-
-def get_dasha_sub_periods_proportional(lord: str, total_years: float, base_start: datetime.datetime):
-    start_idx = DASHA_SEQUENCE.index(lord)
-    subs = []
-    curr_st = base_start
-    for i in range(9):
-        sub_lord = DASHA_SEQUENCE[(start_idx + i) % 9]
-        sub_years = (total_years * DASHA_YEARS[sub_lord]) / 120.0
-        sub_ed = add_years_to_datetime(curr_st, sub_years)
-        subs.append((sub_lord, sub_years, curr_st, sub_ed))
-        curr_st = sub_ed
-    return subs
-
-def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt: datetime.datetime, lagna_idx: int = 0):
-    star_span = 360.0 / 27.0
-    star_idx = int(moon_lon / star_span)
-    start_lord_idx = star_idx % 9
-    
-    nakshatra_start_lon = star_idx * star_span
-    elapsed_deg = moon_lon - nakshatra_start_lon
-    fraction_elapsed = elapsed_deg / star_span
-    fraction_left = max(0.0, min(1.0, 1.0 - fraction_elapsed))
-    
-    start_lord = DASHA_SEQUENCE[start_lord_idx]
-    full_start_years = DASHA_YEARS[start_lord]
-    balance_years = full_start_years * fraction_left
-    
-    md_idx = start_lord_idx
-    md_start = birth_dt
-    md_years = balance_years
-    md_end = add_years_to_datetime(md_start, md_years)
-    
-    while target_dt > md_end:
-        md_start = md_end
-        md_idx = (md_idx + 1) % 9
-        current_lord = DASHA_SEQUENCE[md_idx]
-        md_years = DASHA_YEARS[current_lord]
-        md_end = add_years_to_datetime(md_start, md_years)
-        
-    current_md_lord = DASHA_SEQUENCE[md_idx]
-    
-    # Calculate Next Mahadasha
-    next_md_idx = (md_idx + 1) % 9
-    next_md_lord = DASHA_SEQUENCE[next_md_idx]
-    next_md_start = md_end
-    next_md_end = add_years_to_datetime(next_md_start, DASHA_YEARS[next_md_lord])
-
-    def get_all_sub_periods(lord, total_yrs, st_dt):
-        return get_dasha_sub_periods_proportional(lord, total_yrs, st_dt)
-
-    current_subs = get_all_sub_periods(current_md_lord, md_years, md_start)
-    
-    active_ad_idx = 0
-    ad_lord, ad_yrs, ad_start, ad_end = current_subs[0][0], current_subs[0][1], current_subs[0][2], current_subs[0][3]
-    
-    for idx, (slord, syrs, s_st, s_ed) in enumerate(current_subs):
-        if s_st <= target_dt <= s_ed:
-            ad_lord, ad_yrs, ad_start, ad_end = slord, syrs, s_st, s_ed
-            active_ad_idx = idx
-            break
-
-    # Calculate Next Antardasha
-    if active_ad_idx + 1 < len(current_subs):
-        next_ad_tuple = current_subs[active_ad_idx + 1]
-        next_ad_lord, next_ad_start, next_ad_end = next_ad_tuple[0], next_ad_tuple[2], next_ad_tuple[3]
-    else:
-        # Rolls over to next Mahadasha's first sub-period
-        next_md_subs = get_all_sub_periods(next_md_lord, DASHA_YEARS[next_md_lord], next_md_start)
-        next_ad_lord, next_ad_start, next_ad_end = next_md_subs[0][0], next_md_subs[0][2], next_md_subs[0][3]
-
+def generate_dasha_executive_briefing(lagna_idx: int, md_lord: str, ad_lord: str) -> dict:
     nature_dict = LAGNA_PLANET_NATURE.get(lagna_idx, {})
-    md_nature = nature_dict.get(current_md_lord, "Planetary Lord")
-    ad_nature = nature_dict.get(ad_lord, "Sub-Period Lord")
-
-    # Tailored Descriptions
-    md_desc = f"As the **{md_nature}**, this Mahadasha establishes your multi-year evolutionary chapter. It governs long-term asset compounding, executive decision frameworks, and foundational growth across these specific life sectors."
+    md_nature = nature_dict.get(md_lord, "Active Planetary Influence")
+    ad_nature = nature_dict.get(ad_lord, "Active Sub-Period Influence")
     
-    ad_desc = f"As the **{ad_nature}**, operating under the overarching influence of {current_md_lord}, this sub-period introduces targeted tactical dynamics. It interacts with your Mahadasha lord to accelerate professional progress, regulate cash flow, and manage operational friction."
+    md_info = DASHA_PREDICTIONS.get(md_lord, {"title": "", "details": "", "cautions": "", "remedies": ""})
+    ad_info = DASHA_PREDICTIONS.get(ad_lord, {"title": "", "details": "", "cautions": "", "remedies": ""})
 
     return {
-        "md": {"lord": current_md_lord, "start": md_start, "end": md_end, "desc": md_desc},
-        "ad": {"lord": ad_lord, "start": ad_start, "end": ad_end, "desc": ad_desc},
-        "next_md": {"lord": next_md_lord, "start": next_md_start, "end": next_md_end},
-        "next_ad": {"lord": next_ad_lord, "start": next_ad_start, "end": next_ad_end}
+        "md_title": md_info["title"],
+        "md_text": f"<b>Functional Nature for your Ascendant:</b> {md_nature}<br>{md_info['details']}<br><br><b>Strategic Cautions:</b> {md_info['cautions']}<br><br><b>Remedial Protocol:</b><br>{md_info['remedies'].replace(chr(10), '<br>')}",
+        
+        "ad_title": ad_info["title"],
+        "ad_text": f"<b>Functional Nature for your Ascendant:</b> {ad_nature}<br>{ad_info['details']}<br><br><b>Strategic Cautions:</b> {ad_info['cautions']}<br><br><b>Remedial Protocol:</b><br>{ad_info['remedies'].replace(chr(10), '<br>')}"
     }
