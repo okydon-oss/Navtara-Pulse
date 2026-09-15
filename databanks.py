@@ -996,123 +996,107 @@ NAKSHATRA_BEEJ_MANTRAS = {
 }
 
 # ==============================================================================
-# 12-BHAVA MONTHLY PREDICTION ENGINE (BASED ON SIDEREAL LAGNA)
+# DYNAMIC 12-BHAVA ALGORITHMIC PREDICTION ENGINE (INFINITE CALENDAR)
 # ==============================================================================
-MONTHLY_LAGNA_CONFIG = {
-    0: {  # Mesha (Aries)
-        "current": {
-            "month_name": "September 2026",
-            "highlight": "Lagna Lord Mars activates Cancer (4th house) alongside Jupiter, while Sun & Mercury illuminate your 6th house of service, health, and competition.",
-            "self": "Elevated metabolic drive and ambition; ensure evening downtime to prevent digestive or emotional overheating.",
-            "family": "Active domestic discussions regarding real estate, family responsibilities, and emotional security.",
-            "travels": "Short journeys for property or administrative verifications yield practical results.",
-            "property": "Major focus on home upgrades, domestic renovations, or ancestral land documentation.",
-            "study": "Sharp analytical cognition; excellent for competitive exams, analytical certifications, and structured revisions.",
-            "child": "Children show energetic progress in academics or sports; encourage balanced patience.",
-            "loan": "Favorable planetary support to renegotiate, restructure, or systematically clear liabilities.",
-            "accidents": "Exercise caution during domestic DIY electrical or kitchen repairs; avoid aggressive road overtaking.",
-            "partnership": "Commercial collaborations require clear contract terms; diplomacy avoids misunderstandings.",
-            "spouse": "Partner offers practical support; maintain empathetic listening during emotional conversations.",
-            "research": "Deep investigation into family lineage, historical records, and asset appraisals is fruitful.",
-            "luck": "Steadfast persistence and ethical adherence unlock positive mentorship blessings.",
-            "career": "High productivity in executing complex projects; service-oriented efforts gain executive notice.",
-            "gains": "Steady operational inflows; gains through disciplined work execution rather than speculation.",
-            "expenditure": "Expenditures channeled into household security, health supplements, and property maintenance.",
-            "foreign": "Communications with overseas associates require detailed documentation checks."
-        },
-        "next": {
-            "month_name": "October 2026",
-            "highlight": "Sun & Mercury transit into Libra (7th house) opposite your Lagna, shifting the focal point toward legal contracts, public visibility, and partnerships.",
-            "self": "Social poise and diplomatic negotiation skills take precedence over brute force.",
-            "family": "Harmonious celebrations and social gatherings bring pleasant domestic equilibrium.",
-            "travels": "Business trips and cross-city meetings for client presentations prove profitable.",
-            "property": "Favorable period for concluding residential lease agreements or property decor.",
-            "study": "Strong alignment for jurisprudence, design, diplomacy, and commercial trade studies.",
-            "child": "Creative and artistic pursuits of children flourish with parental encouragement.",
-            "loan": "Stable debt management; avoid taking unsecured credit for luxury expenditures.",
-            "accidents": "Balanced physical vitality; practice daily walking and stay mindful in traffic.",
-            "partnership": "Crucial month for signing trade agreements, joint ventures, and alliance contracts.",
-            "spouse": "Spouse gains professional prominence; prioritize quality shared time.",
-            "research": "Market research and competitive analysis yield significant commercial advantages.",
-            "luck": "Luck manifests through cooperative networks, business partners, and fair dealings.",
-            "career": "Enhanced public reputation; leadership in corporate negotiations and client relations.",
-            "gains": "Substantial commercial inflows, contract renewals, and partner-driven profits.",
-            "expenditure": "Outflows toward social obligations, wardrobe refinement, and business entertaining.",
-            "foreign": "Opportunities for trade collaborations with overseas entities expand smoothly."
-        }
-    },
-    6: {  # Tula (Libra)
-        "current": {
-            "month_name": "September 2026",
-            "highlight": "Lagna Lord Venus transits your 1st house (Malavya Yoga energy) while Sun & Mercury activate your 12th house of introspection and global linkages.",
-            "self": "Radiant personal magnetism, enhanced vitality, aesthetic refinement, and executive composure.",
-            "family": "Supportive domestic environment; speech is diplomatic, gracious, and unifying.",
-            "travels": "Spiritual retreats, quiet getaways, or cross-border travel offer deep rejuvenation.",
-            "property": "Prudent asset review; ideal for organizing title deeds and environmental landscaping.",
-            "study": "Deep contemplative absorption; great for research, philosophy, and advanced technical literature.",
-            "child": "Children exhibit independent thinking; engage in quiet philosophical discussions.",
-            "loan": "Strong balance sheet discipline helps extinguish nagging obligations and hospital bills.",
-            "accidents": "High resilience; maintain consistent circadian sleep rhythms to prevent eye strain.",
-            "partnership": "Counterparts are drawn to your balanced diplomacy and clear commercial vision.",
-            "spouse": "Harmonious rapport, mutual pampering, and deeper emotional intimacy blossom.",
-            "research": "Exceptional breakthrough capacity in deep data analytics, metaphysics, and auditing.",
-            "luck": "Subtle, protective cosmic grace shields you against backstage organizational politics.",
-            "career": "Executive authority operates quietly and decisively from behind the scenes.",
-            "gains": "Inflows from remote assignments, institutional grants, and previous consulting work.",
-            "expenditure": "Expenditures on health retreats, charitable causes, and technology upgrades.",
-            "foreign": "Peak alignment for visa documentation, foreign project tie-ups, and overseas linkages."
-        },
-        "next": {
-            "month_name": "October 2026",
-            "highlight": "Sun & Mercury join your Lagna in Libra, placing you directly in the corporate and societal spotlight.",
-            "self": "Authoritative presence, mental alertness, clear vitality, and dynamic personal agency.",
-            "family": "Dignified celebrations at home; your voice commands respect among extended family.",
-            "travels": "Local commercial tours and executive client visits keep you active and visible.",
-            "property": "Favorable momentum for tangible property investments and structural modifications.",
-            "study": "Peak intellectual performance in executive management, legal debate, and data science.",
-            "child": "Pride in children’s competitive accomplishments and leadership roles at school/college.",
-            "loan": "Debt exposure remains minimal; favorable window for clearing high-interest obligations.",
-            "accidents": "High biological vitality; guard against minor acidity or headaches from over-analysis.",
-            "partnership": "Alliances require clear delegation to balance mutual expectations and authority.",
-            "spouse": "Spouse actively participates in strategic life planning; transparent communication excels.",
-            "research": "Market strategy, patents, and technical publications achieve executive distinction.",
-            "luck": "Fortune shines brightly through personal initiative, upright leadership, and decisive action.",
-            "career": "Promotions, public recognition, executive distinction, and leadership mandate.",
-            "gains": "Strong liquidity turnaround, compounding portfolio returns, and professional rewards.",
-            "expenditure": "Targeted investments in professional development, high-grade tools, and health.",
-            "foreign": "Global contacts invite you for advisory consultations and collaborative ventures."
-        }
-    }
+LAGNA_LORDS = {
+    0: "Mars", 1: "Venus", 2: "Mercury", 3: "Moon", 
+    4: "Sun", 5: "Mercury", 6: "Venus", 7: "Mars", 
+    8: "Jupiter", 9: "Saturn", 10: "Saturn", 11: "Jupiter"
 }
 
-def get_monthly_lagna_prediction(lagna_idx: int, is_next_month: bool = False):
-    month_key = "next" if is_next_month else "current"
-    default_config = MONTHLY_LAGNA_CONFIG.get(lagna_idx, {}).get(month_key)
+DOMAIN_MAPPING = {
+    "self": 1, "family": 2, "travels": 3, "property": 4, 
+    "study": 5, "child": 5, "loan": 6, "accidents": 6, 
+    "partnership": 7, "spouse": 7, "research": 8, "luck": 9, 
+    "career": 10, "gains": 11, "expenditure": 12, "foreign": 12
+}
+
+DOMAIN_BASE_TEXTS = {
+    "self": "Focus is on physical vitality, personal branding, and life direction.",
+    "family": "Attention centers around accumulated savings, family assets, and speech.",
+    "travels": "Short trips, sibling dynamics, and courageous initiatives are highlighted.",
+    "property": "Domestic peace, vehicle maintenance, and real estate matters demand focus.",
+    "study": "Intellectual pursuits, skill building, and cognitive learning take precedence.",
+    "child": "Focus is on children's welfare, guidance, and creative milestones.",
+    "loan": "A phase to proactively tackle debts, organize health, and manage competitors.",
+    "accidents": "Immune defense, road safety, and cautionary health routines are critical.",
+    "partnership": "Commercial alliances and joint ventures require diplomatic balancing.",
+    "spouse": "Spousal dynamics demand clear, patient, and harmonious communication.",
+    "research": "Deep esoteric research, audits, and investigative focus are strongly activated.",
+    "luck": "Fortune, long-distance travel, and adherence to higher principles are favored.",
+    "career": "Executive visibility, career trajectory, and professional authority are at the forefront.",
+    "gains": "Social networking, realizing profits, and fulfilling long-term aspirations are active.",
+    "expenditure": "Managing unbudgeted expenses and calculated financial outflows is key.",
+    "foreign": "Foreign connections, visa processing, and remote linkages are emphasized."
+}
+
+PLANET_TRAITS = {
+    "Sun": "The Sun brings authoritative visibility and vitality, though its heat requires patience.",
+    "Mercury": "Mercury enhances data-driven decisions and commercial adaptability.",
+    "Venus": "Venus attracts diplomatic harmony, aesthetic refinement, and financial ease.",
+    "Mars": "Mars injects aggressive execution, demanding you guard against impulsiveness.",
+    "Jupiter": "Jupiter provides divine protection, optimism, and steady compounding growth.",
+    "Saturn": "Saturn demands rigorous discipline, patience, and structural reorganization.",
+    "Rahu": "Rahu creates hungry ambition and sudden unorthodox breakthroughs.",
+    "Ketu": "Ketu brings spiritual detachment and a desire to cut away superficial attachments."
+}
+
+def get_monthly_planetary_positions(utc_dt: datetime.datetime) -> dict:
+    jd = get_julian_day(utc_dt)
+    positions = {}
+    if HAS_SWISSEPH:
+        swe.set_sid_mode(swe.SIDM_LAHIRI)
+        planets = {"Sun": 0, "Mercury": 2, "Venus": 3, "Mars": 4, "Jupiter": 5, "Saturn": 6, "Rahu": 11}
+        for p_name, p_id in planets.items():
+            try:
+                res = swe.calc_ut(jd, p_id, swe.FLG_SIDEREAL)
+                lon = res[0][0] if isinstance(res, tuple) else res[0]
+                positions[p_name] = int(lon / 30.0)
+            except Exception:
+                positions[p_name] = 0
+        if "Rahu" in positions:
+            positions["Ketu"] = (positions["Rahu"] + 6) % 12
+    else:
+        # Fallback empty state to prevent UI crash if ephemeris library fails
+        for p in PLANET_TRAITS.keys():
+            positions[p] = 0
+    return positions
+
+def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime):
+    utc_dt = target_dt - datetime.timedelta(hours=5, minutes=30)
+    positions = get_monthly_planetary_positions(utc_dt)
     
-    if default_config:
-        return default_config
+    house_occupants = {i: [] for i in range(1, 13)}
+    for p_name, r_idx in positions.items():
+        h = (r_idx - lagna_idx) % 12 + 1
+        house_occupants[h].append(p_name)
         
-    # Generalized dynamic fallback for remaining Lagnas based on classical Bhava principles
-    lagna_name = RASHIS[lagna_idx].split()[0]
-    m_label = "October 2026" if is_next_month else "September 2026"
+    lagna_lord = LAGNA_LORDS[lagna_idx]
+    ll_house = (positions.get(lagna_lord, lagna_idx) - lagna_idx) % 12 + 1
     
-    return {
-        "month_name": m_label,
-        "highlight": f"Planetary transit matrix activating key Kendra and Trikona houses relative to your {lagna_name} Ascendant.",
-        "self": f"Vitality and physical resistance remain steady under the stewardship of your Lagna lord.",
-        "family": "Domestic environment encourages open dialogue; manage tone to maintain family equilibrium.",
-        "travels": "Purposeful short-distance travels bring professional utility and network growth.",
-        "property": "Consolidate land and real-estate records; avoid hasty property speculation.",
-        "study": "Favorable mental focus for analytical skill-building and technical certifications.",
-        "child": "Positive developments in children's routines; foster mutual encouragement.",
-        "loan": "Disciplined budgeting protects balance sheet integrity; refinance liabilities cautiously.",
-        "accidents": "Maintain disciplined road safety and avoid physical exertion during late hours.",
-        "partnership": "Commercial alliances require documented milestones and transparent deliverables.",
-        "spouse": "Mutual understanding deepens through shared responsibilities and emotional empathy.",
-        "research": "High capacity for root-cause diagnosis, research investigation, and systemic audits.",
-        "luck": "Fortune rewards methodical labor, mentorship guidance, and adherence to ethical standards.",
-        "career": "Steady professional traction with gradual expansion of executive scope and responsibilities.",
-        "gains": "Compounding income streams through verified channels; avoid unhedged financial shortcuts.",
-        "expenditure": "Prudent resource allocation toward essential household, technical, and health needs.",
-        "foreign": "Cross-border communications and remote connections yield stable long-term value."
-    }
+    pred = {}
+    pred["month_name"] = target_dt.strftime("%B %Y")
+    pred["highlight"] = f"Your Ascendant Lord {lagna_lord} is transiting your {ll_house}th house this month. "
+    
+    if ll_house in [1, 5, 9]:
+        pred["highlight"] += "This highly auspicious trine placement brings natural vitality, fortune, and alignment with your higher purpose."
+    elif ll_house in [4, 7, 10]:
+        pred["highlight"] += "This powerful Kendra transit amplifies your executive actions, public visibility, and structural stability."
+    elif ll_house in [6, 8, 12]:
+        pred["highlight"] += "This emphasizes a period of deep restructuring, clearing debts, healing, and navigating transformative shifts."
+    else:
+        pred["highlight"] += "This directs your core focus toward wealth management, immediate networks, and materializing short-term gains."
+
+    for dom_key, h_idx in DOMAIN_MAPPING.items():
+        base_text = DOMAIN_BASE_TEXTS[dom_key]
+        occupants = house_occupants[h_idx]
+        
+        if occupants:
+            traits = " ".join([PLANET_TRAITS[p] for p in occupants])
+            text = f"{base_text} Transiting {', '.join(occupants)} actively charges this sector: {traits}"
+        else:
+            text = f"{base_text} With no major planets transiting here this month, this domain operates smoothly under its baseline energy."
+        
+        pred[dom_key] = text
+        
+    return pred
