@@ -5,7 +5,7 @@ def render_html(html_string: str):
     clean_html = " ".join(line.strip() for line in html_string.splitlines() if line.strip())
     st.markdown(clean_html, unsafe_allow_html=True)
 
-# Complete Bilingual Numerology Blueprint Dictionary
+# Complete Bilingual Numerology Blueprint Dictionary (1 to 9)
 NUMEROLOGY_CONTENT = {
     1: {
         "planet_en": "Sun (Surya)", "planet_hi": "सूर्य (Surya)",
@@ -36,43 +36,73 @@ NUMEROLOGY_CONTENT = {
         "wealth_en": "Expansive financial luck; steady compound wealth accumulation through education, advisory, and ethical investments.",
         "wealth_hi": "विस्तृत वित्तीय भाग्य; शिक्षा, परामर्श और नैतिक निवेश के माध्यम से स्थिर चक्रवृद्धि धन संचय।",
         "rel_en": "Generous and inspiring partner; values intellectual freedom and philosophical alignment in relationships.",
-        "rel_hi": "उदार और प्रेरित करने वाले जीवनसाथी; रिश्तों में बौद्धिक स्वतंत्रता और दार्शनिक मेल को महत्व देते हैं।"
+        "rel_hi": "उदार और प्रेरित करने वाले जीवनसाथी; रिश्तों में बौद्धिक स्वतंत्रता और दार्शनिक मेल को महत्व देते हैं।",
+        "health_en": "Generally robust constitution; prone to over-indulgence leading to metabolic lethargy or liver sluggishness.",
+        "health_hi": "सामान्यतः मजबूत स्वास्थ्य; अत्यधिक खान-पान के कारण चयापचय में सुस्ती या यकृत (लिवर) संबंधी विकार की संभावना।"
     },
     4: {
         "planet_en": "Rahu / Uranus", "planet_hi": "राहु / यूरेनस",
         "career_en": "Engineering, Software Architecture, Research & Development, Logistics, Strategic Planning, Data Science.",
         "career_hi": "इंजीनियरिंग, सॉफ्टवेयर वास्तुकला, अनुसंधान एवं विकास, लॉजिस्टिक्स, रणनीतिक योजना और डेटा विज्ञान।",
         "wealth_en": "Unconventional wealth spikes; requires meticulous legal paperwork and avoidance of unverified shortcuts.",
-        "wealth_hi": "अपरंपरागत धन लाभ; इसके लिए सूक्ष्म कानूनी कागजी कार्रवाई और असत्यापित शॉर्टकट से बचना आवश्यक है।"
+        "wealth_hi": "अपरंपरागत धन लाभ; इसके लिए सूक्ष्म कानूनी कागजी कार्रवाई और असत्यापित शॉर्टकट से बचना आवश्यक है।",
+        "rel_en": "Fiercely loyal but unconventional; needs mental stimulation and trust to prevent suspicion.",
+        "rel_hi": "दृढ़ता से वफादार किंतु अपरंपरागत; संदेह से बचने के लिए मानसिक उत्तेजना और आपसी विश्वास की आवश्यकता होती है।",
+        "health_en": "Nervous tension, sleep irregularities, and stress-induced fatigue requiring grounding routines.",
+        "health_hi": "नसों में तनाव, अनिद्रा और तनाव जनित थकान, जिसके लिए नियमित योग व विश्राम आवश्यक है।"
     },
     5: {
         "planet_en": "Mercury (Budha)", "planet_hi": "बुध (Budha)",
         "career_en": "Media, Commerce, Journalism, Technology, Marketing, Sales, Public Speaking, Translation.",
-        "career_hi": "मीडिया, वाणिज्य, पत्रकारिता, प्रौद्योगिकी, विपणन (मार्केंटिग), बिक्री, सार्वजनिक भाषण और अनुवाद।",
+        "career_hi": "मीडिया, वाणिज्य, पत्रकारिता, प्रौद्योगिकी, विपणन (मार्केटिंग), बिक्री, सार्वजनिक भाषण और अनुवाद।",
         "wealth_en": "Agile cash generation across multiple diverse income streams; rewards multi-channel diversification.",
-        "wealth_hi": "कई विविध आय स्रोतों से तेजी से धन अर्जित करना; बहु-चैनल विविधीकरण फायदेमंद रहता है।"
+        "wealth_hi": "कई विविध आय स्रोतों से तेजी से धन अर्जित करना; बहु-चैनल विविधीकरण फायदेमंद रहता है।",
+        "rel_en": "Charming, witty, and adaptable; values lively conversation and freedom over rigid domestic bounds.",
+        "rel_hi": "आकर्षक, विनोदी और अनुकूलनीय; कठोर घरेलू बंधनों के मुकाबले जीवंत संवाद और स्वतंत्रता को प्राथमिकता देते हैं।",
+        "health_en": "High nervous energy; prone to over-exertion, mental burnout, and anxiety.",
+        "health_hi": "उच्च स्नायु ऊर्जा; अति-श्रम, मानसिक थकान और चिंता की प्रवृत्ति।"
     },
     6: {
         "planet_en": "Venus (Shukra)", "planet_hi": "शुक्र (Shukra)",
         "career_en": "Luxury Goods, Architecture, Fashion Design, Entertainment, Hospitality, Interior Decor, Finance.",
         "career_hi": "विलासिता की वस्तुएं, वास्तुकला, फैशन डिजाइन, मनोरंजन, आतिथ्य, इंटीरियर डिजाइन और वित्त।",
         "wealth_en": "Attracts high-value assets, luxury vehicles, and real estate; prone to generous spending on comfort.",
-        "wealth_hi": "उच्च मूल्य की संपत्ति, लग्जरी वाहन और रियल साइट आकर्षित करते हैं; सुख-सुविधाओं पर खुलकर खर्च करने की प्रवृत्ति होती है।"
+        "wealth_hi": "उच्च मूल्य की संपत्ति, लग्जरी वाहन और रियल एस्टेट आकर्षित करते हैं; सुख-सुविधाओं पर खुलकर खर्च करने की प्रवृत्ति होती है।",
+        "rel_en": "Deeply affectionate, romantic, and harmony-seeking; highly devoted to family and partnerships.",
+        "rel_hi": "अत्यंत स्नेही, रोमांटिक और सामंजस्य चाहने वाले; परिवार और साझेदारियों के प्रति पूर्ण समर्पित।"
     },
     7: {
         "planet_en": "Ketu / Neptune", "planet_hi": "केतु / नेपच्यून",
         "career_en": "Occult Research, Data Analysis, Writing, Psychology, Scientific Investigation, Auditing, Spirituality.",
-        "career_hi": "गूढ़ अनुसंधान, डेटा विश्लेषण, लेखन, मनोविज्ञान, वैज्ञानिक जांच, ऑडिटिंग और आध्यात्मिकता।"
+        "career_hi": "गूढ़ अनुसंधान, डेटा विश्लेषण, लेखन, मनोविज्ञान, वैज्ञानिक जांच, ऑडिटिंग और आध्यात्मिकता।",
+        "wealth_en": "Intuitive financial instincts; gains through specialized research, writing, or hidden assets rather than speculation.",
+        "wealth_hi": "सहज वित्तीय अंतर्दृष्टि; सट्टेबाजी के बजाय विशेष अनुसंधान, लेखन या गुप्त संपत्तियों के माध्यम से लाभ।",
+        "rel_en": "Independent and introspective; requires personal space and deep emotional resonance to feel secure.",
+        "rel_hi": "स्वतंत्र और आत्म-विश्लेषी; सुरक्षित महसूस करने के लिए व्यक्तिगत स्थान और गहरी भावनात्मक समझ की आवश्यकता होती है।",
+        "health_en": "Vulnerable to psychosomatic fatigue, joint stiffness, and erratic sleep cycles.",
+        "health_hi": "मनोदैहिक थकान, जोड़ों में अकड़न और अनियमित निद्रा चक्र के प्रति संवेदनशील।"
     },
     8: {
         "planet_en": "Saturn (Shani)", "planet_hi": "शनि (Shani)",
         "career_en": "Corporate Governance, Heavy Industry, Real Estate, Infrastructure, Judiciary, Banking, Auditing.",
-        "career_hi": "कॉर्पोरेट प्रशासन, भारी उद्योग, रियल एस्टेट, बुनियादी ढांचा, न्यायपालिका, बैंकिंग और ऑडिटिंग।"
+        "career_hi": "कॉर्पोरेट प्रशासन, भारी उद्योग, रियल एस्टेट, बुनियादी ढांचा, न्यायपालिका, बैंकिंग और ऑडिटिंग।",
+        "wealth_en": "Slow, methodical capital compounding; builds immovable wealth and enduring financial security over time.",
+        "wealth_hi": "धीमी, व्यवस्थित पूंजी वृद्धि; समय के साथ अचल संपत्ति और स्थाई वित्तीय सुरक्षा का निर्माण करते हैं।",
+        "rel_en": "Deeply committed and protective; expresses care through duty and reliability rather than emotional displays.",
+        "rel_hi": "गहन रूप से प्रतिबद्ध और सुरक्षात्मक; भावनात्मक प्रदर्शन के बजाय कर्तव्य और विश्वसनीयता के माध्यम से स्नेह व्यक्त करते हैं।",
+        "health_en": "Prone to bone stiffness, joint discomfort, dental sensitivity, and fatigue from overworking.",
+        "health_hi": "हड्डियों की अकड़न, जोड़ों की तकलीफ, दांतों की संवेदनशीलता और अति-श्रम से थकान की प्रवृत्ति।"
     },
     9: {
         "planet_en": "Mars (Mangal)", "planet_hi": "मंगल (Mangal)",
         "career_en": "Defense Services, Surgery, Engineering, Real Estate Development, Sports, Emergency Operations.",
-        "career_hi": "रक्षा सेवाएं, शल्य चिकित्सा (सर्जरी), इंजीनियरिंग, रियल एस्टेट विकास, खेल और आपातकालीन संचालन।"
+        "career_hi": "रक्षा सेवाएं, शल्य चिकित्सा (सर्जरी), इंजीनियरिंग, रियल एस्टेट विकास, खेल और आपातकालीन संचालन।",
+        "wealth_en": "Brave financial risk-taking; gains through land, property, and industrial assets with assertive management.",
+        "wealth_hi": "साहसी वित्तीय जोखिम लेना; दृढ़ प्रबंधन के साथ भूमि, संपत्ति और औद्योगिक संपत्तियों से लाभ।",
+        "rel_en": "Protective, passionate, and fiercely loyal; requires mutual respect and emotional directness.",
+        "rel_hi": "सुरक्षात्मक, उत्साही और अत्यंत निष्ठावान; आपसी सम्मान और भावनात्मक स्पष्टता की आवश्यकता होती है।",
+        "health_en": "High physical stamina; susceptible to accidental cuts, inflammation, and high blood pressure.",
+        "health_hi": "उच्च शारीरिक सहनशक्ति; दुर्घटनात्मक चोट, सूजन और उच्च रक्तचाप के प्रति संवेदनशील।"
     }
 }
 
