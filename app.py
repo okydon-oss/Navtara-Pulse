@@ -170,6 +170,44 @@ def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
 # ==============================================================================
+# HINDI ASTROLOGICAL & NUMEROLOGICAL TRANSLATION MAPS
+# ==============================================================================
+NAKSHATRA_NAMES_HI = {
+    "Ashwini": "अश्विनी", "Bharani": "भरणी", "Krittika": "कृत्तिका",
+    "Rohini": "रोहिणी", "Mrigashira": "मृगशिरा", "Ardra": "आर्द्रा",
+    "Punarvasu": "पुनर्वसु", "Pushya": "पुष्य", "Ashlesha": "आश्लेषा",
+    "Magha": "मघा", "Purva Phalguni": "पूर्वा फाल्गुनी", "Uttara Phalguni": "उत्तरा फाल्गुनी",
+    "Hasta": "हस्त", "Chitra": "चित्रा", "Swati": "स्वाति",
+    "Vishakha": "विशाखा", "Anuradha": "अनुराधा", "Jyeshtha": "ज्येष्ठा",
+    "Mula": "मूल", "Purva Ashadha": "पूर्वाषाढ़ा", "Uttara Ashadha": "उत्तराषाढ़ा",
+    "Shravana": "श्रवण", "Dhanishta": "धनिष्ठा", "Shatabhisha": "शतभिषा",
+    "Purva Bhadrapada": "पूर्वाभाद्रपद", "Uttara Bhadrapada": "उत्तराभाद्रपद", "Revati": "रेवती"
+}
+
+RASHI_NAMES_HI = {
+    "Mesha": "मेष (Aries)", "Vrishabha": "वृषभ (Taurus)", "Mithuna": "मिथुन (Gemini)",
+    "Karka": "कर्क (Cancer)", "Simha": "सिंह (Leo)", "Kanya": "कन्या (Virgo)",
+    "Tula": "तुला (Libra)", "Vrishchika": "वृश्चिक (Scorpio)", "Dhanu": "धनु (Sagittarius)",
+    "Makara": "मकर (Capricorn)", "Kumbha": "कुंभ (Aquarius)", "Meena": "मीन (Pisces)",
+    "Aries": "मेष (Aries)", "Taurus": "वृषभ (Taurus)", "Gemini": "मिथुन (Gemini)",
+    "Cancer": "कर्क (Cancer)", "Leo": "सिंह (Leo)", "Virgo": "कन्या (Virgo)",
+    "Libra": "तुला (Libra)", "Scorpio": "वृश्चिक (Scorpio)", "Sagittarius": "धनु (Sagittarius)",
+    "Capricorn": "मकर (Capricorn)", "Aquarius": "कुंभ (Aquarius)", "Pisces": "मीन (Pisces)"
+}
+
+NUMERO_DESCRIPTIONS = {
+    1: {"title_en": "Leader & Pioneer (Sun)", "title_hi": "नेतृत्वकर्ता एवं अग्रदूत (सूर्य प्रभाव)"},
+    2: {"title_en": "Diplomat & Peacemaker (Moon)", "title_hi": "शांतिदूत एवं कूटनीतिज्ञ (चन्द्र प्रभाव)"},
+    3: {"title_en": "Creative & Wisdom Guide (Jupiter)", "title_hi": "ज्ञान एवं रचनात्मक विचारक (गुरु प्रभाव)"},
+    4: {"title_en": "Disciplined & Tactical Architect (Rahu)", "title_hi": "अनुशासित एवं रणनीतिक योजनाकार (राहु प्रभाव)"},
+    5: {"title_en": "Dynamic & Versatile Communicator (Mercury)", "title_hi": "गतिशील एवं व्यापारिक संचारक (बुध प्रभाव)"},
+    6: {"title_en": "Nurturer & Harmonizer (Venus)", "title_hi": "कलात्मक एवं सौहार्द निर्माता (शुक्र प्रभाव)"},
+    7: {"title_en": "Analyst & Deep Thinker (Ketu)", "title_hi": "गहन अनुसंधानकर्ता एवं तत्वज्ञानी (केतु प्रभाव)"},
+    8: {"title_en": "Executive & Authority Builder (Saturn)", "title_hi": "कर्मनिष्ठ एवं न्यायप्रिय प्रबंधक (शनि प्रभाव)"},
+    9: {"title_en": "Humanitarian & Courageous Pioneer (Mars)", "title_hi": "साहसी एवं लोकमंगल अग्रदूत (मंगल प्रभाव)"}
+}
+
+# ==============================================================================
 # CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
 # ==============================================================================
 client_params = st.query_params
