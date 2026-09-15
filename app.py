@@ -269,7 +269,11 @@ with nav_r2_c4:
     if st.button("📿 Mantra", type=p_type, use_container_width=True):
         st.session_state.current_page = "mantra"
         st.rerun()
-        
+ with nav_r3_c2:
+    p_type = "primary" if st.session_state.current_page == "dasha" else "secondary"
+    if st.button(t("btn_dasha", current_lang), type=p_type, use_container_width=True):
+        st.session_state.current_page = "dasha"
+        st.rerun()       
 render_html("<hr style='margin:10px 0 16px 0; border:none; border-top:1.5px solid #e2e8f0;'>")
 
 has_valid_profile = bool(prof.get("name") and prof.get("dob") and prof.get("tob"))
