@@ -1,4 +1,4 @@
-# views/forecast.py - Dedicated Weekly Horoscope View with Complete Bilingual Support
+# views/forecast.py - Dedicated 7-Day Moon Transit Forecast View with Complete Bilingual Support
 import streamlit as st
 import datetime
 from databanks import (
@@ -33,12 +33,34 @@ NAVTARA_NAMES_HI = {
     "Naidhana": "निधन तारा", "Mitra": "मित्र तारा", "Ati-Mitra": "अति-मित्र तारा"
 }
 
+# Complete Bilingual Insight Dictionaries for Forecast Transits
 FORECAST_INSIGHTS_HI = {
     "Strategic Mastery & Manifestation (Sadhana)": {
         "title": "रणनीतिक निपुणता एवं सिद्धि (साधना तारा)",
         "desc": "उच्च-स्तरीय सफलताओं के लिए स्वर्ण काल। जटिल इंजीनियरिंग, रणनीति और कार्य निष्पादन के लिए मानसिक क्षमताएं अत्यंत तीव्र हैं।",
         "opp": "महत्वपूर्ण अभियानों का शुभारंभ करें, जटिल तकनीकी परियोजनाओं को हाथ में लें, पदोन्नति के लिए बातचीत करें और उच्च अध्ययन करें।",
-        "hazaz": "इस उच्च-आवृत्ति वाली ऊर्जा विंडो को सतही या साधारण कार्यों में व्यर्थ न जाने दें।"
+        "hazaz": "इस उच्च-आवृत्ति वाली ऊर्जा विंडो को सतही या साधारण कार्यों में व्यर्थ न जाने दें।",
+        "mantra": "ॐ नमो भगवते वासुदेवाय (प्रातःकाल पूर्व दिशा की ओर मुख करके 11 बार जप करें)",
+        "charity": "वैश्विक समृद्धि सुनिश्चित करने के लिए वरिष्ठों, गुरुजनों या मंदिर में मीठे पीले फल अथवा दूध की मिठाई अर्पित करें।",
+        "action": "शीर्षक ऊर्जा के साथ प्रतिध्वनि प्रसारित करने के लिए हल्के और जीवंत रंग (मूंगा लाल, अंबर स्वर्ण, या इलेक्ट्रिक व्हाइट) पहनें।"
+    },
+    "Abundant Expansion & Material Growth (Sampat)": {
+        "title": "प्रचुर विस्तार एवं भौतिक वृद्धि (सम्पत तारा)",
+        "desc": "आर्थिक प्रगति, व्यावसायिक विस्तार और दीर्घकालिक निवेश के लिए अत्यंत अनुकूल समय।",
+        "opp": "नए वित्तीय अनुबंधों पर हस्ताक्षर करें, पूंजी निवेश करें और वाणिज्यिक साझेदारियों को आगे बढ़ाएं।",
+        "hazaz": "अति-आशावादिता में आकर बिना सोचे-समझे बड़े वित्तीय जोखिम न लें।",
+        "mantra": "ॐ श्री महालक्ष्म्यै नमः (11 बार संध्या समय)",
+        "charity": "जरूरतमंदों को अन्न या वस्त्र का दान करें।",
+        "action": "सकारात्मक वित्तीय ऊर्जा के लिए हरे या सुनहरे रंग के वस्त्रों का प्रयोग करें।"
+    },
+    "Protective Prudence & Friction Defense (Vipat)": {
+        "title": "सुरक्षात्मक विवेक एवं संघर्ष बचाव (विपत तारा)",
+        "desc": "अवरोधों और वैचारिक मतभेदों की संभावना। यह दिन आक्रामक कदमों के बजाय रक्षात्मक और धैर्यवान समीक्षा की मांग करता है।",
+        "opp": "पुराने कार्यों की समीक्षा करें, आंतरिक ऑडिट करें और दस्तावेजों की सूक्ष्म जांच करें।",
+        "hazaz": "नए ऋण लेने, वाद-विवाद शुरू करने या महत्वपूर्ण दस्तावेजों पर बिना पढ़े हस्ताक्षर करने से बचें।",
+        "mantra": "ॐ गं गणपतये नमः (21 बार संकट निवारण हेतु)",
+        "charity": "पक्षियों को दाना डालें या काले तिल का दान करें।",
+        "action": "धीरज बनाए रखें; गहरे नीले या शांत श्वेत रंगों का चयन करें।"
     }
 }
 
@@ -51,9 +73,9 @@ def get_localized_forecast_insights(theme_title, raw_insights, is_hi):
                 "theme_desc": m["desc"],
                 "opportunities": m["opp"],
                 "hazards": m["hazaz"],
-                "remedy_mantra": raw_insights.get("remedy_mantra", ""),
-                "remedy_charity": raw_insights.get("remedy_charity", ""),
-                "remedy_action": raw_insights.get("remedy_action", "")
+                "remedy_mantra": m["mantra"],
+                "remedy_charity": m["charity"],
+                "remedy_action": m["action"]
             }
         else:
             return {
@@ -61,9 +83,9 @@ def get_localized_forecast_insights(theme_title, raw_insights, is_hi):
                 "desc": "आज का दिन व्यावहारिक समीक्षा, आंतरिक स्थिरता और व्यक्तिगत प्राथमिकताओं को व्यवस्थित करने के लिए अनुकूल है।",
                 "opportunities": "लंबित प्रशासनिक कार्यों को पूरा करें, टीम के सदस्यों के साथ संवाद सुधारें और स्वास्थ्य पर ध्यान दें।",
                 "hazards": "भावनात्मक अतिरेक या जल्दबाजी में लिए गए वित्तीय निर्णयों से बचें।",
-                "remedy_mantra": raw_insights.get("remedy_mantra", ""),
-                "remedy_charity": raw_insights.get("remedy_charity", ""),
-                "remedy_action": raw_insights.get("remedy_action", "")
+                "remedy_mantra": "ॐ नमः शिवाय (11 बार)",
+                "remedy_charity": "गौमाता को हरा चारा या गुड़ खिलाएं।",
+                "action": "शांत और संतुलित आचरण बनाए रखें।"
             }
     return raw_insights
 
