@@ -1,13 +1,13 @@
 # app.py - Main Streamlit Application Entry Point
 import streamlit as st
 import datetime
-import urllib.parse
 
 # Import data banks and calculation routines from databanks.py
 import databanks as db
 from databanks import *
 
-# Import modular views
+# Import modular views (Pattern B)
+from views.about import render_page_about
 from views.dasha import render_page_dasha
 
 # Configure Streamlit page settings
@@ -112,11 +112,8 @@ TRANSLATIONS = {
         "btn_dasha": "⏳ Dasha Timeline",
         "btn_mantra": "📿 Mantra Sadhana",
         "edit_details": "✏️ Edit Details",
-        "save_details": "💾 Save Profile",
-        "cancel": "Cancel",
         "name_label": "Full Name",
         "dob_label": "Birth Date",
-        "tob_label": "Birth Time",
         "city_label": "Birth Location / City Name",
         "nakshatra_label": "Janma Nakshatra",
         "pada_label": "Pada (Quarter)",
@@ -125,13 +122,8 @@ TRANSLATIONS = {
         "mulank_label": "Mulank (Driver)",
         "bhagyank_label": "Bhagyank (Destiny)",
         "namank_label": "Namank (Name Vibration)",
-        "shani_paya_title": "🪐 Shani Paya & Active 2.5-Year Transit",
-        "sadesati_title": "⚖️ Shani Sade Sati & Dhaiya Status",
-        "live_pulse_title": "⚡ Today's Live Cosmic Pulse",
         "forecast_title": "🗓️ 7-Day Moon Transit Matrix & Daily Forecasts",
-        "share_title": "📲 Share Navtara Pulse With Friends & Family",
-        "dasha_page_title": "⏳ Vimshottari Dasha: The Cosmic Timeline",
-        "dasha_page_subtitle": "Your active planetary periods mathematically calculated down to the exact minute. This represents the overarching 'season' of your life."
+        "live_pulse_title": "⚡ Today's Live Cosmic Pulse"
     },
     "hi": {
         "app_title": "✨ नवतारा पल्स (Navtara Pulse)",
@@ -146,11 +138,8 @@ TRANSLATIONS = {
         "btn_dasha": "⏳ दशा समयरेखा",
         "btn_mantra": "📿 मंत्र साधना",
         "edit_details": "✏️ विवरण बदलें",
-        "save_details": "💾 सुरक्षित करें",
-        "cancel": "रद्द करें",
         "name_label": "पूरा नाम",
         "dob_label": "जन्म तिथि",
-        "tob_label": "जन्म समय",
         "city_label": "जन्म स्थान का नाम",
         "nakshatra_label": "जन्म नक्षत्र",
         "pada_label": "चरण",
@@ -159,13 +148,8 @@ TRANSLATIONS = {
         "mulank_label": "मूलांक (Driver)",
         "bhagyank_label": "भाग्यांक (Conductor)",
         "namank_label": "नामांक (Name Vibration)",
-        "shani_paya_title": "🪐 वर्तमान शनि पाया एवं 2.5 वर्षीय गोचर",
-        "sadesati_title": "⚖️ शनि साढ़े साती एवं ढैय्या स्थिति",
-        "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह",
         "forecast_title": "🗓️ आगामी 7 दिनों का नक्षत्र गोचर एवं दैनिक फल",
-        "share_title": "📲 नवतारा पल्स को परिवार व मित्रों के साथ साझा करें",
-        "dasha_page_title": "⏳ विंशोत्तरी दशा: खगोलीय समयरेखा",
-        "dasha_page_subtitle": "आपकी वर्तमान सक्रिय ग्रहों की महादशा और अंतरदशा सटीक समय के साथ।"
+        "live_pulse_title": "⚡ आज का दैनिक खगोलीय प्रवाह"
     }
 }
 
@@ -173,7 +157,7 @@ def t(key: str, lang: str = "en") -> str:
     return TRANSLATIONS.get(lang, TRANSLATIONS["en"]).get(key, TRANSLATIONS["en"].get(key, key))
 
 # ==============================================================================
-# HINDI ASTROLOGICAL & NUMEROLOGICAL TRANSLATION MAPS
+# HINDI LOOKUP MAPS
 # ==============================================================================
 NAKSHATRA_NAMES_HI = {
     "Ashwini": "अश्विनी", "Bharani": "भरणी", "Krittika": "कृत्तिका",
@@ -198,18 +182,6 @@ RASHI_NAMES_HI = {
     "Capricorn": "मकर", "Aquarius": "कुंभ", "Pisces": "मीन"
 }
 
-NUMERO_DESCRIPTIONS = {
-    1: {"title_en": "Leader & Pioneer (Sun)", "title_hi": "नेतृत्वकर्ता एवं अग्रदूत (सूर्य प्रभाव)"},
-    2: {"title_en": "Diplomat & Peacemaker (Moon)", "title_hi": "शांतिदूत एवं कूटनीतिज्ञ (चन्द्र प्रभाव)"},
-    3: {"title_en": "Creative & Wisdom Guide (Jupiter)", "title_hi": "ज्ञान एवं रचनात्मक विचारक (गुरु प्रभाव)"},
-    4: {"title_en": "Disciplined & Tactical Architect (Rahu)", "title_hi": "अनुशासित एवं रणनीतिक योजनाकार (राहु प्रभाव)"},
-    5: {"title_en": "Dynamic & Versatile Communicator (Mercury)", "title_hi": "गतिशील एवं व्यापारिक संचारक (बुध प्रभाव)"},
-    6: {"title_en": "Nurturer & Harmonizer (Venus)", "title_hi": "कलात्मक एवं सौहार्द निर्माता (शुक्र प्रभाव)"},
-    7: {"title_en": "Analyst & Deep Thinker (Ketu)", "title_hi": "गहन अनुसंधानकर्ता एवं तत्वज्ञानी (केतु प्रभाव)"},
-    8: {"title_en": "Executive & Authority Builder (Saturn)", "title_hi": "कर्मनिष्ठ एवं न्यायप्रिय प्रबंधक (शनि प्रभाव)"},
-    9: {"title_en": "Humanitarian & Courageous Pioneer (Mars)", "title_hi": "साहसी एवं लोकमंगल अग्रदूत (मंगल प्रभाव)"}
-}
-
 TARA_NAMES_HI = {
     "Janma": "जन्म तारा", "Sampat": "सम्पत तारा", "Vipat": "विपत तारा",
     "Kshema": "क्षेम तारा", "Pratyak": "प्रत्यक तारा", "Sadhana": "साधना तारा",
@@ -217,7 +189,7 @@ TARA_NAMES_HI = {
 }
 
 # ==============================================================================
-# CLIENT-SIDE BROWSER MEMORY (URL QUERY PARAMS + SESSION STATE)
+# SESSION STATE & PERSISTENCE
 # ==============================================================================
 client_params = st.query_params
 
@@ -261,7 +233,7 @@ if "mala_rounds" not in st.session_state:
 prof = st.session_state.user_profile
 current_lang = prof.get("lang", "en")
 
-# Universal Centered Header on ALL tabs
+# Centered App Header
 render_html(f"""
     <div style='text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-top:0.2rem; margin-bottom:0.75rem;'>
         <div style='background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); width:76px; height:76px; border-radius:26px; display:flex; align-items:center; justify-content:center; font-size:2.45rem; box-shadow:0 8px 28px rgba(245,158,11,0.38); margin-bottom:10px;'>
@@ -379,7 +351,7 @@ def render_profile_setup_prompt():
             st.rerun()
 
 # ==============================================================================
-# POST-SUBMISSION ONBOARDING SCREEN: ADD TO HOME SCREEN
+# POST-SUBMISSION ONBOARDING: ADD TO HOME SCREEN
 # ==============================================================================
 def render_page_install_guide():
     render_html("""
@@ -429,105 +401,7 @@ def render_page_install_guide():
             st.rerun()
 
 # ==============================================================================
-# TAB 1: ABOUT APP
-# ==============================================================================
-def render_page_about():
-    with st.container(border=True):
-        st.markdown("**🌐 Select Language / भाषा चुनें:**")
-        lang_col1, _ = st.columns([2, 1])
-        with lang_col1:
-            lang_options = {"en": "English", "hi": "हिन्दी (Hindi)"}
-            selected_lang_code = st.selectbox(
-                "App Language",
-                options=list(lang_options.keys()),
-                format_func=lambda x: lang_options[x],
-                index=list(lang_options.keys()).index(current_lang if current_lang in lang_options else "en"),
-                label_visibility="collapsed"
-            )
-            if selected_lang_code != current_lang:
-                st.session_state.user_profile["lang"] = selected_lang_code
-                st.query_params["lang"] = selected_lang_code
-                st.rerun()
-
-    render_html("""
-    <div class="auth-hero-box">
-        <div style="font-weight:900; font-size:1.35rem; color:#92400e; margin-bottom:0.75rem; border-bottom:1.5px solid #fde68a; padding-bottom:0.4rem;">
-            🧬 Navtara Pulse: Precision Chronobiology & Vedic Timing Engine
-        </div>
-        <div style="font-size:0.98rem; line-height:1.8; color:#451a03; margin-bottom:0.8rem;">
-            <b>Navtara Pulse</b> bridges ancient Sidereal Jyotish with modern chronobiology. It is an algorithmic decision-support compass designed to answer one crucial question: <b>"Is today mathematically aligned for aggressive action, or does it demand strategic defense?"</b><br>
-            By mapping the Moon's real-time transit through the 27 lunar mansions (Nakshatras) against your natal birth frequency, the app calculates your personalized 9-fold bio-rhythm, pinpointing exact windows of peak influence, effortless execution, and friction avoidance.
-        </div>
-    </div>
-
-    <div class="light-card-profile">
-        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
-            🔬 The Scientific Logic: Gravitational Hydrodynamics & Bio-Rhythms
-        </div>
-        
-        <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
-            <b>1. Lunar Tidal Hydrodynamics & Neuro-Endocrine Flow:</b><br>
-            The adult human brain and body are composed of approximately <b>70% water and electrolytic fluids</b>. Chronobiology confirms that lunar periodicity modulates circadian gene expression, sleep architecture (REM cycles), cerebrospinal fluid pressure, and neuro-transmitter output. In classical Vedic science, the Moon governs the mind (<i>"Chandro Manaso Jatah"</i>). When the celestial Moon aligns harmoniously with your natal Moon's electro-magnetic horizon, neural processing operates at peak cognitive clarity.
-        </div>
-
-        <div style="font-size:0.96rem; line-height:1.75; color:#334155; margin-bottom:1rem;">
-            <b>2. The 9-Fold Mathematical Resonance Grid (27 = 9 × 3):</b><br>
-            The zodiac is divided into 27 Nakshatras of 13° 20' each. The Vedic <b>Navtara Chakra</b> is an infradian mathematical model that groups these 27 stars into 3 repeating cycles of 9 qualitative energetic frequencies (Taras). Every single day, the Moon activates one of these 9 energetic chambers for your unique neural wiring:
-            <ul style="margin-top:6px; padding-left:1.3rem;">
-                <li><b>Expansion Windows (Sampat, Sadhana, Mitra, Ati-Mitra):</b> Characterized by high environmental receptivity and synaptic coherence. Ideal for high-stakes business negotiations, signing contracts, strategic investing, and key launches.</li>
-                <li><b>Friction Shields (Vipat, Pratyari, Vadha):</b> Characterized by elevated resistance, biochemical fatigue, and communication misfires. On these days, defensive prudence and patient review prevent costly missteps.</li>
-                <li><b>Foundational & Consolidation Days (Janma, Kshema):</b> Optimal for internal diagnostics, physical recuperation, and team alignment.</li>
-            </ul>
-        </div>
-
-        <div style="font-size:0.96rem; line-height:1.75; color:#334155;">
-            <b>3. Sub-Arcsecond Planetary Ephemeris (Swiss Ephemeris):</b><br>
-            Unlike conventional astrology apps that rely on generic sun signs or flat 24-hour sunrise assumptions, <b>Navtara Pulse</b> incorporates the <b>Moshier Swiss Ephemeris</b> (pyswisseph) with true topocentric Chitrapaksha Lahiri Ayanamsa. Ingress and egress timestamps are calculated down to the exact second for your geographical horizon.
-        </div>
-    </div>
-    """)
-
-    app_url = "https://navtara-pulse.streamlit.app"
-    share_msg = "Track your real-time Vedic Moon transit rhythm, Shani Paya, and personalized timing blueprint with Navtara Pulse!"
-    encoded_url = urllib.parse.quote(app_url)
-    encoded_msg = urllib.parse.quote(f"{share_msg}\n\nCheck your cosmic alignment here: {app_url}")
-
-    render_html(f"""
-    <div class="light-card-profile">
-        <div style="font-weight:900; font-size:1.25rem; color:#9a3412; margin-bottom:0.75rem; border-bottom:2px solid #fed7aa; padding-bottom:0.4rem;">
-            {t('share_title', current_lang)}
-        </div>
-        <div style="font-size:0.95rem; color:#475569; margin-bottom:0.85rem;">
-            Share this authentic Vedic chronobiology tool with your family, friends, and colleagues:
-        </div>
-        
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:1rem;">
-            <a href="https://api.whatsapp.com/send?text={encoded_msg}" target="_blank" style="text-decoration:none;">
-                <div style="background:#25D366; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(37,211,102,0.2);">
-                    🟢 WhatsApp
-                </div>
-            </a>
-            <a href="https://t.me/share/url?url={encoded_url}&text={encoded_msg}" target="_blank" style="text-decoration:none;">
-                <div style="background:#0088cc; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(0,136,204,0.2);">
-                    ✈️ Telegram
-                </div>
-            </a>
-            <a href="mailto:?subject=Navtara Pulse - Vedic Timing&body={encoded_msg}" target="_blank" style="text-decoration:none;">
-                <div style="background:#ea4335; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(234,67,53,0.2);">
-                    ✉️ Email
-                </div>
-            </a>
-            <a href="https://twitter.com/intent/tweet?text={encoded_msg}" target="_blank" style="text-decoration:none;">
-                <div style="background:#0f172a; color:#ffffff; padding:12px; border-radius:12px; text-align:center; font-weight:900; font-size:1rem; box-shadow:0 2px 8px rgba(15,23,42,0.2);">
-                    🐦 X (Twitter)
-                </div>
-            </a>
-        </div>
-    </div>
-    """)
-
-# ==============================================================================
-# TAB 2: USER PROFILE (FULL NATIVE HINDI & ENGLISH INTEGRATION)
+# TAB 2: USER PROFILE
 # ==============================================================================
 def render_page_profile():
     global u_lat, u_lon
@@ -968,7 +842,7 @@ def render_page_numerology():
     """)
 
 # ==============================================================================
-# TAB 4: SHANI & SADE SATI (EXHAUSTIVE 7-DOMAIN MATRIX)
+# TAB 4: SHANI & SADE SATI
 # ==============================================================================
 def render_page_shani():
     if not has_valid_profile:
@@ -1053,7 +927,7 @@ def render_page_shani():
                 <div style="background:#fff1f2; border-radius:10px; padding:10px 12px; border-left:4px solid #e11d48;">
                     <b>📉 4. Loans & Liabilities Management:</b><br>{shani_sadesati_data['loan']}
                 </div>
-                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #065f46;">
+                <div style="background:#f0fdf4; border-radius:10px; padding:10px 12px; border-left:4px solid #065f46; border-left:4px solid #065f46;">
                     <b>🤝 5. Partnerships & Business Alliances:</b><br>{shani_sadesati_data['partner']}
                 </div>
                 <div style="background:#fffbeb; border-radius:10px; padding:10px 12px; border-left:4px solid #d97706;">
@@ -1421,7 +1295,6 @@ def render_page_monthly():
     </div>
     """)
 
-    # --- DYNAMIC CALENDAR LOGIC (Mid-Month Ephemeris Sampling) ---
     now = datetime.datetime.now()
     curr_mid = now.replace(day=15, hour=12, minute=0, second=0)
     curr_month_str = now.strftime("%B %Y")
