@@ -694,6 +694,112 @@ def get_detailed_day_insights(offset: int, vahan_dict: dict, current_star_name: 
         "remedy_action": remedy_action
     }
 
+# ==============================================================================
+# DYNAMIC 12-BHAVA ALGORITHMIC PREDICTION ENGINE (INFINITE CALENDAR)
+# ==============================================================================
+LAGNA_LORDS = {
+    0: "Mars", 1: "Venus", 2: "Mercury", 3: "Moon", 
+    4: "Sun", 5: "Mercury", 6: "Venus", 7: "Mars", 
+    8: "Jupiter", 9: "Saturn", 10: "Saturn", 11: "Jupiter"
+}
+
+DOMAIN_MAPPING = {
+    "self": 1, "family": 2, "travels": 3, "property": 4, 
+    "study": 5, "child": 5, "loan": 6, "accidents": 6, 
+    "partnership": 7, "spouse": 7, "research": 8, "luck": 9, 
+    "career": 10, "gains": 11, "expenditure": 12, "foreign": 12
+}
+
+DOMAIN_BASE_TEXTS = {
+    "self": "Focus is on physical vitality, personal branding, and life direction.",
+    "family": "Attention centers around accumulated savings, family assets, and speech.",
+    "travels": "Short trips, sibling dynamics, and courageous initiatives are highlighted.",
+    "property": "Domestic peace, vehicle maintenance, and real estate matters demand focus.",
+    "study": "Intellectual pursuits, skill building, and cognitive learning take precedence.",
+    "child": "Focus is on children's welfare, guidance, and creative milestones.",
+    "loan": "A phase to proactively tackle debts, organize health, and manage competitors.",
+    "accidents": "Immune defense, road safety, and cautionary health routines are critical.",
+    "partnership": "Commercial alliances and joint ventures require diplomatic balancing.",
+    "spouse": "Spousal dynamics demand clear, patient, and harmonious communication.",
+    "research": "Deep esoteric research, audits, and investigative focus are strongly activated.",
+    "luck": "Fortune, long-distance travel, and adherence to higher principles are favored.",
+    "career": "Executive visibility, career trajectory, and professional authority are at the forefront.",
+    "gains": "Social networking, realizing profits, and fulfilling long-term aspirations are active.",
+    "expenditure": "Managing unbudgeted expenses and calculated financial outflows is key.",
+    "foreign": "Foreign connections, visa processing, and remote linkages are emphasized."
+}
+
+PLANET_TRAITS = {
+    "Sun": "The Sun brings authoritative visibility and vitality, though its heat requires patience.",
+    "Mercury": "Mercury enhances data-driven decisions and commercial adaptability.",
+    "Venus": "Venus attracts diplomatic harmony, aesthetic refinement, and financial ease.",
+    "Mars": "Mars injects aggressive execution, demanding you guard against impulsiveness.",
+    "Jupiter": "Jupiter provides divine protection, optimism, and steady compounding growth.",
+    "Saturn": "Saturn demands rigorous discipline, patience, and structural reorganization.",
+    "Rahu": "Rahu creates hungry ambition and sudden unorthodox breakthroughs.",
+    "Ketu": "Ketu brings spiritual detachment and a desire to cut away superficial attachments."
+}
+
+def get_monthly_planetary_positions(utc_dt: datetime.datetime) -> dict:
+    jd = get_julian_day(utc_dt)
+    positions = {}
+    if HAS_SWISSEPH:
+        swe.set_sid_mode(swe.SIDM_LAHIRI)
+        planets = {"Sun": 0, "Mercury": 2, "Venus": 3, "Mars": 4, "Jupiter": 5, "Saturn": 6, "Rahu": 11}
+        for p_name, p_id in planets.items():
+            try:
+                res = swe.calc_ut(jd, p_id, swe.FLG_SIDEREAL)
+                lon = res[0][0] if isinstance(res, tuple) else res[0]
+                positions[p_name] = int(lon / 30.0)
+            except Exception:
+                positions[p_name] = 0
+        if "Rahu" in positions:
+            positions["Ketu"] = (positions["Rahu"] + 6) % 12
+    else:
+        # Fallback empty state to prevent UI crash if ephemeris library fails
+        for p in PLANET_TRAITS.keys():
+            positions[p] = 0
+    return positions
+
+def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime):
+    utc_dt = target_dt - datetime.timedelta(hours=5, minutes=30)
+    positions = get_monthly_planetary_positions(utc_dt)
+    
+    house_occupants = {i: [] for i in range(1, 13)}
+    for p_name, r_idx in positions.items():
+        h = (r_idx - lagna_idx) % 12 + 1
+        house_occupants[h].append(p_name)
+        
+    lagna_lord = LAGNA_LORDS[lagna_idx]
+    ll_house = (positions.get(lagna_lord, lagna_idx) - lagna_idx) % 12 + 1
+    
+    pred = {}
+    pred["month_name"] = target_dt.strftime("%B %Y")
+    pred["highlight"] = f"Your Ascendant Lord {lagna_lord} is transiting your {ll_house}th house this month. "
+    
+    if ll_house in [1, 5, 9]:
+        pred["highlight"] += "This highly auspicious trine placement brings natural vitality, fortune, and alignment with your higher purpose."
+    elif ll_house in [4, 7, 10]:
+        pred["highlight"] += "This powerful Kendra transit amplifies your executive actions, public visibility, and structural stability."
+    elif ll_house in [6, 8, 12]:
+        pred["highlight"] += "This emphasizes a period of deep restructuring, clearing debts, healing, and navigating transformative shifts."
+    else:
+        pred["highlight"] += "This directs your core focus toward wealth management, immediate networks, and materializing short-term gains."
+
+    for dom_key, h_idx in DOMAIN_MAPPING.items():
+        base_text = DOMAIN_BASE_TEXTS[dom_key]
+        occupants = house_occupants[h_idx]
+        
+        if occupants:
+            traits = " ".join([PLANET_TRAITS[p] for p in occupants])
+            text = f"{base_text} Transiting {', '.join(occupants)} actively charges this sector: {traits}"
+        else:
+            text = f"{base_text} With no major planets transiting here this month, this domain operates smoothly under its baseline energy."
+        
+        pred[dom_key] = text
+        
+    return pred
+
 
 # ==============================================================================
 # 9 NAVAGRAHA BEEJ MANTRAS
@@ -994,109 +1100,3 @@ NAKSHATRA_BEEJ_MANTRAS = {
         "rules": "• Chant in the morning facing North-East.\n• Auspicious day: Wednesday.\n• Pacifies: Over-sensitivity, financial boundary issues, and disorientation."
     }
 }
-
-# ==============================================================================
-# DYNAMIC 12-BHAVA ALGORITHMIC PREDICTION ENGINE (INFINITE CALENDAR)
-# ==============================================================================
-LAGNA_LORDS = {
-    0: "Mars", 1: "Venus", 2: "Mercury", 3: "Moon", 
-    4: "Sun", 5: "Mercury", 6: "Venus", 7: "Mars", 
-    8: "Jupiter", 9: "Saturn", 10: "Saturn", 11: "Jupiter"
-}
-
-DOMAIN_MAPPING = {
-    "self": 1, "family": 2, "travels": 3, "property": 4, 
-    "study": 5, "child": 5, "loan": 6, "accidents": 6, 
-    "partnership": 7, "spouse": 7, "research": 8, "luck": 9, 
-    "career": 10, "gains": 11, "expenditure": 12, "foreign": 12
-}
-
-DOMAIN_BASE_TEXTS = {
-    "self": "Focus is on physical vitality, personal branding, and life direction.",
-    "family": "Attention centers around accumulated savings, family assets, and speech.",
-    "travels": "Short trips, sibling dynamics, and courageous initiatives are highlighted.",
-    "property": "Domestic peace, vehicle maintenance, and real estate matters demand focus.",
-    "study": "Intellectual pursuits, skill building, and cognitive learning take precedence.",
-    "child": "Focus is on children's welfare, guidance, and creative milestones.",
-    "loan": "A phase to proactively tackle debts, organize health, and manage competitors.",
-    "accidents": "Immune defense, road safety, and cautionary health routines are critical.",
-    "partnership": "Commercial alliances and joint ventures require diplomatic balancing.",
-    "spouse": "Spousal dynamics demand clear, patient, and harmonious communication.",
-    "research": "Deep esoteric research, audits, and investigative focus are strongly activated.",
-    "luck": "Fortune, long-distance travel, and adherence to higher principles are favored.",
-    "career": "Executive visibility, career trajectory, and professional authority are at the forefront.",
-    "gains": "Social networking, realizing profits, and fulfilling long-term aspirations are active.",
-    "expenditure": "Managing unbudgeted expenses and calculated financial outflows is key.",
-    "foreign": "Foreign connections, visa processing, and remote linkages are emphasized."
-}
-
-PLANET_TRAITS = {
-    "Sun": "The Sun brings authoritative visibility and vitality, though its heat requires patience.",
-    "Mercury": "Mercury enhances data-driven decisions and commercial adaptability.",
-    "Venus": "Venus attracts diplomatic harmony, aesthetic refinement, and financial ease.",
-    "Mars": "Mars injects aggressive execution, demanding you guard against impulsiveness.",
-    "Jupiter": "Jupiter provides divine protection, optimism, and steady compounding growth.",
-    "Saturn": "Saturn demands rigorous discipline, patience, and structural reorganization.",
-    "Rahu": "Rahu creates hungry ambition and sudden unorthodox breakthroughs.",
-    "Ketu": "Ketu brings spiritual detachment and a desire to cut away superficial attachments."
-}
-
-def get_monthly_planetary_positions(utc_dt: datetime.datetime) -> dict:
-    jd = get_julian_day(utc_dt)
-    positions = {}
-    if HAS_SWISSEPH:
-        swe.set_sid_mode(swe.SIDM_LAHIRI)
-        planets = {"Sun": 0, "Mercury": 2, "Venus": 3, "Mars": 4, "Jupiter": 5, "Saturn": 6, "Rahu": 11}
-        for p_name, p_id in planets.items():
-            try:
-                res = swe.calc_ut(jd, p_id, swe.FLG_SIDEREAL)
-                lon = res[0][0] if isinstance(res, tuple) else res[0]
-                positions[p_name] = int(lon / 30.0)
-            except Exception:
-                positions[p_name] = 0
-        if "Rahu" in positions:
-            positions["Ketu"] = (positions["Rahu"] + 6) % 12
-    else:
-        # Fallback empty state to prevent UI crash if ephemeris library fails
-        for p in PLANET_TRAITS.keys():
-            positions[p] = 0
-    return positions
-
-def get_dynamic_monthly_prediction(lagna_idx: int, target_dt: datetime.datetime):
-    utc_dt = target_dt - datetime.timedelta(hours=5, minutes=30)
-    positions = get_monthly_planetary_positions(utc_dt)
-    
-    house_occupants = {i: [] for i in range(1, 13)}
-    for p_name, r_idx in positions.items():
-        h = (r_idx - lagna_idx) % 12 + 1
-        house_occupants[h].append(p_name)
-        
-    lagna_lord = LAGNA_LORDS[lagna_idx]
-    ll_house = (positions.get(lagna_lord, lagna_idx) - lagna_idx) % 12 + 1
-    
-    pred = {}
-    pred["month_name"] = target_dt.strftime("%B %Y")
-    pred["highlight"] = f"Your Ascendant Lord {lagna_lord} is transiting your {ll_house}th house this month. "
-    
-    if ll_house in [1, 5, 9]:
-        pred["highlight"] += "This highly auspicious trine placement brings natural vitality, fortune, and alignment with your higher purpose."
-    elif ll_house in [4, 7, 10]:
-        pred["highlight"] += "This powerful Kendra transit amplifies your executive actions, public visibility, and structural stability."
-    elif ll_house in [6, 8, 12]:
-        pred["highlight"] += "This emphasizes a period of deep restructuring, clearing debts, healing, and navigating transformative shifts."
-    else:
-        pred["highlight"] += "This directs your core focus toward wealth management, immediate networks, and materializing short-term gains."
-
-    for dom_key, h_idx in DOMAIN_MAPPING.items():
-        base_text = DOMAIN_BASE_TEXTS[dom_key]
-        occupants = house_occupants[h_idx]
-        
-        if occupants:
-            traits = " ".join([PLANET_TRAITS[p] for p in occupants])
-            text = f"{base_text} Transiting {', '.join(occupants)} actively charges this sector: {traits}"
-        else:
-            text = f"{base_text} With no major planets transiting here this month, this domain operates smoothly under its baseline energy."
-        
-        pred[dom_key] = text
-        
-    return pred
