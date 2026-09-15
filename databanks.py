@@ -1338,7 +1338,7 @@ NAKSHATRA_BEEJ_MANTRAS = {
 
 
 # ==============================================================================
-# VIMSHOTTARI DASHA (EXECUTIVE BRIEFING) ENGINE
+# VIMSHOTTARI DASHA (EXECUTIVE TIMELINE & TRANSITIONS) ENGINE
 # ==============================================================================
 DASHA_SEQUENCE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
 DASHA_YEARS = {
@@ -1346,165 +1346,80 @@ DASHA_YEARS = {
     "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
 }
 
-# Lagna-based functional nature database for Mahadashas
 LAGNA_PLANET_NATURE = {
-    0: { # Mesha (Aries)
-        "Sun": "Yogakaraka & 5th Lord (Intellect, Authority & Speculative Fortune)",
-        "Moon": "4th Lord (Domestic Assets, Property & Emotional Security)",
-        "Mars": "Lagna & 8th Lord (Vitality, Physique & Transformative Crises)",
-        "Mercury": "3rd & 6th Lord (Enterprise, Competitors & Operational Hurdles)",
-        "Jupiter": "9th & 12th Lord (Dharma, Mentorship & Long-Distance Expansion)",
-        "Venus": "2nd & 7th Lord (Wealth, Speech & Commercial Partnerships)",
-        "Saturn": "10th & 11th Lord (Career Stature, Authority & Net Inflows)",
-        "Rahu": "Material Catalyst (Unorthodox Breakthroughs & Foreign Linkages)",
-        "Ketu": "Spiritual Catalyst (Occult Insight & Detachment)"
+    0: { # Aries
+        "Sun": "5th Lord of Intellect and Authority", "Moon": "4th Lord of Assets and Home",
+        "Mars": "Lagna & 8th Lord of Vitality and Transformation", "Mercury": "3rd & 6th Lord of Enterprise and Hurdles",
+        "Jupiter": "9th & 12th Lord of Fortune and Expansion", "Venus": "2nd & 7th Lord of Wealth and Partnerships",
+        "Saturn": "10th & 11th Lord of Career and Inflows", "Rahu": "Unorthodox Material Catalyst", "Ketu": "Spiritual Catalyst"
     },
-    1: { # Vrishabha (Taurus)
-        "Sun": "4th Lord (Real Estate, Home Infrastructure & Public Trust)",
-        "Moon": "3rd Lord (Courage, Short Travels & Sibling Dynamics)",
-        "Mars": "7th & 12th Lord (Partnerships, Foreign Linkages & Outflows)",
-        "Mercury": "2nd & 5th Lord (Liquid Wealth, Speech & Intellectual Strategy)",
-        "Jupiter": "8th & 11th Lord (Sudden Shifts, Research & Network Gains)",
-        "Venus": "Lagna & 6th Lord (Physical Vitality, Health Defense & Management)",
-        "Saturn": "9th & 10th Lord (Supreme Yogakaraka - Career Sovereignty & Fortune)",
-        "Rahu": "Material Catalyst (Ambition & Network Expansion)",
-        "Ketu": "Spiritual Catalyst (Deep Introspection)"
+    1: { # Taurus
+        "Sun": "4th Lord of Real Estate and Public Trust", "Moon": "3rd Lord of Courage and Initiative",
+        "Mars": "7th & 12th Lord of Partnerships and Outflows", "Mercury": "2nd & 5th Lord of Wealth and Intellect",
+        "Jupiter": "8th & 11th Lord of Research and Gains", "Venus": "Lagna & 6th Lord of Physique and Health Defense",
+        "Saturn": "Supreme Yogakaraka (9th & 10th Lord of Career and Fortune)", "Rahu": "Ambition Catalyst", "Ketu": "Introspective Catalyst"
     },
-    2: { # Mithuna (Gemini)
-        "Sun": "3rd Lord (Initiative, Communication & Enterprise)",
-        "Moon": "2nd Lord (Accumulated Wealth & Family Assets)",
-        "Mars": "6th & 11th Lord (Liabilities, Competition & Network Profits)",
-        "Mercury": "Lagna & 4th Lord (Intellect, Brand Identity & Real Estate)",
-        "Jupiter": "7th & 10th Lord (Career Authority & Business Alliances)",
-        "Venus": "5th & 12th Lord (Creative Strategy & Foreign Outflows)",
-        "Saturn": "8th & 9th Lord (Transformation & Higher Destiny)",
-        "Rahu": "Material Catalyst (Sudden Career Shifts & Scale)",
-        "Ketu": "Spiritual Catalyst (Analytical Detachment)"
+    2: { # Gemini
+        "Sun": "3rd Lord of Initiative and Communications", "Moon": "2nd Lord of Accumulated Wealth",
+        "Mars": "6th & 11th Lord of Competition and Profits", "Mercury": "Lagna & 4th Lord of Identity and Assets",
+        "Jupiter": "7th & 10th Lord of Authority and Alliances", "Venus": "5th & 12th Lord of Strategy and Foreign Outflows",
+        "Saturn": "8th & 9th Lord of Transformation and Higher Destiny", "Rahu": "Career Expansion Catalyst", "Ketu": "Analytical Catalyst"
     },
-    3: { # Karka (Cancer)
-        "Sun": "2nd Lord (Wealth Accumulation & Speech Control)",
-        "Moon": "Lagna Lord (Personal Identity, Vitality & Public Persona)",
-        "Mars": "5th & 10th Lord (Supreme Yogakaraka - Career Sovereignty & Intellect)",
-        "Mercury": "3rd & 12th Lord (Travel, Documentation & Foreign Linkages)",
-        "Jupiter": "6th & 9th Lord (Service, Health Defense & Higher Fortune)",
-        "Venus": "4th & 11th Lord (Real Estate, Comforts & Liquid Gains)",
-        "Saturn": "7th & 8th Lord (Partnerships & Deep Transformation)",
-        "Rahu": "Material Catalyst (Foreign Expansion & Unorthodox Ventures)",
-        "Ketu": "Spiritual Catalyst (Intuitive Solitude)"
+    3: { # Cancer
+        "Sun": "2nd Lord of Wealth and Speech", "Moon": "Lagna Lord of Personal Identity and Vitality",
+        "Mars": "Supreme Yogakaraka (5th & 10th Lord of Career and Intellect)", "Mercury": "3rd & 12th Lord of Travel and Linkages",
+        "Jupiter": "6th & 9th Lord of Service and Fortune", "Venus": "4th & 11th Lord of Comforts and Gains",
+        "Saturn": "7th & 8th Lord of Partnerships and Crises", "Rahu": "Foreign Expansion Catalyst", "Ketu": "Solitary Catalyst"
     },
-    4: { # Simha (Leo)
-        "Sun": "Lagna Lord (Sovereign Authority, Vitality & Leadership)",
-        "Moon": "12th Lord (Foreign Linkages & Background Strategy)",
-        "Mars": "4th & 9th Lord (Supreme Yogakaraka - Property, Fortune & Ethics)",
-        "Mercury": "2nd & 11th Lord (Liquid Wealth, Savings & Network Inflows)",
-        "Jupiter": "5th & 8th Lord (Intellect, Children & Sudden Transitions)",
-        "Venus": "3rd & 10th Lord (Enterprise, Public Communications & Career)",
-        "Saturn": "6th & 7th Lord (Competitors, Liabilities & Business Alliances)",
-        "Rahu": "Material Catalyst (Massive Ambition & Speculative Scaling)",
-        "Ketu": "Spiritual Catalyst (Detachment from Ego)"
+    4: { # Leo
+        "Sun": "Lagna Lord of Sovereign Authority and Leadership", "Moon": "12th Lord of Background Strategy",
+        "Mars": "Supreme Yogakaraka (4th & 9th Lord of Property and Fortune)", "Mercury": "2nd & 11th Lord of Wealth and Inflows",
+        "Jupiter": "5th & 8th Lord of Intellect and Sudden Shifts", "Venus": "3rd & 10th Lord of Enterprise and Career Stature",
+        "Saturn": "6th & 7th Lord of Competitors and Business Contracts", "Rahu": "Speculative Scaling Catalyst", "Ketu": "Ego-Detachment Catalyst"
     },
-    5: { # Kanya (Virgo)
-        "Sun": "12th Lord (Global Linkages & Institutional Expenses)",
-        "Moon": "11th Lord (Network Profits & Long-Term Aspirations)",
-        "Mars": "3rd & 8th Lord (Courage, Technical Research & Sudden Shifts)",
-        "Mercury": "Lagna & 10th Lord (Supreme Career & Intellectual Sovereignty)",
-        "Jupiter": "4th & 7th Lord (Real Estate, Domestic Peace & Partnerships)",
-        "Venus": "2nd & 9th Lord (Wealth Accumulation & Higher Fortune)",
-        "Saturn": "5th & 6th Lord (Strategy, Risk Management & Competitors)",
-        "Rahu": "Material Catalyst (Unorthodox Collaborations & Tech Ventures)",
-        "Ketu": "Spiritual Catalyst (Systemic Audits & Precision)"
+    5: { # Virgo
+        "Sun": "12th Lord of Global Linkages", "Moon": "11th Lord of Network Profits",
+        "Mars": "3rd & 8th Lord of Research and Crises", "Mercury": "Lagna & 10th Lord of Career and Intellectual Sovereignty",
+        "Jupiter": "4th & 7th Lord of Real Estate and Partnerships", "Venus": "2nd & 9th Lord of Wealth and Higher Dharma",
+        "Saturn": "5th & 6th Lord of Strategy and Risk Management", "Rahu": "Tech & Innovation Catalyst", "Ketu": "Precision Audit Catalyst"
     },
-    6: { # Tula (Libra)
-        "Sun": "11th Lord (Corporate Networks & Revenue Inflows)",
-        "Moon": "10th Lord (Career Stature & Public Executive Role)",
-        "Mars": "2nd & 7th Lord (Wealth Generation & Commercial Contracts)",
-        "Mercury": "9th & 12th Lord (Higher Education & Foreign Ventures)",
-        "Jupiter": "3rd & 6th Lord (Communication, Enterprise & Health Defense)",
-        "Venus": "Lagna & 8th Lord (Physical Vitality & Transformative Shifts)",
-        "Saturn": "4th & 5th Lord (Supreme Yogakaraka - Real Estate, Intellect & Assets)",
-        "Rahu": "Material Catalyst (Foreign Scale & Public Visibility)",
-        "Ketu": "Spiritual Catalyst (Esoteric Research)"
+    6: { # Libra
+        "Sun": "11th Lord of Revenue Inflows", "Moon": "10th Lord of Executive Stature",
+        "Mars": "2nd & 7th Lord of Wealth Generation and Contracts", "Mercury": "9th & 12th Lord of Fortune and Ventures",
+        "Jupiter": "3rd & 6th Lord of Enterprise and Health Defense", "Venus": "Lagna & 8th Lord of Vitality and Transformation",
+        "Saturn": "Supreme Yogakaraka (4th & 5th Lord of Assets and Intellect)", "Rahu": "Public Visibility Catalyst", "Ketu": "Esoteric Catalyst"
     },
-    7: { # Vrishchika (Scorpio)
-        "Sun": "10th Lord (Executive Authority & Career Stature)",
-        "Moon": "9th Lord (Fortune, Mentorship & Long-Distance Journeys)",
-        "Mars": "Lagna & 6th Lord (Physical Drive, Competitors & Liabilities)",
-        "Mercury": "8th & 11th Lord (Research, Audits & Network Profits)",
-        "Jupiter": "2nd & 5th Lord (Wealth, Family Assets & Strategic Intellect)",
-        "Venus": "7th & 12th Lord (Partnerships & Overseas Linkages)",
-        "Saturn": "3rd & 4th Lord (Courage, Real Estate & Domestic Foundations)",
-        "Rahu": "Material Catalyst (Sudden Breakthroughs & Scale)",
-        "Ketu": "Spiritual Catalyst (Deep Psychological Transformation)"
+    7: { # Scorpio
+        "Sun": "10th Lord of Career Authority", "Moon": "9th Lord of Fortune and Mentorship",
+        "Mars": "Lagna & 6th Lord of Physical Drive and Competitors", "Mercury": "8th & 11th Lord of Audits and Profits",
+        "Jupiter": "2nd & 5th Lord of Wealth and Strategy", "Venus": "7th & 12th Lord of Alliances and Outflows",
+        "Saturn": "3rd & 4th Lord of Courage and Real Estate", "Rahu": "Sudden Breakthrough Catalyst", "Ketu": "Deep Transformation Catalyst"
     },
-    8: { # Dhanu (Sagittarius)
-        "Sun": "9th Lord (Higher Dharma, Fortune & Mentors)",
-        "Moon": "8th Lord (Sudden Shifts & Forensic Research)",
-        "Mars": "5th & 12th Lord (Strategy, Children & Foreign Outflows)",
-        "Mercury": "7th & 10th Lord (Business Alliances & Career Executive Role)",
-        "Jupiter": "Lagna & 4th Lord (Personal Vitality, Wisdom & Real Estate)",
-        "Venus": "6th & 11th Lord (Service, Health Management & Liquid Profits)",
-        "Saturn": "2nd & 3rd Lord (Wealth Accumulation & Enterprise)",
-        "Rahu": "Material Catalyst (Unorthodox Wealth & Expansion)",
-        "Ketu": "Spiritual Catalyst (Philosophical Detachment)"
+    8: { # Sagittarius
+        "Sun": "9th Lord of Higher Dharma and Fortune", "Moon": "8th Lord of Forensic Research",
+        "Mars": "5th & 12th Lord of Strategy and Foreign Outflows", "Mercury": "7th & 10th Lord of Alliances and Career",
+        "Jupiter": "Lagna & 4th Lord of Vitality, Wisdom and Assets", "Venus": "6th & 11th Lord of Service and Profits",
+        "Saturn": "2nd & 3rd Lord of Savings and Enterprise", "Rahu": "Unorthodox Expansion Catalyst", "Ketu": "Philosophical Catalyst"
     },
-    9: { # Makara (Capricorn)
-        "Sun": "8th Lord (Transformation & Confidential Investigations)",
-        "Moon": "7th Lord (Marital & Business Partnerships)",
-        "Mars": "4th & 11th Lord (Property Assets & Network Yields)",
-        "Mercury": "6th & 9th Lord (Competitors, Service & Higher Fortune)",
-        "Jupiter": "3rd & 12th Lord (Enterprise & Foreign Linkages)",
-        "Venus": "5th & 10th Lord (Supreme Yogakaraka - Career, Creative Strategy & Rank)",
-        "Saturn": "Lagna & 2nd Lord (Personal Sovereignty & Wealth Accumulation)",
-        "Rahu": "Material Catalyst (Massive Ambition & Sudden Scale)",
-        "Ketu": "Spiritual Catalyst (Inner Mastery)"
+    9: { # Capricorn
+        "Sun": "8th Lord of Confidential Investigations", "Moon": "7th Lord of Commercial Contracts",
+        "Mars": "4th & 11th Lord of Property and Network Yields", "Mercury": "6th & 9th Lord of Service and Fortune",
+        "Jupiter": "3rd & 12th Lord of Enterprise and Foreign Linkages", "Venus": "Supreme Yogakaraka (5th & 10th Lord of Career and Strategy)",
+        "Saturn": "Lagna & 2nd Lord of Personal Sovereignty and Wealth", "Rahu": "Massive Ambition Catalyst", "Ketu": "Inner Mastery Catalyst"
     },
-    10: { # Kumbha (Aquarius)
-        "Sun": "7th Lord (Public Visibility & Commercial Contracts)",
-        "Moon": "6th Lord (Health Defense, Service & Competitors)",
-        "Mars": "3rd & 10th Lord (Enterprise, Courage & Career Authority)",
-        "Mercury": "5th & 8th Lord (Intellect, Strategy & Research Audits)",
-        "Jupiter": "2nd & 11th Lord (Wealth Generation & Financial Inflows)",
-        "Venus": "4th & 9th Lord (Supreme Yogakaraka - Real Estate, Luxury & Fortune)",
-        "Saturn": "Lagna & 12th Lord (Self-Identity & Foreign Linkages)",
-        "Rahu": "Material Catalyst (Unorthodox Innovation & Scale)",
-        "Ketu": "Spiritual Catalyst (Systemic Reform)"
+    10: { # Aquarius
+        "Sun": "7th Lord of Public Visibility", "Moon": "6th Lord of Health Defense and Service",
+        "Mars": "3rd & 10th Lord of Enterprise and Career Authority", "Mercury": "5th & 8th Lord of Intellect and Research",
+        "Jupiter": "2nd & 11th Lord of Wealth Generation and Inflows", "Venus": "Supreme Yogakaraka (4th & 9th Lord of Assets and Fortune)",
+        "Saturn": "Lagna & 12th Lord of Self-Identity and Foreign Linkages", "Rahu": "Unorthodox Innovation Catalyst", "Ketu": "Systemic Reform Catalyst"
     },
-    11: { # Meena (Pisces)
-        "Sun": "6th Lord (Liabilities & Operational Challenges)",
-        "Moon": "5th Lord (Intellect, Strategy & Progeny)",
-        "Mars": "2nd & 9th Lord (Wealth Accumulation & Fortune)",
-        "Mercury": "4th & 7th Lord (Real Estate & Business Partnerships)",
-        "Jupiter": "Lagna & 10th Lord (Personal Sovereignty & Career Stature)",
-        "Venus": "3rd & 8th Lord (Enterprise & Sudden Shifts)",
-        "Saturn": "11th & 12th Lord (Network Profits & Foreign Outflows)",
-        "Rahu": "Material Catalyst (Unconventional Gains)",
-        "Ketu": "Spiritual Catalyst (Mystical Insights)"
+    11: { # Pisces
+        "Sun": "6th Lord of Operational Challenges", "Moon": "5th Lord of Intellect and Progeny",
+        "Mars": "2nd & 9th Lord of Wealth Accumulation and Fortune", "Mercury": "4th & 7th Lord of Real Estate and Partnerships",
+        "Jupiter": "Lagna & 10th Lord of Personal Sovereignty and Career Stature", "Venus": "3rd & 8th Lord of Enterprise and Sudden Shifts",
+        "Saturn": "11th & 12th Lord of Profits and Outflows", "Rahu": "Unconventional Gains Catalyst", "Ketu": "Mystical Insight Catalyst"
     }
 }
-
-def generate_dasha_executive_briefing(lagna_idx: int, md_lord: str, ad_lord: str) -> dict:
-    nature_dict = LAGNA_PLANET_NATURE.get(lagna_idx, {})
-    md_nature = nature_dict.get(md_lord, "Active Planetary Influence")
-    ad_nature = nature_dict.get(ad_lord, "Active Sub-Period Influence")
-
-    # Tailored Executive Briefing synthesis
-    macro_theme = f"Operating under the major era of **{md_lord}**, functioning as your **{md_nature}**. This multi-year chapter sets the grand strategic trajectory of your life, focusing heavily on the structural governance and evolutionary lessons of these specific life domains."
-    
-    tactical_focus = f"Within this macro framework, the active sub-period of **{ad_lord}** (acting as your **{ad_nature}**) serves as the immediate tactical lever. It accelerates, modifies, or introduces targeted friction into your primary Mahadasha objectives."
-
-    career_wealth = f"**Capital & Executive Stature:** This combination directly activates your professional hierarchy. Asset compounding, cash flow management, and decision-making clarity are directly tied to how effectively you leverage the combined energies of {md_lord} and {ad_lord}."
-
-    cautions = f"**Operational & Strategic Risk Areas:** Guard against over-leveraging resources, emotional reactivity during high-stress corporate negotiations, or neglecting foundational rest and health routines."
-
-    remedy = f"**Targeted Grounding Protocol:** Maintain strict contractual transparency, practice early morning mindfulness or physical grounding, and honor the ruling frequencies through consistent ethical execution."
-
-    return {
-        "macro": macro_theme,
-        "tactical": tactical_focus,
-        "career": career_wealth,
-        "cautions": cautions,
-        "remedy": remedy
-    }
 
 def add_years_to_datetime(dt: datetime.datetime, years: float) -> datetime.datetime:
     days = years * 365.2425
@@ -1522,7 +1437,7 @@ def get_dasha_sub_periods_proportional(lord: str, total_years: float, base_start
         curr_st = sub_ed
     return subs
 
-def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt: datetime.datetime):
+def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt: datetime.datetime, lagna_idx: int = 0):
     star_span = 360.0 / 27.0
     star_idx = int(moon_lon / star_span)
     start_lord_idx = star_idx % 9
@@ -1550,16 +1465,47 @@ def calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt
         
     current_md_lord = DASHA_SEQUENCE[md_idx]
     
-    def find_active_sub_level(lord, total_yrs, st_dt, tgt):
-        subs = get_dasha_sub_periods_proportional(lord, total_yrs, st_dt)
-        for slord, syrs, s_st, s_ed in subs:
-            if s_st <= tgt <= s_ed:
-                return slord, syrs, s_st, s_ed
-        return subs[-1][0], subs[-1][1], subs[-1][2], subs[-1][3]
+    # Calculate Next Mahadasha
+    next_md_idx = (md_idx + 1) % 9
+    next_md_lord = DASHA_SEQUENCE[next_md_idx]
+    next_md_start = md_end
+    next_md_end = add_years_to_datetime(next_md_start, DASHA_YEARS[next_md_lord])
 
-    ad_lord, ad_yrs, ad_start, ad_end = find_active_sub_level(current_md_lord, md_years, md_start, target_dt)
+    def get_all_sub_periods(lord, total_yrs, st_dt):
+        return get_dasha_sub_periods_proportional(lord, total_yrs, st_dt)
+
+    current_subs = get_all_sub_periods(current_md_lord, md_years, md_start)
     
-    return [
-        {"level": "Mahadasha (Major Era)", "lord": current_md_lord, "start": md_start, "end": md_end, "key": "MD"},
-        {"level": "Antardasha (Sub-Period)", "lord": ad_lord, "start": ad_start, "end": ad_end, "key": "AD"}
-    ]
+    active_ad_idx = 0
+    ad_lord, ad_yrs, ad_start, ad_end = current_subs[0][0], current_subs[0][1], current_subs[0][2], current_subs[0][3]
+    
+    for idx, (slord, syrs, s_st, s_ed) in enumerate(current_subs):
+        if s_st <= target_dt <= s_ed:
+            ad_lord, ad_yrs, ad_start, ad_end = slord, syrs, s_st, s_ed
+            active_ad_idx = idx
+            break
+
+    # Calculate Next Antardasha
+    if active_ad_idx + 1 < len(current_subs):
+        next_ad_tuple = current_subs[active_ad_idx + 1]
+        next_ad_lord, next_ad_start, next_ad_end = next_ad_tuple[0], next_ad_tuple[2], next_ad_tuple[3]
+    else:
+        # Rolls over to next Mahadasha's first sub-period
+        next_md_subs = get_all_sub_periods(next_md_lord, DASHA_YEARS[next_md_lord], next_md_start)
+        next_ad_lord, next_ad_start, next_ad_end = next_md_subs[0][0], next_md_subs[0][2], next_md_subs[0][3]
+
+    nature_dict = LAGNA_PLANET_NATURE.get(lagna_idx, {})
+    md_nature = nature_dict.get(current_md_lord, "Planetary Lord")
+    ad_nature = nature_dict.get(ad_lord, "Sub-Period Lord")
+
+    # Tailored Descriptions
+    md_desc = f"As the **{md_nature}**, this Mahadasha establishes your multi-year evolutionary chapter. It governs long-term asset compounding, executive decision frameworks, and foundational growth across these specific life sectors."
+    
+    ad_desc = f"As the **{ad_nature}**, operating under the overarching influence of {current_md_lord}, this sub-period introduces targeted tactical dynamics. It interacts with your Mahadasha lord to accelerate professional progress, regulate cash flow, and manage operational friction."
+
+    return {
+        "md": {"lord": current_md_lord, "start": md_start, "end": md_end, "desc": md_desc},
+        "ad": {"lord": ad_lord, "start": ad_start, "end": ad_end, "desc": ad_desc},
+        "next_md": {"lord": next_md_lord, "start": next_md_start, "end": next_md_end},
+        "next_ad": {"lord": next_ad_lord, "start": next_ad_start, "end": next_ad_end}
+    }
