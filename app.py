@@ -1252,7 +1252,7 @@ def render_page_forecast():
 
 
 # ==============================================================================
-# TAB: MONTHLY HOROSCOPE (DYNAMIC)
+# TAB 7: MONTHLY HOROSCOPE (DYNAMIC GOCHAR ENGINE)
 # ==============================================================================
 def render_page_monthly():
     if not has_valid_profile:
@@ -1273,16 +1273,16 @@ def render_page_monthly():
     </div>
     """)
 
-    # --- DYNAMIC CALENDAR LOGIC ---
+    # --- DYNAMIC CALENDAR LOGIC (Mid-Month Ephemeris Sampling) ---
     now = datetime.datetime.now()
+    curr_mid = now.replace(day=15, hour=12, minute=0, second=0)
     curr_month_str = now.strftime("%B %Y")
     
-    # Safely calculate the 15th of next month (handling Dec -> Jan rollover)
     if now.month == 12:
-        next_dt = now.replace(year=now.year + 1, month=1, day=15)
+        next_mid = now.replace(year=now.year + 1, month=1, day=15, hour=12, minute=0, second=0)
     else:
-        next_dt = now.replace(month=now.month + 1, day=15)
-    next_month_str = next_dt.strftime("%B %Y")
+        next_mid = now.replace(month=now.month + 1, day=15, hour=12, minute=0, second=0)
+    next_month_str = next_mid.strftime("%B %Y")
 
     month_choice = st.radio(
         "**Select Forecast Month:**",
@@ -1290,9 +1290,8 @@ def render_page_monthly():
         horizontal=True
     )
     
-    target_date = next_dt if "Next Month" in month_choice else now
+    target_date = next_mid if "Next Month" in month_choice else curr_mid
     pred = db.get_dynamic_monthly_prediction(lagna_idx, target_date)
-    # ------------------------------
 
     render_html(f"""
     <div class="auth-hero-box" style="margin-bottom:1.2rem;">
@@ -1309,58 +1308,58 @@ def render_page_monthly():
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bbf7d0; border-left:5px solid #10b981;">
-            <b style="color:#065f46; font-size:0.98rem;">👨‍👩‍👦 2. Family & Accumulated Wealth:</b>
+            <b style="color:#065f46; font-size:0.98rem;">👨‍👩‍👦 2. Family & Accumulated Wealth (Liquid Assets & Speech):</b>
             <div style="font-size:0.92rem; color:#14532d; margin-top:3px; line-height:1.6;">{pred['family']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd; border-left:5px solid #0284c7;">
-            <b style="color:#0369a1; font-size:0.98rem;">✈️ 3. Travels (Short Journeys & Enterprise):</b>
+            <b style="color:#0369a1; font-size:0.98rem;">✈️ 3. Travels & Enterprise (Short Journeys, Siblings & Courage):</b>
             <div style="font-size:0.92rem; color:#0c4a6e; margin-top:3px; line-height:1.6;">{pred['travels']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fed7aa; border-left:5px solid #ea580c;">
-            <b style="color:#9a3412; font-size:0.98rem;">🏡 4. Property (Land, Home, Vehicles):</b>
+            <b style="color:#9a3412; font-size:0.98rem;">🏡 4. Property, Vehicles & Domestic Peace (Land & Home):</b>
             <div style="font-size:0.92rem; color:#431407; margin-top:3px; line-height:1.6;">{pred['property']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fde68a; border-left:5px solid #f59e0b;">
-            <b style="color:#b45309; font-size:0.98rem;">📚 5. Children & Higher Study (Intellect):</b>
-            <div style="font-size:0.92rem; color:#78350f; margin-top:3px; line-height:1.6;">{pred['study']} | <b>Children:</b> {pred['child']}</div>
+            <b style="color:#b45309; font-size:0.98rem;">📚 5. Children & Higher Study (Intellect & Creative Strategy):</b>
+            <div style="font-size:0.92rem; color:#78350f; margin-top:3px; line-height:1.6;">{pred['study']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #e11d48;">
-            <b style="color:#9f1239; font-size:0.98rem;">📉 6. Loans & Health Defense (Debts, Immunity):</b>
-            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['loan']} | <b>Health/Accidents:</b> {pred['accidents']}</div>
+            <b style="color:#9f1239; font-size:0.98rem;">📉 6. Loans, Debts & Health Defense (Immunity & Competitors):</b>
+            <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['loan']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #ddd6fe; border-left:5px solid #8b5cf6;">
-            <b style="color:#5b21b6; font-size:0.98rem;">💍 7. Spouse & Business Partnerships:</b>
-            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;"><b>Spouse:</b> {pred['spouse']} | <b>Partnerships:</b> {pred['partnership']}</div>
+            <b style="color:#5b21b6; font-size:0.98rem;">💍 7. Spouse & Business Partnerships (Alliances & Contracts):</b>
+            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;">{pred['spouse']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fecdd3; border-left:5px solid #be123c;">
-            <b style="color:#9f1239; font-size:0.98rem;">🔬 8. Research & Sudden Shifts:</b>
+            <b style="color:#9f1239; font-size:0.98rem;">🔬 8. Sudden Shifts, Research & Accidents Caution:</b>
             <div style="font-size:0.92rem; color:#881337; margin-top:3px; line-height:1.6;">{pred['research']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #fde68a; border-left:5px solid #d97706;">
-            <b style="color:#92400e; font-size:0.98rem;">🍀 9. Luck & Dharma (Mentors & Fortune):</b>
+            <b style="color:#92400e; font-size:0.98rem;">🍀 9. Luck, Dharma & Mentorship (Higher Journeys & Fortune):</b>
             <div style="font-size:0.92rem; color:#78350f; margin-top:3px; line-height:1.6;">{pred['luck']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bae6fd; border-left:5px solid #0284c7;">
-            <b style="color:#0369a1; font-size:0.98rem;">💼 10. Career & Executive Stature (Job, Business):</b>
+            <b style="color:#0369a1; font-size:0.98rem;">💼 10. Career, Job & Executive Stature (Authority & Standing):</b>
             <div style="font-size:0.92rem; color:#0c4a6e; margin-top:3px; line-height:1.6;">{pred['career']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #bbf7d0; border-left:5px solid #059669;">
-            <b style="color:#065f46; font-size:0.98rem;">💰 11. Gains & Inflows (Net Profit & Networks):</b>
+            <b style="color:#065f46; font-size:0.98rem;">💰 11. Gains, Inflows & Network Circles (Profits & Aspirations):</b>
             <div style="font-size:0.92rem; color:#14532d; margin-top:3px; line-height:1.6;">{pred['gains']}</div>
         </div>
 
         <div style="background:#ffffff; border-radius:12px; padding:12px 14px; border:1.5px solid #ddd6fe; border-left:5px solid #6d28d9;">
-            <b style="color:#5b21b6; font-size:0.98rem;">🌐 12. Expenditure & Foreign Linkages (Settlements):</b>
-            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;"><b>Expenditure:</b> {pred['expenditure']} | <b>Foreign:</b> {pred['foreign']}</div>
+            <b style="color:#5b21b6; font-size:0.98rem;">🌐 12. Expenditure, Foreign Linkages & Overseas Settlements:</b>
+            <div style="font-size:0.92rem; color:#3b0764; margin-top:3px; line-height:1.6;">{pred['foreign']}</div>
         </div>
     </div>
     """)
