@@ -1371,7 +1371,61 @@ def render_page_monthly():
         </div>
     </div>
     """)
-    
+  # ==============================================================================
+# TAB 8: VIMSHOTTARI DASHA (PLANETARY TIMELINE)
+# ==============================================================================
+def render_page_dasha():
+    if not has_valid_profile:
+        render_profile_setup_prompt()
+        return
+
+    birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
+    now_ist = datetime.datetime.now()
+    dasha_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
+
+    render_html(f"""
+    <div style="margin-bottom:1.5rem;">
+        <div style="font-weight:900; font-size:1.35rem; color:#1e293b;">{t('dasha_page_title', current_lang)}</div>
+        <div style="font-size:0.95rem; color:#475569; margin-top:4px;">
+            {t('dasha_page_subtitle', current_lang)}
+        </div>
+    </div>
+    """)
+
+    # Visual Cascade Styling
+    colors = [
+        {"bg": "#f0fdf4", "border": "#16a34a", "text": "#14532d", "indent": "0px", "icon": "🟩"},  # MD
+        {"bg": "#eff6ff", "border": "#2563eb", "text": "#1e3a8a", "indent": "20px", "icon": "↳ 🟦"},  # AD
+        {"bg": "#faf5ff", "border": "#9333ea", "text": "#581c87", "indent": "40px", "icon": "↳ 🟪"},  # PD
+        {"bg": "#fff7ed", "border": "#ea580c", "text": "#9a3412", "indent": "60px", "icon": "↳ 🟧"},  # SD
+        {"bg": "#fff1f2", "border": "#e11d48", "text": "#9f1239", "indent": "80px", "icon": "↳ 🟥"}   # PrD
+    ]
+
+    for idx, lvl in enumerate(dasha_levels):
+        c = colors[idx]
+        fmt_str = "%b %d, %Y" if idx < 2 else "%b %d, %Y (%I:%M %p)"
+        start_str = lvl['start'].strftime(fmt_str)
+        end_str = lvl['end'].strftime(fmt_str)
+        prediction_text = db.DASHA_PREDICTIONS[lvl['lord']][lvl['key']]
+
+        render_html(f"""
+        <div style="margin-left:{c['indent']}; background:{c['bg']}; border-radius:12px; padding:12px 14px; border:1px solid rgba(0,0,0,0.05); border-left:6px solid {c['border']}; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                <div style="font-weight:900; font-size:1.05rem; color:{c['text']};">
+                    {c['icon']} {lvl['level']}: {lvl['lord'].upper()}
+                </div>
+                <div style="font-size:0.8rem; background:#ffffff; color:#0f172a; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #cbd5e1;">
+                    Live 🟢
+                </div>
+            </div>
+            <div style="font-size:0.85rem; color:#475569; font-weight:700; margin-top:4px;">
+                ⏱️ {start_str} — {end_str}
+            </div>
+            <div style="font-size:0.92rem; color:{c['text']}; margin-top:6px; line-height:1.6;">
+                {prediction_text}
+            </div>
+        </div>
+        """)  
 # ==============================================================================
 # TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
 # ==============================================================================
