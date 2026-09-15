@@ -1381,8 +1381,133 @@ def render_page_monthly():
 
 
 # ==============================================================================
-# TAB 8: VIMSHOTTARI DASHA (EXECUTIVE TIMELINE)
+# TAB 8: VIMSHOTTARI DASHA (SELF-CONTAINED ENGINE & EXECUTIVE TIMELINE)
 # ==============================================================================
+DASHA_SEQ = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"]
+DASHA_YRS = {
+    "Ketu": 7.0, "Venus": 20.0, "Sun": 6.0, "Moon": 10.0, "Mars": 7.0, 
+    "Rahu": 18.0, "Jupiter": 16.0, "Saturn": 19.0, "Mercury": 17.0
+}
+
+LAGNA_NATURE_MAP = {
+    0: {"Sun": "5th Lord (Intellect & Authority)", "Moon": "4th Lord (Property & Domestic Peace)", "Mars": "Lagna & 8th Lord (Vitality & Sudden Shifts)", "Mercury": "3rd & 6th Lord (Enterprise & Management)", "Jupiter": "9th & 12th Lord (Fortune & Foreign Outflows)", "Venus": "2nd & 7th Lord (Wealth & Contracts)", "Saturn": "10th & 11th Lord (Career Authority & Gains)", "Rahu": "Material Catalyst", "Ketu": "Spiritual Catalyst"},
+    1: {"Sun": "4th Lord (Assets & Inner Stability)", "Moon": "3rd Lord (Enterprise & Short Journeys)", "Mars": "7th & 12th Lord (Partnerships & Foreign Outflows)", "Mercury": "2nd & 5th Lord (Liquid Wealth & Intellect)", "Jupiter": "8th & 11th Lord (Transformations & Network Gains)", "Venus": "Lagna & 6th Lord (Vitality & Defense)", "Saturn": "9th & 10th Lord (Supreme Yogakaraka - Career & Fortune)", "Rahu": "Ambition Catalyst", "Ketu": "Introspective Catalyst"},
+    2: {"Sun": "3rd Lord (Enterprise & Courage)", "Moon": "2nd Lord (Accumulated Wealth)", "Mars": "6th & 11th Lord (Liabilities & Network Gains)", "Mercury": "Lagna & 4th Lord (Personal Identity & Assets)", "Jupiter": "7th & 10th Lord (Career & Business Alliances)", "Venus": "5th & 12th Lord (Strategy & Outflows)", "Saturn": "8th & 9th Lord (Transformation & Destiny)", "Rahu": "Career Breakthrough Catalyst", "Ketu": "Analytical Catalyst"},
+    3: {"Sun": "2nd Lord (Wealth & Speech)", "Moon": "Lagna Lord (Personal Vitality & Identity)", "Mars": "5th & 10th Lord (Supreme Yogakaraka - Executive Power)", "Mercury": "3rd & 12th Lord (Communications & Foreign Linkages)", "Jupiter": "6th & 9th Lord (Health Defense & Higher Fortune)", "Venus": "4th & 11th Lord (Real Estate & Gains)", "Saturn": "7th & 8th Lord (Partnerships & Deep Restructuring)", "Rahu": "Expansion Catalyst", "Ketu": "Solitude Catalyst"},
+    4: {"Sun": "Lagna Lord (Sovereignty & Health)", "Moon": "12th Lord (Background Strategy & Foreign Affairs)", "Mars": "4th & 9th Lord (Supreme Yogakaraka - Assets & Luck)", "Mercury": "2nd & 11th Lord (Liquid Wealth & Inflows)", "Jupiter": "5th & 8th Lord (Intellect & Sudden Research)", "Venus": "3rd & 10th Lord (Enterprise & Public Stature)", "Saturn": "6th & 7th Lord (Competitors & Contracts)", "Rahu": "Scale & Ambition Catalyst", "Ketu": "Detachment Catalyst"},
+    5: {"Sun": "12th Lord (Global Linkages & Expenses)", "Moon": "11th Lord (Network Profits & Goals)", "Mars": "3rd & 8th Lord (Courage & Sudden Research)", "Mercury": "Lagna & 10th Lord (Intellectual Stature & Career)", "Jupiter": "4th & 7th Lord (Domestic Assets & Partnerships)", "Venus": "2nd & 9th Lord (Wealth & Destiny)", "Saturn": "5th & 6th Lord (Strategy & Overcoming Resistance)", "Rahu": "Tech & Innovation Catalyst", "Ketu": "Audit Catalyst"},
+    6: {"Sun": "11th Lord (Corporate Networks & Inflows)", "Moon": "10th Lord (Career Stature & Executive Presence)", "Mars": "2nd & 7th Lord (Wealth & Commercial Contracts)", "Mercury": "9th & 12th Lord (Higher Fortune & Overseas Matters)", "Jupiter": "3rd & 6th Lord (Enterprise & Operational Management)", "Venus": "Lagna & 8th Lord (Vitality & Transformations)", "Saturn": "4th & 5th Lord (Supreme Yogakaraka - Real Estate & Intellect)", "Rahu": "Foreign & Media Catalyst", "Ketu": "Esoteric Catalyst"},
+    7: {"Sun": "10th Lord (Executive Authority & Stature)", "Moon": "9th Lord (Fortune & Mentorship)", "Mars": "Lagna & 6th Lord (Physical Drive & Overcoming Obstacles)", "Mercury": "8th & 11th Lord (Forensic Research & Network Yields)", "Jupiter": "2nd & 5th Lord (Wealth & Strategic Intelligence)", "Venus": "7th & 12th Lord (Partnerships & Overseas Linkages)", "Saturn": "3rd & 4th Lord (Courage & Real Estate)", "Rahu": "Breakthrough Catalyst", "Ketu": "Inner Cleansing Catalyst"},
+    8: {"Sun": "9th Lord (Higher Dharma & Fortune)", "Moon": "8th Lord (Sudden Shifts & Depth)", "Mars": "5th & 12th Lord (Intellect & Foreign Outflows)", "Mercury": "7th & 10th Lord (Business Alliances & Career Stature)", "Jupiter": "Lagna & 4th Lord (Vitality, Wisdom & Real Estate)", "Venus": "6th & 11th Lord (Service & Liquid Gains)", "Saturn": "2nd & 3rd Lord (Wealth Accumulation & Enterprise)", "Rahu": "Material Expansion Catalyst", "Ketu": "Philosophical Catalyst"},
+    9: {"Sun": "8th Lord (Transformation & Confidential Matters)", "Moon": "7th Lord (Marital & Commercial Alliances)", "Mars": "4th & 11th Lord (Property Assets & Network Gains)", "Mercury": "6th & 9th Lord (Management & Higher Luck)", "Jupiter": "3rd & 12th Lord (Short Journeys & Foreign Linkages)", "Venus": "5th & 10th Lord (Supreme Yogakaraka - Creative Authority & Stature)", "Saturn": "Lagna & 2nd Lord (Personal Sovereignty & Wealth Accumulation)", "Rahu": "Sudden Elevation Catalyst", "Ketu": "Mastery Catalyst"},
+    10: {"Sun": "7th Lord (Public Visibility & Contracts)", "Moon": "6th Lord (Health Defense & Competitors)", "Mars": "3rd & 10th Lord (Enterprise & Executive Authority)", "Mercury": "5th & 8th Lord (Intellect & Technical Research)", "Jupiter": "2nd & 11th Lord (Wealth Accumulation & Liquid Inflows)", "Venus": "4th & 9th Lord (Supreme Yogakaraka - Assets & Higher Fortune)", "Saturn": "Lagna & 12th Lord (Self-Identity & Global Linkages)", "Rahu": "Innovation Catalyst", "Ketu": "Reformation Catalyst"},
+    11: {"Sun": "6th Lord (Overcoming Competition & Operational Hurdles)", "Moon": "5th Lord (Intellect & Creative Strategy)", "Mars": "2nd & 9th Lord (Wealth & Divine Fortune)", "Mercury": "4th & 7th Lord (Real Estate & Commercial Alliances)", "Jupiter": "Lagna & 10th Lord (Personal Sovereignty & Career Stature)", "Venus": "3rd & 8th Lord (Enterprise & Sudden Transitions)", "Saturn": "11th & 12th Lord (Network Profits & Foreign Matters)", "Rahu": "Unconventional Gains Catalyst", "Ketu": "Mystical Catalyst"}
+}
+
+DASHA_PREDICTIONS_INLINE = {
+    "Sun": {
+        "title": "Sun (Surya) Era - Authority, Vitality & Executive Command",
+        "details": "Elevates your public visibility, leadership responsibilities, and rapport with decision-makers. Strengthens core confidence and physical vitality.",
+        "cautions": "Guard against ego-driven reactions, impatience with collaborators, and elevated metabolic heat (Pitta).",
+        "remedies": "• Gemstone: Ruby (Manikya) in gold on ring finger after trial.\n• Beej Mantra: ॐ ह्रां ह्रीं ह्रौं सः सूर्याय नमः (11 times daily).\n• Deity Worship: Offer pure water in a copper vessel to morning Surya Dev.\n• Fasting: Observe fasts on Sundays."
+    },
+    "Moon": {
+        "title": "Moon (Chandra) Era - Mind, Emotion & Public Resonance",
+        "details": "A period focused on emotional clarity, domestic foundations, real estate decisions, and public interactions. Intuition and social adaptability peak.",
+        "cautions": "Avoid over-sensitivity, erratic mood fluctuations, and reactive domestic choices.",
+        "remedies": "• Gemstone: Natural Pearl (Moti) or Moonstone in silver on little finger.\n• Beej Mantra: ॐ श्रां श्रीं श्रौं सः चन्द्रमसे नमः (11 times daily).\n• Deity Worship: Offer raw milk or water on Shiva Lingam on Mondays.\n• Fasting: Observe fasts on Mondays or Purnima."
+    },
+    "Mars": {
+        "title": "Mars (Mangal) Era - Courage, Real Estate & Direct Action",
+        "details": "Drives physical stamina, asset ownership, competitive triumphs, and bold technical initiatives. Favors decisive execution.",
+        "cautions": "Strictly avoid impulsiveness, confrontational speech, and signing unvetted property deeds.",
+        "remedies": "• Gemstone: Red Coral (Moonga) in copper or gold on ring finger.\n• Beej Mantra: ॐ क्रां क्रीं क्रौं सः भौमाय नमः (11 times daily).\n• Deity Worship: Recite Hanuman Chalisa daily.\n• Fasting: Observe fasts on Tuesdays."
+    },
+    "Rahu": {
+        "title": "Rahu Era - Ambition, Foreign Linkages & Unorthodox Breakthroughs",
+        "details": "Brings material ambition, rapid technological scaling, foreign linkages, and unexpected leaps. Breaks conventional stagnation.",
+        "cautions": "Beware of speculative gambling, get-rich-quick shortcuts, and unnecessary anxiety.",
+        "remedies": "• Gemstone: Hessonite (Gomedh) in silver.\n• Beej Mantra: ॐ भ्रां भ्रीं भ्रौं सः राहवे नमः (11 times daily).\n• Deity Worship: Worship Goddess Durga or Lord Bhairava.\n• Charity: Feed stray dogs or donate dark grains on Saturdays."
+    },
+    "Jupiter": {
+        "title": "Jupiter (Guru) Era - Wisdom, Financial Compounding & Stature",
+        "details": "A golden phase for wealth accumulation, institutional prestige, higher guidance, and mentorship. Brings lasting structural expansion.",
+        "cautions": "Avoid complacency, unvetted optimistic commitments, and liver/dietary excesses.",
+        "remedies": "• Gemstone: Yellow Sapphire (Pukhraj) in gold on index finger.\n• Beej Mantra: ॐ ग्रां ग्रीं ग्रौं सः गुरवे नमः (19 times daily).\n• Deity Worship: Worship Lord Vishnu; water Peepal tree on Thursdays.\n• Fasting: Observe fasts on Thursdays."
+    },
+    "Saturn": {
+        "title": "Saturn (Shani) Era - Karmic Structure, Endurance & Permanent Legacy",
+        "details": "Builds long-term enterprise through discipline, procedural rigor, patience, and organizational grit. Delays immediate comfort to forge lasting security.",
+        "cautions": "Avoid cutting corners, harsh speech, and physical exhaustion impacting joints or lower back.",
+        "remedies": "• Gemstone: Blue Sapphire (Neelam) after trial, or Amethyst in silver.\n• Beej Mantra: ॐ प्रां प्रीं प्रौं सः शनैश्चराय नमः (11 times daily).\n• Deity Worship: Light mustard oil lamp under Peepal on Saturdays.\n• Charity: Donate black sesame or mustard oil to laborers on Saturdays."
+    },
+    "Mercury": {
+        "title": "Mercury (Budha) Era - Intellect, Trade & Analytical Precision",
+        "details": "Favors commercial growth, contract executions, analytical research, verbal clarity, and media/communication projects.",
+        "cautions": "Guard against nervous fatigue, over-analyzing operational margins, and ambiguous correspondence.",
+        "remedies": "• Gemstone: Emerald (Panna) in gold or bronze on little finger.\n• Beej Mantra: ॐ ब्रां ब्रीं ब्रौं सः बुधाय नमः (11 times daily).\n• Deity Worship: Recite Vishnu Sahasranama or worship Goddess Saraswati.\n• Charity: Feed green spinach to cows on Wednesdays."
+    },
+    "Ketu": {
+        "title": "Ketu Era - Deep Research, Inner Mastery & Detachment",
+        "details": "Channels focus toward forensic analysis, root-cause investigation, spiritual autonomy, and letting go of stagnant attachments.",
+        "cautions": "Avoid isolation, vague contractual agreements, and sudden erratic operational pivots.",
+        "remedies": "• Gemstone: Cat's Eye (Lehsuniya) in silver.\n• Beej Mantra: ॐ स्रां स्रीं स्रौं सः केतवे नमः (11 times daily).\n• Deity Worship: Worship Lord Ganesha.\n• Charity: Donate blankets to the needy or feed stray animals."
+    },
+    "Venus": {
+        "title": "Venus (Shukra) Era - Luxury, Harmonious Alliances & Material Refinement",
+        "details": "Governs wealth realization, vehicle and home upgrades, diplomatic negotiation ease, and rewarding domestic relationships.",
+        "cautions": "Guard against financial vanity, lavish overspending, and interpersonal codependency.",
+        "remedies": "• Gemstone: Diamond (Heera) or White Zircon in silver or gold.\n• Beej Mantra: ॐ द्रां द्रीं द्रौं सः शुक्राय नमः (16 times daily).\n• Deity Worship: Worship Goddess Lakshmi.\n• Charity: Donate white sweets, milk, or camphor on Fridays."
+    }
+}
+
+def local_add_years(dt: datetime.datetime, years: float) -> datetime.datetime:
+    return dt + datetime.timedelta(days=years * 365.2425)
+
+def local_calculate_live_dasha(birth_dt: datetime.datetime, moon_lon: float, target_dt: datetime.datetime):
+    star_span = 360.0 / 27.0
+    star_idx = int(moon_lon / star_span)
+    start_lord_idx = star_idx % 9
+    
+    elapsed_deg = moon_lon - (star_idx * star_span)
+    fraction_left = max(0.0, min(1.0, 1.0 - (elapsed_deg / star_span)))
+    
+    start_lord = DASHA_SEQ[start_lord_idx]
+    balance_years = DASHA_YRS[start_lord] * fraction_left
+    
+    md_idx = start_lord_idx
+    md_start = birth_dt
+    md_years = balance_years
+    md_end = local_add_years(md_start, md_years)
+    
+    while target_dt > md_end:
+        md_start = md_end
+        md_idx = (md_idx + 1) % 9
+        current_lord = DASHA_SEQ[md_idx]
+        md_years = DASHA_YRS[current_lord]
+        md_end = local_add_years(md_start, md_years)
+        
+    current_md_lord = DASHA_SEQ[md_idx]
+    
+    # Sub-periods (Antardasha)
+    curr_ad_st = md_start
+    active_ad = ("Ketu", md_years, md_start, md_end)
+    for i in range(9):
+        sub_lord = DASHA_SEQ[(md_idx + i) % 9]
+        sub_yrs = (md_years * DASHA_YRS[sub_lord]) / 120.0
+        sub_ed = local_add_years(curr_ad_st, sub_yrs)
+        if curr_ad_st <= target_dt <= sub_ed:
+            active_ad = (sub_lord, sub_yrs, curr_ad_st, sub_ed)
+            break
+        curr_ad_st = sub_ed
+    else:
+        active_ad = (sub_lord, sub_yrs, curr_ad_st, sub_ed)
+        
+    return [
+        {"level": "Mahadasha", "lord": current_md_lord, "start": md_start, "end": md_end},
+        {"level": "Antardasha", "lord": active_ad[0], "start": active_ad[2], "end": active_ad[3]}
+    ]
+
 def render_page_dasha():
     if not has_valid_profile:
         render_profile_setup_prompt()
@@ -1391,20 +1516,28 @@ def render_page_dasha():
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
     
-    dasha_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
+    # Calculate live dasha directly
+    dasha_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
     md_item = dasha_levels[0]
     ad_item = dasha_levels[1]
     
-    # Calculate next Antardasha and Mahadasha for the upcoming card
+    # Calculate next Antardasha & Mahadasha
     next_ad_target = ad_item['end'] + datetime.timedelta(days=2)
-    next_ad_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_ad_target)
+    next_ad_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_ad_target)
     next_ad_item = next_ad_levels[1]
 
     next_md_target = md_item['end'] + datetime.timedelta(days=2)
-    next_md_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_md_target)
+    next_md_levels = local_calculate_live_dasha(birth_ist, chart_info['moon_lon'], next_md_target)
     next_md_item = next_md_levels[0]
 
-    briefing = db.generate_dasha_executive_briefing(chart_info['lagna_idx'], md_item['lord'], ad_item['lord'])
+    # Pull Lagna-specific functional insights
+    l_idx = chart_info['lagna_idx']
+    nature_map = LAGNA_NATURE_MAP.get(l_idx, LAGNA_NATURE_MAP[1])
+    md_nature = nature_map.get(md_item['lord'], "Functional Planetary Anchor")
+    ad_nature = nature_map.get(ad_item['lord'], "Functional Tactical Lever")
+
+    md_pred = DASHA_PREDICTIONS_INLINE.get(md_item['lord'], DASHA_PREDICTIONS_INLINE["Jupiter"])
+    ad_pred = DASHA_PREDICTIONS_INLINE.get(ad_item['lord'], DASHA_PREDICTIONS_INLINE["Saturn"])
 
     render_html(f"""
     <div style="margin-bottom:1.5rem;">
@@ -1423,12 +1556,15 @@ def render_page_dasha():
                 <b style="color:#14532d; font-size:1.15rem;">🟩 Mahadasha: {md_item['lord'].upper()}</b>
                 <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
             </div>
-            <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:10px;">
+            <div style="font-size:0.88rem; color:#166534; font-weight:700; margin-bottom:12px;">
                 ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
             </div>
-            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:12px 14px; border-radius:10px; border:1px solid #dcfce7;">
-                <b>{briefing['md_title']}</b><br><br>
-                {briefing['md_text']}
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #dcfce7;">
+                <b style="color:#15803d; font-size:1rem;">{md_pred['title']}</b><br>
+                <b>🏛️ Role for Your Ascendant:</b> {md_nature}<br><br>
+                {md_pred['details']}<br><br>
+                <b>⚠️ Strategic Cautions:</b><br>{md_pred['cautions']}<br><br>
+                <b>🪔 Prescribed Vedic Remedial Protocol:</b><br>{md_pred['remedies'].replace(chr(10), '<br>')}
             </div>
         </div>
 
@@ -1438,12 +1574,15 @@ def render_page_dasha():
                 <b style="color:#1e3a8a; font-size:1.15rem;">🟦 Antardasha: {ad_item['lord'].upper()}</b>
                 <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
             </div>
-            <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:10px;">
+            <div style="font-size:0.88rem; color:#1e40af; font-weight:700; margin-bottom:12px;">
                 ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
             </div>
-            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:12px 14px; border-radius:10px; border:1px solid #dbeafe;">
-                <b>{briefing['ad_title']}</b><br><br>
-                {briefing['ad_text']}
+            <div style="font-size:0.95rem; color:#1e293b; line-height:1.7; background:#ffffff; padding:14px 16px; border-radius:10px; border:1px solid #dbeafe;">
+                <b style="color:#1d4ed8; font-size:1rem;">{ad_pred['title']}</b><br>
+                <b>🎯 Tactical Focus for Your Ascendant:</b> {ad_nature}<br><br>
+                {ad_pred['details']}<br><br>
+                <b>⚠️ Tactical Cautions:</b><br>{ad_pred['cautions']}<br><br>
+                <b>🪔 Sub-Period Remedial Protocol:</b><br>{ad_pred['remedies'].replace(chr(10), '<br>')}
             </div>
         </div>
     </div>
