@@ -1378,8 +1378,10 @@ def render_page_monthly():
         </div>
     </div>
     """)
+
+
 # ==============================================================================
-# TAB 8: VIMSHOTTARI DASHA (PLANETARY TIMELINE)
+# TAB 8: VIMSHOTTARI DASHA (EXECUTIVE TIMELINE)
 # ==============================================================================
 def render_page_dasha():
     if not has_valid_profile:
@@ -1389,6 +1391,11 @@ def render_page_dasha():
     birth_ist = datetime.datetime.combine(dob_parsed, tob_parsed)
     now_ist = datetime.datetime.now()
     dasha_levels = db.calculate_live_dasha(birth_ist, chart_info['moon_lon'], now_ist)
+    
+    md_item = dasha_levels[0]
+    ad_item = dasha_levels[1]
+    
+    briefing = db.generate_dasha_executive_briefing(chart_info['lagna_idx'], md_item['lord'], ad_item['lord'])
 
     render_html(f"""
     <div style="margin-bottom:1.5rem;">
@@ -1397,42 +1404,58 @@ def render_page_dasha():
             {t('dasha_page_subtitle', current_lang)}
         </div>
     </div>
-    """)
 
-    # Visual Cascade Styling
-    colors = [
-        {"bg": "#f0fdf4", "border": "#16a34a", "text": "#14532d", "indent": "0px", "icon": "🟩"},  # MD
-        {"bg": "#eff6ff", "border": "#2563eb", "text": "#1e3a8a", "indent": "20px", "icon": "↳ 🟦"},  # AD
-        {"bg": "#faf5ff", "border": "#9333ea", "text": "#581c87", "indent": "40px", "icon": "↳ 🟪"},  # PD
-        {"bg": "#fff7ed", "border": "#ea580c", "text": "#9a3412", "indent": "60px", "icon": "↳ 🟧"},  # SD
-        {"bg": "#fff1f2", "border": "#e11d48", "text": "#9f1239", "indent": "80px", "icon": "↳ 🟥"}   # PrD
-    ]
-
-    for idx, lvl in enumerate(dasha_levels):
-        c = colors[idx]
-        fmt_str = "%b %d, %Y" if idx < 2 else "%b %d, %Y (%I:%M %p)"
-        start_str = lvl['start'].strftime(fmt_str)
-        end_str = lvl['end'].strftime(fmt_str)
-        prediction_text = db.DASHA_PREDICTIONS[lvl['lord']][lvl['key']]
-
-        render_html(f"""
-        <div style="margin-left:{c['indent']}; background:{c['bg']}; border-radius:12px; padding:12px 14px; border:1px solid rgba(0,0,0,0.05); border-left:6px solid {c['border']}; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div style="font-weight:900; font-size:1.05rem; color:{c['text']};">
-                    {c['icon']} {lvl['level']}: {lvl['lord'].upper()}
-                </div>
-                <div style="font-size:0.8rem; background:#ffffff; color:#0f172a; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #cbd5e1;">
-                    Live 🟢
-                </div>
+    <!-- ACTIVE TIMELINE CARD -->
+    <div style="display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:1.5rem;">
+        <div style="background:#f0fdf4; border-radius:12px; padding:14px; border:1px solid #bbf7d0; border-left:6px solid #16a34a;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:#14532d; font-size:1.05rem;">🟩 Mahadasha (Major Era): {md_item['lord'].upper()}</b>
+                <span style="font-size:0.8rem; background:#ffffff; color:#15803d; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #86efac;">Live 🟢</span>
             </div>
-            <div style="font-size:0.85rem; color:#475569; font-weight:700; margin-top:4px;">
-                ⏱️ {start_str} — {end_str}
-            </div>
-            <div style="font-size:0.92rem; color:{c['text']}; margin-top:6px; line-height:1.6;">
-                {prediction_text}
+            <div style="font-size:0.85rem; color:#166534; font-weight:700; margin-top:4px;">
+                ⏱️ {md_item['start'].strftime('%b %d, %Y')} — {md_item['end'].strftime('%b %d, %Y')}
             </div>
         </div>
-        """)
+
+        <div style="background:#eff6ff; border-radius:12px; padding:14px; border:1px solid #bfdbfe; border-left:6px solid #2563eb;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <b style="color:#1e3a8a; font-size:1.05rem;">🟦 Antardasha (Sub-Period): {ad_item['lord'].upper()}</b>
+                <span style="font-size:0.8rem; background:#ffffff; color:#1d4ed8; padding:3px 8px; border-radius:12px; font-weight:800; border:1px solid #93c5fd;">Live 🟢</span>
+            </div>
+            <div style="font-size:0.85rem; color:#1e40af; font-weight:700; margin-top:4px;">
+                ⏱️ {ad_item['start'].strftime('%b %d, %Y')} — {ad_item['end'].strftime('%b %d, %Y')}
+            </div>
+        </div>
+    </div>
+
+    <!-- EXECUTIVE BRIEFING MATRIX -->
+    <div style="background:#ffffff; border-radius:14px; padding:18px; border:1.5px solid #cbd5e1; box-shadow:0 4px 15px rgba(0,0,0,0.03);">
+        <div style="font-weight:900; font-size:1.2rem; color:#0f172a; margin-bottom:12px; border-bottom:2px solid #f1f5f9; padding-bottom:8px;">
+            📋 Executive Briefing for {chart_info['lagna_name']} Ascendant
+        </div>
+
+        <div style="margin-bottom:12px; font-size:0.95rem; line-height:1.7; color:#334155;">
+            <b>🏛️ Macro Theme (Mahadasha):</b><br>{briefing['macro']}
+        </div>
+
+        <div style="margin-bottom:12px; font-size:0.95rem; line-height:1.7; color:#334155;">
+            <b>🎯 Tactical Focus (Antardasha):</b><br>{briefing['tactical']}
+        </div>
+
+        <div style="background:#f8fafc; border-radius:10px; padding:12px; border:1px solid #e2e8f0; margin-bottom:10px; font-size:0.93rem; line-height:1.6; color:#1e293b;">
+            {briefing['career']}
+        </div>
+
+        <div style="background:#fff1f2; border-radius:10px; padding:12px; border:1px solid #fecdd3; margin-bottom:10px; font-size:0.93rem; line-height:1.6; color:#881337;">
+            {briefing['cautions']}
+        </div>
+
+        <div style="background:#f0fdf4; border-radius:10px; padding:12px; border:1px solid #bbf7d0; font-size:0.93rem; line-height:1.6; color:#14532d;">
+            {briefing['remedy']}
+        </div>
+    </div>
+    """)
+
 # ==============================================================================
 # TAB 7: DEDICATED MANTRA SADHANA & DIGITAL JAPA MALA COUNTER
 # ==============================================================================
